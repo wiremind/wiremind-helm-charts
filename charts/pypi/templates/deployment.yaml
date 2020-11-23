@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "pypi.fullname" . }}
+  labels:
+    app: {{ template "pypi.name" . }}
+    chart: {{ template "pypi.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "pypi.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "pypi.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+{{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+{{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          {{- if .Values.basicAuth.secretName }}
+          - name: "PYPI_PASSWD_FILE"
+            value: "/htpasswd/auth"
+          {{- end }}
+          - name: "PYPI_PORT"
+            value: "80"
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+{{ toYaml .Values.livenessProbe | indent 12 }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+{{ toYaml .Values.readinessProbe | indent 12 }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          volumeMounts:
+          - name: data
+            mountPath: /srv/pypi
+            {{- if .Values.persistence.subPath }}
+            subPath: {{ .Values.persistence.subPath }}
+            {{- end }}
+          {{- if .Values.basicAuth.secretName }}
+          - name: htpasswd
+            readOnly: true
+            mountPath: "/htpasswd"
+          {{- end }}
+      volumes:
+      - name: htpasswd
+        {{- if .Values.basicAuth.secretName }}
+        secret:
+          secretName: {{ .Values.basicAuth.secretName }}
+        {{- end }}
+      - name: data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistence.existingClaim | default (include "pypi.fullname" .) }}
+      {{- else }}
+        emptyDir: {}
+      {{- end -}}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
