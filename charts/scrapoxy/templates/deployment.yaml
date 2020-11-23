@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "scrapoxy.fullname" . }}
+  labels:
+{{ include "scrapoxy.labels" . | indent 4 }}
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "scrapoxy.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "scrapoxy.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+{{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+{{- end }}
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["node"]
+          args: ["/app/server/index.js", "start", "/etc/scrapoxy_config/config.json", "-d"]
+          ports:
+            - name: commander
+              containerPort: {{ .Values.config.commander.port }}
+              protocol: TCP
+            - name: proxy
+              containerPort: {{ .Values.config.proxy.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: commander
+          readinessProbe:
+            httpGet:
+              path: /
+              port: commander
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+          - name: configfile
+            mountPath: "/etc/scrapoxy_config"
+            readOnly: true
+      volumes:
+      - name: configfile
+        secret:
+          secretName: {{ template "scrapoxy.fullname" . }} 
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

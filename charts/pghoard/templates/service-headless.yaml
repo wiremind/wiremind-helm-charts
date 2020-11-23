@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "pghoard.fullname" . }}-headless
+  labels:
+    app.kubernetes.io/name: {{ include "pghoard.name" . }}
+    helm.sh/chart: {{ include "pghoard.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: backup
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: pghoard
+    port: 16000
+    targetPort: pghoard
+  selector:
+    app.kubernetes.io/name: {{ include "pghoard.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: backup

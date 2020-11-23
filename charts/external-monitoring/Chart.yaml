@@ -1,0 +1,16 @@
+apiVersion: v2
+description: Simple monitoring for things outside of kubernetes
+name: external-monitoring
+version: 0.2.1
+
+dependencies:
+- name: prometheus-blackbox-exporter
+  version: "*"
+  repository: https://prometheus-community.github.io/helm-charts
+maintainers:
+- name: desaintmartin
+  email: cdesaintmartin@wiremind.io
+- name: machine424
+  email: amrini@wiremind.io
+- name: francoisminaud
+  email: fminaud@wiremind.io

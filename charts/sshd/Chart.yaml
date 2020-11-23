@@ -1,9 +1,8 @@
 apiVersion: v2
 appVersion: "1.0"
-description: A Helm chart for codekoala/pypi, which uses pypiserver
-name: pypi
-version: 0.2.1
-icon: https://raw.githubusercontent.com/pypiserver/pypiserver/master/pypiserver_logo.png
+description: A Helm chart for Kubernetes
+name: sshd
+version: 0.1.1
 maintainers:
 - name: desaintmartin
   email: cdesaintmartin@wiremind.io

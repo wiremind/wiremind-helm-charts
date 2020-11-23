@@ -1,0 +1,48 @@
+# Default values for nginx.
+# This is a YAML-formatted file.
+# Declare name/value pairs to be passed into your templates.
+
+replicaCount: 1
+
+restartPolicy: Never
+
+image:
+  repository: nginx
+  tag: 1.17-alpine
+  pullPolicy: IfNotPresent
+  # pullSecrets: "my-docker-registry-secret"
+
+service:
+  annotations: {}
+  clusterIP: ""
+  externalIPs: []
+  loadBalancerIP: ""
+  loadBalancerSourceRanges: []
+  type: ClusterIP
+  port: 80
+  nodePort: ""
+
+ingress:
+  enabled: false
+  hosts:
+  - annotations: {}
+    name: some.host.com
+
+# nginxCustomConfig: |
+#   bla
+
+customLabels: {}
+
+livenessProbe:
+  enabled: true
+  path: /
+readinessProbe:
+  enabled: true
+  path: /
+
+podAntiAffinity: hard
+nodeAffinity: {}
+
+resources: {}
+
+nodeSelector: {}

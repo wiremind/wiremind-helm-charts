@@ -1,0 +1,86 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ template "pghoard.fullname" . }}-check
+  labels:
+    app.kubernetes.io/name: {{ include "pghoard.name" . }}
+    helm.sh/chart: {{ include "pghoard.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: restore-autocheck
+spec:
+  schedule: "0 12 * * *"
+  startingDeadlineSeconds: 600
+  concurrencyPolicy: "Forbid"
+  failedJobsHistoryLimit: {{ .Values.failedJobsHistoryLimit }}
+  successfulJobsHistoryLimit: {{ .Values.successfulJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      backoffLimit: {{ .Values.restore.retriesNumber }}
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: {{ include "pghoard.name" . }}
+            helm.sh/chart: {{ include "pghoard.chart" . }}
+            app.kubernetes.io/instance: {{ .Release.Name }}
+            app.kubernetes.io/managed-by: {{ .Release.Service }}
+            app.kubernetes.io/component: restore
+            {{ .Release.Name }}-postgresql-client: "true"  # Allows postgresql netpol, from the postgresql helm chart, to accept pghoard
+          annotations:
+            checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        spec:
+{{- if .Values.priorityClassName }}
+          priorityClassName: "{{ .Values.priorityClassName }}"
+{{- end }}
+          containers:
+            - name: {{ .Chart.Name }}-restore
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              command: ['/bin/bash', '/restore.sh']
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              env:
+                - name: PGHOARD_RESTORE_SITE
+                  value: {{ template "pghoard.fullname" . }}
+                - name: RESTORE_CHECK_COMMAND
+                  value: "{{ .Values.restore.checkCommand }}"
+              envFrom:
+              - secretRef:
+                  name: {{ template "pghoard.fullname" . }}
+              - configMapRef:
+                  name: {{ template "pghoard.fullname" . }}
+{{- with .Values.restore.resources }}
+              resources:
+{{ toYaml . | indent 16 }}
+{{- end }}
+              volumeMounts:
+                - name: pghoard
+                  mountPath: /var/lib/pghoard
+          restartPolicy: Never
+          volumes:
+            - name: pghoard
+              # Note: see https://github.com/kubernetes/kubernetes/issues/60903
+              persistentVolumeClaim:
+                claimName: data-{{ template "pghoard.fullname" . }}-0
+                # pghoard in restore mode will write a satusfile in the site directory.
+                # XXX for integrity reasons, this should be set to true. We do not want a restore to mess with our backup.
+                readOnly: false
+{{- with .Values.nodeSelector }}
+          nodeSelector:
+{{ toYaml . | indent 12 }}
+{{- end }}
+          affinity:
+            # Force to be on same node than backup in order to be able to mount Persistent Volume
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: {{ include "pghoard.name" . }}
+                    app.kubernetes.io/instance: {{ .Release.Name }}
+                    app.kubernetes.io/component: backup
+                topologyKey: kubernetes.io/hostname
+{{- with .Values.affinity }}
+{{ toYaml . | indent 12 }}
+{{- end }}
+{{- with .Values.tolerations }}
+          tolerations:
+{{ toYaml . | indent 12 }}
+{{- end }}

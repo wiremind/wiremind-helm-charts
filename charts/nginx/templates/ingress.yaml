@@ -1,0 +1,34 @@
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "nginx.fullname" . -}}
+{{- $name := include "nginx.name" . -}}
+{{- $chart := include "nginx.chart" . -}}
+{{- range .Values.ingress.hosts }}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .name }}
+  labels:
+    app: {{ $name }}
+    chart: {{ $chart }}
+    release: {{ $.Release.Name }}
+    heritage: {{ $.Release.Service }}
+{{- with .annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+  tls:
+    - secretName: {{ if .tlsSecret }}{{ .tlsSecret }}{{ else }}{{ .name }}-tls{{ end }}
+      hosts:
+        - {{ .name }}
+  rules:
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            backend:
+              serviceName: {{ $fullName }}
+              servicePort: http
+---
+{{- end }}
+{{- end }}

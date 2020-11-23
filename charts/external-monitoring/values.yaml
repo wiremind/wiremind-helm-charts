@@ -1,0 +1,18 @@
+# Default values for external-machines-monitoring.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+hosts: {}
+  # - name: service-name
+  #   ip: ip-address
+  #   namespace: namespace
+
+prometheus-blackbox-exporter:
+  config:
+    modules:
+      http_2xx:
+        timeout: 60s
+  serviceMonitor:
+    enabled: true
+
+fullnameOverride:

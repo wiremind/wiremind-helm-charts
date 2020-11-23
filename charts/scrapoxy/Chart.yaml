@@ -1,0 +1,13 @@
+apiVersion: v2
+appVersion: "3.1.1"
+description: Helm chart for the Scrapoxy service.
+name: scrapoxy
+version: 0.3.1
+home: https://github.com/fabienvauchelles/scrapoxy
+maintainers:
+- name: desaintmartin
+  email: cdesaintmartin@wiremind.io
+- name: machine424
+  email: amrini@wiremind.io
+- name: francoisminaud
+  email: fminaud@wiremind.io
