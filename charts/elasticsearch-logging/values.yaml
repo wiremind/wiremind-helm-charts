@@ -1,0 +1,198 @@
+# To define common settings, it may be useful to use YAML anchors to use the same
+# base settings for both node types (data + master)
+es-defaults: &defaults
+  clusterName: "logging"
+
+# The data nodes
+es-data-hot:
+  <<: *defaults
+  nodeGroup: "data-hot"
+  esConfig:
+    elasticsearch.yml: |
+      node:
+        attr:
+          data: hot
+      thread_pool:
+        search:
+          size: 60
+          min_queue_size: 1000
+          max_queue_size: 10000
+      xpack:
+        security:
+          enabled: false
+          transport:
+            ssl:
+              enabled: false
+          http:
+            ssl:
+              enabled: false
+  roles:
+    master: "false"
+    ingest: "true"
+    data: "true"
+  replicas: 1
+  esJavaOpts: "-Xmx128m  -Xms128m"
+  resources:
+    requests:
+      cpu: "10m"
+      memory: "128M"
+    limits:
+      memory: "56Gi"
+      cpu: 15
+  volumeClaimTemplate:
+    resources:
+      requests:
+        storage: 100M
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/tls-acme: "false"
+      nginx.ingress.kubernetes.io/auth-type: basic
+      # name of the secret that contains the user/password definitions
+      nginx.ingress.kubernetes.io/auth-secret: basic-auth
+      nginx.ingress.kubernetes.io/auth-realm: "Authentication Required"
+      nginx.ingress.kubernetes.io/client-body-buffer-size: "9M"
+      nginx.ingress.kubernetes.io/proxy-body-size: "600m"
+    path: /
+    hosts:
+      - elasticsearch.setme.org
+    tls:
+      - secretName: wildcard-setme.org-tls
+        hosts:
+          - elasticsearch.setme.org
+
+# es-data-warm:
+#  <<: *defaults
+#  nodeGroup: "data-warm"
+#  esConfig:
+#    elasticsearch.yml: |
+#      node:
+#        attr:
+#          data: warm
+#      xpack:
+#        security:
+#          enabled: false
+#          transport:
+#            ssl:
+#              enabled: false
+#          http:
+#            ssl:
+#              enabled: false
+#  roles:
+#    master: "false"
+#    ingest: "false"
+#    data: "true"
+#  replicas: 1
+#  esJavaOpts: "-Xmx128m -Xms128m"
+#  # antiAffinity: "soft"
+#  resources:
+#    requests:
+#      memory: "128M"
+#      cpu: "10m"
+#    limits:
+#      memory: "18Gi"
+#      cpu: 15
+#  volumeClaimTemplate:
+#    resources:
+#      requests:
+#        storage: 100M
+#
+# es-data-cold:
+#  <<: *defaults
+#  nodeGroup: "data-cold"
+#  esConfig:
+#    elasticsearch.yml: |
+#      node:
+#        attr:
+#          data: cold
+#      xpack:
+#        security:
+#          enabled: false
+#          transport:
+#            ssl:
+#              enabled: false
+#          http:
+#            ssl:
+#              enabled: false
+#  roles:
+#    master: "false"
+#    ingest: "false"
+#    data: "true"
+#  replicas: 1
+#  esJavaOpts: "-Xmx128m -Xms128m"
+#  # antiAffinity: "soft"
+#  resources:
+#    requests:
+#      memory: "128M"
+#      cpu: "10m"
+#    limits:
+#      memory: 16Gi
+#      cpu: 6
+#  volumeClaimTemplate:
+#    resources:
+#      requests:
+#        storage: 100M
+
+# The master nodes
+es-master:
+  <<: *defaults
+  nodeGroup: "master"
+  esConfig:
+    elasticsearch.yml: |
+      xpack:
+        security:
+          enabled: false
+          transport:
+            ssl:
+              enabled: false
+          http:
+            ssl:
+              enabled: false
+  roles:
+    master: "true"
+    ingest: "false"
+    data: "false"
+  esJavaOpts: "-Xms128m -Xmx128m"
+  resources:
+    requests:
+      memory: "128M"
+      cpu: "10m"
+      # memory: "500Mi"
+    limits:
+      memory: "1Gi"
+      cpu: "2"
+
+kibana:
+  elasticsearchHosts: http://logging-data-hot:9200
+  resources:
+    requests:
+    limits:
+      cpu: 2
+      memory: 2Gi
+  kibanaConfig:
+    kibana.yml: |
+      server.name: kibana
+      server.host: "0"
+      elasticsearch.requestTimeout: 180000
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/auth-signin: https://sso.setme.org/oauth2/start
+      nginx.ingress.kubernetes.io/auth-url: 'http://oauth2-proxy.dex.svc.cluster.local/oauth2/auth'
+      nginx.ingress.kubernetes.io/proxy-connect-timeout: '190'
+      nginx.ingress.kubernetes.io/proxy-read-timeout: '190'
+      nginx.ingress.kubernetes.io/proxy-send-timeout: '190'
+    hosts:
+      - kibana.setme.org
+    tls:
+      - hosts:
+          - kibana.setme.org
+        secretName: wildcard-setme.org-tls
+  readinessProbe:
+    successThreshold: 1
+
+elasticsearch-exporter:
+  es:
+    uri: http://logging-master-headless:9200
+  serviceMonitor:
+    enabled: true

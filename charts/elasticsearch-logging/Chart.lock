@@ -1,0 +1,15 @@
+dependencies:
+- name: elasticsearch
+  repository: https://helm.elastic.co
+  version: 7.10.0
+- name: elasticsearch
+  repository: https://helm.elastic.co
+  version: 7.10.0
+- name: kibana
+  repository: https://helm.elastic.co
+  version: 7.10.0
+- name: prometheus-elasticsearch-exporter
+  repository: https://prometheus-community.github.io/helm-charts
+  version: 4.0.0
+digest: sha256:0bd0caa7317f1005c1ac8253349d6cc46be425e3b1facb7012bb1dad18d245ac
+generated: "2020-11-23T21:25:01.768071902+01:00"

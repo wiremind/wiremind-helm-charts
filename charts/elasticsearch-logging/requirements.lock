@@ -1,0 +1,21 @@
+dependencies:
+- name: elasticsearch
+  repository: https://helm.elastic.co
+  version: 7.9.3
+- name: elasticsearch
+  repository: https://helm.elastic.co
+  version: 7.9.3
+- name: elasticsearch
+  repository: https://helm.elastic.co
+  version: 7.9.3
+- name: elasticsearch
+  repository: https://helm.elastic.co
+  version: 7.9.3
+- name: kibana
+  repository: https://helm.elastic.co
+  version: 7.9.3
+- name: elasticsearch-exporter
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 3.7.0
+digest: sha256:b09cf7671496a695bfa244031c2b7f1a8bd105b6c16097ecfc3765bd0d4a9126
+generated: "2020-10-24T08:07:48.008645+02:00"
