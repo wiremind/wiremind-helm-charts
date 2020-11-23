@@ -1,0 +1,54 @@
+name: Lint and Test Charts
+
+# Controls when the action will run. Triggers the workflow on pull request
+# events but only for the main branch
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.4.0
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: Set up chart-testing
+        uses: helm/chart-testing-action@v2.0.1
+
+      - name: Run chart-testing (list-changed)
+        id: list-changed
+        run: |
+          changed=$(ct --config ct.yaml list-changed)
+          if [[ -n "$changed" ]]; then
+            echo "::set-output name=changed::true"
+          fi
+
+      - name: Run chart-testing (lint)
+        run: ct lint --config ct.yaml
+
+      - name: Validate schema
+        uses: wiremind/helm-kubeval-action@v1.1.0
+        with:
+          path: charts
+          config: config_repos
+
+
+      - name: Create kind cluster
+        uses: helm/kind-action@v1.0.0
+        if: steps.list-changed.outputs.changed == 'true'
+
+      - name: Run chart-testing (install)
+        run: ct install --config ct.yaml --helm-extra-args "--timeout 600s"
+
