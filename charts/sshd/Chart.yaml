@@ -1,0 +1,12 @@
+apiVersion: v2
+appVersion: "1.0"
+description: A Helm chart for Kubernetes
+name: sshd
+version: 0.1.1
+maintainers:
+- name: desaintmartin
+  email: cdesaintmartin@wiremind.io
+- name: machine424
+  email: amrini@wiremind.io
+- name: francoisminaud
+  email: fminaud@wiremind.io

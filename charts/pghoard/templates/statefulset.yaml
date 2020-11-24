@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ template "pghoard.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "pghoard.name" . }}
+    helm.sh/chart: {{ include "pghoard.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: backup
+spec:
+  replicas: 1
+  serviceName: {{ include "pghoard.fullname" . }}-headless
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "pghoard.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: backup
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "pghoard.name" . }}
+        helm.sh/chart: {{ include "pghoard.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+        app.kubernetes.io/component: backup
+        {{ .Release.Name }}-postgresql-client: "true"  # Allows postgresql netpol, from the postgresql helm chart, to accept pghoard
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    spec:
+{{- if .Values.priorityClassName }}
+      priorityClassName: "{{ .Values.priorityClassName }}"
+{{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+          - secretRef:
+              name: {{ template "pghoard.fullname" . }}
+          - configMapRef:
+              name: {{ template "pghoard.fullname" . }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          {{- if .Values.persistence.enabled }}
+          volumeMounts:
+          - name: data
+            mountPath: /var/lib/pghoard
+          {{ end }}
+          ports:
+          - name: pghoard
+            containerPort: 16000
+      restartPolicy: Always
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- if or .Values.affinity .Values.postgresqlPodAntiAffinity.enabled }}
+      affinity:
+    {{- end }}
+    {{- if .Values.postgresqlPodAntiAffinity.enabled }}
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: postgresql
+                  release: {{ .Release.Name }}
+              topologyKey: kubernetes.io/hostname
+    {{- end }}
+    {{- with .Values.affinity }}
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+{{- if .Values.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      {{- with .Values.persistence.annotations }}
+        annotations:
+        {{- range $key, $value := . }}
+          {{ $key }}: {{ $value }}
+        {{- end }}
+      {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size | quote }}
+      {{- if .Values.persistence.storageClass }}
+      {{- if (eq "-" .Values.persistence.storageClass) }}
+        storageClassName: ""
+      {{- else }}
+        storageClassName: "{{ .Values.persistence.storageClass }}"
+      {{- end }}
+      {{- end }}
+{{- else }}
+      - name: data
+        emptyDir: {}
+{{- end }}

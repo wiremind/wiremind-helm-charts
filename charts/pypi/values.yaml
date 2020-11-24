@@ -1,0 +1,106 @@
+# Default values for pypi.
+# This is a YAML-formatted file.
+
+replicaCount: 1
+
+image:
+  repository: codekoala/pypi
+  tag: 1.2.1
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  # annotations:
+  #   kubernetes.io/ingress.class: nginx
+  #   kubernetes.io/tls-acme: "true"
+  #   nginx.ingress.kubernetes.io/auth-type: basic
+  #   # name of the secret that contains the user/password definitions
+  #   nginx.ingress.kubernetes.io/auth-secret: basic-auth-htpasswd
+  #   nginx.ingress.kubernetes.io/auth-realm: "Authentication Required"
+  # path: /
+  # hosts:
+  #   - myhost.com
+  # tls:
+  #   - secretName: myhost.com-tls
+  #     hosts:
+  #       - myhost.com
+
+ingressUpload:
+  enabled: false
+  # annotations:
+  #   kubernetes.io/ingress.class: nginx
+  #   kubernetes.io/tls-acme: "true"
+  #   nginx.ingress.kubernetes.io/auth-type: basic
+  #   # name of the secret that contains the user/password definitions
+  #   nginx.ingress.kubernetes.io/auth-secret: basic-auth-upload-htpasswd
+  #   # Authenticate to backend which has basic auth
+  #   nginx.ingress.kubernetes.io/configuration-snippet: |
+  #     proxy_set_header Authorization $http_authorization;
+  #     proxy_pass_header  Authorization;
+  #   nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+  # path: /
+  # hosts:
+  #   - upload.myhost.com
+  # tls:
+  #   - secretName: upload.myhost.com-tls
+  #     hosts:
+  #       - upload.myhost.com
+
+# basicAuth:
+# Authenticate for uploading, use existing secret
+#  secretName: "basic-auth-upload-htpasswd"
+
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 60
+  # Currently, pypi has only one thread, so if it is currently used, high waiting time can occur.
+  timeoutSeconds: 10
+  successThreshold: 1
+  failureThreshold: 3
+
+readinessProbe:
+  initialDelaySeconds: 5
+  periodSeconds: 30
+  timeoutSeconds: 10
+  successThreshold: 1
+  failureThreshold: 3
+
+## Persist data to a persistent volume
+persistence:
+  enabled: true
+  ## data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "slow"
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+priorityClassName: ""
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+## basic-auth-upload-htpasswd username and password used by default if not changed
+## Can be changed by using the following parameters in helm install command
+## --set  htpasswd_username="setusername" --set htpasswd_password="setpassword"
+htpasswd_username: ""
+htpasswd_password: ""

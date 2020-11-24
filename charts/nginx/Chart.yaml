@@ -1,0 +1,20 @@
+apiVersion: v2
+name: nginx
+description: An NGINX HTTP server
+version: 2.1.1
+kubeVersion: ">=1.10.0"
+dependencies: []
+keywords:
+  - http
+  - nginx
+  - www
+  - web
+sources:
+  - https://hub.docker.com/_/nginx/
+maintainers:
+- name: desaintmartin
+  email: cdesaintmartin@wiremind.io
+- name: machine424
+  email: amrini@wiremind.io
+- name: francoisminaud
+  email: fminaud@wiremind.io

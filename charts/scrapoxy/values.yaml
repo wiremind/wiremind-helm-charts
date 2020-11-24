@@ -1,0 +1,91 @@
+# Default values for scrapoxy.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+
+image:
+  repository: wiremind/scrapoxy
+  tag: latest
+  pullPolicy: Always
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+
+service:
+  type: ClusterIP
+
+
+# To access the admin API/UI from outside Kubernetes.
+ingress:
+  enabled: false
+  # annotations:
+  #   kubernetes.io/ingress.class: nginx
+  #   kubernetes.io/tls-acme: "false"
+  # hosts:
+  #   - host: myhost.com
+  #     paths: ["/"]
+  # tls:
+  #   - hosts:
+  #       - myhost.com
+  #     secretName: myhost.com-tls
+
+
+resources:
+  limits:
+    cpu: 1
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# scrapoxy's app configuration
+
+config:
+  commander:
+    port: 7778
+    password: "setme"
+
+  proxy:
+    auth:
+      username: "setme"
+      password: "setme"
+    port: 7777
+
+  instance:
+    port: 3128
+    scaling:
+      min: 1
+      max: 1
+
+  providers:
+    - type: awsec2
+      accessKeyId: $SET_ME
+      secretAccessKey: $SET_ME
+      region: eu-west-3
+      instance:
+        InstanceType: t2.nano
+        ImageId: set-me
+        SecurityGroups:
+          - forward-proxy
+
+#    - type: ovhcloud
+#      endpoint: ovh-eu
+#      appKey: "set-me"
+#      appSecret: "set-me"
+#      consumerKey: "set-me"
+#      serviceId: "$set-me"
+#      region: SBG5
+#      sshKeyName: scrapoxy
+#      flavorName: s1-2
+#      snapshotName: set-me
+
+
+priorityClassName: ""
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

@@ -1,0 +1,11 @@
+es-data-hot:
+  antiAffinity: "soft"
+
+#  es-data-cold:
+#   antiAffinity: "soft"
+
+# es-data-warm:
+#  antiAffinity: "soft"
+
+es-master:
+  antiAffinity: "soft"

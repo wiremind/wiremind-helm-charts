@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "nginx.fullname" . }}
+  labels:
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app: {{ template "nginx.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "nginx.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      {{- if .Values.nginxCustomConfig }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- end }}
+      labels:
+        app: {{ template "nginx.name" . }}
+        release: {{ .Release.Name }}
+        type: nginx-uwsgi
+        chart: {{ template "nginx.chart" . }}
+        appVersion: "{{ .Values.image.tag }}"
+{{- with .Values.customLabels }}
+{{ toYaml . | indent 8 }}
+{{- end }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    spec:
+      {{- if .Values.image.pullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecrets }}
+      {{- end }}
+      containers:
+        - name: {{ template "nginx.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: 80
+            initialDelaySeconds: 3
+            timeoutSeconds: 2
+            failureThreshold: 2
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: 80
+            initialDelaySeconds: 3
+            timeoutSeconds: 2
+            failureThreshold: 2
+          {{- end }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+{{- if .Values.nginxCustomConfig }}
+          volumeMounts:
+          - name: nginx
+            mountPath: /etc/nginx/conf.d
+            readOnly: true
+      volumes:
+      - name: nginx
+        configMap:
+          name: {{ template "nginx.fullname" . }}
+{{- end }}
+      affinity:
+        podAntiAffinity:
+        {{- if eq .Values.podAntiAffinity "hard" }}
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: "kubernetes.io/hostname"
+            labelSelector:
+              matchLabels:
+                app: {{ template "nginx.name" . }}
+                release: {{ .Release.Name }}
+                type: nginx-uwsgi
+                chart: {{ template "nginx.chart" . }}
+                appVersion: "{{ .Values.image.tag }}"
+        {{- else if eq .Values.podAntiAffinity "soft" }}
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 5
+            podAffinityTerm:
+              topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  app: {{ template "nginx.name" . }}
+                  release: {{ .Release.Name }}
+                  type: nginx-uwsgi
+                  chart: {{ template "nginx.chart" . }}
+                  appVersion: "{{ .Values.image.tag }}"
+        {{- end }}
+      {{- with .Values.nodeAffinity }}
+        nodeAffinity:
+{{ toYaml . | indent 10 }}
+    {{- end }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

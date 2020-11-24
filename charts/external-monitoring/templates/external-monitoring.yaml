@@ -1,0 +1,78 @@
+{{- range .Values.hosts }}
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ $.Release.Name }}-{{ .name }}
+  namespace: {{ .namespace }}
+  labels:
+    app.kubernetes.io/name: {{ include "external-machines-monitoring.name" $ }}
+    helm.sh/chart: {{ include "external-machines-monitoring.chart" $ }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/managed-by: {{ $.Release.Service }}
+    app.kubernetes.io/component: {{ .name }}
+    prometheusJobLabel: node-exporter
+spec:
+  externalName: {{ .ip }}
+  type: ExternalName
+  clusterIP:
+  ports:
+  - name: metrics
+    port: 9100
+    protocol: TCP
+    targetPort: 9100
+
+---
+
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: {{ $.Release.Name }}-{{ .name }}
+  namespace: {{ .namespace }}
+  labels:
+    app.kubernetes.io/name: {{ include "external-machines-monitoring.name" $ }}
+    helm.sh/chart: {{ include "external-machines-monitoring.chart" $ }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/managed-by: {{ $.Release.Service }}
+    app.kubernetes.io/component: {{ .name }}
+    prometheusJobLabel: node-exporter
+subsets:
+  - addresses:
+    - ip: {{ .ip }}
+    ports:
+    - name: metrics
+      port: 9100
+      protocol: TCP
+
+---
+
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ $.Release.Name }}-{{ .name }}
+  namespace: {{ .namespace }}
+  labels:
+    app.kubernetes.io/name: {{ include "external-machines-monitoring.name" $ }}
+    helm.sh/chart: {{ include "external-machines-monitoring.chart" $ }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/managed-by: {{ $.Release.Service }}
+    app.kubernetes.io/component: {{ .name }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "external-machines-monitoring.name" $ }}
+      helm.sh/chart: {{ include "external-machines-monitoring.chart" $ }}
+      app.kubernetes.io/component: {{ .name }}
+  namespaceSelector:
+    matchNames:
+    - {{ .namespace }}
+  endpoints:
+  - port: metrics
+    path: /metrics
+    interval: 15s
+    scrapeTimeout: 15s
+    honorLabels: true
+  jobLabel: prometheusJobLabel  # References corresponding Endpoint label
+
+---
+{{- end }}
