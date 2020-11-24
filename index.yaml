@@ -1,0 +1,235 @@
+apiVersion: v1
+entries:
+  cerebro:
+  - apiVersion: v2
+    appVersion: 0.9.2
+    created: "2020-11-24T16:08:06.525159859Z"
+    description: A Helm chart for Cerebro - a web admin tool that replaces Kopf.
+    digest: 410de46914af8a411af0873fe822b73e0d14b5806367a3f8abba23e60d7c00b3
+    home: https://github.com/lmenezes/cerebro
+    icon: https://github.com/lmenezes/cerebro/blob/master/public/img/logo.png
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: cerebro
+    sources:
+    - https://github.com/lmenezes/cerebro-docker
+    - https://github.com/lmenezes/cerebro
+    - https://github.com/elastic/elasticsearch
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/cerebro-1.9.6/cerebro-1.9.6.tgz
+    version: 1.9.6
+  clair:
+  - apiVersion: v2
+    appVersion: v2.1.4
+    created: "2020-11-24T16:08:06.83138199Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.0.0
+    description: Clair is an open source project for the static analysis of vulnerabilities
+      in application containers.
+    digest: c63288b1879b3d1c93b43cbed2602abb0ab33dbfb5e4e151db22d54d13e4dea5
+    home: https://coreos.com/clair
+    icon: https://cloud.githubusercontent.com/assets/343539/21630811/c5081e5c-d202-11e6-92eb-919d5999c77a.png
+    kubeVersion: '>=1.14.0-0'
+    maintainers:
+    - email: dev@wiremind.io
+      name: Wiremind
+    name: clair
+    sources:
+    - https://github.com/coreos/clair
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/clair-0.2.2/clair-0.2.2.tgz
+    version: 0.2.2
+  dex:
+  - apiVersion: v2
+    appVersion: 2.24.0
+    created: "2020-11-24T16:08:07.124797208Z"
+    description: OpenID Connect Identity (OIDC) and OAuth 2.0 Provider with Pluggable
+      Connectors
+    digest: 3d6eb47a3f1c85687632a667c331b2329deffc3baf9db4418b826e9667c9abf7
+    home: https://github.com/dexidp/dex/
+    icon: https://github.com/dexidp/dex/raw/master/Documentation/logos/dex-glyph-color.png
+    keywords:
+    - dex
+    - oidc
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: dex
+    sources:
+    - https://github.com/dexidp/dex/
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/dex-2.15.3/dex-2.15.3.tgz
+    version: 2.15.3
+  elasticsearch-logging-wiremind:
+  - apiVersion: v2
+    appVersion: 7.9.2
+    created: "2020-11-24T16:08:07.403589509Z"
+    dependencies:
+    - alias: es-data-hot
+      condition: es-data-hot.enabled
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: 7.10.0
+    - alias: es-data-warm
+      condition: es-data-warm.enabled
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: '*'
+    - alias: es-data-cold
+      condition: es-data-cold.enabled
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: '*'
+    - alias: es-master
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: 7.10.0
+    - name: kibana
+      repository: https://helm.elastic.co
+      version: 7.10.0
+    - name: prometheus-elasticsearch-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 4.0.0
+    description: Elasticsearch logging
+    digest: 4ae8eb15d622f6e9ad224c12dadf3f37cf4714648dd19033dada474ae86a6d2a
+    home: https://github.com/elastic/helm-charts
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: elasticsearch-logging-wiremind
+    sources:
+    - https://github.com/elastic/elasticsearch
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/elasticsearch-logging-wiremind-1.2.2/elasticsearch-logging-wiremind-1.2.2.tgz
+    version: 1.2.2
+  external-monitoring:
+  - apiVersion: v2
+    created: "2020-11-24T16:08:07.691578321Z"
+    dependencies:
+    - name: prometheus-blackbox-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: '*'
+    description: Simple monitoring for things outside of kubernetes
+    digest: aebca16771ced152ac3fa5ef57ac4cb862301862d4256f88352de5bc0ffc06f9
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: external-monitoring
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/external-monitoring-0.2.1/external-monitoring-0.2.1.tgz
+    version: 0.2.1
+  nginx:
+  - apiVersion: v2
+    created: "2020-11-24T16:08:07.975878328Z"
+    description: An NGINX HTTP server
+    digest: a32ddea8043918f04867667742adb73da51aca1f7ffbab5740873718696da703
+    keywords:
+    - http
+    - nginx
+    - www
+    - web
+    kubeVersion: '>=1.10.0'
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: nginx
+    sources:
+    - https://hub.docker.com/_/nginx/
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/nginx-2.1.1/nginx-2.1.1.tgz
+    version: 2.1.1
+  pghoard:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2020-11-24T16:08:08.267690244Z"
+    description: pghoard
+    digest: 4603d30012ede98fb88d01a8915f1455ecdfb468c76de30b4da27f32b19bdadb
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: pghoard
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/pghoard-0.6.1/pghoard-0.6.1.tgz
+    version: 0.6.1
+  pypi:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2020-11-24T16:08:08.539040937Z"
+    description: A Helm chart for codekoala/pypi, which uses pypiserver
+    digest: ed16a95b722c11c8d1c3ce14e69a9860ca62d519868b55855b4d28f3df932f3d
+    icon: https://raw.githubusercontent.com/pypiserver/pypiserver/master/pypiserver_logo.png
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: pypi
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/pypi-0.2.1/pypi-0.2.1.tgz
+    version: 0.2.1
+  scrapoxy:
+  - apiVersion: v2
+    appVersion: 3.1.1
+    created: "2020-11-24T16:08:08.812459533Z"
+    description: Helm chart for the Scrapoxy service.
+    digest: d9990ec9d242be90a88381462203d02df4c3fca4fd85f69b3b6df9a98cfc4be8
+    home: https://github.com/fabienvauchelles/scrapoxy
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: scrapoxy
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/scrapoxy-0.3.1/scrapoxy-0.3.1.tgz
+    version: 0.3.1
+  sshd:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2020-11-24T16:08:09.081656024Z"
+    description: A Helm chart for Kubernetes
+    digest: 09fcab0c6725324e746cbce68a271bd509f5b62ff78f2972ca600b883429a55e
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: sshd
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
+    version: 0.1.1
+generated: "2020-11-24T16:08:06.053420949Z"
