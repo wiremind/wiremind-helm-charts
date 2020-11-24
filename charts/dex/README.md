@@ -1,15 +1,6 @@
-# ⚠️ Repo Archive Notice
-
-As of Nov 13, 2020, charts in this repo will no longer be updated.
-For more information, see the Helm Charts [Deprecation and Archive Notice](https://github.com/helm/charts#%EF%B8%8F-deprecation-and-archive-notice), and [Update](https://helm.sh/blog/charts-repo-deprecation/).
-
 # dex
 
 [Dex][dex] is an identity service that uses OpenID Connect to drive authentication for other apps.
-
-## DEPRECATION NOTICE
-
-This chart is deprecated and no longer supported.
 
 ## Introduction
 
@@ -33,7 +24,7 @@ Several helper apps are listed below:
 To install the chart with the release name `my-release`:
 
 ```sh
-$ helm install --name my-release stable/dex
+$ helm install --name my-release wiremind/dex
 ```
 
 It'll install the chart with the default parameters. However most probably it won't work for you as-is, thus before installing the chart you need to consult the [values.yaml](values.yaml) notes as well as [dex documentation][dex].
