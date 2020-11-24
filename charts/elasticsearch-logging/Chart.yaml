@@ -9,14 +9,17 @@ dependencies:
     repository: "https://helm.elastic.co"
     version: "7.10.0"
     alias: es-data-hot
-#  - name: elasticsearch
-#    repository: "https://helm.elastic.co"
-#    version: "*"
-#    alias: es-data-warm
-#  - name: elasticsearch
-#    repository: "https://helm.elastic.co"
-#    version: "*"
-#    alias: es-data-cold
+    condition: es-data-hot.enabled
+  - name: elasticsearch
+    repository: "https://helm.elastic.co"
+    version: "*"
+    alias: es-data-warm
+    condition: es-data-warm.enabled
+  - name: elasticsearch
+    repository: "https://helm.elastic.co"
+    version: "*"
+    alias: es-data-cold
+    condition: es-data-cold.enabled
   - name: elasticsearch
     repository: "https://helm.elastic.co"
     version: "7.10.0"
