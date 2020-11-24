@@ -15,3 +15,4 @@ sources:
 maintainers:
   - name: Wiremind
     email: dev@wiremind.io
+kubeVersion: ">=1.14.0-0"
