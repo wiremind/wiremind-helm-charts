@@ -27,10 +27,8 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-          {{- if .Values.basicAuth.secretName }}
           - name: "PYPI_PASSWD_FILE"
             value: "/htpasswd/auth"
-          {{- end }}
           - name: "PYPI_PORT"
             value: "80"
           ports:
@@ -55,17 +53,13 @@ spec:
             {{- if .Values.persistence.subPath }}
             subPath: {{ .Values.persistence.subPath }}
             {{- end }}
-          {{- if .Values.basicAuth.secretName }}
           - name: htpasswd
             readOnly: true
             mountPath: "/htpasswd"
-          {{- end }}
       volumes:
       - name: htpasswd
-        {{- if .Values.basicAuth.secretName }}
         secret:
-          secretName: {{ .Values.basicAuth.secretName }}
-        {{- end }}
+          secretName: {{ .Release.Namespace }}-basic-auth-upload-htpasswd
       - name: data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:

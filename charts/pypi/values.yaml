@@ -50,9 +50,9 @@ ingressUpload:
   #     hosts:
   #       - upload.myhost.com
 
-basicAuth:
-  # Authenticate for uploading, use existing secret
-  secretName: "basic-auth-upload-htpasswd"
+# basicAuth:
+# Authenticate for uploading, use existing secret
+#  secretName: "basic-auth-upload-htpasswd"
 
 livenessProbe:
   initialDelaySeconds: 30

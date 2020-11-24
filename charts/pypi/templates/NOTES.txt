@@ -1,11 +1,6 @@
 Do not forget to setup your secret for basic auth (downloading):
   htpasswd -c my-htpasswd-file my-user
   kubectl create secret generic basic-auth-htpasswd --from-file=my-htpasswd-file --namespace {{ .Release.Namespace }}
-{{- if .Values.basicAuth.secretName }}
-Do not forget to setup your secret for basic auth (uploading):
-  htpasswd -c my-htpasswd-file-upload my-user
-  kubectl create secret generic {{ .Values.basicAuth.secretName }} --from-file=my-htpasswd-file --namespace {{ .Release.Namespace }}
-{{- end }}
 Get the application URL by running these commands:
 {{- if .Values.ingress.enabled }}
 {{- range .Values.ingress.hosts }}
