@@ -1,0 +1,9 @@
+# Artifact Hub repository metadata file
+# repositoryID:
+owners:
+  - name: desaintmartin
+    email: cdesaintmartin@wiremind.io
+  - name: machine424
+    email: amrini@wiremind.io
+  - name: francoisminaud
+    email: fminaud@wiremind.io
