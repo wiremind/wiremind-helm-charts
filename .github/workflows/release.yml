@@ -25,6 +25,7 @@ jobs:
       - name: Add Helm repositories
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm repo add wiremind https://wiremind.github.com/wiremind-helm-charts
 
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.2.0

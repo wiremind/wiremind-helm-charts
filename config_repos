@@ -3,3 +3,4 @@ prometheus-community=https://prometheus-community.github.io/helm-charts
 grafana=https://grafana.github.io/helm-charts
 elastic=https://helm.elastic.co
 bitnami=https://charts.bitnami.com/bitnami
+wiremind=https://wiremind.github.com/wiremind-helm-charts

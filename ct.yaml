@@ -8,4 +8,5 @@ chart-repos:
   - grafana=https://grafana.github.io/helm-charts
   - elastic=https://helm.elastic.co
   - bitnami=https://charts.bitnami.com/bitnami
+  - wiremind=https://wiremind.github.com/wiremind-helm-charts
 helm-extra-args: "--timeout 600s"
