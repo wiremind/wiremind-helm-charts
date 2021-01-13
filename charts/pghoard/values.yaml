@@ -38,6 +38,7 @@ successfulJobsHistoryLimit: 1
 failedJobsHistoryLimit: 1
 
 restore:
+  schedule: "0 12 * * *"
   # The number of retries before considering a Job as failed
   retriesNumber: 0
   # after restore, run a query to check that data is here
