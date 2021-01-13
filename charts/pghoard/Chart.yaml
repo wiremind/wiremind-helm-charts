@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: "1.0"
 description: pghoard
 name: pghoard
-version: 0.6.1
+version: 0.6.2
 maintainers:
 - name: desaintmartin
   email: cdesaintmartin@wiremind.io
