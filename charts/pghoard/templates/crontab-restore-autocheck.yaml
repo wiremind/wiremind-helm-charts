@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/component: restore-autocheck
 spec:
-  schedule: "0 12 * * *"
+  schedule: {{ .Values.restore.schedule }}
   startingDeadlineSeconds: 600
   concurrencyPolicy: "Forbid"
   failedJobsHistoryLimit: {{ .Values.failedJobsHistoryLimit }}
