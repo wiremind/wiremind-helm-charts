@@ -24,7 +24,7 @@ spec:
             helm.sh/chart: {{ include "pghoard.chart" . }}
             app.kubernetes.io/instance: {{ .Release.Name }}
             app.kubernetes.io/managed-by: {{ .Release.Service }}
-            app.kubernetes.io/component: restore
+            app.kubernetes.io/component: restore-autocheck
             {{ .Release.Name }}-postgresql-client: "true"  # Allows postgresql netpol, from the postgresql helm chart, to accept pghoard
           annotations:
             checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
