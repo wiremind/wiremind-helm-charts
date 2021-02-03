@@ -6,7 +6,7 @@ version: 1.0.8
 home: https://www.clamav.net
 icon: https://www.clamav.net/assets/clamav-trademark.png
 sources:
-  - https://github.com/wiremind/wiremind-helm-charts
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/clamav
   - https://www.clamav.net
 maintainers:
   - name: desaintmartin
