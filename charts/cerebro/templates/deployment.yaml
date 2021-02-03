@@ -86,7 +86,7 @@ spec:
             httpGet:
               path: {{ .Values.config.basePath }}
               port: http
-            initialDelaySeconds: 120
+            initialDelaySeconds: 60
           {{- end }}
           {{- if .Values.deployment.readinessProbe.enabled}}
           readinessProbe:
