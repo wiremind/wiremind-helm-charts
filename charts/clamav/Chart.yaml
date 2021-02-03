@@ -1,0 +1,17 @@
+apiVersion: v2
+appVersion: "1.8"
+description: An Open-Source antivirus engine for detecting trojans, viruses, malware & other malicious threats.
+name: clamav
+version: 1.0.8
+home: https://www.clamav.net
+icon: https://www.clamav.net/assets/clamav-trademark.png
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts
+  - https://www.clamav.net
+maintainers:
+  - name: desaintmartin
+    email: cdesaintmartin@wiremind.io
+  - name: machine424
+    email: amrini@wiremind.io
+  - name: francoisminaud
+    email: fminaud@wiremind.io
