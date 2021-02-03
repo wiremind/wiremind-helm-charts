@@ -45,11 +45,10 @@ spec:
           livenessProbe:
             tcpSocket:
               port: clamavport
-            initialDelaySeconds: 300
+            periodSeconds: 30
           readinessProbe:
             tcpSocket:
               port: clamavport
-            initialDelaySeconds: 300
           resources:
 {{ toYaml .Values.resources | indent 12 }}
 {{- if .Values.freshclamConfig }}
