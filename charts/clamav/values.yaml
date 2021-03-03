@@ -64,3 +64,13 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+livenessProbe:
+  periodSeconds: 30
+  failureThreshold: 3
+  timeoutSeconds: 1
+
+readinessProbe:
+  periodSeconds: 30
+  failureThreshold: 3
+  timeoutSeconds: 1
