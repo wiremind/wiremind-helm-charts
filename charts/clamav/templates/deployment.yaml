@@ -43,8 +43,8 @@ spec:
               containerPort: 3310
               protocol: TCP
           livenessProbe:
-            failureThreshold: { { .Values.livenessProbe.failureThreshold } }
-            periodSeconds: { { .Values.livenessProbe.periodSeconds } }
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             tcpSocket:
               port: clamavport
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
