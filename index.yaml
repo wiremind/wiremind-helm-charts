@@ -54,7 +54,8 @@ entries:
       name: postgresql
       repository: https://charts.bitnami.com/bitnami
       version: 10.0.0
-    description: Clair is an open source project for the static analysis of vulnerabilities in application containers.
+    description: Clair is an open source project for the static analysis of vulnerabilities
+      in application containers.
     digest: c63288b1879b3d1c93b43cbed2602abb0ab33dbfb5e4e151db22d54d13e4dea5
     home: https://coreos.com/clair
     icon: https://cloud.githubusercontent.com/assets/343539/21630811/c5081e5c-d202-11e6-92eb-919d5999c77a.png
@@ -72,7 +73,8 @@ entries:
   - apiVersion: v2
     appVersion: "1.8"
     created: "2021-03-03T09:44:30.933763321Z"
-    description: An Open-Source antivirus engine for detecting trojans, viruses, malware & other malicious threats.
+    description: An Open-Source antivirus engine for detecting trojans, viruses, malware
+      & other malicious threats.
     digest: bda3b2b79dd471b74248f9b71a819e6f92e3edf8f4cc27cce76d2b3b3154bc21
     home: https://www.clamav.net
     icon: https://www.clamav.net/assets/clamav-trademark.png
@@ -94,7 +96,8 @@ entries:
   - apiVersion: v2
     appVersion: "1.8"
     created: "2021-03-02T06:32:05.271827677Z"
-    description: An Open-Source antivirus engine for detecting trojans, viruses, malware & other malicious threats.
+    description: An Open-Source antivirus engine for detecting trojans, viruses, malware
+      & other malicious threats.
     digest: 1da3592280fa2b191655b5f9bc170b0206d24c4b9e4faec56884ae7a2cb14837
     home: https://www.clamav.net
     icon: https://www.clamav.net/assets/clamav-trademark.png
@@ -116,7 +119,8 @@ entries:
   - apiVersion: v2
     appVersion: "1.8"
     created: "2021-02-05T11:44:12.287813336Z"
-    description: An Open-Source antivirus engine for detecting trojans, viruses, malware & other malicious threats.
+    description: An Open-Source antivirus engine for detecting trojans, viruses, malware
+      & other malicious threats.
     digest: 3444e755f37ffd649a0dd1988e9dfdcafe5a7c6de9e49aaf1ab70ef6356eae87
     home: https://www.clamav.net
     icon: https://www.clamav.net/assets/clamav-trademark.png
@@ -138,7 +142,8 @@ entries:
   - apiVersion: v2
     appVersion: "1.8"
     created: "2021-02-03T09:16:59.06362265Z"
-    description: An Open-Source antivirus engine for detecting trojans, viruses, malware & other malicious threats.
+    description: An Open-Source antivirus engine for detecting trojans, viruses, malware
+      & other malicious threats.
     digest: 9015a699c9db695c127bbc00803ce53bd3f9824e3640a92f6db017a12f542398
     home: https://www.clamav.net
     icon: https://www.clamav.net/assets/clamav-trademark.png
@@ -160,7 +165,8 @@ entries:
   - apiVersion: v2
     appVersion: 2.24.0
     created: "2020-11-24T16:08:07.124797208Z"
-    description: OpenID Connect Identity (OIDC) and OAuth 2.0 Provider with Pluggable Connectors
+    description: OpenID Connect Identity (OIDC) and OAuth 2.0 Provider with Pluggable
+      Connectors
     digest: 3d6eb47a3f1c85687632a667c331b2329deffc3baf9db4418b826e9667c9abf7
     home: https://github.com/dexidp/dex/
     icon: https://github.com/dexidp/dex/raw/master/Documentation/logos/dex-glyph-color.png
@@ -246,6 +252,31 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/external-monitoring-0.2.1/external-monitoring-0.2.1.tgz
     version: 0.2.1
+  istio-operator:
+  - apiVersion: v2
+    created: "2021-03-04T18:43:02.685941416Z"
+    description: Helm chart for deploying Istio operator. This is a carbon-copy of
+      the chart found in https://github.com/istio/istio, with container image versions
+      pinned
+    digest: 513a50e9ab08e53aa88c61b364307471d0960b413de8e50ef6dfa2629e7345d0
+    icon: https://istio.io/latest/favicons/android-192x192.png
+    keywords:
+    - istio
+    - operator
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: istio-operator
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/istio-operator
+    - https://github.com/istio/istio/tree/master/operator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/istio-operator-1.9.1/istio-operator-1.9.1.tgz
+    version: 1.9.1
   nginx:
   - apiVersion: v2
     created: "2020-11-24T16:08:07.975878328Z"
@@ -356,4 +387,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2020-11-24T16:08:06.053420949Z"
+generated: "2021-03-04T18:43:02.685963616Z"
