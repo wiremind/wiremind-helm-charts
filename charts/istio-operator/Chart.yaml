@@ -1,0 +1,19 @@
+apiVersion: v2
+name: istio-operator
+version: 1.9.1
+description: Helm chart for deploying Istio operator. This is a carbon-copy of the chart found in https://github.com/istio/istio, with container image versions pinned
+keywords:
+  - istio
+  - operator
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/istio-operator
+  - https://github.com/istio/istio/tree/master/operator
+engine: gotpl
+icon: https://istio.io/latest/favicons/android-192x192.png
+maintainers:
+- name: desaintmartin
+  email: cdesaintmartin@wiremind.io
+- name: machine424
+  email: amrini@wiremind.io
+- name: francoisminaud
+  email: fminaud@wiremind.io
