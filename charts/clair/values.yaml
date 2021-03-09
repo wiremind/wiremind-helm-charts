@@ -6,7 +6,7 @@ logLevel: debug
 insecureTls: false
 image:
   repository: quay.io/coreos/clair
-  tag: v2.1.4
+  tag: v2.1.6
   pullPolicy: IfNotPresent
 service:
   name: clair
