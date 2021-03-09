@@ -277,6 +277,28 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/istio-operator-1.9.1/istio-operator-1.9.1.tgz
     version: 1.9.1
+  karma:
+  - apiVersion: v1
+    appVersion: "0.80"
+    created: "2021-03-09T15:45:15.704079757Z"
+    description: A Helm chart for Karma - an UI for Prometheus Alertmanager
+    digest: 806d018dc970a7c606a799896b3d095956d3b65ab2ea90533460e7eb29fa28e7
+    home: https://github.com/prymitive/karma
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: karma
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/karma
+    - https://hub.docker.com/r/lmierzwa/karma/
+    - https://github.com/prymitive/karma
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/karma-1.7.3/karma-1.7.3.tgz
+    version: 1.7.3
   nginx:
   - apiVersion: v2
     created: "2020-11-24T16:08:07.975878328Z"
@@ -387,4 +409,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2021-03-04T18:43:02.685963616Z"
+generated: "2021-03-09T15:45:15.704098757Z"
