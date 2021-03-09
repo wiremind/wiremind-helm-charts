@@ -47,6 +47,30 @@ entries:
     version: 1.9.6
   clair:
   - apiVersion: v2
+    appVersion: v2.1.6
+    created: "2021-03-09T16:38:33.789999994Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.0.0
+    description: Clair is an open source project for the static analysis of vulnerabilities
+      in application containers.
+    digest: 8299e10fc441449d982c5726a63f245fc7e9d85df95501bad24f27801104eec0
+    home: https://coreos.com/clair
+    icon: https://cloud.githubusercontent.com/assets/343539/21630811/c5081e5c-d202-11e6-92eb-919d5999c77a.png
+    kubeVersion: '>=1.14.0-0'
+    maintainers:
+    - email: dev@wiremind.io
+      name: Wiremind
+    name: clair
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/clair
+    - https://github.com/quay/clair
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/clair-0.2.6/clair-0.2.6.tgz
+    version: 0.2.6
+  - apiVersion: v2
     appVersion: v2.1.4
     created: "2020-11-24T16:08:06.83138199Z"
     dependencies:
@@ -280,6 +304,27 @@ entries:
   karma:
   - apiVersion: v1
     appVersion: "0.80"
+    created: "2021-03-09T16:38:33.90330844Z"
+    description: A Helm chart for Karma - an UI for Prometheus Alertmanager
+    digest: a1e5c33743b2a48385d3a07e1d337cf46837f4943f26778a9618b584fa0babd0
+    home: https://github.com/prymitive/karma
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: karma
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/karma
+    - https://hub.docker.com/r/lmierzwa/karma/
+    - https://github.com/prymitive/karma
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/karma-1.7.4/karma-1.7.4.tgz
+    version: 1.7.4
+  - apiVersion: v1
+    appVersion: "0.80"
     created: "2021-03-09T15:45:15.704079757Z"
     description: A Helm chart for Karma - an UI for Prometheus Alertmanager
     digest: 806d018dc970a7c606a799896b3d095956d3b65ab2ea90533460e7eb29fa28e7
@@ -409,4 +454,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2021-03-09T15:45:15.704098757Z"
+generated: "2021-03-09T16:38:33.90334614Z"
