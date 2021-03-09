@@ -7,7 +7,7 @@ sources:
   - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/karma
   - https://hub.docker.com/r/lmierzwa/karma/
   - https://github.com/prymitive/karma
-version: 1.7.3
+version: 1.7.4
 maintainers:
   - name: desaintmartin
     email: cdesaintmartin@wiremind.io
