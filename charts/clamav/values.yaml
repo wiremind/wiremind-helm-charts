@@ -70,12 +70,12 @@ affinity: {}
 
 livenessProbe:
   initialDelaySeconds: 300
-  periodSeconds: 30
+  periodSeconds: 10
   failureThreshold: 3
   timeoutSeconds: 1
 
 readinessProbe:
   initialDelaySeconds: 90
-  periodSeconds: 30
+  periodSeconds: 10
   failureThreshold: 3
   timeoutSeconds: 1
