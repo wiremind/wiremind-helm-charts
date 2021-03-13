@@ -8,7 +8,8 @@
 ## QuickStart
 
 ```bash
-$ helm install stable/clamav --name foo --namespace bar
+$ helm repo add wiremind https://wiremind.github.com/wiremind-helm-charts
+$ helm install my-release wiremind/clamav
 ```
 
 ## Introduction
@@ -17,29 +18,27 @@ This chart bootstraps a ClamAV deployment and service on a Kubernetes cluster us
 
 ## Prerequisites
 
-- Kubernetes 1.4+
-- PV provisioner support in the underlying infrastructure (optional)
+- Kubernetes 1.9+
 
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install --name my-release stable/clamav
+$ helm repo add wiremind https://wiremind.github.com/wiremind-helm-charts
+$ helm install my-release wiremind/clamav
 ```
 
 The command deploys ClamAV on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
-In order to deploy this chart under Kubernetes 1.9+, the `kubeMeta.deploymentApiVersion` MUST be set to "apps/v1".
-
 ## Uninstalling the Chart
 
 To uninstall/delete the `my-release` deployment:
 
 ```bash
-$ helm delete my-release --purge
+$ helm uninstall my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -55,14 +54,11 @@ their descriptions can be seen in `values.yaml`. The [full documentation](https:
 
 ClamAV uses around 1 GB RAM.
 
-
-
-
 # Virus Definitions
 
 For ClamAV to work properly, both the ClamAV engine and the ClamAV Virus Database (CVD) must be kept up to date.
 
 The virus database is usually updated many times per week.
 
-Freshclam should perform these updates automatically. Instructions for setting up Freshclam can be found in the [ documentation](https://www.clamav.net/documents/clam-antivirus-0-101-0-user-manual) section.
-If your network is segmented or the end hosts are unable to reach the Internet, you should investigate setting up a private local mirror. If this is not viable, you may use these direct [ download](https://www.clamav.net/downloads)
+Freshclam should perform these updates automatically. Instructions for setting up Freshclam can be found in the [documentation](https://www.clamav.net/documents/clam-antivirus-0-101-0-user-manual) section.
+If your network is segmented or the end hosts are unable to reach the Internet, you should investigate setting up a private local mirror. If this is not viable, you may use these direct [download](https://www.clamav.net/downloads)
