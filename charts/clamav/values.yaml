@@ -29,6 +29,9 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+clamdConfig: {}
+freshclamConfig: {}
+
 # Use freshclamConfig to define the content of /etc/clamav/freshclam.conf. Example:
 # freshclamConfig: |
 #   HTTPProxyServer your-proxy.example.com
