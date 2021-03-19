@@ -45,7 +45,7 @@ es-data-hot:
       requests:
         storage: 100M
   ingress:
-    enabled: true
+    enabled: false
     annotations:
       kubernetes.io/tls-acme: "false"
       nginx.ingress.kubernetes.io/auth-type: basic
@@ -176,7 +176,7 @@ kibana:
       server.host: "0"
       elasticsearch.requestTimeout: 180000
   ingress:
-    enabled: true
+    enabled: false
     annotations:
       nginx.ingress.kubernetes.io/auth-signin: https://sso.setme.org/oauth2/start
       nginx.ingress.kubernetes.io/auth-url: 'http://oauth2-proxy.dex.svc.cluster.local/oauth2/auth'
