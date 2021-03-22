@@ -2,13 +2,17 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# Number of replicas
 replicaCount: 1
 
 image:
-  repository: lmierzwa/karma
-  tag: v0.80
+  ## The image to run
+  repository: ghcr.io/prymitive/karma
+  ## The image tag to pull
+  tag: v0.81
   pullPolicy: IfNotPresent
 
+# Override (full)name of app
 nameOverride: ""
 fullnameOverride: ""
 
@@ -24,10 +28,10 @@ service:
   labels: {}
 
 serviceAccount:
-  # Specifies whether a ServiceAccount should be created
+  ## Specifies whether a ServiceAccount should be created
   create: true
-  # The name of the ServiceAccount to use.
-  # If not set and create is true, a name is generated using the fullname template
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the fullname template
   name:
 
 ingress:
@@ -47,10 +51,10 @@ deployment:
   annotations: {}
 
 resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   # limits:
   #  cpu: 100m
   #  memory: 128Mi
@@ -64,25 +68,26 @@ tolerations: []
 
 affinity: {}
 
-# Labels to be added to pod
+## Labels to be added to pod
 podLabels: {}
 
-# Annotations to be added to pod
+## Annotations to be added to pod
 podAnnotations: {}
 
 securityContext: {}
 
-# configuration for liveness probe
+## configuration for liveness probe
 livenessProbe:
   delay: 5
   period: 5
   path: /health
 
-# configMap dictates if a configmap based configuration for Karma should be used
-# to provide advanced configuration. NOTE, you must use port 8080!
+## configMap dictates if a configmap based configuration for Karma should be used
+## to provide advanced configuration. NOTE, you must use port 8080!
 configMap:
   enabled: false
   annotations: {}
+  ## karma compatible YAML configuration
   # rawConfig:
   #   alertmanager:
   #   interval: 30s
@@ -137,10 +142,10 @@ configMap:
   #     private: secret
   #   public: 123456789
 
-# Names of secrets that will be mounted to `/etc/certs/<secret_name>` in the karma container.
-# These secrets can be used to configure TLS for Karma's Alertmanagers by passing their paths to
-# the appropriate Karma configuration parameters. For example, secret `foo` containing a `ca.crt`
-# will yield a file at `/etc/certs/foo/ca.crt`. That path can then be provided as the value to
+## Names of secrets that will be mounted to `/etc/certs/<secret_name>` in the karma container.
+## These secrets can be used to configure TLS for Karma's Alertmanagers by passing their paths to
+## the appropriate Karma configuration parameters. For example, secret `foo` containing a `ca.crt`
+## will yield a file at `/etc/certs/foo/ca.crt`. That path can then be provided as the value to
 # `configMap.rawConfig.alertmanager.servers[].tls.ca`.
-# See <https://github.com/prymitive/karma/blob/master/docs/CONFIGURATION.md#alertmanagers>.
+## Ref: <https://github.com/prymitive/karma/blob/master/docs/CONFIGURATION.md#alertmanagers>.
 certSecretNames: []

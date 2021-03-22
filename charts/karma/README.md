@@ -16,7 +16,8 @@ Optionally you can also enable ingress.
 To install the chart with the release name `my-release`, run:
 
 ```bash
-$ helm install --name my-release stable/karma
+$ helm repo add wiremind https://wiremind.github.com/wiremind-helm-charts
+$ helm install --name my-release wiremind/karma
 ```
 
 After a few seconds, you should see service statuses being written to the configured output.
@@ -35,40 +36,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Configuration
 
-The following table lists the configurable parameters of the karma chart and their default values.
-
-|             Parameter               |            Description                                 |                    Default                |
-|-------------------------------------|--------------------------------------------------------|-------------------------------------------|
-| `replicaCount`                      | Number of replicas                                     | `1`                                       |
-| `image.repository`                  | The image to run                                       | `lmierzwa/karma`                          |
-| `image.tag`                         | The image tag to pull                                  | `v0.80`                                   |
-| `image.pullPolicy`                  | Image pull policy                                      | `IfNotPresent`                            |
-| `nameOverride`                      | Override name of app                                   | ``                                        |
-| `fullnameOverride`                  | Override full name of app                              | ``                                        |
-| `service.type`                      | Type of Service                                        | `ClusterIP`                               |
-| `service.port`                      | Port for kubernetes service                            | `80`                                      |
-| `service.annotations`               | Annotations to add to the service                      | `{}`                                      |
-| `deployment.annotations`            | Annotations to add to the deployment                   | `{}`                                      |
-| `resources.requests.cpu`            | CPU resource requests                                  |                                           |
-| `resources.limits.cpu`              | CPU resource limits                                    |                                           |
-| `resources.requests.memory`         | Memory resource requests                               |                                           |
-| `resources.limits.memory`           | Memory resource limits                                 |                                           |
-| `ingress`                           | Settings for ingress                                   | `{}`                                      |
-| `nodeSelector`                      | Settings for nodeselector                              | `{}`                                      |
-| `tolerations`                       | Settings for toleration                                | `{}`                                      |
-| `affinity`                          | Settings for affinity                                  | `{}`                                      |
-| `podLabels`                         | Labels to be added to pod                              | `{}`                                      |
-| `podAnnotations`                    | Annotations to be added to pod                         | `{}`                                      |
-| `securityContext`                   | Settings for security context                          | `{}`                                      |
-| `serviceAccount.create`             | Create service-account                                 | `true`                                    |
-| `serviceAccount.name`               | Override service-account name                          | ``                                        |
-| `livenessProbe.delay`               | Specify delay in executing probe                       | `5`                                       |
-| `livenessProbe.period`              | Speicy period of liveness probe                        | `5`                                       |
-| `livenessProbe.path`                | Specify path liveness probe should hit                 | `/health`                                 |
-| `configMap.enabled`                 | Provide a custom karma configuration                   | `false`                                   |
-| `configMap.annotations`             | Annotations to add to the config map                   | `{}`                                      |
-| `configMap.rawConfig`               | A karma compatible YAML configuration                  | ``                                        |
-| `certSecretNames`                   | Mount Alertmanager certificates to `/etc/certs/<name>` | `[]`                                      |
+The values.yaml lists the configurable parameters of the karma chart and their default values.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
