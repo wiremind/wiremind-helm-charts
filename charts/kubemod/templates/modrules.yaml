@@ -1,0 +1,14 @@
+{{ range .Values.modrules }}
+
+---
+
+apiVersion: api.kubemod.io/v1beta1
+kind: ModRule
+metadata:
+  name: {{ include "kubemod.fullname" $ }}-{{ .name }}
+  labels:
+    {{- include "kubemod.labels" $ | nindent 4 }}
+spec:
+{{ toYaml .spec | indent 2 }}
+
+{{ end }}

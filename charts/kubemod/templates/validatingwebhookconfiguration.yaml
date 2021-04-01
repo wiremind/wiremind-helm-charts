@@ -1,0 +1,30 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  creationTimestamp: null
+  name: {{ include "kubemod.serviceAccountName" . }}-validating-webhook-configuration
+  labels:
+    {{- include "kubemod.labels" . | nindent 4 }}
+webhooks:
+- admissionReviewVersions:
+  - v1beta1
+  clientConfig:
+    caBundle: Cg==
+    service:
+      name: {{ include "kubemod.fullname" . }}-webhook-service
+      namespace: {{ .Release.Namespace }}
+      path: /validate-api-kubemod-io-v1beta1-modrule
+  failurePolicy: Fail
+  name: vmodrule.kubemod.io
+  rules:
+  - apiGroups:
+    - api.kubemod.io
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - modrules
+  sideEffects: None
+  timeoutSeconds: 5
