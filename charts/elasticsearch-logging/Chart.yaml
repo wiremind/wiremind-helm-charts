@@ -34,7 +34,7 @@ dependencies:
     version: "*"
     condition: prometheus-elasticsearch-exporter.enabled
   - name: cerebro
-    repository: "https://wiremind.github.com/wiremind-helm-charts"
+    repository: "https://wiremind.github.io/wiremind-helm-charts"
     version: "*"
     condition: cerebro.enabled
 sources:

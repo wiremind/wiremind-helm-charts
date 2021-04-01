@@ -8,7 +8,7 @@
 ## QuickStart
 
 ```bash
-$ helm repo add wiremind https://wiremind.github.com/wiremind-helm-charts
+$ helm repo add wiremind https://wiremind.github.io/wiremind-helm-charts
 $ helm install my-release wiremind/clamav
 ```
 
@@ -25,7 +25,7 @@ This chart bootstraps a ClamAV deployment and service on a Kubernetes cluster us
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm repo add wiremind https://wiremind.github.com/wiremind-helm-charts
+$ helm repo add wiremind https://wiremind.github.io/wiremind-helm-charts
 $ helm install my-release wiremind/clamav
 ```
 

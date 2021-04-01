@@ -25,7 +25,7 @@ jobs:
       - name: Add Helm repositories
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
-          helm repo add wiremind https://wiremind.github.com/wiremind-helm-charts
+          helm repo add wiremind https://wiremind.github.io/wiremind-helm-charts
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
           helm repo add elastic https://helm.elastic.co
 

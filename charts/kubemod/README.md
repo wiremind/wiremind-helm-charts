@@ -9,7 +9,7 @@ https://github.com/kubemod/kubemod
 ## QuickStart
 
 ```bash
-$ helm repo add wiremind https://wiremind.github.com/wiremind-helm-charts
+$ helm repo add wiremind https://wiremind.github.io/wiremind-helm-charts
 $ helm install my-release wiremind/kubemod
 ```
 
@@ -22,7 +22,7 @@ This chart bootstraps a kubemod deployment and service on a Kubernetes cluster u
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm repo add wiremind https://wiremind.github.com/wiremind-helm-charts
+$ helm repo add wiremind https://wiremind.github.io/wiremind-helm-charts
 $ helm install my-release wiremind/kubemod
 ```
 

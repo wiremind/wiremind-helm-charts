@@ -18,7 +18,7 @@ dependencies:
   repository: https://prometheus-community.github.io/helm-charts
   version: 4.3.0
 - name: cerebro
-  repository: https://wiremind.github.com/wiremind-helm-charts
+  repository: https://wiremind.github.io/wiremind-helm-charts
   version: 1.9.8
 digest: sha256:fa0e11ccd40a87879db27f540996ad4d7c1dee088d4b827a4e15ec07c90118ef
 generated: "2021-03-19T13:12:59.436502+01:00"

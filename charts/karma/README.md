@@ -16,7 +16,7 @@ Optionally you can also enable ingress.
 To install the chart with the release name `my-release`, run:
 
 ```bash
-$ helm repo add wiremind https://wiremind.github.com/wiremind-helm-charts
+$ helm repo add wiremind https://wiremind.github.io/wiremind-helm-charts
 $ helm install --name my-release wiremind/karma
 ```
 
