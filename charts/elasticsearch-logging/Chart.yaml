@@ -2,8 +2,8 @@ apiVersion: v2
 description: Elasticsearch logging
 home: https://github.com/elastic/helm-charts
 name: elasticsearch-logging-wiremind
-version: 2.0.0
-appVersion: 7.11.2
+version: 2.0.1
+appVersion: 7.12.0
 dependencies:
   - name: elasticsearch
     repository: "https://helm.elastic.co"
