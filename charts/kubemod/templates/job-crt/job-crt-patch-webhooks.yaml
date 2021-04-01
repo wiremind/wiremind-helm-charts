@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "kubemod.fullname" . }}-crt-patch-webhooks
+  labels:
+    {{- include "kubemod.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  backoffLimit: 4
+  template:
+    spec:
+      containers:
+      - command:
+        - /bin/sh
+        - -c
+        - |
+          ca_bundle=$(cat /tmp/ca/ca.pem | base64 - | tr -d '\n' ) && \
+          sed -r -i "s|Cg==|$ca_bundle|" patch-mutating-webhook-configuration.json && \
+          sed -r -i "s|Cg==|$ca_bundle|" patch-validating-webhook-configuration.json && \
+          echo "Applying mutating webhook configuration patch..." && \
+          kubectl patch mutatingwebhookconfiguration {{ include "kubemod.fullname" . }}-mutating-webhook-configuration --type=json --patch "$(cat patch-mutating-webhook-configuration.json)" && \
+          echo "Applying validating webhook configuration patch..." && \
+          kubectl patch validatingwebhookconfiguration {{ include "kubemod.fullname" . }}-validating-webhook-configuration --type=json --patch "$(cat patch-validating-webhook-configuration.json)"
+        image: "{{ .Values.job.image.repository }}:{{ .Values.job.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.job.image.pullPolicy }}
+        name: kubemod-crt
+        volumeMounts:
+          - mountPath: /tmp/ca
+            name: ca
+            readOnly: true
+      restartPolicy: Never
+      serviceAccountName: {{ include "kubemod.serviceAccountName" . }}-crt
+      volumes:
+        - name: ca
+          secret:
+            defaultMode: 420
+            secretName: {{ include "kubemod.fullname" . }}-crt-ca
