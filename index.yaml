@@ -96,6 +96,29 @@ entries:
   clamav:
   - apiVersion: v2
     appVersion: "1.8"
+    created: "2021-04-01T19:08:39.997122665Z"
+    description: An Open-Source antivirus engine for detecting trojans, viruses, malware
+      & other malicious threats.
+    digest: b73a60ac2bee1cf66ef7187bc62bda4f1d6fdf6ba4f5237ccccda2cb1451a626
+    home: https://www.clamav.net
+    icon: https://www.clamav.net/assets/clamav-trademark.png
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: clamav
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/clamav
+    - https://github.com/Mailu/Mailu
+    - https://github.com/Cisco-Talos/clamav-devel
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/clamav-1.2.1/clamav-1.2.1.tgz
+    version: 1.2.1
+  - apiVersion: v2
+    appVersion: "1.8"
     created: "2021-03-16T11:58:07.045065313Z"
     description: An Open-Source antivirus engine for detecting trojans, viruses, malware
       & other malicious threats.
@@ -234,6 +257,60 @@ entries:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/dex-2.15.3/dex-2.15.3.tgz
     version: 2.15.3
   elasticsearch-logging-wiremind:
+  - apiVersion: v2
+    appVersion: 7.12.0
+    created: "2021-04-01T19:08:40.288543598Z"
+    dependencies:
+    - alias: es-data-hot
+      condition: es-data-hot.enabled
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: '*'
+    - alias: es-data-warm
+      condition: es-data-warm.enabled
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: '*'
+    - alias: es-data-cold
+      condition: es-data-cold.enabled
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: '*'
+    - alias: es-master
+      condition: es-master.enabled
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: '*'
+    - condition: kibana.enabled
+      name: kibana
+      repository: https://helm.elastic.co
+      version: '*'
+    - condition: prometheus-elasticsearch-exporter.enabled
+      name: prometheus-elasticsearch-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: '*'
+    - condition: cerebro.enabled
+      name: cerebro
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    description: Elasticsearch logging
+    digest: 7331c550233e32ffc6f8dfa17d1c1f08731c1cd4520cb15fc3cd58c134f16198
+    home: https://github.com/elastic/helm-charts
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: elasticsearch-logging-wiremind
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch-logging
+    - https://github.com/elastic/helm-charts/tree/master/elasticsearch
+    - https://github.com/elastic/elasticsearch
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/elasticsearch-logging-wiremind-2.0.1/elasticsearch-logging-wiremind-2.0.1.tgz
+    version: 2.0.1
   - apiVersion: v2
     appVersion: 7.11.2
     created: "2021-03-19T12:35:40.790265673Z"
@@ -406,6 +483,26 @@ entries:
   karma:
   - apiVersion: v1
     appVersion: "0.81"
+    created: "2021-04-01T19:08:40.58753876Z"
+    description: A Helm chart for Karma - an UI for Prometheus Alertmanager
+    digest: 9941d9799ba31c026714f46b1e2962d366eb36d8e2a09b187c7bd011e976b539
+    home: https://github.com/prymitive/karma
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: karma
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/karma
+    - https://github.com/prymitive/karma
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/karma-1.7.6/karma-1.7.6.tgz
+    version: 1.7.6
+  - apiVersion: v1
+    appVersion: "0.81"
     created: "2021-03-22T10:37:15.176114294Z"
     description: A Helm chart for Karma - an UI for Prometheus Alertmanager
     digest: 569893439336594e5220820bbc98c957ddcccc4280940c5d48f0d6a68c19368b
@@ -467,6 +564,26 @@ entries:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/karma-1.7.3/karma-1.7.3.tgz
     version: 1.7.3
   kubemod:
+  - apiVersion: v2
+    appVersion: 0.10.0
+    created: "2021-04-01T19:08:40.853637264Z"
+    description: KubeMod is a universal Kubernetes mutating operator.
+    digest: 072904b8943dee1b12722ed82d3c84e54948f9d7800e673bb5b42f9acacd5b0a
+    home: https://github.com/kubemod/kubemod
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: kubemod
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/kubemod
+    - https://github.com/kubemod/kubemod
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/kubemod-0.1.3/kubemod-0.1.3.tgz
+    version: 0.1.3
   - apiVersion: v2
     appVersion: 0.10.0
     created: "2021-04-01T16:13:13.625295778Z"
@@ -617,4 +734,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2021-04-01T16:13:13.625335081Z"
+generated: "2021-04-01T19:08:40.853707365Z"
