@@ -66,6 +66,7 @@ affinity: {}
 modrules: []
 # Example:
 # - name: pause-everything
+#   namespace: my-namespace
 #   spec:
 #     type: Patch
 #     match:

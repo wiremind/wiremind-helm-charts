@@ -6,6 +6,7 @@ apiVersion: api.kubemod.io/v1beta1
 kind: ModRule
 metadata:
   name: {{ include "kubemod.fullname" $ }}-{{ .name }}
+  namespace: {{ .namespace }}
   labels:
     {{- include "kubemod.labels" $ | nindent 4 }}
 spec:
