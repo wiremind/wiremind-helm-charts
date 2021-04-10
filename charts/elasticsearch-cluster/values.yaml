@@ -31,7 +31,7 @@ es-data-hot:
   # resources:
   #   requests:
   #     cpu: "10m"
-  #     memory: "128M"
+  #     memory: "128Mi"
   #   limits:
   #     memory: "56Gi"
   #     cpu: 15
@@ -75,7 +75,7 @@ es-data-warm:
   esJavaOpts: "-Xmx128m -Xms128m"
   # resources:
   #   requests:
-  #     memory: "128M"
+  #     memory: "128Mi"
   #     cpu: "10m"
   #   limits:
   #     memory: "18Gi"
@@ -111,11 +111,34 @@ es-data-cold:
   esJavaOpts: "-Xmx128m -Xms128m"
   # resources:
   #   requests:
-  #     memory: "128M"
+  #     memory: "128Mi"
   #     cpu: "10m"
   #   limits:
   #     memory: 16Gi
   #     cpu: 6
+  volumeClaimTemplate:
+    resources:
+      requests:
+        storage: 1Gi
+
+# The ingest (a.k.a client) nodes
+es-ingest:
+  <<: *defaults
+  nodeGroup: "master"
+  enabled: false
+  roles:
+    master: "false"
+    ingest: "true"
+    data: "false"
+  replicas: 1
+  esJavaOpts: "-Xms128m -Xmx128m"
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: "10m"
+    limits:
+      memory: "1Gi"
+      cpu: "2"
   volumeClaimTemplate:
     resources:
       requests:
@@ -144,7 +167,7 @@ es-master:
   esJavaOpts: "-Xms128m -Xmx128m"
   resources:
     requests:
-      memory: "128M"
+      memory: 128Mi
       cpu: "10m"
     limits:
       memory: "1Gi"
