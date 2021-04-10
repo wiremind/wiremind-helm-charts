@@ -1,18 +1,15 @@
 replicaCount: 1
 revisionHistoryLimit: 3
-env:
-  # AUTH_TYPE: "basic"
-  # BASIC_AUTH_USER: "admin"
 
 image:
   repository: lmenezes/cerebro
   # Note: when updating the version, ensure `config` and the ConfigMap are kept
   # in sync with the default configuration of the upstream image
-  tag: 0.9.3
+  tag: 0.9.4
   pullPolicy: IfNotPresent
+  # pullSecrets:
 
 deployment:
-  # additional labels
   labels: {}
   annotations: {}
   podLabels: {}
@@ -57,6 +54,10 @@ tolerations: []
 
 affinity: {}
 
+env:
+  # AUTH_TYPE: "basic"
+  # BASIC_AUTH_USER: "admin"
+
 # Reference to a Secret object with environment variables
 # envFromSecretRef: 'my-secret-ref'
 
@@ -71,6 +72,7 @@ config:
   # random 64 length string
   secret: ''
   tlsVerify: true
+  ## CA cert to use for cert validation
   # tlsCaCert: /opt/cerebro/conf/certs/ca.crt
 
 # volumeMounts:
