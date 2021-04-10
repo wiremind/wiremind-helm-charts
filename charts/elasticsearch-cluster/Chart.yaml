@@ -1,8 +1,8 @@
 apiVersion: v2
-description: Elasticsearch logging
+description: Elasticsearch cluster - a hat chart for several elasticsearch charts
 home: https://github.com/elastic/helm-charts
 name: elasticsearch-logging-wiremind
-version: 2.0.1
+version: 3.0.0
 appVersion: 7.12.0
 dependencies:
   - name: elasticsearch
@@ -25,6 +25,11 @@ dependencies:
     version: "*"
     alias: es-master
     condition: es-master.enabled
+  - name: elasticsearch
+    repository: "https://helm.elastic.co"
+    version: "*"
+    alias: es-ingest
+    condition: es-ingest.enabled
   - name: kibana
     repository: "https://helm.elastic.co"
     version: "*"
