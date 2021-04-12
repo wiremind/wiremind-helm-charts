@@ -83,7 +83,7 @@ livenessProbe:
   path: /health
 
 # store the whole Karma configuration in a Secret if you have sensitive
-# information like basic-auth credentials for Alertmanager endpoints et. al. 
+# information like basic-auth credentials for Alertmanager endpoints et. al.
 # The structure of the Secret must be the same as in `configMap.rawConfig`.
 # NOTE: you can either choose the `configMap` or `secretConfig`, it cannot be both
 secretConfig:
