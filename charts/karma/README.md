@@ -96,7 +96,6 @@ Next, point to the secret in your values file
 # values.yaml
 secretConfig:
   enabled: true
-  annotations: {}
   secretName: sensitive-karma-config
 ```
 
