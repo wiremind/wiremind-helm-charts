@@ -52,3 +52,52 @@ $ helm install --name my-release -f values.yaml stable/karma
 ```
 
 > **Tip**: You will have to define the URL to alertmanager in env-settings in [values.yaml](values.yaml), under key ALERTMANAGER_URI .
+
+### Secure configuration
+
+If you have sensitive information in your Karma config you can wrap it in a Kubernetes Secret and then just point to the name of the Secret.
+
+The structure of the Secret must follow the same pattern defined in `configMap.rawConfig`, here's an example on how to generate this Secret
+with your Karma configuration:
+
+```sh
+# create a temporary file that contains your Karma configuration
+cat > karma.conf <<EOL
+alertmanager:
+  interval: 60s
+  servers:
+    - name: prod-alertmanager
+      uri: https://sensitive:password@alermanager.prod.example.com
+      timeout: 10s
+      proxy: true
+    - name: client-auth
+      uri: https://localhost:9093
+      timeout: 10s
+      tls:
+        ca: /etc/ssl/certs/ca-bundle.crt
+        cert: /etc/karma/client.pem
+        key: /etc/karma/client.key
+annotations:
+  default:
+    hidden: false
+  hidden:
+    - help
+  visible: []
+EOL
+
+# create a Secret from this file with the key `karma.conf`
+kubectl create secret generic sensitive-karma-config \
+    --from-file=karma.conf=./karma.conf
+```
+
+Next, point to the secret in your values file
+
+```yml
+# values.yaml
+secretConfig:
+  enabled: true
+  annotations: {}
+  secretName: sensitive-karma-config
+```
+
+**NOTE:** you can either use `secretConfig` or `configMap`, you can't enable both.
