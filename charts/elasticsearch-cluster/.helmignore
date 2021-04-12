@@ -1,4 +1,3 @@
-elasticsearch-logging-wiremind-*.tgz
 helmfile/
 
 # Patterns to ignore when building packages.
