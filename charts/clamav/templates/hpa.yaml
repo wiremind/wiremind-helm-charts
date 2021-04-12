@@ -29,4 +29,4 @@ spec:
         metricName: http_requests
         targetAverageValue: {{ .Values.hpa.requests }}
   {{- end }}
-  {{- end }}
+{{- end }}
