@@ -118,6 +118,29 @@ entries:
   clamav:
   - apiVersion: v2
     appVersion: "1.8"
+    created: "2021-04-12T06:39:59.938007132Z"
+    description: An Open-Source antivirus engine for detecting trojans, viruses, malware
+      & other malicious threats.
+    digest: 5100eb2b3227f2ace8b7ecc4587ee23e2fee20584810b94a6eea206ef7edbd70
+    home: https://www.clamav.net
+    icon: https://www.clamav.net/assets/clamav-trademark.png
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: clamav
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/clamav
+    - https://github.com/Mailu/Mailu
+    - https://github.com/Cisco-Talos/clamav-devel
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/clamav-1.3.0/clamav-1.3.0.tgz
+    version: 1.3.0
+  - apiVersion: v2
+    appVersion: "1.8"
     created: "2021-04-01T19:08:39.997122665Z"
     description: An Open-Source antivirus engine for detecting trojans, viruses, malware
       & other malicious threats.
@@ -815,4 +838,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2021-04-10T19:17:27.50854224Z"
+generated: "2021-04-12T06:39:59.938090935Z"
