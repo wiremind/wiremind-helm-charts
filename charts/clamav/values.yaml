@@ -66,3 +66,12 @@ readinessProbe:
   periodSeconds: 10
   failureThreshold: 3
   timeoutSeconds: 1
+
+hpa:
+  enabled: true
+  maxReplicas: 5
+  # average total CPU usage per pod (1-100)
+  cpu: 80
+  # average memory usage per pod (100Mi-1Gi)
+  memory:
+  requests:
