@@ -620,6 +620,31 @@ entries:
     version: 0.2.1
   istio-operator:
   - apiVersion: v2
+    appVersion: 1.9.3
+    created: "2021-04-15T20:41:50.796723751Z"
+    description: Helm chart for deploying Istio operator. This is a carbon-copy of
+      the chart found in https://github.com/istio/istio, with container image versions
+      pinned
+    digest: dac10390f47e91a980279559efe73ae6e6b23054826dc087903bd6ab9bf7f4ca
+    icon: https://istio.io/latest/favicons/android-192x192.png
+    keywords:
+    - istio
+    - operator
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: istio-operator
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/istio-operator
+    - https://github.com/istio/istio/tree/master/operator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/istio-operator-1.9.3/istio-operator-1.9.3.tgz
+    version: 1.9.3
+  - apiVersion: v2
     appVersion: 1.9.2
     created: "2021-03-25T20:56:20.530647229Z"
     description: Helm chart for deploying Istio operator. This is a carbon-copy of
@@ -942,4 +967,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2021-04-12T13:12:47.078507954Z"
+generated: "2021-04-15T20:41:50.796773851Z"
