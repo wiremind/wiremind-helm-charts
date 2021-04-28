@@ -843,6 +843,26 @@ entries:
     version: 1.7.3
   kubemod:
   - apiVersion: v2
+    appVersion: 0.12.0
+    created: "2021-04-28T15:47:26.603655917Z"
+    description: KubeMod is a universal Kubernetes mutating operator.
+    digest: 3aab7caba3a0c161a4640dca5eb1ef543f2d7267467b6ab33f687469e2b07804
+    home: https://github.com/kubemod/kubemod
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: kubemod
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/kubemod
+    - https://github.com/kubemod/kubemod
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/kubemod-0.1.4/kubemod-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
     appVersion: 0.10.0
     created: "2021-04-01T19:08:40.853637264Z"
     description: KubeMod is a universal Kubernetes mutating operator.
@@ -1012,4 +1032,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2021-04-27T19:33:40.970845337Z"
+generated: "2021-04-28T15:47:26.603748721Z"
