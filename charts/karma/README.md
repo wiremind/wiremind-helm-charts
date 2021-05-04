@@ -94,9 +94,9 @@ Next, point to the secret in your values file
 
 ```yml
 # values.yaml
-secretConfig:
+existingSecretConfig:
   enabled: true
   secretName: sensitive-karma-config
 ```
 
-**NOTE:** you can either use `secretConfig` or `configMap`, you can't enable both.
+**NOTE:** you can either use `existingSecretConfig` or `configMap`, you can't enable both.
