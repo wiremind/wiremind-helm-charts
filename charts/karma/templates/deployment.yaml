@@ -93,12 +93,15 @@ spec:
 {{ toYaml . | indent 8 }}
     {{- end }}
       volumes:
-      {{- if and (.Values.configMap.enabled) (not .Values.existingSecretConfig.enabled) }}
+      {{- if .Values.configMap.enabled .Values.existingSecretConfig.enabled }}
+      {{- fail "You can either use .Values.configMap or .Values.existingSecretConfig"}}
+      {{- end }}
+      {{- if .Values.configMap.enabled }}
       - name: karma-config
         configMap:
           name: {{ .Release.Name }}-config
       {{- end }}
-      {{- if and (.Values.existingSecretConfig.enabled) (not .Values.configMap.enabled) }}
+      {{- if .Values.existingSecretConfig.enabled }}
       - name: karma-config
         secret:
           secretName: {{ .Values.existingSecretConfig.secretName }}
