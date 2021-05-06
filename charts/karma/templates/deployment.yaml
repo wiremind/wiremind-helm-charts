@@ -49,7 +49,7 @@ spec:
               containerPort: 8080
               protocol: TCP
           env:
-          {{- if .Values.configMap.enabled }}
+          {{- if or .Values.configMap.enabled .Values.existingSecretConfig.enabled }}
           - name: CONFIG_FILE
             value: /etc/karma/karma.conf
           {{- end }}
@@ -71,7 +71,7 @@ spec:
           resources:
 {{ toYaml .Values.resources | indent 12 }}
           volumeMounts:
-          {{- if .Values.configMap.enabled }}
+          {{- if or .Values.configMap.enabled .Values.existingSecretConfig.enabled }}
             - name: karma-config
               mountPath: /etc/karma
           {{- end }}
@@ -93,10 +93,18 @@ spec:
 {{ toYaml . | indent 8 }}
     {{- end }}
       volumes:
+      {{- if and .Values.configMap.enabled .Values.existingSecretConfig.enabled }}
+      {{- fail "You can either use .Values.configMap or .Values.existingSecretConfig"}}
+      {{- end }}
       {{- if .Values.configMap.enabled }}
       - name: karma-config
         configMap:
           name: {{ .Release.Name }}-config
+      {{- end }}
+      {{- if .Values.existingSecretConfig.enabled }}
+      - name: karma-config
+        secret:
+          secretName: {{ .Values.existingSecretConfig.secretName }}
       {{- end }}
       {{- range .Values.certSecretNames }}
       - name: {{ . }}
