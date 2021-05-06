@@ -99,4 +99,4 @@ existingSecretConfig:
   secretName: sensitive-karma-config
 ```
 
-**NOTE:** you can either use `existingSecretConfig` or `configMap`, you can't enable both.
+**NOTE:** you can either use `existingSecretConfig` or `configMap`, it cannot be both.
