@@ -93,7 +93,7 @@ spec:
 {{ toYaml . | indent 8 }}
     {{- end }}
       volumes:
-      {{- if .Values.configMap.enabled .Values.existingSecretConfig.enabled }}
+      {{- if and .Values.configMap.enabled .Values.existingSecretConfig.enabled }}
       {{- fail "You can either use .Values.configMap or .Values.existingSecretConfig"}}
       {{- end }}
       {{- if .Values.configMap.enabled }}
