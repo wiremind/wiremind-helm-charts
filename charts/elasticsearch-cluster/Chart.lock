@@ -1,27 +1,27 @@
 dependencies:
 - name: elasticsearch
   repository: https://helm.elastic.co
-  version: 7.12.0
+  version: 7.12.1
 - name: elasticsearch
   repository: https://helm.elastic.co
-  version: 7.12.0
+  version: 7.12.1
 - name: elasticsearch
   repository: https://helm.elastic.co
-  version: 7.12.0
+  version: 7.12.1
 - name: elasticsearch
   repository: https://helm.elastic.co
-  version: 7.12.0
+  version: 7.12.1
 - name: elasticsearch
   repository: https://helm.elastic.co
-  version: 7.12.0
+  version: 7.12.1
 - name: kibana
   repository: https://helm.elastic.co
-  version: 7.12.0
+  version: 7.12.1
 - name: prometheus-elasticsearch-exporter
   repository: https://prometheus-community.github.io/helm-charts
   version: 4.4.0
 - name: cerebro
   repository: https://wiremind.github.io/wiremind-helm-charts
   version: 1.9.10
-digest: sha256:09013e938cc91a5eeeb77d24c4a04851a17ec8492f467559602dd0531a3b347f
-generated: "2021-04-10T21:04:29.85923+02:00"
+digest: sha256:67417771a7f9428c1d5018d33edd7e0a92c23ee1e4921993951acb4fff28e480
+generated: "2021-05-11T14:36:09.943102+02:00"
