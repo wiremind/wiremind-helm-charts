@@ -1,7 +1,7 @@
 # To define common settings, it may be useful to use YAML anchors to use the same
-# base settings for both node types (data + master)
+# base settings for all node types (data + master) + ingest
 es-defaults: &defaults
-  clusterName: "logging"
+  clusterName: "my-elasticsearch-cluster"  # Change me
 
 # The data nodes
 es-data-hot:
@@ -179,7 +179,7 @@ es-master:
 
 kibana:
   enabled: false
-  elasticsearchHosts: http://logging-data-hot-headless:9200
+  elasticsearchHosts: http://my-elasticsearch-hot-url:9200  # Change me
   resources:
     requests:
     limits:
@@ -206,9 +206,66 @@ kibana:
 elasticsearch-exporter:
   enabled: true
   es:
-    uri: http://logging-master-headless:9200
+    uri: http://my-elasticsearch-master-url:9200  # Change me
   serviceMonitor:
     enabled: true
+  prometheusRule:
+    enabled: false
+    rules:
+      - alert: ESClusterStatusRED
+        expr: |
+          elasticsearch_cluster_health_status{color="red", service="{{ template "elasticsearch-exporter.fullname" . }}"} == 1
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: 'Cluster health status is RED'
+          description: 'Cluster {{ "{{ $labels.cluster }}" }} health status is RED'
+      - alert: ESClusteStatusYELLOW
+        expr: |
+          elasticsearch_cluster_health_status{color="yellow", service="{{ template "elasticsearch-exporter.fullname" . }}"} == 1
+        for: 20m
+        labels:
+          severity: high
+        annotations:
+          summary: 'Cluster health status is YELLOW'
+          description: 'Cluster {{ "{{ $labels.cluster }}" }} health status is YELLOW'
+
+      # Report any rejected request.
+      - alert: ESBulkRequestsRejection
+        expr: |
+          irate(elasticsearch_thread_pool_rejected_count{service="{{ template "elasticsearch-exporter.fullname" . }}"}[1m]) > 0
+        for: 1s
+        labels:
+          severity: high
+        annotations:
+          summary: 'Elasticsearch Bulk Query Rejection'
+          description: |
+            'Bulk Rejection at {{ "{{ $labels.name }}" }} node in {{ "{{ $labels.cluster }}" }} cluster'
+
+      - alert: ESJVMHeapHigh
+        expr: |
+          sum by (cluster, name, namespace)
+            (elasticsearch_jvm_memory_used_bytes{area="heap", service="{{ template "elasticsearch-exporter.fullname" . }}"}
+            /
+            elasticsearch_jvm_memory_max_bytes{area="heap", service="{{ template "elasticsearch-exporter.fullname" . }}"}
+          )
+          > 75
+        for: 5m
+        labels:
+          severity: alert
+        annotations:
+          summary: 'JVM Heap usage on the node is high'
+          description: |
+            'JVM Heap usage on the node {{ "{{ $labels.node }}" }} in {{ "{{ $labels.cluster }}" }} cluster is {{ "{{ $value }}" }}%. There might be long running GCs now.'
 
 cerebro:
   enabled: false
+  ingress:
+    enabled: false
+  config:
+    basePath: '/'
+    restHistorySize: 50
+    hosts:
+      - name: logging
+        host: http://my-elasticsearch-hot-url:9200  # Change me
