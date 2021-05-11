@@ -2,7 +2,7 @@ apiVersion: v2
 description: Elasticsearch cluster - a hat chart for several elasticsearch charts
 home: https://github.com/elastic/helm-charts
 name: elasticsearch-cluster
-version: 3.1.0
+version: 3.1.1
 appVersion: 7.12.1
 dependencies:
   - name: elasticsearch

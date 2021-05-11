@@ -203,7 +203,7 @@ kibana:
   readinessProbe:
     successThreshold: 1
 
-elasticsearch-exporter:
+prometheus-elasticsearch-exporter:
   enabled: true
   es:
     uri: http://my-elasticsearch-master-url:9200  # Change me
