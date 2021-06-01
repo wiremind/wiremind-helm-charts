@@ -1186,6 +1186,31 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/pghoard-0.6.1/pghoard-0.6.1.tgz
     version: 0.6.1
+  postgresql:
+  - apiVersion: v1
+    appVersion: 11.7.0
+    created: "2021-06-01T12:45:38.93611998Z"
+    description: DEPRECATED Chart for PostgreSQL, an object-relational database management
+      system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
+    digest: 49dad2a451b76078243182ad27c472a947e56e39d437318386bcc26aa144fb76
+    home: https://www.postgresql.org/
+    icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-110x117.png
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    - cluster
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    name: postgresql
+    sources:
+    - https://github.com/bitnami/bitnami-docker-postgresql
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/postgresql-8.7.0/postgresql-8.7.0.tgz
+    version: 8.7.0
   pypi:
   - apiVersion: v2
     appVersion: "1.0"
@@ -1239,4 +1264,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2021-05-12T07:20:37.10443389Z"
+generated: "2021-06-01T12:45:38.936487289Z"
