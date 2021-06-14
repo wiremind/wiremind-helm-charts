@@ -88,3 +88,6 @@ hpa:
   # average memory usage per pod (100Mi-1Gi)
   memory:
   requests:
+
+podDisruptionBudget: {}
+  # maxUnavailable: 1
