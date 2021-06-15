@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/name: {{ include "clamav.name" . }}
     helm.sh/chart: {{ include "clamav.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   {{- if .Values.podDisruptionBudget.minAvailable }}
   minAvailable: {{ .Values.podDisruptionBudget.minAvailable }}
