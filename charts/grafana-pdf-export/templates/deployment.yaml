@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+{{ include "grafana-pdf-exporter.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+{{ include "grafana-pdf-exporter.matchLabels" $ | indent 6 }}
+  template:
+    metadata:
+      labels:
+{{ include "grafana-pdf-exporter.labels" $ | indent 8 }}
+    spec:
+      volumes:
+      - name: "{{ .Chart.Name }}-config"
+        configMap:
+          name: {{ template "fullname" . }}
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        envFrom:
+          - secretRef:
+              name: {{ .Release.Name }}-grafana-pdf-exporter-secret
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
