@@ -70,5 +70,5 @@ This will export your PDF to /output.pdf of your pod and upload it to the config
 In case there is no configured AWS upload, it is possible to copy the file to your host station.
 
 ```bash
-$ kubectl exec -n monitoring grafana-pdf-test-grafana-pdf-exporter-65475db8ff-wpgjj -c grafana-pdf-exporter   -- tar cf - /output.pdf | tar xf - -C /tmp/
+$ kubectl cp -n monitoring grafana-pdf-test-grafana-pdf-exporter-65475db8ff-wpgjj -c grafana-pdf-exporter   -- tar cf - /output.pdf | tar xf - -C /tmp/
 ```
