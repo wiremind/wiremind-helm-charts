@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 image:
   repository: francoisminaud/grafana-pdf-export
-  tag: v1.1
+  tag: v1.3
   pullPolicy: IfNotPresent
 resources:
   limits:
@@ -13,10 +13,11 @@ resources:
     cpu: 50m
     memory: 500Mi
 config:
+  uploadToAWS:
+    enabled: false
   secretEnvVars:
-    AWS_ACCESS_KEY_ID: ""
-    AWS_SECRET_ACCESS_KEY: ""
-    AWS_REGION: ""
-    AWS_BUCKET_NAME: ""
-    GRAFANA_USER: ""
-    GRAFANA_PASSWORD: ""
+    AWS_ACCESS_KEY_ID: SETME
+    AWS_SECRET_ACCESS_KEY: SETME
+    AWS_BUCKET_NAME: SETME
+    GRAFANA_USER: SETME
+    GRAFANA_PASSWORD: SETME
