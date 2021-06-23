@@ -208,7 +208,7 @@ prometheus-elasticsearch-exporter:
   es:
     uri: http://my-elasticsearch-master-url:9200  # Change me
   serviceMonitor:
-    enabled: true
+    enabled: false
   prometheusRule:
     enabled: false
     rules:

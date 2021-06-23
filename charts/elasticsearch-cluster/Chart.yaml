@@ -1,9 +1,9 @@
 apiVersion: v2
 description: Elasticsearch cluster - a hat chart for several elasticsearch charts
-home: https://github.com/elastic/helm-charts
+home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch-cluster
 name: elasticsearch-cluster
-version: 3.1.1
-appVersion: 7.12.1
+version: 3.1.2
+appVersion: 7.13.2
 dependencies:
   - name: elasticsearch
     repository: "https://helm.elastic.co"
@@ -43,7 +43,7 @@ dependencies:
     version: "*"
     condition: cerebro.enabled
 sources:
-  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch-logging
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch-cluster
   - https://github.com/elastic/helm-charts/tree/master/elasticsearch
   - https://github.com/elastic/elasticsearch
 maintainers:
