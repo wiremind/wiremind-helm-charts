@@ -9,7 +9,7 @@ image:
   ## The image to run
   repository: ghcr.io/prymitive/karma
   ## The image tag to pull
-  tag: v0.85
+  tag: v0.86
   pullPolicy: IfNotPresent
 
 # Override (full)name of app
