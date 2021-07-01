@@ -14,6 +14,7 @@ A all-in-one hat chart containing:
 - kibana
 - cerebro
 - prometheus-elasticsearch-exporter
+- build-in default ILM settings
 
 Every component can be disabled.
 
