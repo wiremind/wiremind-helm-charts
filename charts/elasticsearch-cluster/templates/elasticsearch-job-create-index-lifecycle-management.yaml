@@ -1,0 +1,110 @@
+{{- if .Values.indexLifecycleManagement.enabled }}
+{{- if not (and (index .Values "es-data-cold" "enabled") (index .Values "es-data-warm" "enabled")) }}
+{{ fail "Elasticsearch ILM policy is enabled, but required es-data-warm and/or es-data-cold is/are not enabled." }}
+{{- end }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-elasticsearch-create-ilm
+  labels:
+{{ include "elasticsearch-cluster.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": post-install, post-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": "before-hook-creation, hook-succeeded"
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+{{ include "elasticsearch-cluster.labels" . | indent 8 }}
+    spec:
+      priorityClassName: {{ index .Values "elasticsearch-common" "priorityClassName" }}
+      restartPolicy: Never
+      initContainers:
+        - name: wait-for-elasticsearch
+          image: curlimages/curl:7.77.0
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - >
+              until curl {{ include "elasticsearch-cluster.elasticsearch-url" . }}/_cluster/health?local=true | grep -v '"status":"red"' > /dev/null;
+              do
+                echo "Waiting for elasticsearch";
+                sleep 2;
+              done;
+      containers:
+        - name: elasticsearch-post-ilm-policy
+          image: curlimages/curl:7.68.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SERVER_URL
+              value: {{ include "elasticsearch-cluster.elasticsearch-url" . }}
+            - name: WARM_MIN_AGE
+              value: {{ index .Values.indexLifecycleManagement.warm.minAge }}
+            - name: COLD_MIN_AGE
+              value: {{ index .Values.indexLifecycleManagement.cold.minAge }}
+          command:
+            - /bin/sh
+          args:
+            - -c
+            - |
+              echo "Configuring Index Lifecycle Management policy..."
+              export QUERY='{
+                "policy": {
+                  "phases": {
+                    "hot": {
+                      "min_age": "0ms",
+                      "actions": {
+                        "set_priority": {
+                          "priority": 100
+                        }
+                      }
+                    },
+{{- if index .Values "elasticsearch-warm" }}
+                    "warm": {
+                      "min_age": "'$WARM_MIN_AGE'",
+                      "actions": {
+                        "allocate": {
+                          "number_of_replicas": 1,
+                          "include": {},
+                          "exclude": {},
+                          "require": {
+                            "data": "warm"
+                          }
+                        },
+                        "forcemerge": {
+                          "max_num_segments": 1
+                        },
+                        "set_priority": {
+                          "priority": 50
+                        }
+                      }
+                    },
+{{- end }}
+{{- if index .Values "elasticsearch-cold" }}
+                    "cold": {
+                      "min_age": "'$COLD_MIN_AGE'",
+                      "actions": {
+                        "allocate": {
+                          "number_of_replicas": 0,
+                          "include": {},
+                          "exclude": {},
+                          "require": {
+                            "data": "cold"
+                          }
+                        },
+                        "set_priority": {
+                          "priority": 0
+                        }
+                      }
+                    }
+{{- end }}
+                  }
+                }
+              }';
+              RESPONSE=$(curl -XPUT --silent --show-error -H 'Content-Type: application/json' "$SERVER_URL/_ilm/policy/wiremind" -d "$QUERY");
+              if echo "$RESPONSE" | grep -v '{"acknowledged":true}'; then exit 1; fi;
+      terminationGracePeriodSeconds: 0
+{{- end }}
