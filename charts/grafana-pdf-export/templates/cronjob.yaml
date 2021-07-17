@@ -1,0 +1,96 @@
+{{- if .Values.config.cronJobs.enabled }}
+{{- range $job, $val := .Values.cronjob }}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: grafana-pdf-export-cronjob
+  labels:
+    app.kubernetes.io/component: grafana-pdf-export-cronjob
+spec:
+  concurrencyPolicy: Allow  # We want to allow day+1 to run even if day did not finish
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 1
+  # Avoid 00:00 -> 03:00, there are a lot of activities going on because of ElasticSearch ILM
+  schedule: {{ $val.schedule | quote}}
+  suspend: false
+  jobTemplate:
+    spec:
+      backoffLimit: 6
+      template:
+        spec:
+          containers:
+          - command:
+            - sh
+            args:
+            - -c
+            - |
+              set -e;
+              set -x;
+              # Construct the dashboard Input URL and Output FILENAME
+              # $1 : grafana input dashboard, $2 : grafana pdf dashboard
+              # node grafana_pdf.js $1 $GRAFANA_USER:$GRAFANA_PASSWORD $2
+              # Parse the dashboard to set the correct date
+              # FROM and TO are computed according to MONTHLY or DAILY
+              if [ ! -z "$MONTHLY" ]
+              then
+                # Replace dates in the Dashboard URL input
+                echo $DASHBOARD_IN > dashboard_url
+                # Replace FROM field
+                #sed -i "s/from.*\&to/from=$(date -d "`date +%Y%m01` -1 month" +%s)\&to/g" dashboard_url
+                # Replace TO field
+                #sed -i "s/to.*\&kiosk/to=$(date -d "`date +%Y%m01` -1 day" +%s)\&kiosk/g" dashboard_url
+
+                # Prepare the Dashboard Output name
+                echo $DASHBOARD_OUT > dashboard_out
+                #From 1st day of last month
+                sed -i "s/from.*_to/from_$(date -d "`date +%Y%m01` -1 month" +%Y-%m-%d)_to/g" dashboard_out
+                # Replace TO field
+                #To last day of last month
+                sed -i "s/to.*_kiosk/to_$(date -d "`date +%Y%m01` -1 day" +%Y-%m-%d)_kiosk/g" dashboard_out
+
+                URL="$(cat dashboard_url)"
+                OUTPUT="$(cat dashboard_out)"
+
+                # 1st parameter is input dashboard / 2nd parameter is output file
+                ./grafana_pdf_exporter.sh $(cat dashboard_url) "/tmp/$(cat dashboard_out)"
+
+                # Send the email
+                export FROM_NAME=${EMAIL_SENDER_NAME}
+                export FROM_EMAIL=${EMAIL_SENDER_EMAIL}
+                bash -x sendgridSendEmail.sh -t $EMAIL_SEND_TO \
+                  -s "Dashboard" \
+                  -o "Dashboard" \
+                  -a "/tmp/$(cat dashboard_out)"
+              fi
+            env:
+              - name: MONTHLY
+                value: {{ .monthly | quote }}
+              - name: DASHBOARD_IN
+                value: {{ $val.dashboard_in  }}
+              - name: DASHBOARD_OUT
+                value: {{ $val.dashboard_out  }}
+              - name: EMAIL_SEND_TO
+                value: "{{ $val.emailRecipient }}"
+              - name: EMAIL_SENDER_EMAIL
+                value: "{{ $val.emailSenderEmail }}"
+              - name: EMAIL_SENDER_NAME
+                value: "{{ $val.emailSenderName }}"
+              - name: EMAIL_SUBJECT
+                value: "{{ $val.emailSubject }}"
+            envFrom:
+              # Used to get AWS, Grafana and Sendgrid variables
+              - secretRef:
+                  name: {{ $.Release.Name }}-grafana-pdf-exporter-secret
+            image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+            name: {{ $val.name | quote}}
+            resources:
+              requests:
+                cpu: 2
+                memory: 8Gi
+              limits:
+                cpu: 4
+                memory: 8Gi
+          restartPolicy: Never
+---
+{{- end }}
+{{- end }}
