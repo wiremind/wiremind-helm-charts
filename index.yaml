@@ -1253,6 +1253,22 @@ entries:
   pghoard:
   - apiVersion: v2
     appVersion: "1.0"
+    created: "2021-07-22T14:48:50.044736016Z"
+    description: pghoard
+    digest: 3cf3e1c27b28b6ea938595684c2493372ad53cd0b9a3cf326e2cff595e76e315
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: pghoard
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/pghoard-0.8.0/pghoard-0.8.0.tgz
+    version: 0.8.0
+  - apiVersion: v2
+    appVersion: "1.0"
     created: "2021-02-03T11:24:50.810562288Z"
     description: pghoard
     digest: 24258d2b60ae1f9c449b62340a1b4f6f2545a9d0086ad15528b19c85c5a9d6a8
@@ -1361,4 +1377,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2021-07-20T10:00:55.317806523Z"
+generated: "2021-07-22T14:48:50.044964118Z"
