@@ -1,3 +1,4 @@
+{{- if .Values.restore.autocheck.enabled }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
@@ -83,4 +84,5 @@ spec:
 {{- with .Values.tolerations }}
           tolerations:
 {{ toYaml . | indent 12 }}
+{{- end }}
 {{- end }}
