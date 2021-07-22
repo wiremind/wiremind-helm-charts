@@ -38,6 +38,9 @@ successfulJobsHistoryLimit: 1
 failedJobsHistoryLimit: 1
 
 restore:
+  enabled: true
+  autocheck:
+    enabled: true
   schedule: "0 12 * * *"
   # The number of retries before considering a Job as failed
   retriesNumber: 0
