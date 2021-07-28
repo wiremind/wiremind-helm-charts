@@ -9,6 +9,12 @@ image:
   tag: "1.8"
   pullPolicy: IfNotPresent
 
+## Optionally specify an array of imagePullSecrets.
+## Secrets must be manually created in the namespace.
+## ref: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
+##
+imagePullSecrets: []
+
 nameOverride: ""
 fullnameOverride: ""
 
@@ -93,3 +99,39 @@ podDisruptionBudget:
   enabled: false
   # minAvailable: 1
   # maxUnavailable: 1
+
+## extraVolumes Optionally specify extra list of additional volumes for the Clam Pod(s)
+##
+extraVolumes: []
+## extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Clam container(s)
+##
+extraVolumeMounts: []
+
+## Clamav data dir persistence
+persistentVolume:
+  ## If true, a Persistent Volume Claim is created, otherwise it uses an emptyDir
+  ##
+  enabled: false
+
+  ## Persistent Volume Claim annotations
+  ##
+  annotations: {}
+
+  ## Persistent Volume access modes
+  ## Must match those of existing PV or dynamic provisioner
+  ## Ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  accessModes:
+  - ReadWriteOnce
+
+  ## Persistent Volume Size
+  ##
+  size: 100Mi
+
+  ## Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
