@@ -1,0 +1,25 @@
+{{- range $categoryrName, $categoryValue := .Values.indexer.categories }}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "druid.indexer.fullname" (dict "categoryrName" $categoryrName "context" $) }}
+  labels:
+{{ include "druid.common-labels" $ | indent 4 }}
+    app.kubernetes.io/part-of: indexer
+    app.kubernetes.io/component: indexer-{{ $categoryrName }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8091
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+{{ include "druid.common-matchLabels" $ | indent 4 }}
+    app.kubernetes.io/part-of: indexer
+    app.kubernetes.io/component: indexer-{{ $categoryrName }}
+
+---
+
+{{- end }}

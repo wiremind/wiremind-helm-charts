@@ -1,0 +1,106 @@
+{{- range $categoryrName, $categoryValue := .Values.indexer.categories }}
+
+{{- if eq $categoryValue.mode "Deployment" }}
+
+{{- $indexerDefaults := $.Values.indexer.defaults }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "druid.indexer.fullname" (dict "categoryrName" $categoryrName "context" $) }}
+  labels:
+{{ include "druid.common-labels" $ | indent 4 }}
+    app.kubernetes.io/part-of: indexer
+    app.kubernetes.io/component: indexer-{{ $categoryrName }}
+  annotations:
+    checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
+    checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") $ | sha256sum }}
+    checksum/configmap-indexers: {{ include (print $.Template.BasePath "/indexer/configmap.yaml") $ | sha256sum }}
+    checksum/secret-indexers: {{ include (print $.Template.BasePath "/indexer/secret.yaml") $ | sha256sum }}
+spec:
+  replicas: {{ default $indexerDefaults.replicaCount $categoryValue.replicaCount }}
+  selector:
+    matchLabels:
+{{ include "druid.common-matchLabels" $ | indent 6 }}
+      app.kubernetes.io/part-of: indexer
+      app.kubernetes.io/component: indexer-{{ $categoryrName }}
+  template:
+    metadata:
+      labels:
+{{ include "druid.common-labels" $ | indent 8 }}
+        app.kubernetes.io/part-of: indexer
+        app.kubernetes.io/component: indexer-{{ $categoryrName }}
+{{- with $categoryValue.podAnnotations }}
+      annotations:
+{{ toYaml . | indent 8 }}
+{{- end }}
+    spec:
+      nodeSelector:
+{{- if $categoryValue.nodeSelector }}
+{{ toYaml $categoryValue.nodeSelector | indent 8 }}
+{{- else }}
+{{ toYaml $indexerDefaults.nodeSelector | indent 8 }}
+{{- end }}
+    {{- with $indexerDefaults.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with $indexerDefaults.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+      {{- if $indexerDefaults.priorityClassName }}
+      priorityClassName: {{ $indexerDefaults.priorityClassName }}
+      {{- end }}
+      containers:
+      - name: indexer
+        image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+        imagePullPolicy: {{ $.Values.image.pullPolicy | quote }}
+        args: [ "middleManager" ]
+        env:
+          - name: druid_extensions_loadList
+            value: {{ $.Values.extensions.loadList | toJson | quote }}
+        envFrom:
+          - configMapRef:
+              name: {{ include "druid.fullname" $ }}-config
+          - configMapRef:
+              name: {{ include "druid.indexer.fullname" (dict "categoryrName" $categoryrName "context" $) }}-config
+          - secretRef:
+              name: {{ include "druid.fullname" $ }}-config
+          - secretRef:
+              name: {{ include "druid.indexer.fullname" (dict "categoryrName" $categoryrName "context" $) }}-config
+        resources:
+{{- if $categoryValue.resources }}
+{{ toYaml $categoryValue.resources | indent 10 }}
+{{- else }}
+{{ toYaml $indexerDefaults.resources | indent 10 }}
+{{- end }}
+        livenessProbe:
+          initialDelaySeconds: 60
+          httpGet:
+            path: /status/health
+            port: 8091
+        readinessProbe:
+          initialDelaySeconds: 60
+          httpGet:
+            path: /status/health
+            port: 8091
+        ports:
+          - containerPort: 8091
+            name: http
+        volumeMounts:
+          - mountPath: /opt/druid/var
+            name: data
+      volumes:
+        - name: data
+          emptyDir:
+            # medium: Memory
+            sizeLimit: "{{ $categoryValue.emptyDir.size }}"
+      securityContext:
+          fsGroup: 1000
+
+---
+
+{{- end }}
+
+{{- end }}
