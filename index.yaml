@@ -397,6 +397,52 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/dex-2.15.3/dex-2.15.3.tgz
     version: 2.15.3
+  druid:
+  - apiVersion: v2
+    appVersion: 0.21.1
+    created: "2021-08-02T15:50:13.224732881Z"
+    dependencies:
+    - condition: zookeeper.enabled
+      name: zookeeper
+      repository: https://charts.bitnami.com/bitnami
+      version: 6.4.0
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 8.6.4
+    - alias: buffer-postgresql
+      condition: buffer-postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 8.6.4
+    - alias: minio-s3
+      condition: minio-s3.enabled
+      name: minio
+      repository: https://helm.min.io/
+      version: 8.0.5
+    description: Apache Druid is a high performance analytics data store for event-driven
+      data. This Chart allows to deploy a Druid cluster.
+    digest: 48ca7a44fc5f1eb4c1e8143fe9550610f5b97b3c7aec62aa008e4e7f8f94ba1b
+    home: http://druid.io/
+    icon: http://druid.io/img/druid_nav.png
+    keywords:
+    - olap
+    - database
+    - analytics
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: druid
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/druid
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/druid-1.0.0/druid-1.0.0.tgz
+    version: 1.0.0
   elasticsearch-cluster:
   - apiVersion: v2
     appVersion: 7.13.2
@@ -1401,4 +1447,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2021-07-28T13:37:12.970427518Z"
+generated: "2021-08-02T15:50:13.224821881Z"
