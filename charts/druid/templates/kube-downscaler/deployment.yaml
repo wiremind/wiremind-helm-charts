@@ -1,0 +1,64 @@
+{{- if .Values.downscaler.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "druid.downscaler.fullname" . }}
+  labels:
+{{ include "druid.common-labels" . | indent 4 }}
+    app.kubernetes.io/component: {{ .Values.downscaler.name }}
+{{- with .Values.downscaler.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+{{ include "druid.common-matchLabels" . | indent 6 }}
+      app.kubernetes.io/component: {{ .Values.downscaler.name }}
+  template:
+    metadata:
+      labels:
+{{ include "druid.common-labels" . | indent 8 }}
+        app.kubernetes.io/component: {{ .Values.downscaler.name }}
+{{- with .Values.downscaler.podAnnotations }}
+      annotations:
+{{ toYaml . | indent 8 }}
+{{- end }}
+    spec:
+      {{- if .Values.downscaler.priorityClassName }}
+      priorityClassName: {{ .Values.downscaler.priorityClassName }}
+      {{- end }}
+      serviceAccountName: readwrite
+      containers:
+        - name: {{ include "druid.downscaler.fullname" . }}
+          image: "{{ .Values.downscaler.image.repository }}:{{ .Values.downscaler.image.tag }}"
+          imagePullPolicy: {{ .Values.downscaler.image.pullPolicy }}
+          args:
+            # run every minute
+            - --interval=60
+            # Only take action on the namespace where I'm deployed
+            - --namespace={{ .Release.Namespace }}
+            # only deployments by default
+            - --include-resources=deployments,statefulsets
+            # number of replicas to scale to
+            - --downtime-replicas=0
+          securityContext:
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+          resources:
+{{ toYaml .Values.downscaler.resources | indent 12 }}
+    {{- with .Values.downscaler.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.downscaler.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.downscaler.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+{{- end }}

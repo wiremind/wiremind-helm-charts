@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "druid.router.fullname" . }}
+  labels:
+{{ include "druid.common-labels" . | indent 4 }}
+    app.kubernetes.io/component: {{ .Values.router.name }}
+  annotations:
+    checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
+    checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") $ | sha256sum }}
+    checksum/configmap-router: {{ include (print $.Template.BasePath "/router/configmap.yaml") $ | sha256sum }}
+    checksum/secret-router: {{ include (print $.Template.BasePath "/router/secret.yaml") $ | sha256sum }}
+{{- with .Values.router.annotations }}
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+  replicas: {{ .Values.router.replicaCount }}
+  selector:
+    matchLabels:
+{{ include "druid.common-matchLabels" . | indent 6 }}
+      app.kubernetes.io/component: {{ .Values.router.name }}
+  template:
+    metadata:
+      labels:
+{{ include "druid.common-labels" . | indent 8 }}
+        app.kubernetes.io/component: {{ .Values.router.name }}
+{{- with .Values.router.podAnnotations }}
+      annotations:
+{{ toYaml . | indent 8 }}
+{{- end }}
+    spec:
+      {{- if .Values.router.priorityClassName }}
+      priorityClassName: {{ .Values.router.priorityClassName }}
+      {{- end }}
+      containers:
+        - name: {{ include "druid.router.fullname" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: [ "router" ]
+          env:
+            - name: druid_extensions_loadList
+              value: {{ .Values.extensions.loadList | toJson | quote }}
+            - name: druid_router_tierToBrokerMap
+              value: '{ {{- include "tiertobroker.map" . -}} }'
+          envFrom:
+            - configMapRef:
+                name: {{ include "druid.fullname" . }}-config
+            - configMapRef:
+                name: {{ include "druid.router.fullname" . }}-config
+            - secretRef:
+                name: {{ include "druid.fullname" . }}-config
+            - secretRef:
+                name: {{ include "druid.router.fullname" . }}-config
+          ports:
+            - name: http
+              containerPort: {{ .Values.router.port }}
+              protocol: TCP
+          resources:
+{{ toYaml .Values.router.resources | indent 12 }}
+    {{- with .Values.router.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.router.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.router.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

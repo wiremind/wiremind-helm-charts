@@ -1,0 +1,16 @@
+{{- range $categoryrName, $categoryValue := .Values.indexer.categories }}
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "druid.indexer.fullname" (dict "categoryrName" $categoryrName "context" $) }}-config
+  labels:
+{{ include "druid.common-labels" $ | indent 4 }}
+    app.kubernetes.io/part-of: indexer
+    app.kubernetes.io/component: indexer-{{ $categoryrName }}
+data:
+{{ toYaml $categoryValue.envVars | indent 2 }}
+
+---
+
+{{- end }}
