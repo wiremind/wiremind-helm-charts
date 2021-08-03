@@ -241,7 +241,7 @@ prometheus-elasticsearch-exporter:
               -
               elasticsearch_snapshot_stats_snapshot_end_time_timestamp{service="{{ template "elasticsearch-exporter.fullname" . }}", state="SUCCESS"}
             )
-            / 3600 / 24 > 1.3
+            / 3600 / 24 > 2.5
         labels:
           severity: warning
         annotations:
