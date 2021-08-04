@@ -445,6 +445,65 @@ entries:
     version: 1.0.0
   elasticsearch-cluster:
   - apiVersion: v2
+    appVersion: 7.14.0
+    created: "2021-08-04T07:15:14.383114516Z"
+    dependencies:
+    - alias: es-data-hot
+      condition: es-data-hot.enabled
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: '*'
+    - alias: es-data-warm
+      condition: es-data-warm.enabled
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: '*'
+    - alias: es-data-cold
+      condition: es-data-cold.enabled
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: '*'
+    - alias: es-master
+      condition: es-master.enabled
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: '*'
+    - alias: es-ingest
+      condition: es-ingest.enabled
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: '*'
+    - condition: kibana.enabled
+      name: kibana
+      repository: https://helm.elastic.co
+      version: '*'
+    - condition: prometheus-elasticsearch-exporter.enabled
+      name: prometheus-elasticsearch-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: '*'
+    - condition: cerebro.enabled
+      name: cerebro
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    description: Elasticsearch cluster - a hat chart for several elasticsearch charts
+    digest: e8f0fd2aedfdfc958f6803fcb77af441e7a2080e4b651e19f510f3c915248b25
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch-cluster
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: elasticsearch-cluster
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch-cluster
+    - https://github.com/elastic/helm-charts/tree/master/elasticsearch
+    - https://github.com/elastic/elasticsearch
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/elasticsearch-cluster-3.2.3/elasticsearch-cluster-3.2.3.tgz
+    version: 3.2.3
+  - apiVersion: v2
     appVersion: 7.13.4
     created: "2021-08-03T13:35:54.595691581Z"
     dependencies:
@@ -1506,4 +1565,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2021-08-03T13:35:54.595837682Z"
+generated: "2021-08-04T07:15:14.383332415Z"
