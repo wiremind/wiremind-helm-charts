@@ -36,9 +36,14 @@ spec:
                 # Replace dates in the Dashboard URL input
                 echo $DASHBOARD_IN > dashboard_url
                 # Replace FROM field
-                #sed -i "s/from.*\&to/from=$(date -d "`date +%Y%m01` -1 month" +%s)\&to/g" dashboard_url
+                date_from=$(date -d "`date +%Y%m01` -1 month" +%s%3N)
+                #multiply=1000
+                # date_from_epoch=$($date_from * $multiply)
+                sed -i "s/from.*\&to/from=$date_from\&to/g" dashboard_url
                 # Replace TO field
-                #sed -i "s/to.*\&kiosk/to=$(date -d "`date +%Y%m01` -1 day" +%s)\&kiosk/g" dashboard_url
+                date_to=$(date -d "`date +%Y%m01` " +%s%3N)
+                # date_to_epoch=$( $date_to * $multiply )
+                sed -i "s/to.*\&kiosk/to=$date_to\&kiosk/g" dashboard_url
 
                 # Prepare the Dashboard Output name
                 echo $DASHBOARD_OUT > dashboard_out
@@ -46,7 +51,7 @@ spec:
                 sed -i "s/from.*_to/from_$(date -d "`date +%Y%m01` -1 month" +%Y-%m-%d)_to/g" dashboard_out
                 # Replace TO field
                 #To last day of last month
-                sed -i "s/to.*_kiosk/to_$(date -d "`date +%Y%m01` -1 day" +%Y-%m-%d)_kiosk/g" dashboard_out
+                sed -i "s/to.*/to_$(date -d "`date +%Y%m01` " +%Y-%m-%d).pdf/g" dashboard_out
 
                 URL="$(cat dashboard_url)"
                 OUTPUT="$(cat dashboard_out)"
@@ -58,8 +63,8 @@ spec:
                 export FROM_NAME=${EMAIL_SENDER_NAME}
                 export FROM_EMAIL=${EMAIL_SENDER_EMAIL}
                 bash -x sendgridSendEmail.sh -t $EMAIL_SEND_TO \
-                  -s "Dashboard" \
-                  -o "Dashboard" \
+                  -s "$EMAIL_SUBJECT" \
+                  -o "$EMAIL_BODY" \
                   -a "/tmp/$(cat dashboard_out)"
               fi
             env:
@@ -77,6 +82,8 @@ spec:
                 value: "{{ $val.emailSenderName }}"
               - name: EMAIL_SUBJECT
                 value: "{{ $val.emailSubject }}"
+              - name: EMAIL_BODY
+                value: "{{ $val.emailBody }}"
             envFrom:
               # Used to get AWS, Grafana and Sendgrid variables
               - secretRef:
