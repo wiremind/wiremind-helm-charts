@@ -52,6 +52,18 @@ ingress:
 deployment:
   annotations: {}
 
+serviceMonitor:
+  enabled: false
+  interval: 15s
+  additionalLabels:
+    {}
+  annotations:
+    {}
+  metricRelabelings:
+    []
+  relabelings:
+    []
+
 resources:
   {}
   ## We usually recommend not to specify default resources and to leave this as a conscious
