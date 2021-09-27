@@ -69,6 +69,30 @@ entries:
     version: 1.9.6
   clair:
   - apiVersion: v2
+    appVersion: 2.1.6
+    created: "2021-09-27T07:30:59.28318637Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.0.0
+    description: Clair is an open source project for the static analysis of vulnerabilities
+      in application containers.
+    digest: 50222a20af206ad9bc10166b68105dba7fc9d085f0aa5c8799bacee141e8b402
+    home: https://coreos.com/clair
+    icon: https://cloud.githubusercontent.com/assets/343539/21630811/c5081e5c-d202-11e6-92eb-919d5999c77a.png
+    kubeVersion: '>=1.14.0-0'
+    maintainers:
+    - email: dev@wiremind.io
+      name: Wiremind
+    name: clair
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/clair
+    - https://github.com/quay/clair
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/clair-0.2.7/clair-0.2.7.tgz
+    version: 0.2.7
+  - apiVersion: v2
     appVersion: v2.1.6
     created: "2021-03-09T16:38:33.789999994Z"
     dependencies:
@@ -942,6 +966,25 @@ entries:
     version: 3.0.0
   external-monitoring:
   - apiVersion: v2
+    created: "2021-09-27T07:30:59.441044482Z"
+    dependencies:
+    - name: prometheus-blackbox-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 4.10.0
+    description: Simple monitoring for things outside of kubernetes
+    digest: ece20a5ac3116dc7cd830b9100e0d577f6adbf694dc7d3a48fab8bebb8029ef5
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: external-monitoring
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/external-monitoring-0.2.2/external-monitoring-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
     created: "2020-11-24T16:08:07.691578321Z"
     dependencies:
     - name: prometheus-blackbox-exporter
@@ -1646,4 +1689,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2021-09-13T07:43:58.788390195Z"
+generated: "2021-09-27T07:30:59.441257789Z"
