@@ -1,8 +1,8 @@
 apiVersion: v2
 name: clair
 home: https://coreos.com/clair
-version: 0.2.6
-appVersion: v2.1.6
+version: 0.2.7
+appVersion: 2.1.6
 dependencies:
   - name: postgresql
     version: "10.0.0"
