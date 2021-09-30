@@ -1,3 +1,10 @@
 env:
 - name: ALERTMANAGER_URI
   value: http://monitoring-prometheus-alertmanager
+
+ingress:
+  enabled: true
+  hosts:
+  - chart-example.local
+  path: /
+  pathType: ImplementationSpecific
