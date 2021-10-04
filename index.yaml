@@ -67,6 +67,31 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/cerebro-1.9.6/cerebro-1.9.6.tgz
     version: 1.9.6
+  chartreuse:
+  - apiVersion: v1
+    appVersion: 4.0.0
+    created: "2021-10-04T13:51:20.813286282Z"
+    description: Automate Alembic SQL schema migrations.
+    digest: 285236f3a238739fea4479007a9b60e57c3c0c04845f544bc7db10b4d8a98bed
+    keywords:
+    - alembic
+    - database
+    - migration
+    - postgresql
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: chartreuse
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/chartreuse
+    - https://github.com/wiremind/chartreuse
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/chartreuse-4.0.0/chartreuse-4.0.0.tgz
+    version: 4.0.0
   clair:
   - apiVersion: v2
     appVersion: 2.1.6
@@ -1774,4 +1799,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2021-09-30T10:21:55.18333093Z"
+generated: "2021-10-04T13:51:20.813716704Z"
