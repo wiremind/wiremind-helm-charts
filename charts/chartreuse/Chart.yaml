@@ -1,0 +1,21 @@
+apiVersion: v1
+name: chartreuse
+# NOTE: when setting a development version, please explicitly specify it in e2e test helm chart, otherwise just put *.
+appVersion: 4.0.0
+version: 4.0.0
+description: Automate Alembic SQL schema migrations.
+maintainers:
+  - name: desaintmartin
+    email: cdesaintmartin@wiremind.io
+  - name: machine424
+    email: amrini@wiremind.io
+  - name: francoisminaud
+    email: fminaud@wiremind.io
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/chartreuse
+  - https://github.com/wiremind/chartreuse
+keywords:
+  - alembic
+  - database
+  - migration
+  - postgresql

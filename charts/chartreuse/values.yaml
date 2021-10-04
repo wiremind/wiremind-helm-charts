@@ -1,0 +1,61 @@
+# Default values for chartreuse.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  ## Change me to a real image from a tag containing chartreuse python package and your migration code
+  repository: overrideme
+  ## Change me to a real image from a tag
+  tag: latest
+  pullPolicy: IfNotPresent
+  ## Note: singular, this is a string and allows a single secret
+  pullSecret: ""
+
+## Wether to run schema upgrade before deployment or after deployment
+## Note that in case of initial deployment ("install" in helm dialect), chartreuse will be run during deployment as a normal job
+upgradeBeforeDeployment: false
+
+## Whether or not to scale down deployments with ExpectedDeploymentScale before migrating (if migration is needed)
+stopPods: true
+
+## Additional environment variables injected within chartreuse Pods
+additionalEnvironmentVariables: {}
+
+## In the case of having multiple upgradeJobs of multiple Chartreuses running, this will allow
+## to control the order of their execution, they are executed in weighted order.
+## Make sure the weights are > 0
+upgradeJobWeight: "1"
+
+alembic:
+  enabled: true
+  username: my-dummy-username
+  password: my-dummy-password
+  database: my-dummy-database
+  allowMigrationFromEmptyDatabase: true
+  ## like "-x env_type=staging"
+  additionalParameters: ""
+  ## Your chart should have this subchart and the postgresql chart.
+  ## This value is the suffix to append to the Release name to obtain postgresql URL
+  ## TODO add support for standalone URL
+  urlSuffix: "-postgresql"
+
+## The entry point to use. Unless you want to re-use chartreuse as library in your code
+## you have no reason to edit it.
+entrypoint: "chartreuse-upgrade"
+
+rbac:
+  create: true
+
+serviceAccount:
+  create: true
+  name:
+
+priorityClassName: ""
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

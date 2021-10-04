@@ -1,0 +1,98 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "additionalEnvironmentVariables": {
+            "type": "object"
+        },
+        "affinity": {
+            "type": "object"
+        },
+        "alembic": {
+            "type": "object",
+            "properties": {
+                "additionalParameters": {
+                    "type": "string"
+                },
+                "allowMigrationFromEmptyDatabase": {
+                    "type": "boolean"
+                },
+                "database": {
+                    "type": "string"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "urlSuffix": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "entrypoint": {
+            "type": "string"
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "pullPolicy": {
+                    "type": "string"
+                },
+                "pullSecret": {
+                    "type": "string"
+                },
+                "repository": {
+                    "type": "string"
+                },
+                "tag": {
+                    "type": "string"
+                }
+            }
+        },
+        "nodeSelector": {
+            "type": "object"
+        },
+        "priorityClassName": {
+            "type": "string"
+        },
+        "rbac": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "resources": {
+            "type": "object"
+        },
+        "serviceAccount": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "null"
+                }
+            }
+        },
+        "stopPods": {
+            "type": "boolean"
+        },
+        "tolerations": {
+            "type": "array"
+        },
+        "upgradeBeforeDeployment": {
+            "type": "boolean"
+        },
+        "upgradeJobWeight": {
+            "type": "string"
+        }
+    }
+}
