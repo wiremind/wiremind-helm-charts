@@ -1,0 +1,7 @@
+# This chart is not made for direct usage, but to be integrated as suchart.
+# Real testing is done on chartreuse github repository.
+image:
+  repository: alpine
+alembic:
+  enabled: false
+entrypoint: "true"

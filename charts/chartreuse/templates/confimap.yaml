@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "chartreuse.fullname" . }}
+  labels:
+{{ include "chartreuse.labels" . | indent 4 }}
+data:
+  # Note: Chartreuse expects false values to be empty string (falsy value) and true values to be non-empty string.
+{{- if .Values.alembic.allowMigrationFromEmptyDatabase }}
+  CHARTREUSE_ALEMBIC_ALLOW_MIGRATION_FOR_EMPTY_DATABASE: "1"
+{{- else }}
+  CHARTREUSE_ALEMBIC_ALLOW_MIGRATION_FOR_EMPTY_DATABASE: ""
+{{- end }}
+
+{{- if .Release.IsInstall }}
+  HELM_IS_INSTALL: "1"
+{{- else }}
+  HELM_IS_INSTALL: ""
+{{- end }}
+
+{{- if .Values.stopPods }}
+  CHARTREUSE_ENABLE_STOP_PODS: "1"
+{{- else }}
+  CHARTREUSE_ENABLE_STOP_PODS: ""
+{{- end }}
+
+{{- if .Values.upgradeBeforeDeployment }}
+  CHARTREUSE_UPGRADE_BEFORE_DEPLOYMENT: "1"
+{{- else }}
+  CHARTREUSE_UPGRADE_BEFORE_DEPLOYMENT: ""
+{{- end }}
+
+  CHARTREUSE_MIGRATE_CONTAINER_IMAGE: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+  CHARTREUSE_MIGRATE_IMAGE_PULL_SECRET: "{{ .Values.image.pullSecret }}"
+  CHARTREUSE_RELEASE_NAME: {{ .Release.Name }}
+  CHARTREUSE_ALEMBIC_ADDITIONAL_PARAMETERS: "{{ .Values.alembic.additionalParameters }}"
+
+  CHARTREUSE_UPGRADE_PRIORITYCLASS_NAME: "{{ .Values.priorityClassName }}"
+
+  HELM_CHART_VERSION: {{ .Chart.Version }}
+
+{{- with .Values.additionalEnvironmentVariables }}
+{{ toYaml . | indent 2 }}
+{{- end }}
