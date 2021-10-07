@@ -1,0 +1,29 @@
+common: &common
+  antiAffinity: "soft"
+  esJavaOpts: "-Xmx128m  -Xms128m"
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: "10m"
+    limits:
+      memory: "1Gi"
+      cpu: "2"
+
+es-data-hot:
+  <<: *common
+
+es-data-warm:
+  enabled: true
+  <<: *common
+
+es-ingest:
+  <<: *common
+
+es-master:
+  <<: *common
+  replicas: 2
+
+indexLifecycleManagement:
+  enabled: true
+  delete:
+    enabled: true

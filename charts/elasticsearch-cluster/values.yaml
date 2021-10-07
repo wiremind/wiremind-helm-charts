@@ -4,7 +4,7 @@ fullnameOverride: ""
 # To define common settings, it may be useful to use YAML anchors to use the same
 # base settings for all node types (data + master) + ingest
 es-defaults: &defaults
-  clusterName: "my-elasticsearch-cluster"  # Change me
+  clusterName: "my-elasticsearch-cluster"  # Change me, and change url using elasticsearch below
 
 # The data nodes
 es-data-hot:
@@ -30,7 +30,7 @@ es-data-hot:
     ingest: "true"
     data: "true"
   replicas: 1
-  esJavaOpts: "-Xmx128m  -Xms128m"
+  # esJavaOpts: "-Xmx1g  -Xms1g"
   # resources:
   #   requests:
   #     cpu: "10m"
@@ -75,7 +75,7 @@ es-data-warm:
     ingest: "false"
     data: "true"
   replicas: 1
-  esJavaOpts: "-Xmx128m -Xms128m"
+  esJavaOpts: "-Xmx1g  -Xms1g"
   # resources:
   #   requests:
   #     memory: "128Mi"
@@ -111,7 +111,7 @@ es-data-cold:
     ingest: "false"
     data: "true"
   replicas: 1
-  esJavaOpts: "-Xmx128m -Xms128m"
+  # esJavaOpts: "-Xmx1g  -Xms1g"
   # resources:
   #   requests:
   #     memory: "128Mi"
@@ -134,14 +134,14 @@ es-ingest:
     ingest: "true"
     data: "false"
   replicas: 1
-  esJavaOpts: "-Xms128m -Xmx128m"
-  resources:
-    requests:
-      memory: 128Mi
-      cpu: "10m"
-    limits:
-      memory: "1Gi"
-      cpu: "2"
+  # esJavaOpts: "-Xmx1g  -Xms1g"
+  # resources:
+  #   requests:
+  #     memory: 128Mi
+  #     cpu: "10m"
+  #   limits:
+  #     memory: "1Gi"
+  #     cpu: "2"
   volumeClaimTemplate:
     resources:
       requests:
@@ -167,27 +167,34 @@ es-master:
     master: "true"
     ingest: "false"
     data: "false"
-  esJavaOpts: "-Xms128m -Xmx128m"
-  resources:
-    requests:
-      memory: 128Mi
-      cpu: "10m"
-    limits:
-      memory: "1Gi"
-      cpu: "2"
+  # esJavaOpts: "-Xms128m -Xmx128m"
+  #  resources:
+  #    requests:
+  #      memory: 128Mi
+  #      cpu: "10m"
+  #    limits:
+  #      memory: "1Gi"
+  #      cpu: "2"
   volumeClaimTemplate:
     resources:
       requests:
         storage: 1Gi
 
 # Creates a default indexLifecycleManagement policy
+# Note: you'll have to manage index templates so that your indices point to this ILM.
 indexLifecycleManagement:
   enabled: false
+  # Name of the policy to create
+  name: wiremind
   # Ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/_timing.html
   warm:
     minAge: 8d
   cold:
     minAge: 31d
+  delete:
+    enabled: false
+    minAge: 90d
+  # priorityClassName: my-priority-class
 
 kibana:
   enabled: false

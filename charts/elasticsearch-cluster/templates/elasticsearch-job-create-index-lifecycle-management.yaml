@@ -1,5 +1,5 @@
 {{- if .Values.indexLifecycleManagement.enabled }}
-{{- if not (and (index .Values "es-data-cold" "enabled") (index .Values "es-data-warm" "enabled")) }}
+{{- if not (or (index .Values "es-data-cold" "enabled") (index .Values "es-data-warm" "enabled")) }}
 {{ fail "Elasticsearch ILM policy is enabled, but required es-data-warm and/or es-data-cold is/are not enabled." }}
 {{- end }}
 apiVersion: batch/v1
@@ -19,7 +19,9 @@ spec:
       labels:
 {{ include "elasticsearch-cluster.labels" . | indent 8 }}
     spec:
-      priorityClassName: {{ index .Values "elasticsearch-common" "priorityClassName" }}
+      {{- with .Values.indexLifecycleManagement.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
       restartPolicy: Never
       initContainers:
         - name: wait-for-elasticsearch
@@ -29,7 +31,7 @@ spec:
             - /bin/sh
             - -c
             - >
-              until curl {{ include "elasticsearch-cluster.elasticsearch-url" . }}/_cluster/health?local=true | grep -v '"status":"red"' > /dev/null;
+              until curl -S {{ include "elasticsearch-cluster.elasticsearch-url" . }}/_cluster/health?local=true | grep -v '"status":"red"' > /dev/null;
               do
                 echo "Waiting for elasticsearch";
                 sleep 2;
@@ -42,9 +44,11 @@ spec:
             - name: SERVER_URL
               value: {{ include "elasticsearch-cluster.elasticsearch-url" . }}
             - name: WARM_MIN_AGE
-              value: {{ index .Values.indexLifecycleManagement.warm.minAge }}
+              value: {{ index .Values.indexLifecycleManagement.warm.minAge | quote }}
             - name: COLD_MIN_AGE
-              value: {{ index .Values.indexLifecycleManagement.cold.minAge }}
+              value: {{ index .Values.indexLifecycleManagement.cold.minAge | quote }}
+            - name: DELETE_MIN_AGE
+              value: {{ index .Values.indexLifecycleManagement.delete.minAge | quote }}
           command:
             - /bin/sh
           args:
@@ -61,13 +65,13 @@ spec:
                           "priority": 100
                         }
                       }
-                    },
-{{- if index .Values "elasticsearch-warm" }}
-                    "warm": {
+                    }
+{{- if index .Values "es-data-warm" "enabled" }}
+                    ,"warm": {
                       "min_age": "'$WARM_MIN_AGE'",
                       "actions": {
                         "allocate": {
-                          "number_of_replicas": 1,
+                          "number_of_replicas": 0,
                           "include": {},
                           "exclude": {},
                           "require": {
@@ -81,10 +85,10 @@ spec:
                           "priority": 50
                         }
                       }
-                    },
+                    }
 {{- end }}
-{{- if index .Values "elasticsearch-cold" }}
-                    "cold": {
+{{- if index .Values "es-data-cold" "enabled" }}
+                    ,"cold": {
                       "min_age": "'$COLD_MIN_AGE'",
                       "actions": {
                         "allocate": {
@@ -101,10 +105,20 @@ spec:
                       }
                     }
 {{- end }}
+{{- if .Values.indexLifecycleManagement.delete.enabled }}
+                    ,"delete": {
+                      "min_age": "'$DELETE_MIN_AGE'",
+                      "actions": {
+                        "delete": {
+                          "delete_searchable_snapshot": true
+                        }
+                      }
+                    }
+{{- end }}
                   }
                 }
               }';
-              RESPONSE=$(curl -XPUT --silent --show-error -H 'Content-Type: application/json' "$SERVER_URL/_ilm/policy/wiremind" -d "$QUERY");
+              RESPONSE=$(curl -XPUT --silent --show-error -H 'Content-Type: application/json' "$SERVER_URL/_ilm/policy/{{ index .Values.indexLifecycleManagement.name }}" -d "$QUERY");
               if echo "$RESPONSE" | grep -v '{"acknowledged":true}'; then exit 1; fi;
       terminationGracePeriodSeconds: 0
 {{- end }}
