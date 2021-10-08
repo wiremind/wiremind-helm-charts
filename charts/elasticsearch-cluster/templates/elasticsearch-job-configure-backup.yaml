@@ -1,0 +1,84 @@
+{{- if .Values.backup.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-elasticsearch-create-backup-repo
+  labels:
+{{ include "elasticsearch-cluster.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": post-install, post-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": "before-hook-creation, hook-succeeded"
+spec:
+  backoffLimit: 2
+  template:
+    metadata:
+      labels:
+{{ include "elasticsearch-cluster.labels" . | indent 8 }}
+    spec:
+      priorityClassName: {{ .Values.backup.priorityClassName }}
+      restartPolicy: Never
+      initContainers:
+        - name: wait-for-elasticsearch
+          image: curlimages/curl:7.68.0
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - >
+              until curl {{ include "elasticsearch-cluster.elasticsearch-url" . }}/_cluster/health?local=true | grep -v '"status":"red"' > /dev/null;
+              do
+                echo "Waiting for elasticsearch";
+                sleep 2;
+              done;
+      containers:
+        - name: elasticsearch-create-backup-repository
+          image: curlimages/curl:7.68.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SERVER_URL
+              value: {{ include "elasticsearch-cluster.elasticsearch-url" . }}
+            - name: BUCKET_NAME
+              value: {{ index .Values "elasticsearch-backup" "s3BucketName" }}
+          command:
+            - /bin/sh
+          args:
+            - -c
+            - |
+              #echo "Checking for repository existence..."
+              #RESPONSE=$(curl -XGET --silent --show-error "$SERVER_URL/_snapshot/backup");
+              #if echo "$RESPONSE" | grep "[backup] missing"; then exit 1; fi;
+
+              echo "Configuring backup s3 repository using $BUCKET_NAME S3 bucket...";
+              export QUERY="{
+                \"type\": \"s3\",
+                \"settings\": {
+                 \"bucket\": \"$BUCKET_NAME\",
+                 \"region\": \"eu-west-3\",
+                 \"endpoint\": \"s3.eu-west-3.amazonaws.com\"
+                }
+               }";
+              set -x;
+              RESPONSE=$(curl -XPUT --silent --show-error -H 'Content-Type: application/json' "$SERVER_URL/_snapshot/backup" -d "$QUERY");
+              if echo "$RESPONSE" | grep error; then exit 1; fi;
+
+              echo "Configuring backup policy..."
+              export QUERY='{
+                "schedule": {{ index .Values "elasticsearch-backup" "backupSchedule" | quote }},
+                "name": {{ index .Values "elasticsearch-backup" "backupNameExpression" | quote }},
+                "repository": "backup",
+                "config": {
+                  "indices": ["*"],
+                  "ignore_unavailable": false,
+                  "include_global_state": false
+                },
+                "retention": {
+                  "expire_after": {{ index .Values "elasticsearch-backup" "backupExpireAfter" | quote }},
+                  "min_count": {{ index .Values "elasticsearch-backup" "backupMinCount" }},
+                  "max_count": {{ index .Values "elasticsearch-backup" "backupMaxCount" }}
+                }
+              }';
+              RESPONSE=$(curl -XPUT --silent --show-error -H 'Content-Type: application/json' "$SERVER_URL/_slm/policy/daily-snapshots" -d "$QUERY");
+              if echo "$RESPONSE" | grep -v '{"acknowledged":true}'; then exit 1; fi;
+      terminationGracePeriodSeconds: 0
+{{- end }}
