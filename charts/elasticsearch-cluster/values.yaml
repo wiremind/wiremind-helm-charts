@@ -4,7 +4,8 @@ fullnameOverride: ""
 # To define common settings, it may be useful to use YAML anchors to use the same
 # base settings for all node types (data + master) + ingest
 es-defaults: &defaults
-  clusterName: "my-elasticsearch-cluster"  # Change me, and change url using elasticsearch below
+  # Change me, and change urls using elasticsearch below
+  clusterName: "my-elasticsearch-cluster"
 
 # The data nodes
 es-data-hot:
@@ -196,9 +197,26 @@ indexLifecycleManagement:
     minAge: 90d
   # priorityClassName: my-priority-class
 
+## Configure a s3 backup repository and snapshot policy on it
+## Currently only supports s3 and with a lot of snapshot policy hardcoded, to be generalized
+backup:
+  enabled: false
+  accessKey: setme
+  secretKey: setme
+  s3BucketName: setme
+  # https://www.elastic.co/guide/en/elasticsearch/reference/7.x/getting-started-snapshot-lifecycle-management.html for more details.
+  backupSchedule: "0 30 1 * * ?"
+  backupNameExpression: "<daily-snap-{now/d}>"
+  backupExpireAfter: "30d"
+  backupMinCount: 5
+  backupMaxCount: 50
+  ## Set priority class name for setting up ES regarding related object storage repository
+  # priorityClassName:
+
 kibana:
   enabled: false
-  elasticsearchHosts: http://my-elasticsearch-hot-url:9200  # Change me
+  # Change me
+  elasticsearchHosts: http://my-elasticsearch-hot-url:9200
   resources:
     limits:
       cpu: 2
@@ -227,7 +245,8 @@ kibana:
 prometheus-elasticsearch-exporter:
   enabled: true
   es:
-    uri: http://my-elasticsearch-master-url:9200  # Change me
+    # Change me
+    uri: http://my-elasticsearch-master-url:9200
   resources:
     requests:
       cpu: 10m
@@ -243,12 +262,12 @@ prometheus-elasticsearch-exporter:
       - alert: ESNoBackup
         # Note that it will fire only if backup repo exists, so only for prod
         expr: |
-            (
-              time()
-              -
-              elasticsearch_snapshot_stats_snapshot_end_time_timestamp{service="{{ template "elasticsearch-exporter.fullname" . }}", state="SUCCESS"}
-            )
-            / 3600 / 24 > 2.5
+          (
+            time()
+            -
+            elasticsearch_snapshot_stats_snapshot_end_time_timestamp{service="{{ template "elasticsearch-exporter.fullname" . }}", state="SUCCESS"}
+          )
+          / 3600 / 24 > 2.5
         labels:
           severity: warning
         annotations:
@@ -262,7 +281,7 @@ prometheus-elasticsearch-exporter:
         labels:
           severity: critical
         annotations:
-          summary: 'Cluster health status is RED'
+          summary: "Cluster health status is RED"
           description: 'Cluster {{ "{{ $labels.cluster }}" }} health status is RED'
       - alert: ESClusteStatusYELLOW
         expr: |
@@ -271,7 +290,7 @@ prometheus-elasticsearch-exporter:
         labels:
           severity: high
         annotations:
-          summary: 'Cluster health status is YELLOW'
+          summary: "Cluster health status is YELLOW"
           description: 'Cluster {{ "{{ $labels.cluster }}" }} health status is YELLOW'
 
       # Report any rejected request.
@@ -282,7 +301,7 @@ prometheus-elasticsearch-exporter:
         labels:
           severity: high
         annotations:
-          summary: 'Elasticsearch Bulk Query Rejection'
+          summary: "Elasticsearch Bulk Query Rejection"
           description: |
             'Bulk Rejection at {{ "{{ $labels.name }}" }} node in {{ "{{ $labels.cluster }}" }} cluster'
 
@@ -298,7 +317,7 @@ prometheus-elasticsearch-exporter:
         labels:
           severity: alert
         annotations:
-          summary: 'JVM Heap usage on the node is high'
+          summary: "JVM Heap usage on the node is high"
           description: |
             'JVM Heap usage on the node {{ "{{ $labels.node }}" }} in {{ "{{ $labels.cluster }}" }} cluster is {{ "{{ $value }}" }}%. There might be long running GCs now.'
 
@@ -310,8 +329,9 @@ cerebro:
     readinessProbe:
       enabled: false
   config:
-    basePath: '/'
+    basePath: "/"
     restHistorySize: 50
     hosts:
       - name: elasticsearch-cluster
-        host: http://my-elasticsearch-hot-url:9200  # Change me
+        # Change me
+        host: http://my-elasticsearch-hot-url:9200
