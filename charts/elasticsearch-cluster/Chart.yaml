@@ -2,7 +2,7 @@ apiVersion: v2
 description: Elasticsearch cluster - a hat chart for several elasticsearch charts
 home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch-cluster
 name: elasticsearch-cluster
-version: 3.4.1
+version: 3.4.2
 appVersion: 7.15.0
 dependencies:
   - name: elasticsearch

@@ -201,8 +201,11 @@ indexLifecycleManagement:
 ## Currently only supports s3 and with a lot of snapshot policy hardcoded, to be generalized
 backup:
   enabled: false
-  accessKey: setme
-  secretKey: setme
+  keystore:
+    # Create a secret containing S3 credentials
+    enabled: false
+    accessKey: setme
+    secretKey: setme
   s3BucketName: setme
   # https://www.elastic.co/guide/en/elasticsearch/reference/7.x/getting-started-snapshot-lifecycle-management.html for more details.
   backupSchedule: "0 30 1 * * ?"
