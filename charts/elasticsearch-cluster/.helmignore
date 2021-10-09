@@ -22,4 +22,3 @@ helmfile/
 .idea/
 *.tmproj
 CHANGELOG.md
-README.md
