@@ -543,6 +543,66 @@ entries:
   elasticsearch-cluster:
   - apiVersion: v2
     appVersion: 7.15.0
+    created: "2021-10-09T10:49:30.325861874Z"
+    dependencies:
+    - alias: es-data-hot
+      condition: es-data-hot.enabled
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: '*'
+    - alias: es-data-warm
+      condition: es-data-warm.enabled
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: '*'
+    - alias: es-data-cold
+      condition: es-data-cold.enabled
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: '*'
+    - alias: es-master
+      condition: es-master.enabled
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: '*'
+    - alias: es-ingest
+      condition: es-ingest.enabled
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: '*'
+    - condition: kibana.enabled
+      name: kibana
+      repository: https://helm.elastic.co
+      version: '*'
+    - condition: prometheus-elasticsearch-exporter.enabled
+      name: prometheus-elasticsearch-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: '*'
+    - condition: cerebro.enabled
+      name: cerebro
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    description: Elasticsearch cluster - a hat chart for several elasticsearch charts
+    digest: ae5df81e239afdf30b2f75e024ba2957e65f270520926f18248dcccfa6d089b1
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch-cluster
+    icon: https://static-www.elastic.co/v3/assets/bltefdd0b53724fa2ce/blt5ebe80fb665aef6b/5ea8c8f26b62d4563b6ecec2/brand-elasticsearch-220x130.svg
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: elasticsearch-cluster
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch-cluster
+    - https://github.com/elastic/helm-charts/tree/master/elasticsearch
+    - https://github.com/elastic/elasticsearch
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/elasticsearch-cluster-3.4.3/elasticsearch-cluster-3.4.3.tgz
+    version: 3.4.3
+  - apiVersion: v2
+    appVersion: 7.15.0
     created: "2021-10-09T09:38:35.063409776Z"
     dependencies:
     - alias: es-data-hot
@@ -1915,6 +1975,22 @@ entries:
   pghoard:
   - apiVersion: v2
     appVersion: "1.0"
+    created: "2021-10-09T10:49:30.509632459Z"
+    description: pghoard
+    digest: a834e20e44304258e75c7cc6b1776028e27d0c061cd409363ff0c1ad00123504
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: pghoard
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/pghoard-0.8.1/pghoard-0.8.1.tgz
+    version: 0.8.1
+  - apiVersion: v2
+    appVersion: "1.0"
     created: "2021-07-22T14:48:50.044736016Z"
     description: pghoard
     digest: 3cf3e1c27b28b6ea938595684c2493372ad53cd0b9a3cf326e2cff595e76e315
@@ -2039,4 +2115,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2021-10-09T09:38:35.063561876Z"
+generated: "2021-10-09T10:49:30.509866958Z"
