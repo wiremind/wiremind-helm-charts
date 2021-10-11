@@ -1,13 +1,45 @@
 nameOverride: ""
 fullnameOverride: ""
 
-# To define common settings, it may be useful to use YAML anchors to use the same
-# base settings for all node types (data + master) + ingest
+## To define common settings, it may be useful to use YAML anchors to use the same
+## base settings for all node types (data + master) + ingest
 es-defaults: &defaults
-  # Change me, and change urls using elasticsearch below
+  ## Change me, and change urls using elasticsearch below
   clusterName: "my-elasticsearch-cluster"
+  ## Enable if you want backup (see below)
+  # keystore:
+  #   - secretName: $RELEASE-NAME-elasticsearch-s3
+  ## Installs by default repository-s3 plugin
+  extraInitContainers: |
+    - name: elasticsearch-plugin-install-repository-s3
+      image: {{ .Values.image }}:{{ .Values.imageTag }}
+      command:
+        - sh
+      args:
+        - -c
+        - |
+          set -e; set -x;
+          PLUGIN_NAME="repository-s3"
+          echo "Installing $PLUGIN_NAME..."
+          PLUGIN_LIST=$(bin/elasticsearch-plugin list)
+          echo $PLUGIN_LIST
+          if echo $PLUGIN_LIST | grep "$PLUGIN_NAME"; then
+            echo "Plugin $PLUGIN_NAME already exists, skipping."
+          else
+            echo "$PLUGIN_NAME does not exist yet, installing..."
+            bin/elasticsearch-plugin install --batch $PLUGIN_NAME
+          fi
+      volumeMounts:
+        - mountPath: /usr/share/elasticsearch/plugins/
+          name: plugindir
+  extraVolumes: |
+    - name: plugindir
+      emptyDir: {}
+  extraVolumeMounts: |
+    - mountPath: /usr/share/elasticsearch/plugins/
+      name: plugindir
 
-# The data nodes
+## The data nodes
 es-data-hot:
   <<: *defaults
   nodeGroup: "data-hot"
@@ -125,10 +157,10 @@ es-data-cold:
       requests:
         storage: 1Gi
 
-# The ingest (a.k.a client) nodes
+## The ingest (a.k.a client) nodes
 es-ingest:
   <<: *defaults
-  nodeGroup: "master"
+  nodeGroup: "ingest"
   enabled: false
   roles:
     master: "false"
@@ -148,7 +180,7 @@ es-ingest:
       requests:
         storage: 1Gi
 
-# The master nodes
+## The master nodes
 es-master:
   <<: *defaults
   nodeGroup: "master"
@@ -181,13 +213,13 @@ es-master:
       requests:
         storage: 1Gi
 
-# Creates a default indexLifecycleManagement policy
-# Note: you'll have to manage index templates so that your indices point to this ILM.
+## Creates a default indexLifecycleManagement policy
+## Note: you'll have to manage index templates so that your indices point to this ILM.
 indexLifecycleManagement:
   enabled: false
-  # Name of the policy to create
+  ## Name of the policy to create
   name: wiremind
-  # Ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/_timing.html
+  ## Ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/_timing.html
   warm:
     minAge: 8d
   cold:
@@ -195,30 +227,50 @@ indexLifecycleManagement:
   delete:
     enabled: false
     minAge: 90d
+  ## priority class to use for the job setting up the ILM
   # priorityClassName: my-priority-class
 
-## Configure a s3 backup repository and snapshot policy on it
-## Currently only supports s3 and with a lot of snapshot policy hardcoded, to be generalized
+## Configure a backup repository and snapshot policy on it
 backup:
   enabled: false
   keystore:
-    # Create a secret containing S3 credentials
+    ## Create a secret containing credentials
+    ## Currently only supports s3
+    ## You can manually create a secret instead
     enabled: false
-    accessKey: setme
-    secretKey: setme
-  s3BucketName: setme
-  # https://www.elastic.co/guide/en/elasticsearch/reference/7.x/getting-started-snapshot-lifecycle-management.html for more details.
-  backupSchedule: "0 30 1 * * ?"
-  backupNameExpression: "<daily-snap-{now/d}>"
-  backupExpireAfter: "30d"
-  backupMinCount: 5
-  backupMaxCount: 50
-  ## Set priority class name for setting up ES regarding related object storage repository
+    accessKey: setme  # change me
+    secretKey: setme  # change me
+  ## Ref:
+  ## https://www.elastic.co/guide/en/elasticsearch/reference/7.x/snapshots-register-repository.html
+  repository:
+    type: s3
+    settings:
+      bucket: setme  # change me
+      region: eu-west-3
+      endpoint: s3.eu-west-3.amazonaws.com
+  snapshotPolicyName: snapshot
+  ## Ref:
+  ## https://www.elastic.co/guide/en/elasticsearch/reference/7.x/getting-started-snapshot-lifecycle-management.html
+  ## https://www.elastic.co/guide/en/elasticsearch/reference/7.x/slm-api-put-policy.html
+  snapshotPolicy:
+    schedule: "0 30 1 * * ?"
+    name: <snapshot-{now/d}>
+    repository: backup  ## Also sets repository name. Beware when changing name, you'll have duplicate registered repositories and you manually need to delete the old one
+    config:
+      indices:
+        - "*"
+      ignore_unavailable: false
+      include_global_state: true
+    retention:
+      expire_after: 30d
+      min_count: 5
+      max_count: 50
+  ## priority class to use for the job setting up the repository and snapshot policy
   # priorityClassName:
 
 kibana:
   enabled: false
-  # Change me
+  ## Change me
   elasticsearchHosts: http://my-elasticsearch-hot-url:9200
   resources:
     limits:
@@ -248,7 +300,7 @@ kibana:
 prometheus-elasticsearch-exporter:
   enabled: true
   es:
-    # Change me
+    ## Change me
     uri: http://my-elasticsearch-master-url:9200
   resources:
     requests:
@@ -263,7 +315,7 @@ prometheus-elasticsearch-exporter:
     enabled: false
     rules:
       - alert: ESNoBackup
-        # Note that it will fire only if backup repo exists, so only for prod
+        ## Note that it will fire only if backup repo exists, so only for prod
         expr: |
           (
             time()
@@ -296,7 +348,7 @@ prometheus-elasticsearch-exporter:
           summary: "Cluster health status is YELLOW"
           description: 'Cluster {{ "{{ $labels.cluster }}" }} health status is YELLOW'
 
-      # Report any rejected request.
+      ## Report any rejected request.
       - alert: ESBulkRequestsRejection
         expr: |
           irate(elasticsearch_thread_pool_rejected_count{service="{{ template "elasticsearch-exporter.fullname" . }}"}[1m]) > 0
@@ -336,5 +388,5 @@ cerebro:
     restHistorySize: 50
     hosts:
       - name: elasticsearch-cluster
-        # Change me
+        ## Change me
         host: http://my-elasticsearch-hot-url:9200
