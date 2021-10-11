@@ -5,7 +5,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Release.Name }}-elasticsearch-create-ilm
+  name: {{ include "elasticsearch-cluster.fullname" . }}-setup-ilm
   labels:
 {{ include "elasticsearch-cluster.labels" . | indent 4 }}
   annotations:
@@ -31,13 +31,13 @@ spec:
             - /bin/sh
             - -c
             - >
-              until curl -S {{ include "elasticsearch-cluster.elasticsearch-url" . }}/_cluster/health?local=true | grep -v '"status":"red"' > /dev/null;
+              until curl -S "{{ include "elasticsearch-cluster.elasticsearch-url" . }}/_cluster/health?wait_for_status=yellow&timeout=50s";
               do
                 echo "Waiting for elasticsearch";
                 sleep 2;
               done;
       containers:
-        - name: elasticsearch-post-ilm-policy
+        - name: elasticsearch-setup-ilm
           image: curlimages/curl:7.68.0
           imagePullPolicy: IfNotPresent
           env:

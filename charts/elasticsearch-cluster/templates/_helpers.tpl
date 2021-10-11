@@ -51,5 +51,5 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{- define "elasticsearch-cluster.elasticsearch-url" -}}
-{{ printf "http://%s-data-hot:9200" (index .Values "es-data-hot" "clusterName") }}
+{{ printf "http://%s-data-hot-headless:9200" (index .Values "es-data-hot" "clusterName") }}
 {{- end }}
