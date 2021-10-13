@@ -1,4 +1,4 @@
-{{- if .Values.config -}}
+{{- if not .Values.configFromSecretRef -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
