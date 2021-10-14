@@ -51,4 +51,8 @@ Alternatively, a YAML file that specifies the values for the parameters can be p
 $ helm install --name my-release -f values.yaml stable/cerebro
 ```
 
+## Backend connection with basic auth
+
+You can create your secret, make sure the key name is "application.conf" and simply give the secret name `configFromSecretRef:`
+
 > **Tip**: You can use the default [values.yaml](values.yaml)

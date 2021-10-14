@@ -1,3 +1,4 @@
+{{- if not .Values.configFromSecretRef -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -75,3 +76,4 @@ data:
       }
       {{- end }}
     ]
+{{- end -}}

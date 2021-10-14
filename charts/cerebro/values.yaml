@@ -61,6 +61,9 @@ env:
 # Reference to a Secret object with environment variables
 # envFromSecretRef: 'my-secret-ref'
 
+# if config is coming from a k8s secret, give the secret name
+# configFromSecertRef: 'my-secret-config-name'
+
 config:
   basePath: '/'
   restHistorySize: 50

@@ -1,5 +1,5 @@
 name: cerebro
-version: 1.9.10
+version: 1.10.0
 appVersion: 0.9.4
 apiVersion: v2
 description: A Helm chart for Cerebro - a web admin tool that replaces Kopf.

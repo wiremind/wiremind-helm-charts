@@ -100,15 +100,21 @@ spec:
       volumes:
         - name: db
           emptyDir: {}
-        - name: config
-          configMap:
-            name: {{ template "cerebro.fullname" . }}
         - name: logs
           emptyDir: {}
         - name: tmp
           emptyDir: {}
     {{- if .Values.volumes }}
 {{ toYaml .Values.volumes | indent 8 }}
+    {{- end }}
+    {{- if .Values.configFromSecretRef }}
+        - name: config
+          secret:
+            secretName: {{ .Values.configFromSecretRef }}
+    {{- else }}
+        - name: config
+          configMap:
+            name: {{ template "cerebro.fullname" . }}
     {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
