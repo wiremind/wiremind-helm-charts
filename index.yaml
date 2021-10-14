@@ -3,6 +3,28 @@ entries:
   cerebro:
   - apiVersion: v2
     appVersion: 0.9.4
+    created: "2021-10-14T07:02:45.600024114Z"
+    description: A Helm chart for Cerebro - a web admin tool that replaces Kopf.
+    digest: 99330ffaa5ec3ee3547d8aa44c055fad67a700a1cf9059bbc6e93df839d3dbe6
+    home: https://github.com/lmenezes/cerebro
+    icon: https://github.com/lmenezes/cerebro/blob/master/public/img/logo.png
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: cerebro
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cerebro
+    - https://github.com/lmenezes/cerebro-docker
+    - https://github.com/lmenezes/cerebro
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/cerebro-1.10.0/cerebro-1.10.0.tgz
+    version: 1.10.0
+  - apiVersion: v2
+    appVersion: 0.9.4
     created: "2021-04-10T18:29:19.580811777Z"
     description: A Helm chart for Cerebro - a web admin tool that replaces Kopf.
     digest: 848aa6141c1661db31c510f9bd08938e41a09081ba962ab69581eb6914f891e2
@@ -2257,4 +2279,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2021-10-13T15:11:17.855709075Z"
+generated: "2021-10-14T07:02:45.600278209Z"
