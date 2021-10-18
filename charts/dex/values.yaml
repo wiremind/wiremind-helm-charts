@@ -188,7 +188,11 @@ certs:
         #           app: {{ template "dex.name" . }}
         #           release: "{{ .Release.Name }}"
 
-env: []
+env:
+- name: KUBERNETES_POD_NAMESPACE
+  valueFrom:
+   fieldRef:
+     fieldPath: metadata.namespace
 
 rbac:
   # Specifies whether RBAC resources should be created
