@@ -106,7 +106,13 @@ spec:
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
 {{- end }}
         env:
-{{ toYaml .Values.env | indent 10 }}
+        {{- with .Values.env }}
+        {{- toYaml . | nindent 10 }}
+        {{- end }}
+        - name: KUBERNETES_POD_NAMESPACE
+          valueFrom:
+           fieldRef:
+             fieldPath: metadata.namespace
         volumeMounts:
         - mountPath: /etc/dex/cfg
           name: config
