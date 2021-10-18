@@ -494,6 +494,30 @@ entries:
   dex:
   - apiVersion: v2
     appVersion: 2.24.0
+    created: "2021-10-18T15:46:07.271746274Z"
+    description: OpenID Connect Identity (OIDC) and OAuth 2.0 Provider with Pluggable
+      Connectors
+    digest: 883c663a7e2b40146c41e67324c5b8316e273dbbd871e1e7e0ea2f61547f363a
+    home: https://github.com/dexidp/dex/
+    icon: https://github.com/dexidp/dex/raw/master/Documentation/logos/dex-glyph-color.png
+    keywords:
+    - dex
+    - oidc
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: dex
+    sources:
+    - https://github.com/dexidp/dex/
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/dex-2.15.4/dex-2.15.4.tgz
+    version: 2.15.4
+  - apiVersion: v2
+    appVersion: 2.24.0
     created: "2020-11-24T16:08:07.124797208Z"
     description: OpenID Connect Identity (OIDC) and OAuth 2.0 Provider with Pluggable
       Connectors
@@ -2279,4 +2303,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2021-10-14T07:02:45.600278209Z"
+generated: "2021-10-18T15:46:07.272411422Z"
