@@ -191,8 +191,8 @@ certs:
 env:
 - name: KUBERNETES_POD_NAMESPACE
   valueFrom:
-   fieldRef:
-     fieldPath: metadata.namespace
+    fieldRef:
+      fieldPath: metadata.namespace
 
 rbac:
   # Specifies whether RBAC resources should be created
