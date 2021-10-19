@@ -1,0 +1,61 @@
+{{- if and .Values.backup.enabled .Values.backup.snapshotPolicy.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "elasticsearch-cluster.fullname" . }}-snapshot-setup-policy
+  labels:
+{{ include "elasticsearch-cluster.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": post-install, post-upgrade
+    "helm.sh/hook-weight": "2"
+    "helm.sh/hook-delete-policy": "before-hook-creation, hook-succeeded"
+spec:
+  backoffLimit: 2
+  template:
+    metadata:
+      labels:
+{{ include "elasticsearch-cluster.labels" . | indent 8 }}
+    spec:
+      priorityClassName: {{ .Values.backup.priorityClassName }}
+      restartPolicy: Never
+      initContainers:
+        - name: wait-for-elasticsearch
+          image: curlimages/curl:7.79.1
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - >
+              until curl -S "{{ include "elasticsearch-cluster.elasticsearch-url" . }}/_cluster/health?wait_for_status=yellow&timeout=300s";
+              do
+                echo "Waiting for elasticsearch";
+                sleep 2;
+              done;
+      containers:
+        - name: elasticsearch-create-backup-repo
+          image: curlimages/curl:7.79.1
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SERVER_URL
+              value: {{ include "elasticsearch-cluster.elasticsearch-url" . }}
+            - name: SNAPSHOT_POLICY_NAME
+              value: {{ .Values.backup.snapshotPolicyName }}
+          command:
+            - curl
+          args:
+            - -c
+            - |
+              echo "Configuring snapshot policy..."
+              set -x;
+              RESPONSE=$(curl -XPUT --silent --show-error -H 'Content-Type: application/json' "$SERVER_URL/_slm/policy/$SNAPSHOT_POLICY_NAME" -d "@/etc/snapshot-policy-configuration/snapshot-policy.json");
+              if echo "$RESPONSE" | grep -v '{"acknowledged":true}'; then exit 1; fi;
+          volumeMounts:
+            - name: snapshot-policy-configuration
+              mountPath: /etc/snapshot-policy-configuration
+      volumes:
+        - name: snapshot-policy-configuration
+          configMap:
+            name: {{ include "elasticsearch-cluster.fullname" . }}-setup-backup-repo
+            defaultMode: 420
+      terminationGracePeriodSeconds: 0
+{{- end }}
