@@ -23,22 +23,9 @@ spec:
       priorityClassName: {{ . }}
       {{- end }}
       restartPolicy: Never
-      initContainers:
-        - name: wait-for-elasticsearch
-          image: curlimages/curl:7.77.0
-          imagePullPolicy: IfNotPresent
-          command:
-            - /bin/sh
-            - -c
-            - >
-              until curl -S "{{ include "elasticsearch-cluster.elasticsearch-url" . }}/_cluster/health?wait_for_status=yellow&timeout=50s";
-              do
-                echo "Waiting for elasticsearch";
-                sleep 2;
-              done;
       containers:
         - name: elasticsearch-setup-ilm
-          image: curlimages/curl:7.68.0
+          image: curlimages/curl:7.79.1
           imagePullPolicy: IfNotPresent
           env:
             - name: SERVER_URL
@@ -54,6 +41,12 @@ spec:
           args:
             - -c
             - |
+              until curl --silent --show-error "$SERVER_URL/_cluster/health?wait_for_status=yellow&timeout=300s";
+              do
+                echo "Waiting for elasticsearch";
+                sleep 2;
+              done;
+
               echo "Configuring Index Lifecycle Management policy..."
               export QUERY='{
                 "policy": {
