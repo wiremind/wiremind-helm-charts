@@ -243,6 +243,10 @@ backup:
   ## Ref:
   ## https://www.elastic.co/guide/en/elasticsearch/reference/7.x/snapshots-register-repository.html
   repository:
+    ## Will setup the repository if enabled and backup is enabled
+    ## Note that elasticseach repository name is stated in snapshotPolicy below
+    enabled: true
+    ## Note: currently, only s3 is supported
     type: s3
     settings:
       bucket: setme  # change me
@@ -253,6 +257,8 @@ backup:
   ## https://www.elastic.co/guide/en/elasticsearch/reference/7.x/getting-started-snapshot-lifecycle-management.html
   ## https://www.elastic.co/guide/en/elasticsearch/reference/7.x/slm-api-put-policy.html
   snapshotPolicy:
+    ## Will setup the snapshot policy if enabled and backup is enabled
+    enabled: true
     schedule: "0 30 1 * * ?"
     name: <snapshot-{now/d}>
     repository: backup  ## Also sets repository name. Beware when changing name, you'll have duplicate registered repositories and you manually need to delete the old one
