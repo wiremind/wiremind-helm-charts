@@ -320,20 +320,19 @@ prometheus-elasticsearch-exporter:
   prometheusRule:
     enabled: false
     rules:
-      - alert: ESNoBackup
-        ## Note that it will fire only if backup repo exists, so only for prod
+      - alert: ESNoRecentSnapshot
+        ## Note that it will fire only if snapshot repository exists
         expr: |
           (
             time()
             -
-            elasticsearch_snapshot_stats_snapshot_end_time_timestamp{service="{{ template "elasticsearch-exporter.fullname" . }}", state="SUCCESS"}
-          )
-          / 3600 / 24 > 2.5
+            elasticsearch_snapshot_stats_snapshot_start_time_timestamp{service="{{ template "elasticsearch-exporter.fullname" . }}, state="SUCCESS"}
+          ) / 3600 / 24 > 8
         labels:
           severity: warning
         annotations:
           summary: |
-            No successful {{ "{{ $labels.instance }}" }} Elasticsearch backup for {{ "{{ $value }}" }} days
+            No successful {{ "{{ $labels.instance }}" }} Elasticsearch snapshot for {{ "{{ $value }}" }} days
           description: No recent Elasticsearch backup
       - alert: ESClusterStatusRED
         expr: |
