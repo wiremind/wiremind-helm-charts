@@ -326,7 +326,7 @@ prometheus-elasticsearch-exporter:
           (
             time()
             -
-            elasticsearch_snapshot_stats_snapshot_start_time_timestamp{service="{{ template "elasticsearch-exporter.fullname" . }}, state="SUCCESS"}
+            elasticsearch_snapshot_stats_snapshot_start_time_timestamp{service="{{ template "elasticsearch-exporter.fullname" . }}", state="SUCCESS"}
           ) / 3600 / 24 > 8
         labels:
           severity: warning
