@@ -111,7 +111,58 @@
             "type": "integer"
         },
         "resources": {
-            "type": "object"
+            "type": "object",
+            "title": "Required Resources",
+            "description": "Configure resource requests",
+            "form": true,
+            "properties": {
+                "requests": {
+                    "type": "object",
+                    "properties": {
+                        "memory": {
+                            "type": "string",
+                            "form": true,
+                            "render": "slider",
+                            "title": "Memory Request",
+                            "sliderMin": 10,
+                            "sliderMax": 2048,
+                            "sliderUnit": "Mi"
+                        },
+                        "cpu": {
+                            "type": "string",
+                            "form": true,
+                            "render": "slider",
+                            "title": "CPU Request",
+                            "sliderMin": 10,
+                            "sliderMax": 2000,
+                            "sliderUnit": "m"
+                        }
+                    }
+                },
+                "limits": {
+                    "type": "object",
+                    "properties": {
+                        "memory": {
+                            "type": "string",
+                            "form": true,
+                            "render": "slider",
+                            "title": "Memory Limits",
+                            "sliderMin": 10,
+                            "sliderMax": 2048,
+                            "sliderUnit": "Mi"
+                        },
+                        "cpu": {
+                            "type": "string",
+                            "form": true,
+                            "render": "slider",
+                            "title": "CPU Limits",
+                            "sliderMin": 10,
+                            "sliderMax": 2000,
+                            "sliderUnit": "m"
+                        }
+                    }
+                }
+            }
         },
         "revisionHistoryLimit": {
             "type": "integer"
