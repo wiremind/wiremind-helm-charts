@@ -1,3 +1,5 @@
+
+
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
@@ -75,7 +77,28 @@
         },
         "tls": {
           "type": "array",
-          "items": {}
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "secretName": {
+                  "type": "string"
+                },
+                "hosts": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "secretName",
+                "hosts"
+              ]
+            }
+          ]
         }
       },
       "required": [
@@ -86,10 +109,34 @@
       "type": "object"
     },
     "freshclamConfig": {
-      "type": "object"
+      "type": ["object", "string"]
     },
     "resources": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "limits": {
+          "type": "object",
+          "properties": {
+            "cpu": {
+              "type": "string"
+            },
+            "memory": {
+              "type": "string"
+            }
+          }
+        },
+        "requests": {
+          "type": "object",
+          "properties": {
+            "cpu": {
+              "type": "string"
+            },
+            "memory": {
+              "type": "string"
+            }
+          }
+        }
+      }
     },
     "podLabels": {
       "type": "object"
@@ -170,7 +217,11 @@
         }
       },
       "required": [
-        "enabled"
+        "enabled",
+        "maxReplicas",
+        "cpu",
+        "memory",
+        "requests"
       ]
     },
     "podDisruptionBudget": {
@@ -178,6 +229,12 @@
       "properties": {
         "enabled": {
           "type": "boolean"
+        },
+        "minAvailable": {
+          "type": "integer"
+        },
+        "maxUnavailable": {
+          "type": "integer"
         }
       },
       "required": [
@@ -210,6 +267,9 @@
           ]
         },
         "size": {
+          "type": "string"
+        },
+        "storageClass": {
           "type": "string"
         }
       },
