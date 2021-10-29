@@ -217,11 +217,7 @@
         }
       },
       "required": [
-        "enabled",
-        "maxReplicas",
-        "cpu",
-        "memory",
-        "requests"
+        "enabled"
       ]
     },
     "podDisruptionBudget": {
