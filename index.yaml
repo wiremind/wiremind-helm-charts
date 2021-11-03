@@ -3,6 +3,31 @@ entries:
   cerebro:
   - apiVersion: v2
     appVersion: 0.9.4
+    created: "2021-11-03T13:02:29.200055464Z"
+    description: A Helm chart for Cerebro - a web admin tool to manage ElasticSearch
+    digest: cef9e6c7e7c94ba02e95d72d06feb3963d09907d3e6c70e3516686513297c794
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cerebro
+    icon: https://raw.githubusercontent.com/lmenezes/cerebro/main/public/img/logo.png
+    keywords:
+    - cerebro
+    - elasticsearch
+    - admin
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: cerebro
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cerebro
+    - https://github.com/lmenezes/cerebro-docker
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/cerebro-1.10.5/cerebro-1.10.5.tgz
+    version: 1.10.5
+  - apiVersion: v2
+    appVersion: 0.9.4
     created: "2021-10-29T15:39:05.265742541Z"
     description: A Helm chart for Cerebro - a web admin tool to manage ElasticSearch
     digest: 77b45db1989a14a90b9e5458cbfe5add1c82c31220d718aa19a632714859e1ac
@@ -2640,4 +2665,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2021-10-29T15:39:05.265997639Z"
+generated: "2021-11-03T13:02:29.200303167Z"
