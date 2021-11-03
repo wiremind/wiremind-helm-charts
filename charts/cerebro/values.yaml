@@ -54,7 +54,7 @@ tolerations: []
 
 affinity: {}
 
-env:
+env: {}
   # AUTH_TYPE: "basic"
   # BASIC_AUTH_USER: "admin"
 
