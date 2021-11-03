@@ -59,7 +59,7 @@
             }
         },
         "env": {
-            "type": "null"
+            "type": "object"
         },
         "image": {
             "type": "object",
