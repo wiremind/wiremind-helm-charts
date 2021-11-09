@@ -6,9 +6,9 @@ home: https://github.com/prymitive/karma
 sources:
   - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/karma
   - https://github.com/prymitive/karma
-version: 2.0.1
+version: 2.0.2
 kubeVersion: '>= 1.19-0'
-appVersion: "0.92"
+appVersion: "0.93"
 maintainers:
   - name: desaintmartin
     email: cdesaintmartin@wiremind.io
