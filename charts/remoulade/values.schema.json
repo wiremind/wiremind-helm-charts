@@ -1,0 +1,587 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "definitions": {
+    "worker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["replicaCount", "enabled"],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "replicaCount": {
+          "type": "integer",
+          "form": true,
+          "title": "Number of Replicas"
+        },
+
+        "image": {
+          "type": "object",
+          "properties": {
+            "pullPolicy": {
+              "type": "string"
+            },
+            "pullSecrets": {
+              "type": "array"
+            },
+            "repository": {
+              "type": "string"
+            },
+            "tag": {
+              "type": "string"
+            }
+          }
+        },
+        "resources": {
+          "type": "object",
+          "title": "Required Resources",
+          "description": "Configure resource requests",
+          "form": true,
+          "properties": {
+            "requests": {
+              "type": "object",
+              "properties": {
+                "memory": {
+                  "type": "string",
+                  "form": true,
+                  "render": "slider",
+                  "title": "Memory Request",
+                  "sliderMin": 10,
+                  "sliderMax": 2048,
+                  "sliderUnit": "Mi"
+                },
+                "cpu": {
+                  "type": "string",
+                  "form": true,
+                  "render": "slider",
+                  "title": "CPU Request",
+                  "sliderMin": 10,
+                  "sliderMax": 20000,
+                  "sliderUnit": "m"
+                }
+              }
+            }
+          }
+        },
+        "extraEnvVars": {
+          "type": "object"
+        },
+        "labels": {
+          "type": "object"
+        },
+        "podLabels": {
+          "type": "object"
+        },
+        "podAnnotations": {
+          "type": "object"
+        },
+        "affinity": {
+          "type": "object"
+        },
+        "nodeSelector": {
+          "type": "object"
+        },
+        "priorityClassName": {
+          "type": ["string"]
+        },
+        "terminationGracePeriodSeconds": {
+          "type": "integer"
+        },
+        "strategyType": {
+          "type": "string"
+        },
+        "containerSecurityContext": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        },
+        "podSecurityContext": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        },
+
+        "command": {
+          "type": "array",
+          "form": true
+        },
+        "args": {
+          "type": "array",
+          "form": true
+        },
+        "metrics": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        },
+        "autoscaling": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "maxReplicas": {
+              "type": "integer"
+            },
+            "minReplicas": {
+              "type": "integer"
+            }
+          }
+        },
+        "extraContainerList": {
+          "type": "array"
+        }
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "form": true,
+  "properties": {
+    "nameOverride": {
+      "type": ["null", "string"]
+    },
+    "fullnameOverride": {
+      "type": ["null", "string"]
+    },
+    "serviceAccount": {
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "type": "object"
+        },
+        "create": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string",
+          "title": "Service Account Name",
+          "description": "Service Account Name to use",
+          "form": true
+        }
+      }
+    },
+    "workers": {
+      "type": "object",
+      "properties": {
+        "defaults": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "image": {
+              "type": "object",
+              "properties": {
+                "pullPolicy": {
+                  "type": "string"
+                },
+                "pullSecrets": {
+                  "type": "array"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "tag": {
+                  "type": "string"
+                }
+              }
+            },
+            "resources": {
+              "type": "object",
+              "title": "Required Resources",
+              "description": "Configure resource requests",
+              "form": true,
+              "properties": {
+                "requests": {
+                  "type": "object",
+                  "properties": {
+                    "memory": {
+                      "type": "string",
+                      "form": true,
+                      "render": "slider",
+                      "title": "Memory Request",
+                      "sliderMin": 10,
+                      "sliderMax": 2048,
+                      "sliderUnit": "Mi"
+                    },
+                    "cpu": {
+                      "type": "string",
+                      "form": true,
+                      "render": "slider",
+                      "title": "CPU Request",
+                      "sliderMin": 10,
+                      "sliderMax": 2000,
+                      "sliderUnit": "m"
+                    }
+                  }
+                }
+              }
+            },
+            "extraEnvVars": {
+              "type": "object"
+            },
+            "labels": {
+              "type": "object"
+            },
+            "podLabels": {
+              "type": "object"
+            },
+            "podAnnotations": {
+              "type": "object"
+            },
+            "affinity": {
+              "type": "object"
+            },
+            "nodeSelector": {
+              "type": "object"
+            },
+            "priorityClassName": {
+              "type": ["string"]
+            },
+            "terminationGracePeriodSeconds": {
+              "type": "integer"
+            },
+            "strategyType": {
+              "type": "string"
+            },
+            "containerSecurityContext": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true
+                }
+              }
+            },
+            "podSecurityContext": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true
+                }
+              }
+            }
+          }
+        },
+        "list": {
+          "type": "object",
+          "patternProperties": {
+            "^.*$": {
+              "$ref": "#/definitions/worker"
+            }
+          }
+        },
+        "serviceAccount": {
+          "type": "object",
+          "properties": {
+            "annotations": {
+              "type": "object"
+            },
+            "create": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        "sharedEnvironmentVariables": {
+          "type": "array"
+        }
+      }
+    },
+    "superbowl": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Superbowl",
+          "form": true
+        },
+        "replicaCount": {
+          "type": "integer",
+          "form": true,
+          "title": "Number of Replicas"
+        },
+        "backend": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "image": {
+              "type": "object",
+              "properties": {
+                "repository": {
+                  "type": "string",
+                  "form": true
+                },
+                "tag": {
+                  "type": "string",
+                  "form": true
+                },
+                "pullPolicy": {
+                  "type": "string",
+                  "form": true
+                }
+              }
+            },
+            "command": {
+              "type": "array",
+              "form": true
+            },
+            "args": {
+              "type": "array",
+              "form": true
+            },
+            "resources": {
+              "type": "object",
+              "title": "Required Resources",
+              "description": "Configure resource requests",
+              "form": true,
+              "properties": {
+                "requests": {
+                  "type": "object",
+                  "properties": {
+                    "memory": {
+                      "type": "string",
+                      "form": true,
+                      "render": "slider",
+                      "title": "Memory Request",
+                      "sliderMin": 10,
+                      "sliderMax": 2048,
+                      "sliderUnit": "Mi"
+                    },
+                    "cpu": {
+                      "type": "string",
+                      "form": true,
+                      "render": "slider",
+                      "title": "CPU Request",
+                      "sliderMin": 10,
+                      "sliderMax": 2000,
+                      "sliderUnit": "m"
+                    }
+                  }
+                }
+              }
+            },
+            "containerSecurityContext": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true
+                }
+              }
+            }
+          }
+        },
+        "frontend": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "image": {
+              "type": "object",
+              "properties": {
+                "repository": {
+                  "type": "string",
+                  "form": true
+                },
+                "tag": {
+                  "type": "string",
+                  "form": true
+                },
+                "pullPolicy": {
+                  "type": "string",
+                  "form": true
+                }
+              }
+            },
+            "resources": {
+              "type": "object",
+              "title": "Required Resources",
+              "description": "Configure resource requests",
+              "form": true,
+              "properties": {
+                "requests": {
+                  "type": "object",
+                  "properties": {
+                    "memory": {
+                      "type": "string",
+                      "form": true,
+                      "render": "slider",
+                      "title": "Memory Request",
+                      "sliderMin": 10,
+                      "sliderMax": 2048,
+                      "sliderUnit": "Mi"
+                    },
+                    "cpu": {
+                      "type": "string",
+                      "form": true,
+                      "render": "slider",
+                      "title": "CPU Request",
+                      "sliderMin": 10,
+                      "sliderMax": 2000,
+                      "sliderUnit": "m"
+                    }
+                  }
+                }
+              }
+            },
+            "containerSecurityContext": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true
+                }
+              }
+            }
+          }
+        },
+        "imagePullSecrets": {
+          "type": "array"
+        },
+        "affinity": {
+          "type": "object"
+        },
+        "autoscaling": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "maxReplicas": {
+              "type": "integer"
+            },
+            "minReplicas": {
+              "type": "integer"
+            },
+            "targetCPUUtilizationPercentage": {
+              "type": "integer"
+            }
+          }
+        },
+        "nodeSelector": {
+          "type": "object"
+        },
+        "podAnnotations": {
+          "type": "object"
+        },
+        "podSecurityContext": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        },
+        "service": {
+          "type": "object",
+          "properties": {
+            "port": {
+              "type": "integer"
+            },
+            "type": {
+              "type": "string"
+            }
+          }
+        },
+        "ingress": {
+          "type": "object",
+          "properties": {
+            "annotations": {
+              "type": "object"
+            },
+            "className": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "hosts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "host": {
+                    "type": "string"
+                  },
+                  "paths": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "path": {
+                          "type": "string"
+                        },
+                        "pathType": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "tls": {
+              "type": "array"
+            }
+          }
+        },
+        "tolerations": {
+          "type": "array"
+        }
+      }
+    },
+    "remoulade-postgresql": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "externalPostgresqlUrl": {
+      "type": ["string", "null"]
+    },
+    "remoulade-rabbitmq": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "remoulade-rabbitmq-exporter": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "remoulade-redis": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    }
+  }
+}

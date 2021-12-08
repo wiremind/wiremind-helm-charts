@@ -1,0 +1,109 @@
+# We voluntarily do not use defaults here to show all possible values
+workers:
+  list:
+    my-first-worker:
+      ###
+      ## Mandatory values to be stated for all types of workers
+      ###
+      enabled: true
+      replicaCount: 1
+
+      ###
+      ## Optional values, if not defined, will use the "defaults" key
+      ## Please refer to this key to know default values
+      ###
+
+      ## Define which image to use
+      image:
+        ## We deploy the "composition" example
+        repository: ghcr.io/wiremind/remoulade
+        tag: v0.46.2-example-composition
+        pullPolicy: IfNotPresent
+        pullSecrets: []
+      ## Set the resources for the Pod
+      ## Note that if defined in a specific worker the whole block is overridden from the defaults
+      resources:
+        requests:
+          cpu: 100m
+          memory: 64Mi
+        limits:
+          cpu: "2"
+          memory: 256Mi
+      ## Additional environment variables to define in the container
+      extraEnvVars: {foo: a, bar: b}
+      ## Add extra labels to the Deployment
+      labels: {}
+      ## Add extra labels to the pods
+      podLabels: {foo: bar}
+      ## Extra annotations for pods
+      podAnnotations: {"foo": "bar"}
+      ## Affinity to set
+      affinity: {}
+      ## Node selector to set
+      nodeSelector: {}
+      ## Priority Class Name
+      ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+      priorityClassName: ""
+      ## Seconds pod needs to terminate gracefully
+      ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+      terminationGracePeriodSeconds: 90
+      ## Strategy type
+      strategyType: RollingUpdate
+      ## Security Context for the Container
+      ## Note that if defined in a specific worker the whole block is overridden from the defaults
+      containerSecurityContext:
+        enabled: true
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 1001
+      ## Security Context for the Pod
+      ## Note that if defined in a specific worker the whole block is overridden from the default
+      podSecurityContext:
+        enabled: true
+        fsGroup: 2001
+
+      ###
+      ## Optional values, if not defined, will not be used at all or will be false (but there is no defaults)
+      ###
+
+      ## Optional command to run
+      command: ["composition_worker"]
+      ## Optional args to define
+      args: []
+      ## Define a port in the container and a Prometheus Operator PodMonitor
+      metrics:
+        enabled: true
+
+      ## Horizontal Pod Autoscaler
+      ## Refs:
+      ## - https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+      ## - https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/
+      autoscaling:
+        enabled: true
+        ## minReplicas SHOULD be >= 1 for now.
+        minReplicas: 1
+        maxReplicas: 1
+        describedService: "some_service"
+        metricName: "some_rabbitmq_queue_name"
+        metricMatchLabels:
+          queue: queue_name
+        targetMetricValue: 42
+      ## Optional extra Container(s) to define
+      extraContainerList:
+        - name: dummy-extra-container
+          image: gcr.io/google_containers/pause-amd64:3.0
+
+    ## Another smaller example
+    my-second-worker:
+      enabled: true
+      replicaCount: 1
+      image:
+        repository: ghcr.io/wiremind/remoulade
+        tag: v0.46.2-example-composition
+      command: ["composition_worker"]  # Yeah, I have a single example to show
+      metrics:
+        enabled: true
