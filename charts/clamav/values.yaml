@@ -21,6 +21,7 @@ fullnameOverride: ""
 service:
   type: ClusterIP
   port: 3310
+  nodePort: ""
   annotations: {}
 
 ingress:
