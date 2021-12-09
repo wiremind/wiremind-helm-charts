@@ -45,6 +45,9 @@
         "port": {
           "type": "integer"
         },
+        "nodePort": {
+          "type": "integer"
+        },
         "annotations": {
           "type": "object"
         }
