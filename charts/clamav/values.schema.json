@@ -213,10 +213,10 @@
           "type": "integer"
         },
         "memory": {
-          "type": "null"
+          "type": "string"
         },
         "requests": {
-          "type": "null"
+          "type": "string"
         }
       },
       "required": [
