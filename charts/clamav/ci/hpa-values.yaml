@@ -1,3 +1,2 @@
 hpa:
-  requests: 500m
-  memory: 1Gi
+  memory: "1Gi"
