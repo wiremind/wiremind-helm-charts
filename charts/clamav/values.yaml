@@ -95,7 +95,7 @@ hpa:
   cpu: 80
   # average memory usage per pod (100Mi-1Gi)
   # memory: "1000Mi"
-  # requests: "500m" 
+  # requests: "500m"
 
 podDisruptionBudget:
   enabled: false
