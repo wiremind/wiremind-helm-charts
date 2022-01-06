@@ -109,10 +109,10 @@
       ]
     },
     "clamdConfig": {
-      "type": ["object", "string"]
+      "type": ["string"]
     },
     "freshclamConfig": {
-      "type": ["object", "string"]
+      "type": ["string"]
     },
     "resources": {
       "type": "object",
