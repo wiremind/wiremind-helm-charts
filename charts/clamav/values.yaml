@@ -37,8 +37,19 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-clamdConfig: {}
-freshclamConfig: {}
+## Ref: https://linux.die.net/man/5/clamd.conf
+## Note: will completely override default clamd.conf file at https://github.com/Mailu/Mailu/tree/master/optional/clamav/conf
+clamdConfig: ""
+# Example:
+# clamdConfig: |
+#   MaxScanSize 1000M
+
+## Ref: https://linux.die.net/man/5/freshclam.conf
+## Note: will completely override default clamd.conf file at https://github.com/Mailu/Mailu/tree/master/optional/clamav/conf
+freshclamConfig: ""
+# Example:
+# freshclamConfig: |
+#   Checks 25
 
 # Use freshclamConfig to define the content of /etc/clamav/freshclam.conf. Example:
 # freshclamConfig: |
