@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: mailu/clamav
-  tag: "1.8"
+  tag: ""  # If not defined, uses appVersion
   pullPolicy: IfNotPresent
 
 ## Optionally specify an array of imagePullSecrets.
