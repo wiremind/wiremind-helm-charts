@@ -1,8 +1,8 @@
 apiVersion: v2
 description: An Open-Source antivirus engine for detecting trojans, viruses, malware & other malicious threats. Using Mailu docker image.
 name: clamav
-version: 2.3.1
-appVersion: "1.8"
+version: 2.3.2
+appVersion: "1.9"
 home: https://www.clamav.net
 icon: https://www.clamav.net/assets/clamav-trademark.png
 sources:
