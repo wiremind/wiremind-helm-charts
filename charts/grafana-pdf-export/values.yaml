@@ -49,4 +49,14 @@ cronjob:
     emailSenderName: "Wiremind Platform"
     emailSubject: "Wiremind Pod Dashboard"
     emailBody: "Here is the monthly dashboard"
-#  - name: my-second-cron
+  - name: my-second-cron
+    # schedule the export at 6AM the first day of each month
+    schedule: "0 6 1 * *"
+    monthly: true
+    dashboard_in: "https://xxxxxx/d/prometheus-blackbox-exporter/prometheus-blackbox-exporter?orgId=1&from=1619820000000&to=1622498399000&kiosk"
+    dashboard_out: "output.pdf"
+    emailRecipient: "platform@wiremind.io"
+    emailSenderEmail: "platform@wiremind.io"
+    emailSenderName: "Wiremind Platform"
+    emailSubject: "Wiremind Pod Dashboard"
+    emailBody: "Here is the monthly dashboard"

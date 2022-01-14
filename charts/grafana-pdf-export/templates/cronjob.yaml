@@ -3,7 +3,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: grafana-pdf-export-cronjob
+  name: grafana-pdf-export-cronjob-{{ $val.name }}
   labels:
     app.kubernetes.io/component: grafana-pdf-export-cronjob
 spec:
