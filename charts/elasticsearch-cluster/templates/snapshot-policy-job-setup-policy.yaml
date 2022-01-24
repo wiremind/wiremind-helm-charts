@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "elasticsearch-cluster.fullname" . }}-snapshot-setup-policy
+  name: {{ include "elasticsearch-cluster.fullname" . }}-snapshot-setup-pol
   labels:
 {{ include "elasticsearch-cluster.labels" . | indent 4 }}
   annotations:
