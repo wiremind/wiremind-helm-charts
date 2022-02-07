@@ -1,7 +1,7 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "cerebro.fullname" . -}}
 {{- $ingressPath := .Values.ingress.path -}}
-apiVersion: {{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1" }} networking.k8s.io/v1beta1 {{- else if .Capabilities.APIVersions.Has "extensions/v1beta1" }} extensions/v1beta1 {{- else }} networking.k8s.io/v1 {{- end }}
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
