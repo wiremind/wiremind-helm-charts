@@ -6,5 +6,5 @@ version: 1.4.0
 sources:
 - https://github.com/mintel/dex-k8s-authenticator
 maintainers:
-- name: Nick Badger
+- name: nabadger
   email: nbadger@mintel.com

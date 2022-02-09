@@ -17,9 +17,9 @@ dexK8sAuthenticator:
   port: 5555
   debug: false
   web_path_prefix: /
-  #logoUrl: http://<path-to-your-logo.png>
-  #tlsCert: /path/to/dex-client.crt
-  #tlsKey: /path/to/dex-client.key
+  # logoUrl: http://<path-to-your-logo.png>
+  # tlsCert: /path/to/dex-client.crt
+  # tlsKey: /path/to/dex-client.key
   clusters:
   - name: my-cluster
     short_description: "My Cluster"
@@ -81,11 +81,11 @@ caCerts:
   #
   #     value: The base64 encoded value of the CA
   #
-  #secrets:
-  #- name: ca-cert1
+  # secrets:
+  # - name: ca-cert1
   #  filename: ca1.crt
   #  value: LS0tLS1......X2F
-  #- name: ca-cert2
+  # - name: ca-cert2
   #  filename: ca2.crt
   #  value: DS1tFA1......X2F
 
