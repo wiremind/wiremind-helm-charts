@@ -9,6 +9,8 @@ image:
   tag: ""  # If not defined, uses appVersion
   pullPolicy: IfNotPresent
 
+priorityClassName: ""
+
 ## Optionally specify an array of imagePullSecrets.
 ## Secrets must be manually created in the namespace.
 ## ref: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
