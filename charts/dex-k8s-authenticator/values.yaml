@@ -13,23 +13,25 @@ image:
 
 imagePullSecrets: {}
 
-dexK8sAuthenticator:
-  port: 5555
-  debug: false
-  web_path_prefix: /
+# -- Application configuration.
+# See the [official documentation](https://dexidp.io/docs/).
+dexK8sAuthenticator: {}
+  # port: 5555
+  # debug: false
+  # web_path_prefix: /
   # logoUrl: http://<path-to-your-logo.png>
   # tlsCert: /path/to/dex-client.crt
   # tlsKey: /path/to/dex-client.key
-  clusters:
-  - name: my-cluster
-    short_description: "My Cluster"
-    description: "Example Cluster Long Description..."
-    client_secret: pUBnBOY80SnXgjibTYM9ZWNzY2xreNGQok
-    issuer: https://dex.example.com
-    k8s_master_uri: https://my-cluster.example.com
-    client_id: my-cluster
-    redirect_uri: https://login.example.com/callback/my-cluster
-    k8s_ca_uri: https://url-to-your-ca.crt
+  # clusters:
+  # - name: my-cluster
+  #   short_description: "My Cluster"
+  #   description: "Example Cluster Long Description..."
+  #   client_secret: pUBnBOY80SnXgjibTYM9ZWNzY2xreNGQok
+  #   issuer: https://dex.example.com
+  #   k8s_master_uri: https://my-cluster.example.com
+  #   client_id: my-cluster
+  #   redirect_uri: https://login.example.com/callback/my-cluster
+  #   k8s_ca_uri: https://url-to-your-ca.crt
 
 service:
   annotations: {}
