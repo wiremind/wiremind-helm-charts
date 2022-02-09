@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "dex-k8s-authenticator.fullname" . }}
+  labels:
+    app: {{ template "dex-k8s-authenticator.fullname" . }}
+    env: {{ default "dev" .Values.global.deployEnv }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  config.yaml: {{ set .Values.dexK8sAuthenticator "listen" "http://0.0.0.0:5555" | toYaml | quote }}
