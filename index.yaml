@@ -883,6 +883,21 @@ entries:
   dex-k8s-authenticator:
   - apiVersion: v1
     appVersion: v1.4.0
+    created: "2022-02-11T09:07:47.590003918Z"
+    description: Authenticator for using Dex with Kubernetes
+    digest: 1201e8f5b4184f9d9050523b095bafb4a5ba563b5db890bd0bb780ce6b3853da
+    maintainers:
+    - email: nbadger@mintel.com
+      name: nabadger
+    name: dex-k8s-authenticator
+    sources:
+    - https://github.com/mintel/dex-k8s-authenticator
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/dex-k8s-authenticator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/dex-k8s-authenticator-1.5.1/dex-k8s-authenticator-1.5.1.tgz
+    version: 1.5.1
+  - apiVersion: v1
+    appVersion: v1.4.0
     created: "2022-02-09T16:46:40.446151068Z"
     description: Authenticator for using Dex with Kubernetes
     digest: fdaa7512082047b7b017d606b114c2911be13150229e5f52aa5586930385326d
@@ -3275,4 +3290,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2022-02-09T16:46:40.446471195Z"
+generated: "2022-02-11T09:07:47.590333494Z"
