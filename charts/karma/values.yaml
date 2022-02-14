@@ -9,7 +9,8 @@ image:
   ## The image to run
   repository: ghcr.io/prymitive/karma
   ## The image tag to pull
-  tag: v0.95
+  ## Overrides the image tag whose default is the chart appVersion.
+  tag: ""
   pullPolicy: IfNotPresent
 
 # Override (full)name of app
