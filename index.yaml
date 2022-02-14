@@ -2693,6 +2693,28 @@ entries:
     version: 1.9.1
   karma:
   - apiVersion: v2
+    appVersion: v0.97
+    created: "2022-02-14T10:07:13.918215985Z"
+    description: A Helm chart for Karma - an UI for Prometheus Alertmanager
+    digest: 78cd809d1877fc2c0b13797bb2c8c4a7e5c8db911ce500014bfd50c176eeb969
+    home: https://github.com/prymitive/karma
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: karma
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/karma
+    - https://github.com/prymitive/karma
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/karma-2.0.4/karma-2.0.4.tgz
+    version: 2.0.4
+  - apiVersion: v2
     appVersion: "0.95"
     created: "2022-02-02T19:28:07.76134404Z"
     description: A Helm chart for Karma - an UI for Prometheus Alertmanager
@@ -3290,4 +3312,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2022-02-11T09:07:47.590333494Z"
+generated: "2022-02-14T10:07:13.918881936Z"
