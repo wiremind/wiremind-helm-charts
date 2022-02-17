@@ -314,6 +314,30 @@ entries:
   clair:
   - apiVersion: v2
     appVersion: 2.1.6
+    created: "2022-02-17T17:23:42.677919271Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.0.0
+    description: Clair is an open source project for the static analysis of vulnerabilities
+      in application containers.
+    digest: b12458507dc1ff3ea363a8243450c8ad96d06055a319e9a6db43e2e90bcb1b83
+    home: https://coreos.com/clair
+    icon: https://cloud.githubusercontent.com/assets/343539/21630811/c5081e5c-d202-11e6-92eb-919d5999c77a.png
+    kubeVersion: '>=1.14.0-0'
+    maintainers:
+    - email: dev@wiremind.io
+      name: Wiremind
+    name: clair
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/clair
+    - https://github.com/quay/clair
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/clair-0.2.9/clair-0.2.9.tgz
+    version: 0.2.9
+  - apiVersion: v2
+    appVersion: 2.1.6
     created: "2021-09-27T12:08:55.898390976Z"
     dependencies:
     - condition: postgresql.enabled
@@ -859,6 +883,30 @@ entries:
   dex:
   - apiVersion: v2
     appVersion: 2.24.0
+    created: "2022-02-17T17:23:42.837141501Z"
+    description: OpenID Connect Identity (OIDC) and OAuth 2.0 Provider with Pluggable
+      Connectors
+    digest: 0a1abcfb9dc81ff8ef8a5cd3db15a8fbf9980fbd46232ae86cdeb97bc1a12f80
+    home: https://github.com/dexidp/dex/
+    icon: https://github.com/dexidp/dex/raw/master/Documentation/logos/dex-glyph-color.png
+    keywords:
+    - dex
+    - oidc
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: dex
+    sources:
+    - https://github.com/dexidp/dex/
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/dex-2.15.5/dex-2.15.5.tgz
+    version: 2.15.5
+  - apiVersion: v2
+    appVersion: 2.24.0
     created: "2021-10-18T15:46:07.271746274Z"
     description: OpenID Connect Identity (OIDC) and OAuth 2.0 Provider with Pluggable
       Connectors
@@ -906,6 +954,21 @@ entries:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/dex-2.15.3/dex-2.15.3.tgz
     version: 2.15.3
   dex-k8s-authenticator:
+  - apiVersion: v1
+    appVersion: v1.4.0
+    created: "2022-02-17T17:23:42.953318435Z"
+    description: Authenticator for using Dex with Kubernetes
+    digest: 657d6dd7b50ab56437e6401bfa87e2bf0837b0aaf15f3094f783cdee82b03282
+    maintainers:
+    - email: nbadger@mintel.com
+      name: nabadger
+    name: dex-k8s-authenticator
+    sources:
+    - https://github.com/mintel/dex-k8s-authenticator
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/dex-k8s-authenticator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/dex-k8s-authenticator-1.5.2/dex-k8s-authenticator-1.5.2.tgz
+    version: 1.5.2
   - apiVersion: v1
     appVersion: v1.4.0
     created: "2022-02-11T09:07:47.590003918Z"
@@ -3305,6 +3368,23 @@ entries:
   scrapoxy:
   - apiVersion: v2
     appVersion: 3.1.1
+    created: "2022-02-17T17:23:43.079148081Z"
+    description: Helm chart for the Scrapoxy service.
+    digest: 71174c2f7b43945363cca3347f22c5d32fe40ef12de3eecfdab8e0e8e659f21c
+    home: https://github.com/fabienvauchelles/scrapoxy
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: scrapoxy
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/scrapoxy-0.3.2/scrapoxy-0.3.2.tgz
+    version: 0.3.2
+  - apiVersion: v2
+    appVersion: 3.1.1
     created: "2020-11-24T16:08:08.812459533Z"
     description: Helm chart for the Scrapoxy service.
     digest: d9990ec9d242be90a88381462203d02df4c3fca4fd85f69b3b6df9a98cfc4be8
@@ -3337,4 +3417,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2022-02-17T08:21:10.194311586Z"
+generated: "2022-02-17T17:23:43.079838389Z"
