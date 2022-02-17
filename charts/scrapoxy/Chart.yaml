@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: "3.1.1"
 description: Helm chart for the Scrapoxy service.
 name: scrapoxy
-version: 0.3.1
+version: 0.3.2
 home: https://github.com/fabienvauchelles/scrapoxy
 maintainers:
 - name: desaintmartin

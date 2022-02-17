@@ -17,6 +17,7 @@ service:
   externalHealthPort: 6061
 ingress:
   enabled: false
+  # ingressClassName: ""
   # Used to create Ingress record (should used with service.type: ClusterIP).
   hosts:
     - clair-clair
