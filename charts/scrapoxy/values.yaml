@@ -20,6 +20,7 @@ service:
 # To access the admin API/UI from outside Kubernetes.
 ingress:
   enabled: false
+  # ingressClassName: ""
   # annotations:
   #   kubernetes.io/ingress.class: nginx
   #   kubernetes.io/tls-acme: "false"
