@@ -1,0 +1,42 @@
+{{- range $backupKey, $backupValue := .Values.keycloakBackups }}
+
+# https://doc.crds.dev/github.com/keycloak/keycloak-operator/keycloak.org/KeycloakBackup/v1alpha1@17.0.0
+# https://github.com/keycloak/keycloak-operator/tree/main/deploy/examples/backup
+
+{{- $backupType := "local" }}
+{{- if $backupValue.aws }}
+{{- $backupType = "aws" }}
+{{- end }}
+
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakBackup
+metadata:
+  name: {{ include "keycloak-operator.fullname" $ }}-keycloak-backup-{{ $backupType }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: keycloak-backup-{{ $backupType }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+spec:
+  {{- if $backupValue.aws }}
+  aws:
+    credentialsSecretName: {{ $backupValue.aws.credentialsSecretName | quote }}
+    {{- if $backupValue.aws.encryptionKeySecretName }}
+    encryptionKeySecretName: {{ $backupValue.aws.encryptionKeySecretName | quote }}
+    {{- end }}
+    {{- if $backupValue.aws.schedule }}
+    schedule: {{ $backupValue.aws.schedule | quote }}
+    {{- end }}
+  {{- end }}
+  {{- if $backupValue.storageClassName }}
+  storageClassName: {{ $backupValue.storageClassName | quote }}
+  {{- end }}
+  {{- if $backupValue.restore }}
+  restore: {{ $backupValue.restore }}
+  {{- end }}
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "keycloak-operator.fullname" $ }}-keycloak
+      app.kubernetes.io/instance: {{ $.Release.Name }}
+
+---
+{{- end }}

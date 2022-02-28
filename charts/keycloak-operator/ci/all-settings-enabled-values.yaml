@@ -1,0 +1,431 @@
+# This chart is not made for direct usage, but to be integrated as a subchart.
+# Real testing is done in git repository.
+
+# ImagePullSecrets for operator ServiceAccount, list of secrets in the same namespace.
+# Must be set for any cluster configured with private docker registry.
+imagePullSecrets:
+  - "gitlab-docker-registry"
+
+priorityClassName: ""
+
+runInClusterScope: true
+# Used to replace keycloakNamespace to support operator watch multiple namespaces.
+watchedNamespaces: "default"
+
+replicaCount: 2
+
+image:
+  repository: quay.io/keycloak/keycloak-operator
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "17.0.0"
+
+nameOverride: keycloak-operator-test-release-name
+fullnameOverride: keycloak-operator-test-release-fullname
+
+# Operator resource defaults
+resources:
+  requests:
+    memory: 250Mi
+    cpu: 250m
+  limits:
+    memory: 500Mi
+    cpu: 500m
+
+securityContext:
+  runAsUser: 1000
+  runAsGroup: 3000
+  fsGroup: 2000
+  fsGroupChangePolicy: "OnRootMismatch"
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+
+keycloak:
+  # Overrides the keycloak image whose default is in the code.
+  image: "quay.io/keycloak/keycloak:9.0.2"
+  instances: 2
+  unmanaged: true
+  external:
+    enabled: true
+    url: "localhost.dev"
+    tlsTermination: "passthrough"
+  extensions:
+    - "https://link.to.s3/custom-theme.jar"
+  externalAccess:
+    enabled: true
+    host: "localhost.dev"
+    tlsTermination: "reencrypt"
+  # User needs to provision the external database
+  externalDatabase:
+    enabled: true
+    database: "keycloak_pgsql"
+    address: "127.0.0.1"
+    port: 5432
+    username: "username"
+    password: "password"
+  adminCredentials:
+    username: "admin"
+    password: "password"
+  podDisruptionBudget:
+    enabled: true
+  migration:
+    backups:
+      enabled: true
+    strategy: "rolling"
+  multiAvailablityZones:
+    enabled: true
+  profile: "test"
+  storageClassName: "test"
+  postgresDeploymentSpec:
+    resources:
+      limits:
+        memory: 300Mi
+        cpu: 300m
+      requests:
+        memory: 256Mi
+        cpu: 250m
+  keycloakDeploymentSpec:
+    experimental:
+      args:
+        - "-Djboss.as.management.blocking.timeout=600"
+      env:
+        - name: PROXY_ADDRESS_FORWARDING
+          value: "true"
+      volumes:
+        defaultMode: 0777
+        items:
+          - name: keytab
+            mountPath: /keytabs
+            secrets:
+              - keytabs
+          - name: vault
+            mountPath: /opt/jboss/keycloak/secrets
+            secrets:
+              - realm1
+              - realm2
+          - name: test-config
+            mountPath: /configmap
+            configMaps:
+              - test-config
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - keycloak
+              topologyKey: "topology.kubernetes.io/zone"
+          - weight: 90
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - keycloak
+              topologyKey: "kubernetes.io/hostname"
+    podLabels:
+      environment: production
+    resources:
+      limits:
+        memory: 600Mi
+        cpu: 300m
+      requests:
+        cpu: 250m
+        memory: 500Mi
+
+keycloakRealms:
+  - realm:
+      name: "basic"
+      enabled: false
+      displayName: "Basic Realm"
+  - realm:
+      # General
+      name: "test"
+      displayName: "Test Realm"
+      displayNameHtml: "<h1>Test Realm</h1>"
+      # Login
+      registrationAllowed: false
+      registrationEmailAsUsername: false
+      editUsernameAllowed: true
+      resetPasswordAllowed: true
+      rememberMe: true
+      verifyEmail: true
+      loginWithEmailAllowed: true
+      sslRequired: "external"
+      # Email
+      smtpServer:
+        host: "smtp.example.com"
+        port: 25
+        fromDisplayName: "Test club"
+        from: "test@example.com"
+        replyToDisplayName: "Test club"
+        replyTo: "test@example.com"
+        envelopeFrom: "test@example.com"
+        ssl: false
+        starttls: false
+        auth: false
+        user: "apikey"
+        password: "password"
+      # Theme
+      accountTheme: "keycloak"
+      adminTheme: "keycloak"
+      emailTheme: "keycloak"
+      loginTheme: "keycloak"
+      # Client Scopes
+      clientScopes:
+        - name: "birthday_included"
+          description: "Birthday_included"
+          protocol: "openid-connect"
+          protocolMappers:
+            - name: "consent1"
+              consentRequired: true
+              consentText: "Consent_text"
+      clientScopeMappings:
+        birthday:
+          - client: "clientIdBasic"
+            clientScope: "birthday_included"
+            roles:
+              - "admin"
+              - "customer"
+            self: ""
+      # Roles
+      roles:
+        realm:
+          - name: test1
+            description: "Role for test customers"
+            attributes:
+              dateOfBirth:
+                - "1900-01-01"
+              gender:
+                - "unknown"
+            composite: false
+      # Identity Providers
+      identityProviders:
+        - enabled: true
+          addReadTokenRoleOnCreate: true
+          alias: "testProvider1"
+          config: {}
+          displayName: "Test Provider 1"
+          firstBrokerLoginFlowAlias: "firstBrokerLoginFlowAlias 1"
+          linkOnly: true
+          postBrokerLoginFlowAlias: "postBrokerLoginFlowAlias 1"
+          providerId: "TestProviderId1"
+          storeToken: true
+          trustEmail: true
+      # Events
+      adminEventsEnabled: true
+      eventsEnabled: true
+      eventsListeners:
+        - jboss-logging
+      enabledEventTypes:
+        - SEND_RESET_PASSWORD
+        - UPDATE_CONSENT_ERROR
+        - GRANT_CONSENT
+        - REMOVE_TOTP
+        - REVOKE_GRANT
+        - UPDATE_TOTP
+        - LOGIN_ERROR
+      userFederationProviders:
+        - displayName: "ldap"
+          providerName: "ldap"
+          config:
+            vendor: "ad"
+            connectionUrl: "ldap://localhost"
+            bindDn: "USERNAME"
+            # This reads the REALM-SECRET from /opt/jboss/keycloak/secrets
+            # In this example, the secret key is called ldap-realm_bindCredential
+            # See deploy/examples/keycloak/keycloak-with-vault.yaml for an
+            # example of how to setup the vault secret directory
+            bindCredential: "${vault.bindCredential}"
+            usersDn: DC=example,DC=com"
+            usernameLDAPAttribute: "mail"
+            uuidLDAPAttribute: "objectGUID"
+            # sub
+            searchScope: "2"
+            useTruststoreSpi: "ldapsOnly"
+            trustEmail: "true"
+            userObjectClasses: "person, organizationalPerson, user"
+            rdnLDAPAttribute: "cn"
+            editMode: "READ_ONLY"
+            # debug: "false"
+      userFederationMappers:
+        - name: username
+          federationProviderDisplayName: ldap
+          federationMapperType: user-attribute-ldap-mapper
+          config:
+            always.read.value.from.ldap: 'true'
+            is.binary.attribute: 'false'
+            is.mandatory.in.ldap: 'true'
+            ldap.attribute: mail
+            read.only: 'true'
+            user.model.attribute: username
+        - name: MSAD account controls
+          federationProviderDisplayName: ldap
+          federationMapperType: msad-user-account-control-mapper
+          config:
+            ldap.password.policy.hints.enabled: 'false'
+        - name: last name
+          federationProviderDisplayName: ldap
+          federationMapperType: user-attribute-ldap-mapper
+          config:
+            always.read.value.from.ldap: 'true'
+            is.binary.attribute: 'false'
+            is.mandatory.in.ldap: 'true'
+            ldap.attribute: sn
+            read.only: 'true'
+            user.model.attribute: lastName
+        - name: email
+          federationProviderDisplayName: ldap
+          federationMapperType: user-attribute-ldap-mapper
+          config:
+            always.read.value.from.ldap: 'true'
+            is.binary.attribute: 'false'
+            is.mandatory.in.ldap: 'true'
+            ldap.attribute: mail
+            read.only: 'true'
+            user.model.attribute: email
+        - name: full name
+          federationProviderDisplayName: ldap
+          federationMapperType: full-name-ldap-mapper
+          config:
+            ldap.full.name.attribute: cn
+            read.only: 'true'
+            write.only: 'false'
+        - name: groups
+          federationProviderDisplayName: ldap
+          federationMapperType: group-ldap-mapper
+          config:
+            membership.attribute.type: DN
+            group.name.ldap.attribute: cn
+            membership.user.ldap.attribute: sAMAccountName
+            preserve.group.inheritance: 'true'
+            groups.dn: DC=example,DC=com
+            mode: READ_ONLY
+            user.roles.retrieve.strategy: GET_GROUPS_FROM_USER_MEMBEROF_ATTRIBUTE
+            # Only pull in groups that start with prefix EXAMPLE
+            groups.ldap.filter: "(cn=EXAMPLE*)"
+            membership.ldap.attribute: 'true'
+            memberof.ldap.attribute: memberOf
+            group.object.classes: group
+            drop.non.existing.groups.during.sync: 'true'
+    realmOverrides:
+      - forFlow: "browser"
+        identityProvider: "openshift-v4"
+
+keycloakClients:
+  - client:
+      clientId: clientIdBasic
+    realmName: "basic"
+  - client:
+      clientId: clientIdTest
+      secret: client-secret
+      clientAuthenticatorType: client-secret
+      protocol: openid-connect
+      defaultRoles:
+        - test1
+        - test2
+        - test5
+      access:
+        public: true
+      rootUrl: "https://localhost.dev"
+      baseUrl: "https://localhost.dev"
+      adminUrl: "https://localhost.dev"
+      redirectUris:
+        - "*"
+      webOrigins:
+        - "*"
+      bearerOnly: false
+      consentRequired: false
+      directAccessGrantsEnabled: true
+      implicitFlowEnabled: true
+      frontchannelLogout: true
+      standardFlowEnabled: true
+      useTemplateConfig: true
+      useTemplateMappers: true
+      useTemplateScope: true
+      fullScopeAllowed: true
+      defaultClientScopes:
+        - "email"
+        - "profile"
+        - "role_list"
+        - "roles"
+        - "web-origins"
+      optionalClientScopes:
+        - "address"
+        - "microprofile-jwt"
+        - "offline_access"
+        - "phone"
+    roles:
+      - name: test1
+        description: "Role for test customers"
+        attributes:
+          dateOfBirth:
+            - "1900-01-01"
+          gender:
+            - "unknown"
+        composite: false
+      - name: test2
+      - name: test5
+    realmName: "test"
+
+keycloakUsers:
+  - user:
+      username: "realm_user"
+      firstName: "John"
+      lastName: "Doe"
+      email: "user@example.com"
+      enabled: false
+      emailVerified: false
+    realmName: "basic"
+  - user:
+      username: "realm_test"
+      firstName: "Test"
+      lastName: "Toto"
+      email: "test@example.com"
+      credentials:
+        - type: "password"
+          value: "123456"
+          temporary: true
+      realmRoles:
+        - "offline_access"
+      clientRoles:
+        account:
+          - "manage-account"
+          - "view-profile"
+        realm-management:
+          - "manage-users"
+          - "view-users"
+          - "query-users"
+          - "create-client"
+      groups:
+        - "testgroup1"
+        - "testgroup2"
+    realmName: "test"
+
+keycloakBackups:
+  - aws:
+      credentialsSecretName: s3-backup
+      encryptionKeySecretName: s3-backup-encryption
+      schedule: "*/2 * * * *"
+    storageClassName: ""
+    restore: false
+  - local: {}
+
+extraEnvVars:
+  RELATED_IMAGE_RHSSO_OPENJ9: "registry.redhat.io/rh-sso-7/sso74-openshift-rhel8:7.4-1"
+  RELATED_IMAGE_RHSSO_OPENJDK: "registry.redhat.io/rh-sso-7/sso74-openshift-rhel8:7.4-1"
+  RELATED_IMAGE_KEYCLOAK_INIT_CONTAINER: "quay.io/keycloak/keycloak-init-container:latest"
+  RELATED_IMAGE_RHMI_BACKUP_CONTAINER: "quay.io/integreatly/backup-container:1.0.16"
+  RELATED_IMAGE_POSTGRESQL: "registry.redhat.io/rhel8/postgresql-10:1"
+
+# Additional labels and annotations to apply on the pod level for monitoring and logging configuration.
+podLabels:
+  environment: production
+podAnnotations:
+  imageregistry: "https://quay.io/"

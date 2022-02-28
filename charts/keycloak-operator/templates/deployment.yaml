@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "keycloak-operator.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "keycloak-operator.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      name: {{ include "keycloak-operator.fullname" . }}
+  template:
+    metadata:
+      labels:
+        name: {{ include "keycloak-operator.fullname" . }}
+        {{- range $key, $val := .Values.podLabels }}
+        {{ $key }}: "{{ $val }}"
+        {{- end }}
+    {{- if .Values.podAnnotations }}
+      annotations:
+{{ toYaml .Values.podAnnotations | indent 8 }}
+    {{- end }}
+    spec:
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      serviceAccountName: {{ include "keycloak-operator.fullname" . }}-sa
+      {{- if .Values.securityContext }}
+      securityContext:
+{{ toYaml .Values.securityContext | trim | indent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ include "keycloak-operator.fullname" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - keycloak-operator
+          {{- if .Values.containerSecurityContext }}
+          securityContext:
+{{ toYaml .Values.containerSecurityContext | trim | indent 12 }}
+          {{- end }}
+          resources:
+{{ toYaml .Values.resources | trim | indent 12 }}
+          env:
+            - name: WATCH_NAMESPACE
+            {{- if .Values.runInClusterScope }}
+              value: ""
+            {{ else if .Values.watchedNamespaces }}
+              value: {{ .Values.watchedNamespaces | quote }}
+            {{ else }}
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            {{ end -}}
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: {{ include "keycloak-operator.fullname" . }}
+            {{ if .Values.keycloak -}}
+            {{ if .Values.keycloak.image -}}
+            - name: RELATED_IMAGE_KEYCLOAK
+              value: {{ .Values.keycloak.image }}
+            {{- end }}
+            {{- end }}
+          {{- range $key, $val := .Values.extraEnvVars }}
+            - name: {{ $key }}
+              value: {{ $val | quote }}
+          {{- end }}
+---

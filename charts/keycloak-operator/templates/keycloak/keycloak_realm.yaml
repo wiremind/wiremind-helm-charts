@@ -1,0 +1,181 @@
+{{- range $realmKey, $realmValue := .Values.keycloakRealms }}
+
+# https://doc.crds.dev/github.com/keycloak/keycloak-operator/keycloak.org/KeycloakRealm/v1alpha1@17.0.0
+# https://github.com/keycloak/keycloak-operator/tree/main/deploy/examples/realm
+
+{{- $realmNameFormatted := $realmValue.realm.name | replace "_" "-" | lower }}
+
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakRealm
+metadata:
+  name: {{ include "keycloak-operator.fullname" $ }}-keycloak-realm-{{ $realmNameFormatted }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: keycloak-realm-{{ $realmNameFormatted }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+spec:
+  realm:
+    # General
+    enabled: {{ hasKey $realmValue.realm "enabled" | ternary $realmValue.realm.enabled true }}
+    realm: {{ $realmValue.realm.name | quote }} # Required and must be unique
+    {{- if $realmValue.realm.id }}
+    id: {{ $realmValue.realm.id | quote }}
+    {{- end }}
+    displayName: {{ $realmValue.realm.displayName | default "" | quote }}
+    displayNameHtml: {{ $realmValue.realm.displayNameHtml | default "" | quote }}
+    {{- if $realmValue.realm.passwordPolicy }}
+    passwordPolicy: {{ $realmValue.realm.passwordPolicy }}
+    {{- end }}
+    # Login
+    registrationAllowed: {{ hasKey $realmValue.realm "registrationAllowed" | ternary $realmValue.realm.registrationAllowed false }}
+    registrationEmailAsUsername: {{ hasKey $realmValue.realm "registrationEmailAsUsername" | ternary $realmValue.realm.registrationEmailAsUsername false }}
+    editUsernameAllowed: {{ hasKey $realmValue.realm "editUsernameAllowed" | ternary $realmValue.realm.editUsernameAllowed false }}
+    resetPasswordAllowed: {{ hasKey $realmValue.realm "resetPasswordAllowed" | ternary $realmValue.realm.resetPasswordAllowed false }}
+    rememberMe: {{ hasKey $realmValue.realm "rememberMe" | ternary $realmValue.realm.rememberMe false }}
+    verifyEmail: {{ hasKey $realmValue.realm "verifyEmail" | ternary $realmValue.realm.verifyEmail false }}
+    loginWithEmailAllowed: {{ hasKey $realmValue.realm "loginWithEmailAllowed" | ternary $realmValue.realm.loginWithEmailAllowed true }}
+    sslRequired: {{ has $realmValue.realm.sslRequired (list "all" "external" "none") | ternary $realmValue.realm.sslRequired "external" | quote }}
+    # Themes
+    accountTheme: {{ $realmValue.realm.accountTheme | default "keycloak" | quote }}
+    adminTheme: {{ $realmValue.realm.adminTheme | default "keycloak" | quote }}
+    emailTheme: {{ $realmValue.realm.emailTheme | default "keycloak" | quote }}
+    loginTheme: {{ $realmValue.realm.loginTheme | default "keycloak" | quote }}
+    {{- if $realmValue.realm.smtpServer }}
+    # Email
+    smtpServer:
+      host: {{ $realmValue.realm.smtpServer.host | default "" | quote }}
+      port: {{ hasKey $realmValue.realm.smtpServer "port" | ternary $realmValue.realm.smtpServer.port 25 | quote }}
+      fromDisplayName: {{ $realmValue.realm.smtpServer.fromDisplayName | default "" | quote }}
+      from: {{ $realmValue.realm.smtpServer.from | default "" | quote }}
+      replyToDisplayName: {{ $realmValue.realm.smtpServer.replyToDisplayName | default "" | quote }}
+      replyTo: {{ $realmValue.realm.smtpServer.replyTo | default "" | quote }}
+      envelopeFrom: {{ $realmValue.realm.smtpServer.envelopeFrom | default "" | quote }}
+      ssl: {{ hasKey $realmValue.realm.smtpServer "ssl" | ternary $realmValue.realm.smtpServer.ssl false | quote }}
+      starttls: {{ hasKey $realmValue.realm.smtpServer "starttls" | ternary $realmValue.realm.smtpServer.starttls false | quote }}
+      auth: {{ hasKey $realmValue.realm.smtpServer "auth" | ternary $realmValue.realm.smtpServer.auth false | quote }}
+      user: {{ $realmValue.realm.smtpServer.user | default "" | quote }}
+      password: {{ $realmValue.realm.smtpServer.password | default "" | quote }}
+    {{- end }}
+    {{- if $realmValue.realm.clientScopes }}
+    # Client Scopes
+    clientScopes:
+      {{- range $clientScopeKey, $clientScopeValue := $realmValue.realm.clientScopes }}
+      - name: {{ $clientScopeValue.name | quote }}
+        description: {{ $clientScopeValue.description | default "" | quote }}
+        protocol: {{ $clientScopeValue.protocol | default "openid-connect" | quote }}
+        {{- if $clientScopeValue.protocolMappers }}
+        protocolMappers:
+          {{- range $protocolMapperKey, $protocolMapperValue := $clientScopeValue.protocolMappers }}
+          - name: {{ $protocolMapperValue.name | quote }}
+            consentRequired: {{ hasKey $protocolMapperValue "consentRequired" | ternary $protocolMapperValue.consentRequired false }}
+            consentText: {{ $protocolMapperValue.consentText | default "" | quote }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+    {{- if $realmValue.realm.clientScopeMappings }}
+    clientScopeMappings:
+      {{- range $clientScopeMappingKey, $clientScopeMappingValue := $realmValue.realm.clientScopeMappings }}
+      {{ $clientScopeMappingKey }}:
+        {{- range $clientScopeSubMappingKey, $clientScopeSubMappingValue := $clientScopeMappingValue }}
+        - client: {{ $clientScopeSubMappingValue.client | quote }}
+          clientScope: {{ $clientScopeSubMappingValue.clientScope | quote }}
+          {{- if $clientScopeSubMappingValue.roles }}
+          roles:
+            {{- range $roleKey, $roleValue := $clientScopeSubMappingValue.roles }}
+            - {{ $roleValue | quote }}
+            {{- end }}
+          {{- end }}
+          self: {{ $clientScopeSubMappingValue.self | default "" | quote }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+    {{- if $realmValue.realm.roles }}
+    # Roles
+    roles:
+      {{- if $realmValue.realm.roles.realm }}
+      realm:
+        {{- range $realmRoleRealmKey, $realmRoleRealmValue := $realmValue.realm.roles.realm }}
+        - name: {{ $realmRoleRealmValue.name | quote }}
+          description: {{ $realmRoleRealmValue.name | default "" | quote }}
+          {{- if $realmRoleRealmValue.attributes }}
+          attributes:
+            {{- range $attributeKey, $attributeValue := $realmRoleRealmValue.attributes }}
+            {{ $attributeKey }}:
+              {{- range $attributeSubKey, $attributeSubValue := $attributeValue }}
+              - {{ $attributeSubValue | quote }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+          composite: {{ hasKey $realmRoleRealmValue "composite" | ternary $realmRoleRealmValue.composite false }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+    # Identity Providers
+    {{- if $realmValue.realm.identityProviders }}
+    identityProviders:
+      {{- range $identityProviderKey, $identityProviderValue := $realmValue.realm.identityProviders }}
+      - enabled: {{ hasKey $identityProviderValue "enabled" | ternary $identityProviderValue.enabled true }}
+        addReadTokenRoleOnCreate: {{ hasKey $identityProviderValue "addReadTokenRoleOnCreate" | ternary $identityProviderValue.addReadTokenRoleOnCreate false }}
+        alias: {{ $identityProviderValue.alias | default "" | quote }}
+        {{- if $identityProviderValue.config }}
+        config:
+{{ toYaml $identityProviderValue.config | trim | indent 10 }}
+        {{- end }}
+        displayName: {{ $identityProviderValue.displayName | default "" | quote }}
+        firstBrokerLoginFlowAlias: {{ $identityProviderValue.firstBrokerLoginFlowAlias | default "" | quote }}
+        linkOnly: {{ hasKey $identityProviderValue "linkOnly" | ternary $identityProviderValue.linkOnly false }}
+        postBrokerLoginFlowAlias: {{ $identityProviderValue.postBrokerLoginFlowAlias | default "" | quote }}
+        providerId: {{ $identityProviderValue.providerId | default "" | quote }}
+        storeToken: {{ hasKey $identityProviderValue "storeToken" | ternary $identityProviderValue.storeToken false }}
+        trustEmail: {{ hasKey $identityProviderValue "trustEmail" | ternary $identityProviderValue.trustEmail false }}
+      {{- end }}
+    {{- end }}
+    # Events
+    adminEventsEnabled: {{ hasKey $realmValue.realm "adminEventsEnabled" | ternary $realmValue.realm.adminEventsEnabled false }}
+    eventsEnabled: {{ hasKey $realmValue.realm "eventsEnabled" | ternary $realmValue.realm.eventsEnabled false }}
+    {{- if $realmValue.realm.eventsListeners }}
+    eventsListeners:
+      {{- range $eventsListenerKey, $eventsListenerValue := $realmValue.realm.eventsListeners }}
+      - {{ $eventsListenerValue | quote }}
+      {{- end }}
+    {{- end }}
+    {{- if $realmValue.realm.enabledEventTypes }}
+    enabledEventTypes:
+      {{- range $enabledEventTypeKey, $enabledEventTypeValue := $realmValue.realm.enabledEventTypes }}
+      - {{ $enabledEventTypeValue | quote }}
+      {{- end }}
+    {{- end }}
+    {{- if $realmValue.realm.userFederationProviders }}
+    userFederationProviders:
+      {{- range $userFederationProviderKey, $userFederationProviderValue := $realmValue.realm.userFederationProviders }}
+      - displayName: {{ $userFederationProviderValue.displayName | quote }}
+        providerName: {{ $userFederationProviderValue.providerName | quote }}
+        config:
+{{ toYaml $userFederationProviderValue.config | trim | indent 10 }}
+      {{- end }}
+    {{- end }}
+    {{- if $realmValue.realm.userFederationMappers }}
+    userFederationMappers:
+      {{- range $userFederationMapperKey, $userFederationMapperValue := $realmValue.realm.userFederationMappers }}
+      - name: {{ $userFederationMapperValue.name | quote }}
+        federationProviderDisplayName: {{ $userFederationMapperValue.federationProviderDisplayName | quote }}
+        federationMapperType: {{ $userFederationMapperValue.federationMapperType | quote }}
+        config:
+{{ toYaml $userFederationMapperValue.config | trim | indent 10 }}
+      {{- end }}
+    {{- end }}
+  {{- if $realmValue.realmOverrides }}
+  realmOverrides:
+    {{- range $realmOverrideKey, $realmOverrideValue := $realmValue.realmOverrides }}
+    - forFlow: {{ $realmOverrideValue.forFlow  | quote }}
+      identityProvider: {{ $realmOverrideValue.identityProvider  | quote }}
+    {{- end }}
+  {{- end }}
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/name: keycloak
+      app.kubernetes.io/instance: {{ $.Release.Name }}
+
+---
+{{- end }}

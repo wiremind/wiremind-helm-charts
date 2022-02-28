@@ -1,0 +1,57 @@
+# Default values for test.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# ImagePullSecrets for operator ServiceAccount, list of secrets in the same namespace
+# used to pull operator image. Must be set for any cluster configured with private docker registry.
+imagePullSecrets: []
+priorityClassName: ""
+
+runInClusterScope: false
+# Used to replace keycloakNamespace to support operator watch multiple namespaces.
+watchedNamespaces: ""
+
+replicaCount: 1
+
+image:
+  repository: quay.io/keycloak/keycloak-operator
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+nameOverride: ""
+fullnameOverride: ""
+
+# Operator resource defaults
+resources:
+  limits: {}
+  requests:
+    cpu: 250m
+    memory: 500Mi
+
+securityContext: {}
+
+keycloak:
+  postgresDeploymentSpec:
+    resources:
+      limits: {}
+      requests:
+        memory: 256Mi
+        cpu: 250m
+  keycloakDeploymentSpec:
+    resources:
+      limits: {}
+      requests:
+        cpu: 250m
+        memory: 500Mi
+
+keycloakRealms: []
+keycloakClients: []
+keycloakUsers: []
+keycloakBackups: []
+
+extraEnvVars: {}
+
+# Additional labels and annotations to apply on the pod level for monitoring and logging configuration.
+podLabels: {}
+podAnnotations: {}

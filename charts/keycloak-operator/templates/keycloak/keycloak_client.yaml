@@ -1,0 +1,107 @@
+{{- range $clientKey, $clientValue := .Values.keycloakClients }}
+
+# https://doc.crds.dev/github.com/keycloak/keycloak-operator/keycloak.org/KeycloakClient/v1alpha1@17.0.0
+# https://github.com/keycloak/keycloak-operator/tree/main/deploy/examples/client
+
+{{- $clientIdFormatted := $clientValue.client.clientId | replace "_" "-" | lower }}
+{{- $realmNameFormatted := $clientValue.realmName | replace "_" "-" | lower }}
+
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: {{ include "keycloak-operator.fullname" $ }}-keycloak-client-{{ $clientIdFormatted | lower }}-{{ $realmNameFormatted }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: keycloak-client-{{ $clientIdFormatted }}-{{ $realmNameFormatted }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+spec:
+  client:
+    # Settings
+    enabled: {{ hasKey $clientValue.client "enabled" | ternary $clientValue.client.enabled true }}
+    clientId: {{ $clientValue.client.clientId | quote }} # Required and must be unique
+    {{- if $clientValue.client.id }}
+    id: {{ $clientValue.client.id | quote }}
+    {{- end }}
+    name: {{ $clientValue.client.name | default "" | quote }}
+    description: {{ $clientValue.client.description | default "" | quote }}
+    secret: {{ $clientValue.client.secret | default "" | quote }}
+    clientAuthenticatorType: {{ $clientValue.client.clientAuthenticatorType | default "" | quote }}
+    protocol: {{ $clientValue.client.protocol | default "openid-connect" | quote }}
+    {{- if $clientValue.client.access }}
+    access:
+      {{- range $accessKey, $accessValue := $clientValue.client.access }}
+      {{ $accessKey }}: {{ $accessValue }}
+      {{- end }}
+    {{- end }}
+    {{- if $clientValue.client.redirectUris }}
+    redirectUris:
+      {{- range $redirectUriKey, $redirectUriValue := $clientValue.client.redirectUris }}
+      - {{ $redirectUriValue | quote }}
+      {{- end }}
+    {{- end }}
+    {{- if $clientValue.client.webOrigins }}
+    webOrigins:
+      {{- range $webOriginKey, $webOriginValue := $clientValue.client.webOrigins }}
+      - {{ $webOriginValue | quote }}
+      {{- end }}
+    {{- end }}
+    rootUrl: {{ $clientValue.client.rootUrl | default "" | quote }}
+    baseUrl: {{ $clientValue.client.baseUrl | default "" | quote }}
+    adminUrl: {{ $clientValue.client.adminUrl | default "" | quote }}
+    publicClient: {{ hasKey $clientValue.client "publicClient" | ternary $clientValue.client.publicClient true }}
+    bearerOnly: {{ hasKey $clientValue.client "bearerOnly" | ternary $clientValue.client.bearerOnly false }}
+    serviceAccountsEnabled: {{ hasKey $clientValue.client "serviceAccountsEnabled" | ternary $clientValue.client.serviceAccountsEnabled false }}
+    consentRequired: {{ hasKey $clientValue.client "consentRequired" | ternary $clientValue.client.consentRequired false }}
+    directAccessGrantsEnabled: {{ hasKey $clientValue.client "directAccessGrantsEnabled" | ternary $clientValue.client.directAccessGrantsEnabled true }}
+    implicitFlowEnabled: {{ hasKey $clientValue.client "implicitFlowEnabled" | ternary $clientValue.client.implicitFlowEnabled false }}
+    frontchannelLogout: {{ hasKey $clientValue.client "frontchannelLogout" | ternary $clientValue.client.frontchannelLogout false }}
+    standardFlowEnabled: {{ hasKey $clientValue.client "standardFlowEnabled" | ternary $clientValue.client.standardFlowEnabled true }}
+    surrogateAuthRequired: {{ hasKey $clientValue.client "surrogateAuthRequired" | ternary $clientValue.client.surrogateAuthRequired false }}
+    useTemplateConfig: {{ hasKey $clientValue.client "useTemplateConfig" | ternary $clientValue.client.useTemplateConfig true }}
+    useTemplateMappers: {{ hasKey $clientValue.client "useTemplateMappers" | ternary $clientValue.client.useTemplateMappers true }}
+    # Scopes
+    useTemplateScope: {{ hasKey $clientValue.client "useTemplateScope" | ternary $clientValue.client.useTemplateScope true }}
+    fullScopeAllowed: {{ hasKey $clientValue.client "fullScopeAllowed" | ternary $clientValue.client.fullScopeAllowed true }}
+    {{- if $clientValue.client.defaultClientScopes | quote }}
+    defaultClientScopes:
+      {{- range $defaultClientScopeKey, $defaultClientScopeValue := $clientValue.client.defaultClientScopes }}
+      - {{ $defaultClientScopeValue | quote }}
+      {{- end }}
+    {{- end }}
+    {{- if $clientValue.client.optionalClientScopes | quote }}
+    optionalClientScopes:
+      {{- range $optionalClientScopeKey, $optionalClientScopeValue := $clientValue.client.optionalClientScopes }}
+      - {{ $optionalClientScopeValue | quote }}
+      {{- end }}
+    {{- end }}
+    # Roles
+    {{- if $clientValue.client.defaultRoles | quote }}
+    defaultRoles:
+      {{- range $defaultRoleKey, $defaultRoleValue := $clientValue.client.defaultRoles }}
+      - {{ $defaultRoleValue | quote }}
+      {{- end }}
+    {{- end }}
+  {{- if $clientValue.roles }}
+  roles:
+    {{- range $roleKey, $roleValue := $clientValue.roles }}
+    - name: {{ $roleValue.name | quote }}
+      description: {{ $roleValue.name | default "" | quote }}
+      {{- if $roleValue.attributes }}
+      attributes:
+        {{- range $attributeKey, $attributeValue := $roleValue.attributes }}
+        {{ $attributeKey }}:
+          {{- range $attributeSubKey, $attributeSubValue := $attributeValue }}
+          - {{ $attributeSubValue | quote }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+      composite: {{ hasKey $roleValue "composite" | ternary $roleValue.composite false }}
+    {{- end }}
+  {{- end }}
+  realmSelector:
+    matchLabels:
+      app.kubernetes.io/name: keycloak-realm-{{ $realmNameFormatted }}
+      app.kubernetes.io/instance: {{ $.Release.Name }}
+
+---
+{{- end }}

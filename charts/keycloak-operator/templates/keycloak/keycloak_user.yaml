@@ -1,0 +1,63 @@
+{{- range $userKey, $userValue := .Values.keycloakUsers }}
+
+# https://doc.crds.dev/github.com/keycloak/keycloak-operator/keycloak.org/KeycloakUser/v1alpha1@17.0.0
+# https://github.com/keycloak/keycloak-operator/tree/main/deploy/examples/user
+
+{{- $usernameFormatted := $userValue.user.username | replace "_" "-" | lower }}
+{{- $realmNameFormatted := $userValue.realmName | replace "_" "-" | lower }}
+
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakUser
+metadata:
+  name: {{ include "keycloak-operator.fullname" $ }}-keycloak-user-{{ $usernameFormatted }}-{{ $realmNameFormatted }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: keycloak-user-{{ $usernameFormatted }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+spec:
+  user:
+    enabled: {{ hasKey $userValue.user "enabled" | ternary $userValue.user.enabled true }}
+    username: {{ $userValue.user.username | quote }} # Required and must be unique
+    {{- if $userValue.user.id }}
+    id: {{ $userValue.user.id | quote }}
+    {{- end }}
+    firstName: {{ $userValue.user.firstName | default "" | quote }}
+    lastName: {{ $userValue.user.lastName | default "" | quote }}
+    email: {{ $userValue.user.email | default "" | quote }}
+    emailVerified: {{ hasKey $userValue.user "emailVerified" | ternary $userValue.user.emailVerified false }}
+    {{- if $userValue.user.credentials }}
+    credentials:
+      {{- range $credential := $userValue.user.credentials }}
+      - type: {{ $credential.type | quote }}
+        value: {{ $credential.value | quote }}
+        temporary: {{ hasKey $credential "temporary" | ternary $credential.temporary false }}
+      {{- end }}
+    {{- end }}
+    {{- if $userValue.user.realmRoles }}
+    realmRoles:
+      {{- range $realmRoleKey, $realmRoleValue := $userValue.user.realmRoles }}
+      - {{ $realmRoleValue | quote }}
+      {{- end }}
+    {{- end }}
+    {{- if $userValue.user.clientRoles }}
+    clientRoles:
+      {{- range $clientRoleKey, $clientRoleValue := $userValue.user.clientRoles }}
+      {{ $clientRoleKey }}:
+        {{- range $clientRoleValueDefinitionKey, $clientRoleValueDefinitionValue := $clientRoleValue }}
+        - {{ $clientRoleValueDefinitionValue | quote }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+    {{- if $userValue.user.groups }}
+    groups:
+      {{- range $groupKey, $groupValue := $userValue.user.groups }}
+      - {{ $groupValue | quote }}
+      {{- end }}
+    {{- end }}
+  realmSelector:
+    matchLabels:
+      app.kubernetes.io/name: keycloak-realm-{{ $realmNameFormatted }}
+      app.kubernetes.io/instance: {{ $.Release.Name }}
+
+---
+{{- end }}

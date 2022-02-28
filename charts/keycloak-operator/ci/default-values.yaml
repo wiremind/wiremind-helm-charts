@@ -1,0 +1,59 @@
+# This chart is not made for direct usage, but to be integrated as a subchart.
+# Real testing is done in git repository.
+
+resources:
+  requests:
+    memory: "250Mi"
+    cpu: "500m"
+  limits:
+    memory: "500Mi"
+    cpu: "1000m"
+
+fullnameOverride: keycloak-operator-test-release
+
+keycloak:
+  adminCredentials:
+    username: "admin"
+    password: "password"
+
+keycloakRealms:
+  - realm:
+      # General
+      name: "Basic"
+      displayName: "Basic Realm 1"
+      displayNameHtml: "<h1>Basic Realm</h1>"
+      emailTheme: "qrm-website"
+      loginTheme: "qrm-website"
+  - realm:
+      # General
+      name: "Test"
+      displayName: "Test Realm 2"
+      displayNameHtml: "<h1>Test Realm</h1>"
+
+keycloakClients:
+  - client:
+      # Required
+      clientId: "clientId_basic"
+    realmName: "Basic"
+  - client:
+      # Required
+      clientId: "clientId_test"
+    realmName: "Test"
+
+keycloakUsers:
+  - user:
+      # Required
+      username: "realm_user"
+      firstName: "John"
+      lastName: "Doe"
+      email: "user@example.com"
+      emailVerified: false
+    realmName: "Basic"
+  - user:
+      # Required
+      username: "test_user"
+      firstName: "Testing"
+      lastName: "Gnitset"
+      email: "test@example.com"
+      emailVerified: true
+    realmName: "Test"
