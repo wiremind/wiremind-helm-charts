@@ -60,3 +60,14 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Create hardcoded values from keycloak-operator
+https://github.com/keycloak/keycloak-operator/blob/main/pkg/model/constants.go
+*/}}
+{{- define "keycloak-operator.keycloak.applicationName" -}}
+{{- default "keycloak" .Values.keycloak.applicationNameOverride }}
+{{- end }}
+{{- define "keycloak-operator.keycloak.servicePort" -}}
+{{- default "8443" .Values.keycloak.servicePortOverride }}
+{{- end }}

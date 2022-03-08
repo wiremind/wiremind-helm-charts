@@ -1,0 +1,1145 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "autoscaling": {
+            "type": "object",
+            "properties": {
+                "annotations": {
+                    "type": "object"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "labels": {
+                    "type": "object"
+                },
+                "maxReplicas": {
+                    "type": "integer"
+                },
+                "minReplicas": {
+                    "type": "integer"
+                },
+                "targetCPU": {
+                    "type": "integer"
+                },
+                "targetMemory": {
+                    "type": "integer"
+                }
+            }
+        },
+        "containerSecurityContext": {
+            "type": "object",
+            "properties": {
+                "allowPrivilegeEscalation": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "extraEnvVars": {
+            "type": "object",
+            "properties": {
+                "RELATED_IMAGE_KEYCLOAK_INIT_CONTAINER": {
+                    "type": "string"
+                },
+                "RELATED_IMAGE_POSTGRESQL": {
+                    "type": "string"
+                },
+                "RELATED_IMAGE_RHMI_BACKUP_CONTAINER": {
+                    "type": "string"
+                },
+                "RELATED_IMAGE_RHSSO_OPENJ9": {
+                    "type": "string"
+                },
+                "RELATED_IMAGE_RHSSO_OPENJDK": {
+                    "type": "string"
+                }
+            }
+        },
+        "fullnameOverride": {
+            "type": "string"
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "pullPolicy": {
+                    "type": "string"
+                },
+                "repository": {
+                    "type": "string"
+                },
+                "tag": {
+                    "type": "string"
+                }
+            }
+        },
+        "imagePullSecrets": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "keycloak": {
+            "type": "object",
+            "properties": {
+                "adminCredentials": {
+                    "type": "object",
+                    "properties": {
+                        "password": {
+                            "type": "string"
+                        },
+                        "username": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "applicationNameOverride": {
+                    "type": "string"
+                },
+                "autoscaling": {
+                    "type": "object",
+                    "properties": {
+                        "annotations": {
+                            "type": "object"
+                        },
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "labels": {
+                            "type": "object"
+                        },
+                        "maxReplicas": {
+                            "type": "integer"
+                        },
+                        "minReplicas": {
+                            "type": "integer"
+                        },
+                        "targetCPU": {
+                            "type": "integer"
+                        },
+                        "targetMemory": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "extensions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "external": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "tlsTermination": {
+                            "type": "string"
+                        },
+                        "url": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "externalAccess": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "host": {
+                            "type": "string"
+                        },
+                        "tlsTermination": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "externalDatabase": {
+                    "type": "object",
+                    "properties": {
+                        "address": {
+                            "type": "string"
+                        },
+                        "database": {
+                            "type": "string"
+                        },
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "password": {
+                            "type": "string"
+                        },
+                        "port": {
+                            "type": "integer"
+                        },
+                        "username": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "image": {
+                    "type": "string"
+                },
+                "ingress": {
+                    "type": "object",
+                    "properties": {
+                        "annotations": {
+                            "type": "object"
+                        },
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "extraHosts": {
+                            "type": "array"
+                        },
+                        "extraPaths": {
+                            "type": "array"
+                        },
+                        "extraTls": {
+                            "type": "array"
+                        },
+                        "hostname": {
+                            "type": "string"
+                        },
+                        "ingressClassName": {
+                            "type": "string"
+                        },
+                        "labels": {
+                            "type": "object"
+                        },
+                        "path": {
+                            "type": "string"
+                        },
+                        "pathType": {
+                            "type": "string"
+                        },
+                        "selfSigned": {
+                            "type": "boolean"
+                        },
+                        "serviceName": {
+                            "type": "string"
+                        },
+                        "servicePortNumber": {
+                            "type": "integer"
+                        },
+                        "tls": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "instances": {
+                    "type": "integer"
+                },
+                "keycloakDeploymentSpec": {
+                    "type": "object",
+                    "properties": {
+                        "experimental": {
+                            "type": "object",
+                            "properties": {
+                                "affinity": {
+                                    "type": "object",
+                                    "properties": {
+                                        "podAntiAffinity": {
+                                            "type": "object",
+                                            "properties": {
+                                                "preferredDuringSchedulingIgnoredDuringExecution": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "podAffinityTerm": {
+                                                                "type": "object",
+                                                                "properties": {
+                                                                    "labelSelector": {
+                                                                        "type": "object",
+                                                                        "properties": {
+                                                                            "matchExpressions": {
+                                                                                "type": "array",
+                                                                                "items": {
+                                                                                    "type": "object",
+                                                                                    "properties": {
+                                                                                        "key": {
+                                                                                            "type": "string"
+                                                                                        },
+                                                                                        "operator": {
+                                                                                            "type": "string"
+                                                                                        },
+                                                                                        "values": {
+                                                                                            "type": "array",
+                                                                                            "items": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "topologyKey": {
+                                                                        "type": "string"
+                                                                    }
+                                                                }
+                                                            },
+                                                            "weight": {
+                                                                "type": "integer"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "args": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "env": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "value": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                },
+                                "volumes": {
+                                    "type": "object",
+                                    "properties": {
+                                        "defaultMode": {
+                                            "type": "integer"
+                                        },
+                                        "items": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "mountPath": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "secrets": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "podLabels": {
+                            "type": "object",
+                            "properties": {
+                                "environment": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "resources": {
+                            "type": "object",
+                            "properties": {
+                                "limits": {
+                                    "type": "object",
+                                    "properties": {
+                                        "cpu": {
+                                            "type": "string"
+                                        },
+                                        "memory": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "requests": {
+                                    "type": "object",
+                                    "properties": {
+                                        "cpu": {
+                                            "type": "string"
+                                        },
+                                        "memory": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "migration": {
+                    "type": "object",
+                    "properties": {
+                        "backups": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean"
+                                }
+                            }
+                        },
+                        "strategy": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "multiAvailablityZones": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "podDisruptionBudget": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "postgresDeploymentSpec": {
+                    "type": "object",
+                    "properties": {
+                        "resources": {
+                            "type": "object",
+                            "properties": {
+                                "limits": {
+                                    "type": "object",
+                                    "properties": {
+                                        "cpu": {
+                                            "type": "string"
+                                        },
+                                        "memory": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "requests": {
+                                    "type": "object",
+                                    "properties": {
+                                        "cpu": {
+                                            "type": "string"
+                                        },
+                                        "memory": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "profile": {
+                    "type": "string"
+                },
+                "storageClassName": {
+                    "type": "string"
+                },
+                "unmanaged": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "keycloakBackups": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "aws": {
+                        "type": "object",
+                        "properties": {
+                            "credentialsSecretName": {
+                                "type": "string"
+                            },
+                            "encryptionKeySecretName": {
+                                "type": "string"
+                            },
+                            "schedule": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "restore": {
+                        "type": "boolean"
+                    },
+                    "storageClassName": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "keycloakClients": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "client": {
+                        "type": "object",
+                        "properties": {
+                            "access": {
+                                "type": "object",
+                                "properties": {
+                                    "public": {
+                                        "type": "boolean"
+                                    }
+                                }
+                            },
+                            "adminUrl": {
+                                "type": "string"
+                            },
+                            "baseUrl": {
+                                "type": "string"
+                            },
+                            "bearerOnly": {
+                                "type": "boolean"
+                            },
+                            "clientAuthenticatorType": {
+                                "type": "string"
+                            },
+                            "clientId": {
+                                "type": "string"
+                            },
+                            "consentRequired": {
+                                "type": "boolean"
+                            },
+                            "defaultClientScopes": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "defaultRoles": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "directAccessGrantsEnabled": {
+                                "type": "boolean"
+                            },
+                            "frontchannelLogout": {
+                                "type": "boolean"
+                            },
+                            "fullScopeAllowed": {
+                                "type": "boolean"
+                            },
+                            "implicitFlowEnabled": {
+                                "type": "boolean"
+                            },
+                            "optionalClientScopes": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "protocol": {
+                                "type": "string"
+                            },
+                            "redirectUris": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "rootUrl": {
+                                "type": "string"
+                            },
+                            "secret": {
+                                "type": "string"
+                            },
+                            "standardFlowEnabled": {
+                                "type": "boolean"
+                            },
+                            "useTemplateConfig": {
+                                "type": "boolean"
+                            },
+                            "useTemplateMappers": {
+                                "type": "boolean"
+                            },
+                            "useTemplateScope": {
+                                "type": "boolean"
+                            },
+                            "webOrigins": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "realmName": {
+                        "type": "string"
+                    },
+                    "roles": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "attributes": {
+                                    "type": "object",
+                                    "properties": {
+                                        "dateOfBirth": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "gender": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                },
+                                "composite": {
+                                    "type": "boolean"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "keycloakRealms": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "realm": {
+                        "type": "object",
+                        "properties": {
+                            "accountTheme": {
+                                "type": "string"
+                            },
+                            "adminEventsEnabled": {
+                                "type": "boolean"
+                            },
+                            "adminTheme": {
+                                "type": "string"
+                            },
+                            "clientScopeMappings": {
+                                "type": "object",
+                                "properties": {
+                                    "birthday": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "client": {
+                                                    "type": "string"
+                                                },
+                                                "clientScope": {
+                                                    "type": "string"
+                                                },
+                                                "roles": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "self": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "clientScopes": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "description": {
+                                            "type": "string"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "protocol": {
+                                            "type": "string"
+                                        },
+                                        "protocolMappers": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "consentRequired": {
+                                                        "type": "boolean"
+                                                    },
+                                                    "consentText": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "displayName": {
+                                "type": "string"
+                            },
+                            "displayNameHtml": {
+                                "type": "string"
+                            },
+                            "editUsernameAllowed": {
+                                "type": "boolean"
+                            },
+                            "emailTheme": {
+                                "type": "string"
+                            },
+                            "enabledEventTypes": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "eventsEnabled": {
+                                "type": "boolean"
+                            },
+                            "eventsListeners": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "identityProviders": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "addReadTokenRoleOnCreate": {
+                                            "type": "boolean"
+                                        },
+                                        "alias": {
+                                            "type": "string"
+                                        },
+                                        "config": {
+                                            "type": "object"
+                                        },
+                                        "displayName": {
+                                            "type": "string"
+                                        },
+                                        "enabled": {
+                                            "type": "boolean"
+                                        },
+                                        "firstBrokerLoginFlowAlias": {
+                                            "type": "string"
+                                        },
+                                        "linkOnly": {
+                                            "type": "boolean"
+                                        },
+                                        "postBrokerLoginFlowAlias": {
+                                            "type": "string"
+                                        },
+                                        "providerId": {
+                                            "type": "string"
+                                        },
+                                        "storeToken": {
+                                            "type": "boolean"
+                                        },
+                                        "trustEmail": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            },
+                            "loginTheme": {
+                                "type": "string"
+                            },
+                            "loginWithEmailAllowed": {
+                                "type": "boolean"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "registrationAllowed": {
+                                "type": "boolean"
+                            },
+                            "registrationEmailAsUsername": {
+                                "type": "boolean"
+                            },
+                            "rememberMe": {
+                                "type": "boolean"
+                            },
+                            "resetPasswordAllowed": {
+                                "type": "boolean"
+                            },
+                            "roles": {
+                                "type": "object",
+                                "properties": {
+                                    "realm": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "attributes": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "dateOfBirth": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "gender": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                "composite": {
+                                                    "type": "boolean"
+                                                },
+                                                "description": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "smtpServer": {
+                                "type": "object",
+                                "properties": {
+                                    "auth": {
+                                        "type": "boolean"
+                                    },
+                                    "envelopeFrom": {
+                                        "type": "string"
+                                    },
+                                    "from": {
+                                        "type": "string"
+                                    },
+                                    "fromDisplayName": {
+                                        "type": "string"
+                                    },
+                                    "host": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "port": {
+                                        "type": "integer"
+                                    },
+                                    "replyTo": {
+                                        "type": "string"
+                                    },
+                                    "replyToDisplayName": {
+                                        "type": "string"
+                                    },
+                                    "ssl": {
+                                        "type": "boolean"
+                                    },
+                                    "starttls": {
+                                        "type": "boolean"
+                                    },
+                                    "user": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "sslRequired": {
+                                "type": "string"
+                            },
+                            "userFederationMappers": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "config": {
+                                            "type": "object",
+                                            "properties": {
+                                                "always.read.value.from.ldap": {
+                                                    "type": "string"
+                                                },
+                                                "is.binary.attribute": {
+                                                    "type": "string"
+                                                },
+                                                "is.mandatory.in.ldap": {
+                                                    "type": "string"
+                                                },
+                                                "ldap.attribute": {
+                                                    "type": "string"
+                                                },
+                                                "read.only": {
+                                                    "type": "string"
+                                                },
+                                                "user.model.attribute": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "federationMapperType": {
+                                            "type": "string"
+                                        },
+                                        "federationProviderDisplayName": {
+                                            "type": "string"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "userFederationProviders": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "config": {
+                                            "type": "object",
+                                            "properties": {
+                                                "bindCredential": {
+                                                    "type": "string"
+                                                },
+                                                "bindDn": {
+                                                    "type": "string"
+                                                },
+                                                "connectionUrl": {
+                                                    "type": "string"
+                                                },
+                                                "editMode": {
+                                                    "type": "string"
+                                                },
+                                                "rdnLDAPAttribute": {
+                                                    "type": "string"
+                                                },
+                                                "searchScope": {
+                                                    "type": "string"
+                                                },
+                                                "trustEmail": {
+                                                    "type": "string"
+                                                },
+                                                "useTruststoreSpi": {
+                                                    "type": "string"
+                                                },
+                                                "userObjectClasses": {
+                                                    "type": "string"
+                                                },
+                                                "usernameLDAPAttribute": {
+                                                    "type": "string"
+                                                },
+                                                "usersDn": {
+                                                    "type": "string"
+                                                },
+                                                "uuidLDAPAttribute": {
+                                                    "type": "string"
+                                                },
+                                                "vendor": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "displayName": {
+                                            "type": "string"
+                                        },
+                                        "providerName": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "verifyEmail": {
+                                "type": "boolean"
+                            }
+                        }
+                    },
+                    "realmOverrides": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "forFlow": {
+                                    "type": "string"
+                                },
+                                "identityProvider": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "keycloakUsers": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "realmName": {
+                        "type": "string"
+                    },
+                    "user": {
+                        "type": "object",
+                        "properties": {
+                            "clientRoles": {
+                                "type": "object",
+                                "properties": {
+                                    "account": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "realm-management": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "credentials": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "temporary": {
+                                            "type": "boolean"
+                                        },
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "value": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "email": {
+                                "type": "string"
+                            },
+                            "firstName": {
+                                "type": "string"
+                            },
+                            "groups": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "lastName": {
+                                "type": "string"
+                            },
+                            "realmRoles": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "username": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "nameOverride": {
+            "type": "string"
+        },
+        "podAnnotations": {
+            "type": "object",
+            "properties": {
+                "imageregistry": {
+                    "type": "string"
+                }
+            }
+        },
+        "podLabels": {
+            "type": "object",
+            "properties": {
+                "environment": {
+                    "type": "string"
+                }
+            }
+        },
+        "priorityClassName": {
+            "type": "string"
+        },
+        "replicaCount": {
+            "type": "integer"
+        },
+        "resources": {
+            "type": "object",
+            "properties": {
+                "limits": {
+                    "type": "object",
+                    "properties": {
+                        "cpu": {
+                            "type": "string"
+                        },
+                        "memory": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "requests": {
+                    "type": "object",
+                    "properties": {
+                        "cpu": {
+                            "type": "string"
+                        },
+                        "memory": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "runInClusterScope": {
+            "type": "boolean"
+        },
+        "securityContext": {
+            "type": "object",
+            "properties": {
+                "fsGroup": {
+                    "type": "integer"
+                },
+                "fsGroupChangePolicy": {
+                    "type": "string"
+                },
+                "runAsGroup": {
+                    "type": "integer"
+                },
+                "runAsUser": {
+                    "type": "integer"
+                }
+            }
+        },
+        "watchedNamespaces": {
+            "type": "string"
+        }
+    }
+}

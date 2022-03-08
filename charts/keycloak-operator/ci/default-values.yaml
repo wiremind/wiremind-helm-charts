@@ -11,10 +11,34 @@ resources:
 
 fullnameOverride: keycloak-operator-test-release
 
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 11
+  targetCPU: 50
+  targetMemory: 50
+  labels: {}
+  annotations: {}
+
 keycloak:
   adminCredentials:
     username: "admin"
     password: "password"
+  ingress:
+    enabled: true
+    hostname: login-test-release.localhost.dev
+    tls: true
+    annotations:
+      kubernetes.io/tls-acme: true
+  # Doesnt work
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 11
+    targetCPU: 50
+    targetMemory: 50
+    labels: {}
+    annotations: {}
 
 keycloakRealms:
   - realm:

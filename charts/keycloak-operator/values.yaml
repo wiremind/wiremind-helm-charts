@@ -31,6 +31,15 @@ resources:
 
 securityContext: {}
 
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 11
+  targetCPU: ""
+  targetMemory: ""
+  labels: {}
+  annotations: {}
+
 keycloak:
   postgresDeploymentSpec:
     resources:
@@ -44,6 +53,30 @@ keycloak:
       requests:
         cpu: 250m
         memory: 500Mi
+  ingress:
+    enabled: false
+    ingressClassName: ""
+    pathType: ImplementationSpecific
+    hostname: keycloak.local
+    path: /
+    serviceName: keycloak
+    servicePortNumber: 8443
+    labels: {}
+    annotations: {}
+    tls: false
+    selfSigned: false
+    extraHosts: []
+    extraPaths: []
+    extraTls: []
+  # Doesnt work
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 11
+    targetCPU: ""
+    targetMemory: ""
+    labels: {}
+    annotations: {}
 
 keycloakRealms: []
 keycloakClients: []
