@@ -1,0 +1,79 @@
+# https://doc.crds.dev/github.com/keycloak/keycloak-operator/keycloak.org/Keycloak/v1alpha1@17.0.0
+# https://github.com/keycloak/keycloak-operator/tree/main/deploy/examples/keycloak
+
+apiVersion: keycloak.org/v1alpha1
+kind: Keycloak
+metadata:
+  name: {{ include "keycloak-operator.fullname" $ }}-keycloak
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+spec:
+  instances: {{ hasKey .Values.keycloak "instances" | ternary .Values.keycloak.instances 1 }}
+  unmanaged: {{ hasKey .Values.keycloak "unmanaged" | ternary .Values.keycloak.unmanaged false }}
+  {{- if .Values.keycloak.external }}
+  external:
+    enabled: {{ hasKey .Values.keycloak.external "enabled" | ternary .Values.keycloak.external.enabled true }}
+    url: {{ .Values.keycloak.external.url | quote }}
+  {{- end }}
+  {{- if .Values.keycloak.extensions }}
+  extensions:
+    {{- range $extensionKey, $extensionValue := .Values.keycloak.extensions }}
+    - {{ $extensionValue | quote }}
+    {{- end }}
+  {{- end }}
+  {{- if .Values.keycloak.externalAccess }}
+  externalAccess:
+    enabled: {{ hasKey .Values.keycloak.externalAccess "enabled" | ternary .Values.keycloak.externalAccess.enabled true }}
+    {{- if .Values.keycloak.externalAccess.host }}
+    host: {{ .Values.keycloak.externalAccess.host | quote }}
+    {{- end }}
+    {{- if .Values.keycloak.externalAccess.tlsTermination }}
+    tlsTermination: {{ .Values.keycloak.externalAccess.tlsTermination | quote }}
+    {{- end }}
+  {{- end }}
+  {{- if .Values.keycloak.podDisruptionBudget }}
+  podDisruptionBudget:
+    enabled: {{ hasKey .Values.keycloak.podDisruptionBudget "enabled" | ternary .Values.keycloak.podDisruptionBudget.enabled true }}
+  {{- end }}
+  {{- if .Values.keycloak.migration }}
+  migration:
+    {{- if .Values.keycloak.migration.backups }}
+    backups:
+      enabled: {{ .Values.keycloak.migration.backups.enabled }}
+    {{- end }}
+    {{- if .Values.keycloak.migration.strategy }}
+    strategy: {{ .Values.keycloak.migration.strategy }}
+    {{- end }}
+  {{- end }}
+  {{- if .Values.keycloak.externalDatabase }}
+  externalDatabase:
+    enabled: {{ hasKey .Values.keycloak.externalDatabase "enabled" | ternary .Values.keycloak.externalDatabase.enabled true }}
+  {{- end }}
+  {{- if .Values.keycloak.multiAvailablityZones }}
+  multiAvailablityZones:
+    enabled: {{ hasKey .Values.keycloak.multiAvailablityZones "enabled" | ternary .Values.keycloak.multiAvailablityZones.enabled true }}
+  {{- end }}
+  {{- if .Values.keycloak.profile }}
+  profile: {{ .Values.keycloak.profile }}
+  {{- end }}
+  {{- if .Values.keycloak.storageClassName }}
+  storageClassName: {{ .Values.keycloak.storageClassName }}
+  {{- end }}
+  postgresDeploymentSpec:
+    resources:
+{{ toYaml .Values.keycloak.postgresDeploymentSpec.resources | trim | indent 6 }}
+  keycloakDeploymentSpec:
+    experimental:
+      serviceAccountName: {{ include "keycloak-operator.fullname" . }}-sa
+      {{- if .Values.keycloak.keycloakDeploymentSpec.experimental }}
+{{ toYaml .Values.keycloak.keycloakDeploymentSpec.experimental | trim | indent 6 }}
+      {{- end }}
+    podlabels:
+      {{- include "keycloak-operator.labels" . | nindent 6 }}
+      {{- range $key, $val := .Values.keycloak.keycloakDeploymentSpec.podLabels }}
+      {{ $key }}: "{{ $val }}"
+      {{- end }}
+    resources:
+{{ toYaml .Values.keycloak.keycloakDeploymentSpec.resources | trim | indent 6 }}

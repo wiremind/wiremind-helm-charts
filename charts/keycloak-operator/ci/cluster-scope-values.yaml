@@ -1,0 +1,6 @@
+# This chart is not made for direct usage, but to be integrated as a subchart.
+# Real testing is done in git repository.
+
+runInClusterScope: true
+# Used to replace keycloakNamespace to support operator watch multiple namespaces.
+watchedNamespaces: "default"
