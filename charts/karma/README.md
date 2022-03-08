@@ -100,3 +100,29 @@ existingSecretConfig:
 ```
 
 **NOTE:** you can either use `existingSecretConfig` or `configMap`, it cannot be both.
+
+
+### kthxbye sidecar added by streamotion
+kthxbye is a tiny daemon that can help with managing short lived acknowledged silences.
+It will continuously extend short lived acknowledgement silences if there are alerts firing against those silences,
+which means that the user doesn't need to worry about setting proper duration for such silences.
+
+```yml
+# values.yaml
+kthxbyeSidecar:
+  enabled: false
+  image:
+    repository: ghcr.io/prymitive/kthxbye
+    tag:  v0.14
+    pullPolicy: IfNotPresent
+  alertmanagerServiceName: prometheus-alertmanager
+  alertmanagerServicePort: 80
+  extraArgs: {}
+    # alertmanager.timeout: <duration> #Alertmanager request timeout (default 1m0s)
+    # extend-by: <duration> # Extend silences by adding DURATION seconds (default 15m0s)
+    # extend-if-expiring-in: <duration> # Extend silences that are about to expire in the next DURATION seconds (default 5m0s)
+    # extend-with-prefix: <string> # Extend silences with comment starting with PREFIX string (default "ACK!")
+    # interval: <duration> # Silence check interval (default 45s)
+    # max-duration=<duration> # Maximum duration of a silence, it won't be extended anymore after reaching it
+  logJson: false
+```

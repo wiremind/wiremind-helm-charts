@@ -80,6 +80,20 @@ spec:
               mountPath: /etc/certs/{{ . }}
               readOnly: true
           {{- end }}
+        {{- if .Values.kthxbyeSidecar.enabled }}
+        - name: kthxbye-sidecar
+          image: "{{ .Values.kthxbyeSidecar.image.repository }}:{{ .Values.kthxbyeSidecar.image.tag }}"
+          imagePullPolicy: "{{ .Values.kthxbyeSidecar.image.pullPolicy }}"
+          args:
+            - --listen=:80
+            - --alertmanager.uri=http://{{ .Values.kthxbyeSidecar.alertmanagerServiceName }}:{{ .Values.kthxbyeSidecar.alertmanagerServicePort }}
+          {{- range $key, $value := .Values.kthxbyeSidecar.extraArgs }}
+            - --{{ $key }}={{ $value }}
+          {{- end }}
+          {{- if .Values.kthxbyeSidecar.logJson }}
+            - --log-json
+          {{- end }}
+         {{- end }}    
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
