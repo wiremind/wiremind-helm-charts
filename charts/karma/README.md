@@ -112,3 +112,4 @@ which means that the user doesn't need to worry about setting proper duration fo
 kthxbyeSidecar:
   enabled: true
 ```
+**NOTE:** kthxbye-sidecar in karma does not support multiple alertmanager.uri. this means if you have multiple

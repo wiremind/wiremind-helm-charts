@@ -193,5 +193,5 @@ kthxbyeSidecar:
     # extend-if-expiring-in: <duration> # Extend silences that are about to expire in the next DURATION seconds (default 5m0s)
     # extend-with-prefix: <string> # Extend silences with comment starting with PREFIX string (default "ACK!")
     # interval: <duration> # Silence check interval (default 45s)
-    # max-duration=<duration> # Maximum duration of a silence, it won't be extended anymore after reaching it
+    # max-duration: <duration> # Maximum duration of a silence, it won't be extended anymore after reaching it
   logJson: false
