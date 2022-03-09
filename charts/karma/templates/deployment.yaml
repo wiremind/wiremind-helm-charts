@@ -85,7 +85,7 @@ spec:
           image: "{{ .Values.kthxbyeSidecar.image.repository }}:{{ .Values.kthxbyeSidecar.image.tag }}"
           imagePullPolicy: "{{ .Values.kthxbyeSidecar.image.pullPolicy }}"
           args:
-            - --listen=:80
+            - --listen=:8082
             - --alertmanager.uri=http://{{ .Values.kthxbyeSidecar.alertmanagerServiceName }}:{{ .Values.kthxbyeSidecar.alertmanagerServicePort }}
           {{- range $key, $value := .Values.kthxbyeSidecar.extraArgs }}
             - --{{ $key }}={{ $value }}
@@ -93,7 +93,12 @@ spec:
           {{- if .Values.kthxbyeSidecar.logJson }}
             - --log-json
           {{- end }}
-         {{- end }}    
+         {{- end }}
+        {{- if .Values.securityContext }}
+          securityContext:
+            runAsUser: 2000
+            allowPrivilegeEscalation: false
+        {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
