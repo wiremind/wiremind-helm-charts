@@ -1,0 +1,59 @@
+# https://github.com/bitnami/charts/blob/master/bitnami/keycloak/templates/ingress.yaml
+
+{{- if .Values.keycloak.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "keycloak-operator.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "keycloak-operator.labels" . | nindent 4 }}
+    {{- range $key, $val := .Values.keycloak.ingress.labels }}
+    {{ $key }}: "{{ $val }}"
+    {{- end }}
+  {{- if .Values.keycloak.ingress.annotations }}
+  annotations:
+    {{- range $key, $val := .Values.keycloak.ingress.annotations }}
+    {{ $key }}: "{{ $val }}"
+    {{- end }}
+  {{- end }}
+spec:
+  {{- if .Values.keycloak.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.keycloak.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.keycloak.ingress.hostname }}
+    - host: {{ .Values.keycloak.ingress.hostname | quote }}
+      http:
+        paths:
+          {{- if .Values.keycloak.ingress.extraPaths }}
+          {{- toYaml .Values.keycloak.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.keycloak.ingress.path }}
+            pathType: {{ .Values.keycloak.ingress.pathType }}
+            backend:
+              service:
+                name: {{ include "keycloak-operator.keycloak.applicationName" . }}
+                port:
+                  number: {{ include "keycloak-operator.keycloak.servicePort" . }}
+    {{- end }}
+    {{- range .Values.keycloak.ingress.extraHosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            backend: {{- $.Values.keycloak.ingress.servicePort }}
+    {{- end }}
+  {{- if or (and .Values.keycloak.ingress.tls (or .Values.keycloak.ingress.annotations .Values.keycloak.ingress.selfSigned)) .Values.keycloak.ingress.extraTls }}
+  tls:
+    {{- if and .Values.keycloak.ingress.tls (or .Values.keycloak.ingress.annotations .Values.keycloak.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.keycloak.ingress.hostname | quote }}
+      secretName: {{ printf "%s-tls" .Values.keycloak.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.keycloak.ingress.extraTls }}
+    {{- toYaml .Values.keycloak.ingress.extraTls | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

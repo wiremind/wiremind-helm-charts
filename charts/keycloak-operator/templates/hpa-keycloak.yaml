@@ -1,0 +1,38 @@
+{{- if .Values.keycloak.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "keycloak-operator.fullname" . }}-keycloak
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "keycloak-operator.labels" . | nindent 4 }}
+    {{- range $key, $val := .Values.keycloak.autoscaling.labels }}
+    {{ $key }}: "{{ $val }}"
+    {{- end }}
+  {{- if .Values.keycloak.autoscaling.annotations }}
+  annotations:
+    {{- range $key, $val := .Values.keycloak.autoscaling.annotations }}
+    {{ $key }}: "{{ $val }}"
+    {{- end }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: {{ include "keycloak-operator.keycloak.applicationName" . }}
+  minReplicas: {{ .Values.keycloak.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.keycloak.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.keycloak.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.keycloak.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.keycloak.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.keycloak.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}

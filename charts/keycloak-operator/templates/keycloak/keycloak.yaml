@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/name: keycloak
     app.kubernetes.io/instance: {{ $.Release.Name }}
 spec:
-  instances: {{ hasKey .Values.keycloak "instances" | ternary .Values.keycloak.instances 1 }}
+  instances: {{ and (hasKey .Values.keycloak "instances") (not .Values.keycloak.autoscaling.enabled) | ternary .Values.keycloak.instances 1 }}
   unmanaged: {{ hasKey .Values.keycloak "unmanaged" | ternary .Values.keycloak.unmanaged false }}
   {{- if .Values.keycloak.external }}
   external:

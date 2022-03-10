@@ -41,10 +41,29 @@ securityContext:
 containerSecurityContext:
   allowPrivilegeEscalation: false
 
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPU: 90
+  targetMemory: 90
+  labels: {}
+  annotations: {}
+
 keycloak:
   # Overrides the keycloak image whose default is in the code.
   image: "quay.io/keycloak/keycloak:9.0.2"
   instances: 2
+  applicationNameOverride: "keycloak"
+  # Doesnt work
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 11
+    targetCPU: 50
+    targetMemory: 50
+    labels: {}
+    annotations: {}
   unmanaged: true
   external:
     enabled: true
@@ -56,6 +75,21 @@ keycloak:
     enabled: true
     host: "localhost.dev"
     tlsTermination: "reencrypt"
+  ingress:
+    enabled: false
+    ingressClassName: ""
+    pathType: ImplementationSpecific
+    hostname: keycloak.local
+    path: /
+    serviceName: keycloak
+    servicePortNumber: 8443
+    labels: {}
+    annotations: {}
+    tls: false
+    selfSigned: false
+    extraHosts: []
+    extraPaths: []
+    extraTls: []
   # User needs to provision the external database
   externalDatabase:
     enabled: true
@@ -140,10 +174,6 @@ keycloak:
         memory: 500Mi
 
 keycloakRealms:
-  - realm:
-      name: "basic"
-      enabled: false
-      displayName: "Basic Realm"
   - realm:
       # General
       name: "test"
@@ -320,9 +350,6 @@ keycloakRealms:
 
 keycloakClients:
   - client:
-      clientId: clientIdBasic
-    realmName: "basic"
-  - client:
       clientId: clientIdTest
       secret: client-secret
       clientAuthenticatorType: client-secret
@@ -375,14 +402,6 @@ keycloakClients:
     realmName: "test"
 
 keycloakUsers:
-  - user:
-      username: "realm_user"
-      firstName: "John"
-      lastName: "Doe"
-      email: "user@example.com"
-      enabled: false
-      emailVerified: false
-    realmName: "basic"
   - user:
       username: "realm_test"
       firstName: "Test"
