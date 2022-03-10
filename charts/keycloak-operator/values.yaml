@@ -35,8 +35,8 @@ autoscaling:
   enabled: false
   minReplicas: 1
   maxReplicas: 11
-  targetCPU: ""
-  targetMemory: ""
+  targetCPU: 50
+  targetMemory: 50
   labels: {}
   annotations: {}
 
@@ -73,8 +73,8 @@ keycloak:
     enabled: false
     minReplicas: 1
     maxReplicas: 11
-    targetCPU: ""
-    targetMemory: ""
+    targetCPU: 50
+    targetMemory: 50
     labels: {}
     annotations: {}
 
