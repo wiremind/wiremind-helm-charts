@@ -3217,6 +3217,31 @@ entries:
   keycloak-operator:
   - apiVersion: v2
     appVersion: 17.0.0
+    created: "2022-03-10T16:05:26.3764524Z"
+    description: Helm chart for deploying keycloak operator
+    digest: e351e6659fd26c5e4a3817cb2b2fe7e2574f3b63596da213f6ce70b5d2e913b5
+    icon: https://www.keycloak.org/resources/images/keycloak_icon_512px.svg
+    keywords:
+    - keycloak
+    - operator
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    - email: 19607336+maxime1907@users.noreply.github.com
+      name: maxime1907
+    name: keycloak-operator
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/keycloak-operator
+    - https://github.com/keycloak/keycloak-operator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/keycloak-operator-0.0.3/keycloak-operator-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
+    appVersion: 17.0.0
     created: "2022-03-10T15:44:42.499340243Z"
     description: Helm chart for deploying keycloak operator
     digest: f8499940334a3537ce8d94eb5b2bed1d8933810677b6a80fb83c20efa2aaa6b8
@@ -3550,4 +3575,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2022-03-10T15:44:42.499846787Z"
+generated: "2022-03-10T16:05:26.376993403Z"
