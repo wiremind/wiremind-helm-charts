@@ -29,7 +29,14 @@ keycloak:
     hostname: login-test-release.localhost.dev
     tls: true
     annotations:
-      kubernetes.io/tls-acme: true
+      kubernetes.io/tls-acme: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      # Keycloak header with token is bigger than default 4k
+      nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
+      nginx.ingress.kubernetes.io/server-snippet: |
+        location ~* "^/auth/realms/master/metrics" {
+              return 301 /auth/realms/master;
+        }
   # Doesnt work
   autoscaling:
     enabled: false

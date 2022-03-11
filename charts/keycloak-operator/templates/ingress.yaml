@@ -13,9 +13,7 @@ metadata:
     {{- end }}
   {{- if .Values.keycloak.ingress.annotations }}
   annotations:
-    {{- range $key, $val := .Values.keycloak.ingress.annotations }}
-    {{ $key }}: "{{ $val }}"
-    {{- end }}
+{{- toYaml .Values.keycloak.ingress.annotations | nindent 4 }}
   {{- end }}
 spec:
   {{- if .Values.keycloak.ingress.ingressClassName }}

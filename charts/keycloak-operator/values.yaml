@@ -62,7 +62,14 @@ keycloak:
     serviceName: keycloak
     servicePortNumber: 8443
     labels: {}
-    annotations: {}
+    annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      # Keycloak header with token is bigger than default 4k
+      nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
+      nginx.ingress.kubernetes.io/server-snippet: |
+        location ~* "^/auth/realms/master/metrics" {
+              return 301 /auth/realms/master;
+        }
     tls: false
     selfSigned: false
     extraHosts: []

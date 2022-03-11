@@ -11,9 +11,7 @@ metadata:
     {{- end }}
   {{- if .Values.autoscaling.annotations }}
   annotations:
-    {{- range $key, $val := .Values.autoscaling.annotations }}
-    {{ $key }}: "{{ $val }}"
-    {{- end }}
+{{- toYaml .Values.autoscaling.annotations | nindent 4 }}
   {{- end }}
 spec:
   scaleTargetRef:
