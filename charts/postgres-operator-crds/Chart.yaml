@@ -1,0 +1,7 @@
+apiVersion: v2
+name: postgres-operator-crds
+description: A Helm chart to manage postgres-operator CRDs
+# Set it to the postgres-operator's Chart version.
+version: 1.7.1
+appVersion: 1.7.1
+
