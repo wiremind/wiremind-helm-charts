@@ -61,9 +61,11 @@ spec:
   {{- if .Values.keycloak.storageClassName }}
   storageClassName: {{ .Values.keycloak.storageClassName }}
   {{- end }}
+  {{- if .Values.keycloak.postgresDeploymentSpec }}
   postgresDeploymentSpec:
     resources:
 {{ toYaml .Values.keycloak.postgresDeploymentSpec.resources | trim | indent 6 }}
+  {{- end }}
   keycloakDeploymentSpec:
     experimental:
       serviceAccountName: {{ include "keycloak-operator.fullname" . }}-sa

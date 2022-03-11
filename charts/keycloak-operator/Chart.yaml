@@ -1,8 +1,13 @@
 apiVersion: v2
 name: keycloak-operator
-version: 0.0.4
+version: 0.0.5
 appVersion: "17.0.0"
-description: Helm chart for deploying keycloak operator
+description: Keycloak is a high performance Java-based identity and access management solution. It lets developers add an authentication layer to their applications with minimum effort.
+dependencies:
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 11.x.x
 keywords:
   - keycloak
   - operator
