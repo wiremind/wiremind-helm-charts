@@ -1,6 +1,8 @@
+annotations:
+  category: DeveloperTools
 apiVersion: v2
 name: keycloak-operator
-version: 0.0.5
+version: 0.0.6
 appVersion: "17.0.0"
 description: Keycloak is a high performance Java-based identity and access management solution. It lets developers add an authentication layer to their applications with minimum effort.
 dependencies:
@@ -8,6 +10,11 @@ dependencies:
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
     version: 11.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 keywords:
   - keycloak
   - operator
