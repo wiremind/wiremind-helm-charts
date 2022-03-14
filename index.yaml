@@ -3219,6 +3219,35 @@ entries:
       category: DeveloperTools
     apiVersion: v2
     appVersion: 17.0.0
+    created: "2022-03-14T15:06:00.139831255Z"
+    description: Keycloak is a high performance Java-based identity and access management
+      solution. It lets developers add an authentication layer to their applications
+      with minimum effort.
+    digest: 33fb2e5e44c70a8d1863a3dd71c07baf34c18defa8dc4174ce60b011f5cea172
+    icon: https://www.keycloak.org/resources/images/keycloak_icon_512px.svg
+    keywords:
+    - keycloak
+    - operator
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    - email: 19607336+maxime1907@users.noreply.github.com
+      name: maxime1907
+    name: keycloak-operator
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/keycloak-operator
+    - https://github.com/keycloak/keycloak-operator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/keycloak-operator-0.0.7/keycloak-operator-0.0.7.tgz
+    version: 0.0.7
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 17.0.0
     created: "2022-03-14T11:47:49.723835641Z"
     dependencies:
     - condition: postgresql.enabled
@@ -3671,4 +3700,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
-generated: "2022-03-14T11:47:49.724213246Z"
+generated: "2022-03-14T15:06:00.140513359Z"
