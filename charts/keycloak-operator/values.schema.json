@@ -159,23 +159,8 @@
                 "externalDatabase": {
                     "type": "object",
                     "properties": {
-                        "address": {
-                            "type": "string"
-                        },
-                        "database": {
-                            "type": "string"
-                        },
                         "enabled": {
                             "type": "boolean"
-                        },
-                        "password": {
-                            "type": "string"
-                        },
-                        "port": {
-                            "type": "integer"
-                        },
-                        "username": {
-                            "type": "string"
                         }
                     }
                 },
@@ -186,7 +171,18 @@
                     "type": "object",
                     "properties": {
                         "annotations": {
-                            "type": "object"
+                            "type": "object",
+                            "properties": {
+                                "nginx.ingress.kubernetes.io/backend-protocol": {
+                                    "type": "string"
+                                },
+                                "nginx.ingress.kubernetes.io/proxy-buffer-size": {
+                                    "type": "string"
+                                },
+                                "nginx.ingress.kubernetes.io/server-snippet": {
+                                    "type": "string"
+                                }
+                            }
                         },
                         "enabled": {
                             "type": "boolean"
@@ -408,38 +404,6 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean"
-                        }
-                    }
-                },
-                "postgresDeploymentSpec": {
-                    "type": "object",
-                    "properties": {
-                        "resources": {
-                            "type": "object",
-                            "properties": {
-                                "limits": {
-                                    "type": "object",
-                                    "properties": {
-                                        "cpu": {
-                                            "type": "string"
-                                        },
-                                        "memory": {
-                                            "type": "string"
-                                        }
-                                    }
-                                },
-                                "requests": {
-                                    "type": "object",
-                                    "properties": {
-                                        "cpu": {
-                                            "type": "string"
-                                        },
-                                        "memory": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            }
                         }
                     }
                 },
@@ -1082,6 +1046,34 @@
             "properties": {
                 "environment": {
                     "type": "string"
+                }
+            }
+        },
+        "postgresql": {
+            "type": "object",
+            "properties": {
+                "architecture": {
+                    "type": "string"
+                },
+                "auth": {
+                    "type": "object",
+                    "properties": {
+                        "database": {
+                            "type": "string"
+                        },
+                        "existingSecret": {
+                            "type": "string"
+                        },
+                        "password": {
+                            "type": "string"
+                        },
+                        "username": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "enabled": {
+                    "type": "boolean"
                 }
             }
         },

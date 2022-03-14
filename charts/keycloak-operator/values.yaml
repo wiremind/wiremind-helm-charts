@@ -40,19 +40,24 @@ autoscaling:
   labels: {}
   annotations: {}
 
+postgresql:
+  enabled: true
+  auth:
+    username: keycloak
+    password: "secret"
+    database: keycloak
+    existingSecret: ""
+  architecture: standalone
+
 keycloak:
-  postgresDeploymentSpec:
-    resources:
-      limits: {}
-      requests:
-        memory: 256Mi
-        cpu: 250m
   keycloakDeploymentSpec:
     resources:
       limits: {}
       requests:
         cpu: 250m
         memory: 500Mi
+  externalDatabase:
+    enabled: true
   ingress:
     enabled: false
     ingressClassName: ""
