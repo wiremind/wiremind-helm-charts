@@ -395,3 +395,6 @@ cerebro:
       - name: elasticsearch-cluster
         ## Change me
         host: http://my-elasticsearch-hot-url:9200
+
+## Array of extra K8s manifests to deploy
+extraObjects: []
