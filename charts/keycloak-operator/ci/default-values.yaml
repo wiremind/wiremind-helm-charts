@@ -18,21 +18,10 @@ autoscaling:
   labels: {}
   annotations: {}
 
-postgresql:
-  enabled: true
-  auth:
-    username: keycloak
-    password: "secret"
-    database: keycloak
-    existingSecret: ""
-  architecture: standalone
-
 keycloak:
   adminCredentials:
     username: "admin"
     password: "password"
-  externalDatabase:
-    enabled: true
   ingress:
     enabled: true
     hostname: login-test-release.localhost.dev
