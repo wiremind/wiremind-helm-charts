@@ -50,15 +50,6 @@ autoscaling:
   labels: {}
   annotations: {}
 
-postgresql:
-  enabled: true
-  auth:
-    username: keycloak
-    password: "secret"
-    database: keycloak
-    existingSecret: ""
-  architecture: standalone
-
 keycloak:
   # Overrides the keycloak image whose default is in the code.
   image: "quay.io/keycloak/keycloak:9.0.2"
@@ -109,6 +100,11 @@ keycloak:
   # User needs to provision the external database
   externalDatabase:
     enabled: true
+    host: keycloak-postgresql.svc.cluster.local
+    port: 5432
+    database: keycloak
+    username: keycloak
+    password: "secret"
   adminCredentials:
     username: "admin"
     password: "password"
