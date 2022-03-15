@@ -8,3 +8,8 @@ ingress:
   - chart-example.local
   path: /
   pathType: ImplementationSpecific
+
+kthxbyeSidecar:
+  enabled: true
+  alertmanagerServiceName: prometheus-alertmanager
+  alertmanagerServicePort: 80
