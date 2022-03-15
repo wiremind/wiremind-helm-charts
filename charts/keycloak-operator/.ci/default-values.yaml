@@ -19,6 +19,7 @@ autoscaling:
   annotations: {}
 
 keycloak:
+  enabled: true
   adminCredentials:
     username: "admin"
     password: "password"

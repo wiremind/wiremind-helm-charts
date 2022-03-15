@@ -41,6 +41,7 @@ autoscaling:
   annotations: {}
 
 keycloak:
+  enabled: false
   keycloakDeploymentSpec:
     resources:
       limits: {}

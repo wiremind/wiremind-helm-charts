@@ -1,3 +1,5 @@
+{{- if .Values.keycloak.enabled }}
+
 # https://doc.crds.dev/github.com/keycloak/keycloak-operator/keycloak.org/Keycloak/v1alpha1@17.0.0
 # https://github.com/keycloak/keycloak-operator/tree/main/deploy/examples/keycloak
 
@@ -79,3 +81,5 @@ spec:
       {{- end }}
     resources:
 {{ toYaml .Values.keycloak.keycloakDeploymentSpec.resources | trim | indent 6 }}
+
+{{- end }}
