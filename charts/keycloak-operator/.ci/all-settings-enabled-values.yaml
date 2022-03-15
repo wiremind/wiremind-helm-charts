@@ -51,6 +51,7 @@ autoscaling:
   annotations: {}
 
 keycloak:
+  enabled: true
   # Overrides the keycloak image whose default is in the code.
   image: "quay.io/keycloak/keycloak:9.0.2"
   instances: 2
