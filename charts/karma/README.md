@@ -100,3 +100,16 @@ existingSecretConfig:
 ```
 
 **NOTE:** you can either use `existingSecretConfig` or `configMap`, it cannot be both.
+
+
+### kthxbye sidecar
+kthxbye is a tiny daemon that can help with managing short lived acknowledged silences.
+It will continuously extend short lived acknowledgement silences if there are alerts firing against those silences,
+which means that the user doesn't need to worry about setting proper duration for such silences.
+
+```yml
+# values.yaml
+kthxbyeSidecar:
+  enabled: true
+```
+**NOTE:** kthxbye-sidecar in karma does not support multiple alertmanager.uri. this means if you have multiple
