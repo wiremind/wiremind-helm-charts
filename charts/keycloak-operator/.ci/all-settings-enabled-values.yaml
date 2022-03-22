@@ -209,13 +209,37 @@ keycloakRealms:
       loginTheme: "keycloak"
       # Client Scopes
       clientScopes:
-        - name: "birthday_included"
-          description: "Birthday_included"
+        - name: "web-origins"
+          description: "OpenID Connect scope for add allowed web origins to the access token"
           protocol: "openid-connect"
+          attributes:
+            include.in.token.scope: "false"
+            display.on.consent.screen: "false"
+        - name: "back_office_back_end_audience_scope"
+          description: "Back office back end audience scope"
+          protocol: "openid-connect"
+          attributes:
+            include.in.token.scope: "true"
+            display.on.consent.screen: "false"
           protocolMappers:
-            - name: "consent1"
-              consentRequired: true
-              consentText: "Consent_text"
+            - name: "back_end_client-audience"
+              consentRequired: false
+              protocol: "openid-connect"
+              protocolMapper: "oidc-audience-mapper"
+              config:
+                id.token.claim: "false"
+                access.token.claim: "true"
+                included.client.audience: "back_office_back_end"
+            - name: "genderattribute"
+              consentRequired: false
+              protocol: "openid-connect"
+              protocolMapper: "oidc-usermodel-attribute-mapper"
+              config:
+                id.token.claim: "true"
+                access.token.claim: "false"
+                jsonType.label: "String"
+                user.attribute: "gender"
+                userinfo.token.claim: "false"
       clientScopeMappings:
         birthday:
           - client: "clientIdBasic"

@@ -63,12 +63,20 @@ spec:
       - name: {{ $clientScopeValue.name | quote }}
         description: {{ $clientScopeValue.description | default "" | quote }}
         protocol: {{ $clientScopeValue.protocol | default "openid-connect" | quote }}
+        {{- if $clientScopeValue.attributes }}
+        attributes:
+{{ toYaml $clientScopeValue.attributes | trim | indent 10 }}
+        {{- end }}
         {{- if $clientScopeValue.protocolMappers }}
         protocolMappers:
           {{- range $protocolMapperKey, $protocolMapperValue := $clientScopeValue.protocolMappers }}
           - name: {{ $protocolMapperValue.name | quote }}
             consentRequired: {{ hasKey $protocolMapperValue "consentRequired" | ternary $protocolMapperValue.consentRequired false }}
             consentText: {{ $protocolMapperValue.consentText | default "" | quote }}
+            {{- if $protocolMapperValue.config }}
+            config:
+{{ toYaml $protocolMapperValue.config | trim | indent 14 }}
+            {{- end }}
           {{- end }}
         {{- end }}
       {{- end }}
@@ -97,7 +105,7 @@ spec:
       realm:
         {{- range $realmRoleRealmKey, $realmRoleRealmValue := $realmValue.realm.roles.realm }}
         - name: {{ $realmRoleRealmValue.name | quote }}
-          description: {{ $realmRoleRealmValue.name | default "" | quote }}
+          description: {{ $realmRoleRealmValue.description | default "" | quote }}
           {{- if $realmRoleRealmValue.attributes }}
           attributes:
             {{- range $attributeKey, $attributeValue := $realmRoleRealmValue.attributes }}
