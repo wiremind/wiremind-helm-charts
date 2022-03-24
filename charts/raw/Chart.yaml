@@ -1,0 +1,22 @@
+annotations:
+  category: DeveloperTools
+type: application
+apiVersion: v2
+name: raw
+version: 0.1.0
+appVersion: 0.0.0
+description: A helm chart to generate extra resources
+keywords:
+  - raw
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/raw
+engine: gotpl
+maintainers:
+- name: desaintmartin
+  email: cdesaintmartin@wiremind.io
+- name: machine424
+  email: amrini@wiremind.io
+- name: francoisminaud
+  email: fminaud@wiremind.io
+- name: maxime1907
+  email: 19607336+maxime1907@users.noreply.github.com
