@@ -40,6 +40,14 @@ spec:
     adminTheme: {{ $realmValue.realm.adminTheme | default "keycloak" | quote }}
     emailTheme: {{ $realmValue.realm.emailTheme | default "keycloak" | quote }}
     loginTheme: {{ $realmValue.realm.loginTheme | default "keycloak" | quote }}
+    internationalizationEnabled: {{ hasKey $realmValue.realm "internationalizationEnabled" | ternary $realmValue.realm.internationalizationEnabled false }}
+    {{- if $realmValue.realm.supportedLocales }}
+    supportedLocales:
+      {{- range $supportedLocaleKey, $supportedLocaleValue := $realmValue.realm.supportedLocales }}
+      - {{ $supportedLocaleValue | quote }}
+      {{- end }}
+    {{- end }}
+    defaultLocale: {{ $realmValue.realm.defaultLocale | default "" | quote }}
     {{- if $realmValue.realm.smtpServer }}
     # Email
     smtpServer:
@@ -173,11 +181,14 @@ spec:
 {{ toYaml $userFederationMapperValue.config | trim | indent 10 }}
       {{- end }}
     {{- end }}
+    {{- if $realmValue.realm.additionalFields }}
+{{ toYaml $realmValue.realm.additionalFields | trim | indent 4 }}
+    {{- end }}
   {{- if $realmValue.realmOverrides }}
   realmOverrides:
     {{- range $realmOverrideKey, $realmOverrideValue := $realmValue.realmOverrides }}
-    - forFlow: {{ $realmOverrideValue.forFlow  | quote }}
-      identityProvider: {{ $realmOverrideValue.identityProvider  | quote }}
+    - forFlow: {{ $realmOverrideValue.forFlow | quote }}
+      identityProvider: {{ $realmOverrideValue.identityProvider | quote }}
     {{- end }}
   {{- end }}
   instanceSelector:

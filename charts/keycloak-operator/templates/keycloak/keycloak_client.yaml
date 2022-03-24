@@ -81,6 +81,9 @@ spec:
       - {{ $defaultRoleValue | quote }}
       {{- end }}
     {{- end }}
+    {{- if $clientValue.client.additionalFields }}
+{{ toYaml $clientValue.client.additionalFields | trim | indent 4 }}
+    {{- end }}
   {{- if $clientValue.roles }}
   roles:
     {{- range $roleKey, $roleValue := $clientValue.roles }}
@@ -97,6 +100,10 @@ spec:
       {{- end }}
       composite: {{ hasKey $roleValue "composite" | ternary $roleValue.composite false }}
     {{- end }}
+  {{- end }}
+  {{- if $clientValue.scopeMappings }}
+  scopeMappings:
+{{ toYaml $clientValue.scopeMappings | trim | indent 4 }}
   {{- end }}
   realmSelector:
     matchLabels:

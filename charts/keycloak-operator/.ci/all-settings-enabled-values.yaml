@@ -207,6 +207,10 @@ keycloakRealms:
       adminTheme: "keycloak"
       emailTheme: "keycloak"
       loginTheme: "keycloak"
+      internationalizationEnabled: true
+      supportedLocales:
+        - "fr"
+      defaultLocale: "fr"
       # Client Scopes
       clientScopes:
         - name: "web-origins"
@@ -368,6 +372,8 @@ keycloakRealms:
             memberof.ldap.attribute: memberOf
             group.object.classes: group
             drop.non.existing.groups.during.sync: 'true'
+      additionalFields:
+        userManagedAccessAllowed: true
     realmOverrides:
       - forFlow: "browser"
         identityProvider: "openshift-v4"
@@ -412,6 +418,8 @@ keycloakClients:
         - "microprofile-jwt"
         - "offline_access"
         - "phone"
+      additionalFields:
+        serviceAccountsEnabled: true
     roles:
       - name: test1
         description: "Role for test customers"
@@ -423,6 +431,7 @@ keycloakClients:
         composite: false
       - name: test2
       - name: test5
+    scopeMappings: {}
     realmName: "test"
 
 keycloakUsers:
@@ -449,6 +458,19 @@ keycloakUsers:
       groups:
         - "testgroup1"
         - "testgroup2"
+      requiredActions:
+        - "CONFIGURE_TOTP"
+        - "UPDATE_PASSWORD"
+        - "UPDATE_PROFILE"
+        - "VERIFY_EMAIL"
+        - "update_user_locale"
+      attributes:
+        locale:
+          - "fr"
+      federatedIdentities:
+        - identityProvider: "openshift-v4"
+          userId: "userid"
+          userName: "username"
     realmName: "test"
 
 keycloakBackups:

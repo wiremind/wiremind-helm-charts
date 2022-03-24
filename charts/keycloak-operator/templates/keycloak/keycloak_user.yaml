@@ -54,6 +54,29 @@ spec:
       - {{ $groupValue | quote }}
       {{- end }}
     {{- end }}
+    {{- if $userValue.user.requiredActions }}
+    requiredActions:
+      {{- range $requiredActionKey, $requiredActionValue := $userValue.user.requiredActions }}
+      - {{ $requiredActionValue | quote }}
+      {{- end }}
+    {{- end }}
+    {{- if $userValue.user.federatedIdentities }}
+    federatedIdentities:
+      {{- range $federatedIdentityKey, $federatedIdentityValue := $userValue.user.federatedIdentities }}
+      - identityProvider: {{ $federatedIdentityValue.identityProvider | quote }}
+        userId: {{ $federatedIdentityValue.userId | quote }}
+        userName: {{ $federatedIdentityValue.userName | quote }}
+      {{- end }}
+    {{- end }}
+    {{- if $userValue.user.attributes }}
+    attributes:
+      {{- range $attributeKey, $attributeValue := $userValue.user.attributes }}
+      {{ $attributeKey }}:
+        {{- range $subAttributeKey, $subAttributeValue := $attributeValue }}
+        - {{ $subAttributeValue | quote }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
   realmSelector:
     matchLabels:
       app.kubernetes.io/name: keycloak-realm-{{ $realmNameFormatted }}
