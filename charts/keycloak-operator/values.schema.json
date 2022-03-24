@@ -122,6 +122,9 @@
                         }
                     }
                 },
+                "enabled": {
+                    "type": "boolean"
+                },
                 "extensions": {
                     "type": "array",
                     "items": {
@@ -159,8 +162,23 @@
                 "externalDatabase": {
                     "type": "object",
                     "properties": {
+                        "database": {
+                            "type": "string"
+                        },
                         "enabled": {
                             "type": "boolean"
+                        },
+                        "host": {
+                            "type": "string"
+                        },
+                        "password": {
+                            "type": "string"
+                        },
+                        "port": {
+                            "type": "integer"
+                        },
+                        "username": {
+                            "type": "string"
                         }
                     }
                 },
@@ -462,6 +480,14 @@
                                     }
                                 }
                             },
+                            "additionalFields": {
+                                "type": "object",
+                                "properties": {
+                                    "serviceAccountsEnabled": {
+                                        "type": "boolean"
+                                    }
+                                }
+                            },
                             "adminUrl": {
                                 "type": "string"
                             },
@@ -581,6 +607,9 @@
                                 }
                             }
                         }
+                    },
+                    "scopeMappings": {
+                        "type": "object"
                     }
                 }
             }
@@ -595,6 +624,14 @@
                         "properties": {
                             "accountTheme": {
                                 "type": "string"
+                            },
+                            "additionalFields": {
+                                "type": "object",
+                                "properties": {
+                                    "userManagedAccessAllowed": {
+                                        "type": "boolean"
+                                    }
+                                }
                             },
                             "adminEventsEnabled": {
                                 "type": "boolean"
@@ -635,6 +672,17 @@
                                 "items": {
                                     "type": "object",
                                     "properties": {
+                                        "attributes": {
+                                            "type": "object",
+                                            "properties": {
+                                                "display.on.consent.screen": {
+                                                    "type": "string"
+                                                },
+                                                "include.in.token.scope": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
                                         "description": {
                                             "type": "string"
                                         },
@@ -643,26 +691,12 @@
                                         },
                                         "protocol": {
                                             "type": "string"
-                                        },
-                                        "protocolMappers": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "consentRequired": {
-                                                        "type": "boolean"
-                                                    },
-                                                    "consentText": {
-                                                        "type": "string"
-                                                    },
-                                                    "name": {
-                                                        "type": "string"
-                                                    }
-                                                }
-                                            }
                                         }
                                     }
                                 }
+                            },
+                            "defaultLocale": {
+                                "type": "string"
                             },
                             "displayName": {
                                 "type": "string"
@@ -731,6 +765,9 @@
                                         }
                                     }
                                 }
+                            },
+                            "internationalizationEnabled": {
+                                "type": "boolean"
                             },
                             "loginTheme": {
                                 "type": "string"
@@ -835,6 +872,12 @@
                             },
                             "sslRequired": {
                                 "type": "string"
+                            },
+                            "supportedLocales": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
                             },
                             "userFederationMappers": {
                                 "type": "array",
@@ -967,6 +1010,17 @@
                     "user": {
                         "type": "object",
                         "properties": {
+                            "attributes": {
+                                "type": "object",
+                                "properties": {
+                                    "locale": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
                             "clientRoles": {
                                 "type": "object",
                                 "properties": {
@@ -1004,6 +1058,23 @@
                             "email": {
                                 "type": "string"
                             },
+                            "federatedIdentities": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "identityProvider": {
+                                            "type": "string"
+                                        },
+                                        "userId": {
+                                            "type": "string"
+                                        },
+                                        "userName": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
                             "firstName": {
                                 "type": "string"
                             },
@@ -1017,6 +1088,12 @@
                                 "type": "string"
                             },
                             "realmRoles": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "requiredActions": {
                                 "type": "array",
                                 "items": {
                                     "type": "string"
@@ -1046,34 +1123,6 @@
             "properties": {
                 "environment": {
                     "type": "string"
-                }
-            }
-        },
-        "postgresql": {
-            "type": "object",
-            "properties": {
-                "architecture": {
-                    "type": "string"
-                },
-                "auth": {
-                    "type": "object",
-                    "properties": {
-                        "database": {
-                            "type": "string"
-                        },
-                        "existingSecret": {
-                            "type": "string"
-                        },
-                        "password": {
-                            "type": "string"
-                        },
-                        "username": {
-                            "type": "string"
-                        }
-                    }
-                },
-                "enabled": {
-                    "type": "boolean"
                 }
             }
         },
