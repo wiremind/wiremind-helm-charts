@@ -4,7 +4,7 @@ kind: CustomResourceDefinition
 metadata:
   name: istiooperators.install.istio.io
   labels:
-    release: istio
+{{ include "istio-operator-crds.labels" . | indent 4 }}
 spec:
   conversion:
     strategy: None
