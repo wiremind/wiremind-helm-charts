@@ -14,5 +14,5 @@ CRDs are located [here](https://github.com/cert-manager/cert-manager/tree/master
 export APP_VERSION=v1.7.1
 cd charts/cert-manager-crds
 curl https://github.com/cert-manager/cert-manager/releases/download/$APP_VERSION/cert-manager.crds.yaml -L -o crds.yaml
-bash ../../cut_crds.sh crds.yaml
+bash ../../scripts/cut_crds.sh crds.yaml
 ```
