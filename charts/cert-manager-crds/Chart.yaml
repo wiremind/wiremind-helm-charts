@@ -2,7 +2,7 @@ annotations:
   category: DeveloperTools
 apiVersion: v2
 name: cert-manager-crds
-version: 1.7.1
+version: 1.7.2-labels0
 appVersion: "v1.7.1"
 description: Manage cert-manager CRDs
 keywords:
