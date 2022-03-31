@@ -43,11 +43,12 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 }
 
 # Manually find and remove .metadata.labels since yq has "formatting problems with the gotemplate" :/
-function add_or_replace_yaml_object()
+function manage_yaml_object()
 {
-    template_filepath_relative_tmp="$1"
-    key_to_find="$2"
-    data_to_replace="$3"
+    yaml_action="$1"
+    template_filepath_relative_tmp="$2"
+    key_to_find="$3"
+    data_to_replace="$4"
 
     if [[ "$DEBUG" == "1" ]]; then
         echo $data_to_replace
@@ -149,21 +150,23 @@ function add_or_replace_yaml_object()
                             fi
                             sed -i ''${remove_start_pos}','${remove_end_pos}'d' $template_filepath_relative_tmp
 
-                            append_pos=${keys_to_find_start_pos[$index_to_remove]}
-                            if [[ "$DEBUG" == "1" ]]; then
-                                echo ${keys_to_find_indentations[$index_to_remove]}
-                                echo ${keys_to_find[$index_to_remove]}
-                                set -x
-                            fi
-                            yaml_key_formatted=`printf "%*s%s" ${keys_to_find_indentations[$index_to_remove]} "" ${keys_to_find[$index_to_remove]}:`
-                            if [[ "$DEBUG" == "1" ]]; then
-                                echo "Apending $yaml_key_formatted to line $append_pos"
-                            fi
-                            sed -i ''${append_pos}' a \'$yaml_key_formatted'' $template_filepath_relative_tmp
-                            append_pos=$((append_pos+1))
-                            sed -i ''${append_pos}' a {{ include "'$chart_name'.labels" . | indent 4 }}' $template_filepath_relative_tmp
-                            if [[ "$DEBUG" == "1" ]]; then
-                                set +x
+                            if [[ "$yaml_action" == "add" ]]; then
+                                append_pos=${keys_to_find_start_pos[$index_to_remove]}
+                                if [[ "$DEBUG" == "1" ]]; then
+                                    echo ${keys_to_find_indentations[$index_to_remove]}
+                                    echo ${keys_to_find[$index_to_remove]}
+                                    set -x
+                                fi
+                                yaml_key_formatted=`printf "%*s%s" ${keys_to_find_indentations[$index_to_remove]} "" ${keys_to_find[$index_to_remove]}:`
+                                if [[ "$DEBUG" == "1" ]]; then
+                                    echo "Apending $yaml_key_formatted to line $append_pos"
+                                fi
+                                sed -i ''${append_pos}' a \'$yaml_key_formatted'' $template_filepath_relative_tmp
+                                append_pos=$((append_pos+1))
+                                sed -i ''${append_pos}' a {{ include "'$chart_name'.labels" . | indent 4 }}' $template_filepath_relative_tmp
+                                if [[ "$DEBUG" == "1" ]]; then
+                                    set +x
+                                fi
                             fi
                         fi
                     fi
@@ -186,10 +189,27 @@ function add_or_replace_yaml_object()
     done < "$template_filepath_relative_tmp"
 }
 
+function print_helper()
+{
+    echo "Usage:"
+    echo "DEBUG=\"1\" REGENERATE_HELPERS=\"1\" YAML_ACTION=\"add\" ./${0} path/to/chart-crds"
+    echo "DEBUG=\"1\" YAML_ACTION=\"delete\" ./${0} path/to/chart-crds"
+    echo "YAML_ACTION:"
+    echo "add: Add a _helpers.tpl and the label inclusion directly into each CRD"
+    echo "delete: Delete the labels of each CRD"
+}
+
 function process_crds_chart()
 {
     if [ -z "$1" ]; then
         echo "${1} is not a valid crds helm chart"
+        print_helper
+        exit 84
+    fi
+
+    if [ -z "$YAML_ACTION" ]; then
+        echo "Please provide the env variable YAML_ACTION"
+        print_helper
         exit 84
     fi
 
@@ -223,9 +243,9 @@ function process_crds_chart()
         # Check if its a valid yaml file
         docker run --rm -v "${PWD}":/workdir mikefarah/yq "${template_filepath_relative}" > /dev/null 2>&1
         retVal=`echo $?`
-        if [[ "$retVal" == "0" ]]; then
-            # Remove metadata labels
-            add_or_replace_yaml_object "${template_filepath_relative_tmp}" ".metadata.labels" '{{ include "'$chart_name'.labels" . | indent 4 }}'
+        if [[ "$retVal" == "0" && ("$YAML_ACTION" == "add" || "$YAML_ACTION" == "delete") ]]; then
+            # Manage metadata labels
+            manage_yaml_object "$YAML_ACTION" "${template_filepath_relative_tmp}" ".metadata.labels" '{{ include "'$chart_name'.labels" . | indent 4 }}'
             cat $template_filepath_relative_tmp > $template_filepath_relative
             echo "OK"
         else
