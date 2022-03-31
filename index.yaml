@@ -3703,6 +3703,34 @@ entries:
       category: DeveloperTools
     apiVersion: v2
     appVersion: 17.0.0
+    created: "2022-03-31T15:09:03.500848992Z"
+    description: Manage keycloak-operator CRDs
+    digest: 2ef02a8fb23f58c8b80ec8086502bf01cab2aef56e186bb6d097fff73cc85530
+    icon: https://www.keycloak.org/resources/images/keycloak_icon_512px.svg
+    keywords:
+    - keycloak
+    - operator
+    - crds
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    - email: 19607336+maxime1907@users.noreply.github.com
+      name: maxime1907
+    name: keycloak-operator-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/keycloak-operator-crds
+    - https://github.com/keycloak/keycloak-operator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/keycloak-operator-crds-0.0.11-labels0/keycloak-operator-crds-0.0.11-labels0.tgz
+    version: 0.0.11-labels0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 17.0.0
     created: "2022-03-30T08:39:40.708928646Z"
     description: Manage keycloak-operator CRDs
     digest: e6d8b37484e55e2c5e883222c2a1e583d94fbbdf7ae451c854aee7f771b2b41f
@@ -4090,4 +4118,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2022-03-31T15:06:42.858624705Z"
+generated: "2022-03-31T15:09:03.509040538Z"
