@@ -8,6 +8,8 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.6.2
   creationTimestamp: null
   name: alertmanagers.monitoring.coreos.com
+  labels:
+{{ include "kube-prometheus-stack-crds.labels" . | indent 4 }}
 spec:
   group: monitoring.coreos.com
   names:
