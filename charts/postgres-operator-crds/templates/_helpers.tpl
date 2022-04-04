@@ -31,4 +31,3 @@ Selector labels
 app.kubernetes.io/name: {{ include "postgres-operator-crds.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
-
