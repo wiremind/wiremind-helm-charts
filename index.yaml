@@ -4078,6 +4078,34 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/postgres-operator-crds-1.7.1/postgres-operator-crds-1.7.1.tgz
     version: 1.7.1
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 1.7.1-sby
+    created: "2022-04-04T10:45:34.919384788Z"
+    description: Manage postgres-operator CRDs
+    digest: 278bb9df197ab262c320acd4d658c4f00f7cceda6e846b402facaadc91b80c20
+    icon: https://raw.githubusercontent.com/zalando/postgres-operator/master/docs/diagrams/logo.png
+    keywords:
+    - postgres
+    - operator
+    - crds
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    - email: 19607336+maxime1907@users.noreply.github.com
+      name: maxime1907
+    name: postgres-operator-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/postgres-operator-crds
+    - https://github.com/zalando/postgres-operator/tree/master/charts/postgres-operator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/postgres-operator-crds-1.7.1-sby/postgres-operator-crds-1.7.1-sby.tgz
+    version: 1.7.1-sby
   postgresql:
   - apiVersion: v1
     appVersion: 11.7.0
@@ -4237,4 +4265,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2022-04-04T08:56:22.836286157Z"
+generated: "2022-04-04T10:45:34.920762832Z"
