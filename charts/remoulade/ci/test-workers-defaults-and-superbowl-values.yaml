@@ -18,11 +18,9 @@ workers:
 
   list:
     my-worker-reusing-defaults:
-      enabled: true
       replicaCount: 1
       command: ["composition_worker"]
     my-other-worker:
-      enabled: true
       replicaCount: 1
       command: ["composition_worker"]  # Yeah, I have a single example to show
 

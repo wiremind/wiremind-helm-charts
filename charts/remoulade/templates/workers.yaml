@@ -1,6 +1,6 @@
 {{- $workerDefault := .Values.workers.defaults }}
+
 {{- range $workerType, $currentWorker := .Values.workers.list }}
-{{- if $currentWorker.enabled -}}
 
 {{- $currentWorkerFullName := printf "%s-%s" $.Release.Name $workerType }}
 {{- $currentWorkerImage := default (dict) $currentWorker.image }}
@@ -162,5 +162,4 @@ spec:
 {{- end }}
 {{- end }}
 
-{{- end }}
 {{- end }}

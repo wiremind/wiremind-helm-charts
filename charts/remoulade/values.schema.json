@@ -4,11 +4,8 @@
     "worker": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["replicaCount", "enabled"],
+      "required": ["replicaCount"],
       "properties": {
-        "enabled": {
-          "type": "boolean"
-        },
         "replicaCount": {
           "type": "integer",
           "form": true,
