@@ -4,6 +4,7 @@ workers:
       # We'll deploy the "composition" example
       repository: ghcr.io/wiremind/remoulade
       tag: v0.46.2-example-composition
+    replicaCount: 2
     extraEnvVars: {foo: a, bar: b}
     labels: {foo: bar}
     podLabels: {foo: bar}
@@ -18,10 +19,8 @@ workers:
 
   list:
     my-worker-reusing-defaults:
-      replicaCount: 1
       command: ["composition_worker"]
     my-other-worker:
-      replicaCount: 1
       command: ["composition_worker"]  # Yeah, I have a single example to show
 
 

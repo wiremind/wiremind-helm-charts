@@ -18,6 +18,8 @@ workers:  # Define remoulade workers to deploy
       tag: setme
       pullPolicy: IfNotPresent
       pullSecrets: []
+    ## Replica count for the Deployment
+    replicaCount: 1
     ## Set the resources for the Pod
     ## Note that if defined in a specific worker the whole block is overridden from the defaults
     resources:
@@ -69,12 +71,6 @@ workers:  # Define remoulade workers to deploy
     {}
     # my-first-worker:
     #   ###
-    #   ## Mandatory values to be stated for all types of workers
-    #   ###
-    #   enabled: true
-    #   replicaCount: 1
-
-    #   ###
     #   ## Optional values, if not defined, will use the "defaults" key
     #   ## Please refer to this key to know default values
     #   ###
@@ -86,6 +82,8 @@ workers:  # Define remoulade workers to deploy
     #     tag: v0.46.2-example-composition
     #     pullPolicy: IfNotPresent
     #     pullSecrets: []
+    #   ## Replica count for the Deployment
+    #   replicaCount: 1
     #   ## Set the resources for the Pod
     #   ## Note that if defined in a specific worker the whole block is overridden from the defaults
     #   resources:
@@ -136,9 +134,8 @@ workers:  # Define remoulade workers to deploy
     #   ## Optional values, if not defined, will not be used at all or will be false (but there is no defaults)
     #   ###
 
-    #   ## Optional command to run
+    #   ## Optional command and args to run (if not using what is defined in Dockerfile)
     #   command: ["composition_worker"]
-    #   ## Optional args to define
     #   args: []
     #   ## Define a port in the container and a Prometheus Operator PodMonitor
     #   metrics:
@@ -165,7 +162,6 @@ workers:  # Define remoulade workers to deploy
 
     # ## Another smaller example
     # my-second-worker:
-    #   enabled: true
     #   replicaCount: 1
     #   image:
     #     repository: ghcr.io/wiremind/remoulade

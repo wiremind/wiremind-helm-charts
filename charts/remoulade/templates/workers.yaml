@@ -16,7 +16,7 @@ metadata:
     {{- toYaml . | nindent 4}}
     {{- end }}
 spec:
-  replicas: {{ $currentWorker.replicaCount }}
+  replicas: {{ hasKey $workerDefault "replicaCount" | ternary $workerDefault.replicaCount $currentWorker.replicaCount }}
   selector:
     matchLabels:
       {{- include "remoulade.selectorLabels" $ | nindent 6 }}
@@ -39,7 +39,7 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      priorityClassName: {{ $currentWorker.priorityClassName | default $workerDefault.priorityClassName }}
+      priorityClassName: {{ hasKey $workerDefault "priorityClassName" | ternary $workerDefault.priorityClassName $currentWorker.priorityClassName }}
       imagePullSecrets: {{- $currentWorkerImage.pullSecrets | default $workerDefault.image.pullSecrets | toYaml | nindent 8 }}
       serviceAccountName: {{ template "remoulade.serviceAccountName" $ }}
       terminationGracePeriodSeconds: {{ $currentWorker.terminationGracePeriodSeconds | default $workerDefault.terminationGracePeriodSeconds }}
