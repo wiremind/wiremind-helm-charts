@@ -4206,6 +4206,49 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/raw-0.1.0/raw-0.1.0.tgz
     version: 0.1.0
+  remoulade:
+  - apiVersion: v2
+    created: "2022-04-08T11:28:43.654969588Z"
+    dependencies:
+    - alias: remoulade-postgresql
+      condition: remoulade-postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: '*'
+    - alias: remoulade-redis
+      condition: remoulade-redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: '*'
+    - alias: remoulade-rabbitmq
+      condition: remoulade-rabbimq.enabled
+      name: rabbitmq
+      repository: https://charts.bitnami.com/bitnami
+      version: '*'
+    - alias: remoulade-rabbitmq-exporter
+      condition: prometheus-rabbitmq-exporter.enabled
+      name: prometheus-rabbitmq-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: '*'
+    description: A Helm chart to deploy Remoulade and its dependencies
+    digest: 9dc7bb23fa980f77f8c4cba8f439528133e76c024f76c208ccef5364e2ba2b79
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/remoulade
+    icon: https://raw.githubusercontent.com/wiremind/remoulade/master/artwork/logo.png
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: remoulade
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/remoulade
+    - https://github.com/wiremind/remoulade
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/remoulade-0.1.0/remoulade-0.1.0.tgz
+    version: 0.1.0
   scrapoxy:
   - apiVersion: v2
     appVersion: 3.1.1
@@ -4296,4 +4339,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2022-04-04T11:03:05.332144011Z"
+generated: "2022-04-08T11:28:43.655376688Z"
