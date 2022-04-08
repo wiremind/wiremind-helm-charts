@@ -1,0 +1,165 @@
+{{- $workerDefault := .Values.workers.defaults }}
+
+{{- range $workerType, $currentWorker := .Values.workers.list }}
+
+{{- $currentWorkerFullName := printf "%s-%s" $.Release.Name $workerType }}
+{{- $currentWorkerImage := default (dict) $currentWorker.image }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $currentWorkerFullName }}
+  labels:
+    {{- include "remoulade.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: remoulade-worker-{{ $workerType }}
+    {{- with default $workerDefault.labels $currentWorker.labels }}
+    {{- toYaml . | nindent 4}}
+    {{- end }}
+spec:
+  replicas: {{ hasKey $workerDefault "replicaCount" | ternary $workerDefault.replicaCount $currentWorker.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "remoulade.selectorLabels" $ | nindent 6 }}
+      app.kubernetes.io/component: remoulade-worker-{{ $workerType }}
+  minReadySeconds: 5
+  strategy:
+    type: {{ $currentWorker.strategyType | default $workerDefault.strategyType }}
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        {{- include "remoulade.labels" $ | nindent 8 }}
+        app.kubernetes.io/component: remoulade-worker-{{ $workerType }}
+        {{- with default $workerDefault.podLabels $currentWorker.podLabels }}
+        {{- tpl (toYaml .) $ | nindent 8 }}
+        {{- end }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/secret.yaml") $ | sha256sum }}
+        {{- with default $workerDefault.podAnnotations $currentWorker.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      priorityClassName: {{ hasKey $workerDefault "priorityClassName" | ternary $workerDefault.priorityClassName $currentWorker.priorityClassName }}
+      imagePullSecrets: {{- $currentWorkerImage.pullSecrets | default $workerDefault.image.pullSecrets | toYaml | nindent 8 }}
+      serviceAccountName: {{ template "remoulade.serviceAccountName" $ }}
+      terminationGracePeriodSeconds: {{ $currentWorker.terminationGracePeriodSeconds | default $workerDefault.terminationGracePeriodSeconds }}
+      containers:
+        - name: remoulade-worker-{{ $workerType }}
+          image: {{ $currentWorkerImage.repository | default $workerDefault.image.repository }}:{{ $currentWorkerImage.tag | default $workerDefault.image.tag }}
+          imagePullPolicy: {{ $currentWorkerImage.pullPolicy | default $workerDefault.image.pullPolicy }}
+          {{- with $currentWorker.command }}
+          command: {{- toYaml . | nindent 12}}
+          {{- end }}
+          {{- with $currentWorker.args }}
+          args: {{- toYaml $currentWorker.args | nindent 12 }}
+          {{- end }}
+          {{- if $currentWorker.metrics }}
+          {{- if $currentWorker.metrics.enabled }}
+          ports:
+            - name: metrics
+              containerPort: 9191
+              protocol: TCP
+          {{- end }}
+          {{- end }}
+          envFrom:
+            - secretRef:
+                name: {{ template "remoulade.fullname" $ }}
+          env:
+            {{- range $key, $val := default $workerDefault.extraEnvVars $currentWorker.extraEnvVars }}
+            - name: {{ $key }}
+              value: {{ $val | quote }}
+            {{- end }}
+          resources: {{- $currentWorker.resources | default $workerDefault.resources | toYaml | nindent 12 }}
+          {{- with default $workerDefault.volumeMounts $currentWorker.volumeMounts }}
+          volumeMounts: {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with default $workerDefault.containerSecurityContext $currentWorker.containerSecurityContext }}
+          {{- if .enabled }}
+          securityContext: {{- omit . "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- end }}
+        {{- if $currentWorker.extraContainerList }}
+        {{- toYaml $currentWorker.extraContainerList | nindent 8 }}
+        {{- end }}
+      {{- with default $workerDefault.podSecurityContext $currentWorker.podSecurityContext }}
+      {{- if .enabled }}
+      securityContext: {{- omit . "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- with default $workerDefault.nodeSelector $currentWorker.nodeSelector }}
+      nodeSelector: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with default $workerDefault.affinity $currentWorker.affinity }}
+      affinity: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with default $workerDefault.tolerations $currentWorker.tolerations }}
+      tolerations: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with default $workerDefault.volumes $currentWorker.volumes }}
+      volumes: {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+---
+
+{{- if $currentWorker.autoscaling }}
+{{- if $currentWorker.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ $currentWorkerFullName }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ $currentWorkerFullName }}
+  minReplicas: {{ $currentWorker.autoscaling.minReplicas }}
+  maxReplicas: {{ $currentWorker.autoscaling.maxReplicas }}
+  metrics:
+    - type: Object
+      object:
+        metric:
+          name: {{ $currentWorker.autoscaling.metricName }}
+          {{- with $currentWorker.autoscaling.metricMatchLabels }}
+          selector:
+            matchLabels:
+              {{- toYaml . | nindent 14 }}
+          {{- end }}
+        describedObject:
+          apiVersion: "/v1"
+          kind: Service
+          # Defaults to HPA based on rabbitmq metrics
+          name: {{ $currentWorker.autoscaling.describedService | default (printf "%s-remoulade-rabbitmq-exporter" $.Release.Name) }}
+        target:
+          type: Value
+          value: {{ $currentWorker.autoscaling.targetMetricValue }}
+---
+{{- end }}
+{{- end }}
+
+{{- if $currentWorker.metrics }}
+{{- if $currentWorker.metrics.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ $currentWorkerFullName }}-metrics
+  labels:
+    {{- include "remoulade.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: remoulade-worker-{{ $workerType }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "remoulade.selectorLabels" $ | nindent 6 }}
+      app.kubernetes.io/component: remoulade-worker-{{ $workerType }}
+  podMetricsEndpoints:
+    - port: metrics
+      # Drop OpenMetrics .*_created metrics as we get a lot of them with HPA * a lot of metrics per Pod
+      metricRelabelings:
+        - action: drop
+          regex: ".*_created"
+          sourceLabels:
+            - __name__
+---
+{{- end }}
+{{- end }}
+
+{{- end }}

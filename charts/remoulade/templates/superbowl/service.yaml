@@ -1,0 +1,17 @@
+{{- if and .Values.superbowl.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "remoulade.fullname" . }}
+  labels:
+    {{- include "remoulade.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.superbowl.service.type }}
+  ports:
+    - port: {{ .Values.superbowl.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "remoulade.selectorLabels" . | nindent 4 }}
+{{ end }}

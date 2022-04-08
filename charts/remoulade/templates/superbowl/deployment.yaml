@@ -1,0 +1,97 @@
+{{- if .Values.superbowl.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "remoulade.fullname" . }}-super-bowl
+  labels:
+    {{- include "remoulade.labels" . | nindent 4 }}
+    app.kubernetes.io/component: remoulade-worker-superbowl
+spec:
+  {{- if not .Values.superbowl.autoscaling.enabled }}
+  replicas: {{ .Values.superbowl.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "remoulade.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: remoulade-worker-superbowl
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- with .Values.superbowl.podAnnotations }}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "remoulade.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: remoulade-worker-superbowl
+    spec:
+      {{- with .Values.superbowl.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.superbowl.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.superbowl.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: super-bowl-frontend
+          {{- if .Values.superbowl.frontend.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.superbowl.frontend.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.superbowl.frontend.image.repository }}:{{ .Values.superbowl.frontend.image.tag }}"
+          imagePullPolicy: {{ .Values.superbowl.frontend.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.superbowl.frontend.resources | nindent 12 }}
+        - name: super-bowl-backend
+          {{- if .Values.superbowl.backend.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.superbowl.backend.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.superbowl.backend.image.repository }}:{{ .Values.superbowl.backend.image.tag }}"
+          imagePullPolicy: {{ .Values.superbowl.backend.image.pullPolicy }}
+          {{- with .Values.superbowl.backend.command }}
+          command: {{- toYaml . | nindent 12}}
+          {{- end }}
+          {{- with .Values.superbowl.backend.args }}
+          args: {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: backend
+              containerPort: 5000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /options
+              port: backend
+          readinessProbe:
+            httpGet:
+              path: /options
+              port: backend
+          envFrom:
+            - secretRef:
+                name: {{ template "remoulade.fullname" $ }}
+          resources:
+            {{- toYaml .Values.superbowl.backend.resources | nindent 12 }}
+      {{- with .Values.superbowl.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.superbowl.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.superbowl.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{ end }}
