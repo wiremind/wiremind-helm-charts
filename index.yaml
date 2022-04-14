@@ -4208,6 +4208,48 @@ entries:
     version: 0.1.0
   remoulade:
   - apiVersion: v2
+    created: "2022-04-14T14:58:31.942930706Z"
+    dependencies:
+    - alias: remoulade-postgresql
+      condition: remoulade-postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: '*'
+    - alias: remoulade-redis
+      condition: remoulade-redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: '*'
+    - alias: remoulade-rabbitmq
+      condition: remoulade-rabbimq.enabled
+      name: rabbitmq
+      repository: https://charts.bitnami.com/bitnami
+      version: '*'
+    - alias: remoulade-rabbitmq-exporter
+      condition: prometheus-rabbitmq-exporter.enabled
+      name: prometheus-rabbitmq-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: '*'
+    description: A Helm chart to deploy Remoulade and its dependencies
+    digest: 911c23585371fa7e145bd6d826474a94fba06992c98312b6d79bc51b75210e79
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/remoulade
+    icon: https://raw.githubusercontent.com/wiremind/remoulade/master/artwork/logo.png
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: remoulade
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/remoulade
+    - https://github.com/wiremind/remoulade
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/remoulade-0.1.1/remoulade-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
     created: "2022-04-08T11:28:43.654969588Z"
     dependencies:
     - alias: remoulade-postgresql
@@ -4339,4 +4381,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2022-04-08T11:28:43.655376688Z"
+generated: "2022-04-14T14:58:31.943478707Z"
