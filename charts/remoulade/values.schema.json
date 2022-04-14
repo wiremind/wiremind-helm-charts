@@ -143,6 +143,9 @@
   "additionalProperties": false,
   "form": true,
   "properties": {
+    "global": {
+      "type": ["object"]
+    },
     "nameOverride": {
       "type": ["null", "string"]
     },
