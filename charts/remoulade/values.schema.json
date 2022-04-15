@@ -62,6 +62,12 @@
         "extraEnvVars": {
           "type": "object"
         },
+        "volumeMounts": {
+          "type": "array"
+        },
+        "volumes": {
+          "type": "array"
+        },
         "labels": {
           "type": "object"
         },
@@ -231,6 +237,12 @@
             },
             "extraEnvVars": {
               "type": "object"
+            },
+            "volumeMounts": {
+              "type": "array"
+            },
+            "volumes": {
+              "type": "array"
             },
             "labels": {
               "type": "object"
