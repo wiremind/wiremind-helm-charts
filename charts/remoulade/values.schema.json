@@ -571,7 +571,7 @@
         }
       }
     },
-    "remoulade-postgresql": {
+    "postgresql": {
       "type": "object",
       "properties": {
         "enabled": {
@@ -583,7 +583,7 @@
     "externalPostgresqlUrl": {
       "type": ["string", "null"]
     },
-    "remoulade-rabbitmq": {
+    "rabbitmq": {
       "type": "object",
       "properties": {
         "enabled": {
@@ -592,7 +592,7 @@
         }
       }
     },
-    "remoulade-rabbitmq-exporter": {
+    "rabbitmq-exporter": {
       "type": "object",
       "properties": {
         "enabled": {
@@ -601,7 +601,7 @@
         }
       }
     },
-    "remoulade-redis": {
+    "redis": {
       "type": "object",
       "properties": {
         "enabled": {

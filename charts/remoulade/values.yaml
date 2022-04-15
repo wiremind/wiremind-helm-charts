@@ -279,7 +279,7 @@ superbowl:
 
 ## PostgreSQL
 ## Ref: https://github.com/bitnami/charts/tree/master/bitnami/postgresql
-remoulade-postgresql:
+postgresql:
   enabled: true
   auth:
     postgresPassword: setme
@@ -293,7 +293,7 @@ externalPostgresqlUrl:
 
 ## RabbitMQ
 ## Ref: https://github.com/bitnami/charts/tree/master/bitnami/rabbitmq
-remoulade-rabbitmq:
+rabbitmq:
   enabled: true
   auth:
     username: rabbitmq
@@ -302,12 +302,12 @@ remoulade-rabbitmq:
 
 ## RabbitMQ Exporter
 ## Ref: https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-rabbitmq-exporter
-remoulade-rabbitmq-exporter:
+rabbitmq-exporter:
   enabled: false
 
 ## Redis
 ## Ref: https://github.com/bitnami/charts/tree/master/bitnami/redis
-remoulade-redis:
+redis:
   enabled: true
   auth:
     password: setme
