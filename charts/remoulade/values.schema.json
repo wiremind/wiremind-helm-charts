@@ -72,13 +72,16 @@
           "type": "object"
         },
         "podLabels": {
-          "type": "object"
+          "type": ["object", "string", "null"]
         },
         "podAnnotations": {
           "type": "object"
         },
         "affinity": {
           "type": "object"
+        },
+        "tolerations": {
+          "type": "array"
         },
         "nodeSelector": {
           "type": "object"
@@ -150,7 +153,12 @@
   "form": true,
   "properties": {
     "global": {
-      "type": ["object"]
+      "type": ["object"],
+      "title": "Allow helm global value"
+    },
+    "enabled": {
+      "type": ["boolean"],
+      "title": "Allow integration as subchart with usual helm conventions. Not actually used."
     },
     "nameOverride": {
       "type": ["null", "string"]
@@ -248,13 +256,16 @@
               "type": "object"
             },
             "podLabels": {
-              "type": "object"
+              "type": ["object", "string", "null"]
             },
             "podAnnotations": {
               "type": "object"
             },
             "affinity": {
               "type": "object"
+            },
+            "tolerations": {
+              "type": "array"
             },
             "nodeSelector": {
               "type": "object"

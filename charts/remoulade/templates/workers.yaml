@@ -1,4 +1,4 @@
-{{- $workerDefault := .Values.workers.defaults }}
+{{- $workerDefaults := .Values.workers.defaults }}
 
 {{- range $workerType, $currentWorker := .Values.workers.list }}
 
@@ -12,41 +12,41 @@ metadata:
   labels:
     {{- include "remoulade.labels" $ | nindent 4 }}
     app.kubernetes.io/component: remoulade-worker-{{ $workerType }}
-    {{- with default $workerDefault.labels $currentWorker.labels }}
+    {{- with default $workerDefaults.labels $currentWorker.labels }}
     {{- toYaml . | nindent 4}}
     {{- end }}
 spec:
-  replicas: {{ hasKey $workerDefault "replicaCount" | ternary $workerDefault.replicaCount $currentWorker.replicaCount }}
+  replicas: {{ hasKey $workerDefaults "replicaCount" | ternary $workerDefaults.replicaCount $currentWorker.replicaCount }}
   selector:
     matchLabels:
       {{- include "remoulade.selectorLabels" $ | nindent 6 }}
       app.kubernetes.io/component: remoulade-worker-{{ $workerType }}
   minReadySeconds: 5
   strategy:
-    type: {{ $currentWorker.strategyType | default $workerDefault.strategyType }}
+    type: {{ $currentWorker.strategyType | default $workerDefaults.strategyType }}
   revisionHistoryLimit: 2
   template:
     metadata:
       labels:
         {{- include "remoulade.labels" $ | nindent 8 }}
         app.kubernetes.io/component: remoulade-worker-{{ $workerType }}
-        {{- with default $workerDefault.podLabels $currentWorker.podLabels }}
+        {{- with default $workerDefaults.podLabels $currentWorker.podLabels }}
         {{- tpl (toYaml .) $ | nindent 8 }}
         {{- end }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/secret.yaml") $ | sha256sum }}
-        {{- with default $workerDefault.podAnnotations $currentWorker.podAnnotations }}
+        {{- with default $workerDefaults.podAnnotations $currentWorker.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      priorityClassName: {{ hasKey $workerDefault "priorityClassName" | ternary $workerDefault.priorityClassName $currentWorker.priorityClassName }}
-      imagePullSecrets: {{- $currentWorkerImage.pullSecrets | default $workerDefault.image.pullSecrets | toYaml | nindent 8 }}
+      priorityClassName: {{ hasKey $workerDefaults "priorityClassName" | ternary $workerDefaults.priorityClassName $currentWorker.priorityClassName }}
+      imagePullSecrets: {{- $currentWorkerImage.pullSecrets | default $workerDefaults.image.pullSecrets | toYaml | nindent 8 }}
       serviceAccountName: {{ template "remoulade.serviceAccountName" $ }}
-      terminationGracePeriodSeconds: {{ $currentWorker.terminationGracePeriodSeconds | default $workerDefault.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ $currentWorker.terminationGracePeriodSeconds | default $workerDefaults.terminationGracePeriodSeconds }}
       containers:
         - name: remoulade-worker-{{ $workerType }}
-          image: {{ $currentWorkerImage.repository | default $workerDefault.image.repository }}:{{ $currentWorkerImage.tag | default $workerDefault.image.tag }}
-          imagePullPolicy: {{ $currentWorkerImage.pullPolicy | default $workerDefault.image.pullPolicy }}
+          image: {{ $currentWorkerImage.repository | default $workerDefaults.image.repository }}:{{ $currentWorkerImage.tag | default $workerDefaults.image.tag }}
+          imagePullPolicy: {{ $currentWorkerImage.pullPolicy | default $workerDefaults.image.pullPolicy }}
           {{- with $currentWorker.command }}
           command: {{- toYaml . | nindent 12}}
           {{- end }}
@@ -65,15 +65,15 @@ spec:
             - secretRef:
                 name: {{ template "remoulade.fullname" $ }}
           env:
-            {{- range $key, $val := default $workerDefault.extraEnvVars $currentWorker.extraEnvVars }}
+            {{- range $key, $val := default $workerDefaults.extraEnvVars $currentWorker.extraEnvVars }}
             - name: {{ $key }}
               value: {{ $val | quote }}
             {{- end }}
-          resources: {{- $currentWorker.resources | default $workerDefault.resources | toYaml | nindent 12 }}
-          {{- with default $workerDefault.volumeMounts $currentWorker.volumeMounts }}
+          resources: {{- $currentWorker.resources | default $workerDefaults.resources | toYaml | nindent 12 }}
+          {{- with default $workerDefaults.volumeMounts $currentWorker.volumeMounts }}
           volumeMounts: {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with default $workerDefault.containerSecurityContext $currentWorker.containerSecurityContext }}
+          {{- with default $workerDefaults.containerSecurityContext $currentWorker.containerSecurityContext }}
           {{- if .enabled }}
           securityContext: {{- omit . "enabled" | toYaml | nindent 12 }}
           {{- end }}
@@ -81,21 +81,21 @@ spec:
         {{- if $currentWorker.extraContainerList }}
         {{- toYaml $currentWorker.extraContainerList | nindent 8 }}
         {{- end }}
-      {{- with default $workerDefault.podSecurityContext $currentWorker.podSecurityContext }}
+      {{- with default $workerDefaults.podSecurityContext $currentWorker.podSecurityContext }}
       {{- if .enabled }}
       securityContext: {{- omit . "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- end }}
-      {{- with default $workerDefault.nodeSelector $currentWorker.nodeSelector }}
+      {{- with default $workerDefaults.nodeSelector $currentWorker.nodeSelector }}
       nodeSelector: {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with default $workerDefault.affinity $currentWorker.affinity }}
+      {{- with default $workerDefaults.affinity $currentWorker.affinity }}
       affinity: {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with default $workerDefault.tolerations $currentWorker.tolerations }}
+      {{- with default $workerDefaults.tolerations $currentWorker.tolerations }}
       tolerations: {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with default $workerDefault.volumes $currentWorker.volumes }}
+      {{- with default $workerDefaults.volumes $currentWorker.volumes }}
       volumes: {{- toYaml . | nindent 8 }}
       {{- end }}
 
