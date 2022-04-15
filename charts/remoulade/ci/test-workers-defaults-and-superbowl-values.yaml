@@ -6,6 +6,12 @@ workers:
       tag: v0.46.2-example-composition
     replicaCount: 2
     extraEnvVars: {foo: a, bar: b}
+    volumes:
+      - name: some-cache-volume
+        emptyDir: {}
+    volumeMounts:
+      - mountPath: /some-cache
+        name: some-cache-volume
     labels: {foo: bar}
     podLabels: {foo: bar}
     strategyType: Recreate

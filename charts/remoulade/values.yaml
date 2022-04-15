@@ -31,6 +31,10 @@ workers:  # Define remoulade workers to deploy
         memory: 64Mi
     ## Additional environment variables to define in the container
     extraEnvVars: {}
+    ## Additional volumes to define in the Pod
+    volumes: []
+    ## Additional volume mounts to define in the main container
+    volumeMounts: []
     ## Add extra labels to the Deployment
     labels: {}
     ## Add extra labels to the pods
@@ -95,6 +99,10 @@ workers:  # Define remoulade workers to deploy
     #       memory: 256Mi
     #   ## Additional environment variables to define in the container
     #   extraEnvVars: {foo: a, bar: b}
+    #   ## Additional volumes to define in the Pod
+    #   volumes: []
+    #   ## Additional volume mounts to define in the main container
+    #   volumeMounts: []
     #   ## Add extra labels to the Deployment
     #   labels: {}
     #   ## Add extra labels to the pods
