@@ -1,0 +1,18 @@
+# Test that additional pod labels can be interpolated
+workers:
+  # Bare minimum defaults
+  defaults:
+    image:
+      # We'll deploy the "composition" example
+      repository: ghcr.io/wiremind/remoulade
+      tag: v0.46.2-example-composition
+
+  list:
+    my-first-worker:
+      podLabels: "{{ include `remoulade.labels` $ }}"
+    my-second-worker:
+      podLabels: "foo: bar"
+    my-third-worker:
+      podLabels: |
+        foo: bar
+        foo2: bar2
