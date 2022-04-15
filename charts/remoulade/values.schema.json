@@ -592,7 +592,7 @@
         }
       }
     },
-    "rabbitmq-exporter": {
+    "prometheus-rabbitmq-exporter": {
       "type": "object",
       "properties": {
         "enabled": {

@@ -302,7 +302,7 @@ rabbitmq:
 
 ## RabbitMQ Exporter
 ## Ref: https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-rabbitmq-exporter
-rabbitmq-exporter:
+prometheus-rabbitmq-exporter:
   enabled: false
 
 ## Redis
