@@ -39,6 +39,8 @@ workers:
       podAnnotations: {"foo": "bar"}
       ## Affinity to set
       affinity: {}
+      ## Tolerations to set
+      tolerations: []
       ## Node selector to set
       nodeSelector: {}
       ## Priority Class Name

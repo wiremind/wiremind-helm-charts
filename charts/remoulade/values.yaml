@@ -38,11 +38,14 @@ workers:  # Define remoulade workers to deploy
     ## Add extra labels to the Deployment
     labels: {}
     ## Add extra labels to the pods
-    podLabels: {}
+    ## Can be a string to be interpolated or a dict
+    podLabels:
     ## Extra annotations for pods
     podAnnotations: {}
     ## Affinity to set
     affinity: {}
+    ## Tolerations to set
+    tolerations: []
     ## Node selector to set
     nodeSelector: {}
     ## Priority Class Name
@@ -111,6 +114,8 @@ workers:  # Define remoulade workers to deploy
     #   podAnnotations: {"foo": "bar"}
     #   ## Affinity to set
     #   affinity: {}
+    #   ## Tolerations to set
+    #   tolerations: []
     #   ## Node selector to set
     #   nodeSelector: {}
     #   ## Priority Class Name
