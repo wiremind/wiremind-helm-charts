@@ -62,15 +62,15 @@ Create the name of the service account to use
 {{- end }}
 
 {{- define "remoulade.postgresql-host" -}}
-{{ printf "%s-remoulade-postgresql" .Release.Name }}
+{{ printf "%s-postgresql" .Release.Name }}
 {{- end }}
 
 {{- define "remoulade.rabbitmq-host" -}}
-{{ printf "%s-remoulade-rabbitmq" .Release.Name }}
+{{ printf "%s-rabbitmq" .Release.Name }}
 {{- end }}
 
 {{- define "remoulade.redis-name" -}}
-{{ printf "%s-remoulade-redis" .Release.Name }}
+{{ printf "%s-redis" .Release.Name }}
 {{- end }}
 
 {{- define "remoulade.redis-host" -}}
