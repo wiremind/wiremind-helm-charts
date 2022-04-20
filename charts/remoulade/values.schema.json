@@ -185,6 +185,7 @@
     },
     "workers": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "defaults": {
           "type": "object",
@@ -192,6 +193,7 @@
           "properties": {
             "image": {
               "type": "object",
+              "additionalProperties": false,
               "properties": {
                 "pullPolicy": {
                   "type": "string"
@@ -301,6 +303,7 @@
         },
         "list": {
           "type": "object",
+          "additionalProperties": false,
           "patternProperties": {
             "^.*$": {
               "$ref": "#/definitions/worker"
@@ -525,6 +528,7 @@
         },
         "ingress": {
           "type": "object",
+          "additionalProperties": false,
           "properties": {
             "annotations": {
               "type": "object"
