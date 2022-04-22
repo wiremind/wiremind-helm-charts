@@ -2,8 +2,6 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: keycloaks.keycloak.org
-  labels:
-{{ include "keycloak-operator-crds.labels" . | indent 4 }}
 spec:
   group: keycloak.org
   names:
@@ -33,6 +31,12 @@ spec:
           spec:
             description: KeycloakSpec defines the desired state of Keycloak.
             properties:
+              DisableDefaultServiceMonitor:
+                description: Disables the integration with Application Monitoring
+                  Operator. When set to true, the operator doesn't create default
+                  PrometheusRule, ServiceMonitor and GrafanaDashboard objects and
+                  users will have to create them manually, if needed.
+                type: boolean
               extensions:
                 description: A list of extensions, where each one is a URL to a JAR
                   files that will be deployed in Keycloak.
@@ -947,6 +951,11 @@ spec:
                               type: object
                             type: array
                         type: object
+                    type: object
+                  podannotations:
+                    additionalProperties:
+                      type: string
+                    description: List of annotations to set in the keycloak pods
                     type: object
                   podlabels:
                     additionalProperties:
