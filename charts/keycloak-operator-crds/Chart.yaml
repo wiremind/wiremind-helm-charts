@@ -2,8 +2,8 @@ annotations:
   category: DeveloperTools
 apiVersion: v2
 name: keycloak-operator-crds
-version: 0.0.11-labels0
-appVersion: "17.0.0"
+version: 0.0.11
+appVersion: "18.0.0"
 description: Manage keycloak-operator CRDs
 keywords:
   - keycloak

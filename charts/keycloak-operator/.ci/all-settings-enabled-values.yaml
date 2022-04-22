@@ -70,8 +70,10 @@ keycloak:
     enabled: true
     url: "localhost.dev"
     tlsTermination: "passthrough"
+  DisableDefaultServiceMonitor: true
   extensions:
     - "https://link.to.s3/custom-theme.jar"
+    - https://github.com/aerogear/keycloak-metrics-spi/releases/download/2.5.3/keycloak-metrics-spi-2.5.3.jar
   externalAccess:
     enabled: true
     host: "localhost.dev"
@@ -165,6 +167,11 @@ keycloak:
               topologyKey: "kubernetes.io/hostname"
     podLabels:
       environment: production
+    podAnnotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/path: "/auth/realms/master/metrics"
+      prometheus.io/port: "8080"
+      prometheus.io/scheme: "http"
     resources:
       limits:
         memory: 600Mi

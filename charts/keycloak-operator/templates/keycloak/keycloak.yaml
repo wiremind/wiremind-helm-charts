@@ -19,6 +19,9 @@ spec:
     enabled: {{ hasKey .Values.keycloak.external "enabled" | ternary .Values.keycloak.external.enabled true }}
     url: {{ .Values.keycloak.external.url | quote }}
   {{- end }}
+  {{- if .Values.keycloak.DisableDefaultServiceMonitor }}
+  DisableDefaultServiceMonitor: {{ .Values.keycloak.DisableDefaultServiceMonitor }}
+  {{- end }}
   {{- if .Values.keycloak.extensions }}
   extensions:
     {{- range $extensionKey, $extensionValue := .Values.keycloak.extensions }}
@@ -79,6 +82,10 @@ spec:
       {{- range $key, $val := .Values.keycloak.keycloakDeploymentSpec.podLabels }}
       {{ $key }}: "{{ $val }}"
       {{- end }}
+    {{- if .Values.keycloak.keycloakDeploymentSpec.podAnnotations }}
+    podannotations:
+{{ toYaml .Values.keycloak.keycloakDeploymentSpec.podAnnotations | indent 6 }}
+    {{- end }}
     resources:
 {{ toYaml .Values.keycloak.keycloakDeploymentSpec.resources | trim | indent 6 }}
 
