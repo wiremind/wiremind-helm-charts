@@ -2,8 +2,8 @@ annotations:
   category: DeveloperTools
 apiVersion: v2
 name: postgres-operator-crds
-version: 1.7.1-sby
-appVersion: 1.7.1-sby
+version: 1.8.0
+appVersion: 1.8.0
 description: Manage postgres-operator CRDs
 keywords:
   - postgres
