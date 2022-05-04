@@ -90,3 +90,15 @@ extraEnvVars: {}
 # Additional labels and annotations to apply on the pod level for monitoring and logging configuration.
 podLabels: {}
 podAnnotations: {}
+
+metrics:
+  enabled: false
+  serviceMonitor:
+    enabled: false
+    additionalLabels: {}
+  prometheusRule:
+    enabled: false
+    defaultRules:
+      create: true
+      disabled: []
+    additionalRules: []

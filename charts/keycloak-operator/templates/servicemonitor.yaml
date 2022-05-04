@@ -1,0 +1,33 @@
+{{- if .Values.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  # Hardcoded https://github.com/vmuzikar/keycloak-operator/blob/5179ed73897d0be4c55e1e0a766c9fbbd39b17e8/pkg/model/service_monitor.go#L14
+  name: "keycloak-service-monitor"
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "keycloak-operator.labels" . | nindent 4 }}
+    {{- if .Values.metrics.serviceMonitor.additionalLabels }}
+    {{- toYaml .Values.metrics.serviceMonitor.additionalLabels | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app: "keycloak"
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  endpoints:
+    - port: keycloak
+      scheme: https
+      path: /auth/realms/master/metrics
+      tlsConfig:
+        insecureSkipVerify: true
+      interval: 60s
+    - port: keycloak-monitoring
+      scheme: http
+      path: /metrics
+      tlsConfig:
+        insecureSkipVerify: true
+      interval: 60s
+{{- end }}

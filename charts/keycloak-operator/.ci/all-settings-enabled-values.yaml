@@ -70,7 +70,6 @@ keycloak:
     enabled: true
     url: "localhost.dev"
     tlsTermination: "passthrough"
-  DisableDefaultServiceMonitor: true
   extensions:
     - "https://link.to.s3/custom-theme.jar"
     - https://github.com/aerogear/keycloak-metrics-spi/releases/download/2.5.3/keycloak-metrics-spi-2.5.3.jar
@@ -501,3 +500,15 @@ podLabels:
   environment: production
 podAnnotations:
   imageregistry: "https://quay.io/"
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    additionalLabels: {}
+  prometheusRule:
+    enabled: true
+    defaultRules:
+      create: true
+      disabled: []
+    additionalRules: []

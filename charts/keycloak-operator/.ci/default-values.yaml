@@ -87,3 +87,17 @@ keycloakUsers:
       email: "test@example.com"
       emailVerified: true
     realmName: "Test"
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    additionalLabels: {}
+  prometheusRule:
+    enabled: true
+    defaultRules:
+      create: true
+      disabled:
+        - "KeycloakInstanceNotAvailable"
+        - "KeycloakDatabaseNotAvailable"
+    additionalRules: []
