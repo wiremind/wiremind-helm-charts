@@ -19,9 +19,8 @@ spec:
     enabled: {{ hasKey .Values.keycloak.external "enabled" | ternary .Values.keycloak.external.enabled true }}
     url: {{ .Values.keycloak.external.url | quote }}
   {{- end }}
-  {{- if .Values.keycloak.DisableDefaultServiceMonitor }}
-  DisableDefaultServiceMonitor: {{ .Values.keycloak.DisableDefaultServiceMonitor }}
-  {{- end }}
+  # Manage ServiceMonitor, PrometheusRules, GrafanaDashboard outside of operator
+  DisableDefaultServiceMonitor: true
   {{- if .Values.keycloak.extensions }}
   extensions:
     {{- range $extensionKey, $extensionValue := .Values.keycloak.extensions }}
