@@ -1,0 +1,27 @@
+annotations:
+  category: DeveloperTools
+apiVersion: v1
+name: argo-crds
+version: 1.0.0
+appVersion: "v1.0.0"
+description: Manage argo CRDs
+keywords:
+  - argo
+  - workflow
+  - crds
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/argo-crds
+  - https://raw.githubusercontent.com/argoproj/argo-workflows/master/manifests/quick-start-postgres.yaml
+engine: gotpl
+icon: https://raw.githubusercontent.com/jetstack/cert-manager/master/logo/logo.png
+maintainers:
+- name: desaintmartin
+  email: cdesaintmartin@wiremind.io
+- name: machine424
+  email: amrini@wiremind.io
+- name: francoisminaud
+  email: fminaud@wiremind.io
+- name: maxime1907
+  email: 19607336+maxime1907@users.noreply.github.com
+- name: chrysgide
+  email: ctcheumadjeu@wiremind.io
