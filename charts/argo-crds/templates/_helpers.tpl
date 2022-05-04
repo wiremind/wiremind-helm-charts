@@ -16,7 +16,7 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "argo-crds.labels" -}}
-helm.sh/chart: {{ include "cert-manager-crds.chart" . }}
+helm.sh/chart: {{ include "argo-crds.chart" . }}
 {{ include "argo-crds.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
@@ -28,7 +28,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "argo-crds.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "cert-manager-crds.name" . }}
+app.kubernetes.io/name: {{ include "argo-crds.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
