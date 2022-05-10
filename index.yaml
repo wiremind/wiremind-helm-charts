@@ -1130,6 +1130,34 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/dex-k8s-authenticator-1.5.0/dex-k8s-authenticator-1.5.0.tgz
     version: 1.5.0
+  docker-hub-rate-limit-exporter:
+  - apiVersion: v2
+    appVersion: version-1.5
+    created: "2022-05-10T15:41:06.493781622Z"
+    description: Export your current docker hub rate limit status to prometheus.
+    digest: efec9db7cd14f76e8f3fbb283e7e5c09eecfec2c8e270c6fd546bdb17590bbbb
+    home: https://github.com/viadee/docker-hub-rate-limit-exporter/
+    icon: https://raw.githubusercontent.com/viadee/docker-hub-rate-limit-exporter/main/charts/docker-hub-rate-limit-exporter-chart/icon.png
+    keywords:
+    - docker
+    - hub
+    - rate
+    - limit
+    - exporter
+    maintainers:
+    - email: sebastian.sirch@viadee.de
+      name: sebastiansirch
+    - email: frank.koehne@viadee.de
+      name: fkoehne
+    - email: marius.stein@viadee.de
+      name: mstein11
+    name: docker-hub-rate-limit-exporter
+    sources:
+    - https://github.com/viadee/docker-hub-rate-limit-exporter/
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/docker-hub-rate-limit-exporter-0.3.0/docker-hub-rate-limit-exporter-0.3.0.tgz
+    version: 0.3.0
   druid:
   - apiVersion: v2
     appVersion: 0.21.1
@@ -4809,4 +4837,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2022-05-08T19:40:00.821754433Z"
+generated: "2022-05-10T15:41:06.494893536Z"
