@@ -49,11 +49,23 @@ keycloak:
 keycloakRealms:
   - realm:
       # General
-      name: "Basic"
-      displayName: "Basic Realm 1"
-      displayNameHtml: "<h1>Basic Realm</h1>"
-      emailTheme: "qrm-website"
-      loginTheme: "qrm-website"
+      name: "backoffice"
+      displayName: "Backoffice Realm 1"
+      displayNameHtml: "<h1>Backoffice Realm</h1>"
+      emailTheme: "app-website"
+      loginTheme: "app-website"
+      defaultRole:
+        name: "default-roles-backoffice-test"
+        description: "${role_default-roles}"
+        composite: true
+        composites:
+          realm:
+            - "admin"
+      roles:
+        realm:
+          - name: "admin"
+            description: "App admins"
+            composite: false
   - realm:
       # General
       name: "Test"
@@ -64,7 +76,19 @@ keycloakClients:
   - client:
       # Required
       clientId: "clientId_basic"
-    realmName: "Basic"
+      defaultClientScopes:
+        - "acr"
+        - "email"
+        - "profile"
+        - "roles"
+        - "web-origins"
+      optionalClientScopes:
+        - "acr"
+        - "address"
+        - "microprofile-jwt"
+        - "offline_access"
+        - "phone"
+    realmName: "backoffice"
   - client:
       # Required
       clientId: "clientId_test"
@@ -78,6 +102,8 @@ keycloakUsers:
       lastName: "Doe"
       email: "user@example.com"
       emailVerified: false
+      realmRoles:
+        - "default-roles-backoffice-test"
     realmName: "Basic"
   - user:
       # Required
