@@ -3633,6 +3633,35 @@ entries:
       category: DeveloperTools
     apiVersion: v2
     appVersion: 18.0.0-legacy
+    created: "2022-05-25T13:42:13.162819261Z"
+    description: Keycloak is a high performance Java-based identity and access management
+      solution. It lets developers add an authentication layer to their applications
+      with minimum effort.
+    digest: 3138a82d0ea1ac96b630c1345ddd18e99bad9c684bbeaaa5bb91f437d2a814f8
+    icon: https://www.keycloak.org/resources/images/keycloak_icon_512px.svg
+    keywords:
+    - keycloak
+    - operator
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    - email: 19607336+maxime1907@users.noreply.github.com
+      name: maxime1907
+    name: keycloak-operator
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/keycloak-operator
+    - https://github.com/keycloak/keycloak-operator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/keycloak-operator-0.0.13/keycloak-operator-0.0.13.tgz
+    version: 0.0.13
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 18.0.0-legacy
     created: "2022-05-04T13:36:12.733216198Z"
     description: Keycloak is a high performance Java-based identity and access management
       solution. It lets developers add an authentication layer to their applications
@@ -4893,4 +4922,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2022-05-16T20:20:57.211993166Z"
+generated: "2022-05-25T13:42:13.163679456Z"
