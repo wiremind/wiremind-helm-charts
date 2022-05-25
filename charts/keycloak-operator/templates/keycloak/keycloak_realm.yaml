@@ -107,6 +107,10 @@ spec:
       {{- end }}
     {{- end }}
     {{- if $realmValue.realm.roles }}
+    {{- if $realmValue.realm.defaultRole }}
+    defaultRole:
+{{ toYaml $realmValue.realm.defaultRole | trim | indent 6 }}
+    {{- end }}
     # Roles
     roles:
       {{- if $realmValue.realm.roles.realm }}

@@ -259,6 +259,13 @@ keycloakRealms:
               - "customer"
             self: ""
       # Roles
+      defaultRole:
+        name: "default-roles-backoffice-test"
+        description: "${role_default-roles}"
+        composite: true
+        composites:
+          realm:
+            - "admin"
       roles:
         realm:
           - name: test1
@@ -452,6 +459,7 @@ keycloakUsers:
           temporary: true
       realmRoles:
         - "offline_access"
+        - "default-roles-backoffice-test"
       clientRoles:
         account:
           - "manage-account"
