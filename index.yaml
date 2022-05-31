@@ -4283,6 +4283,19 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/kubemod-0.1.0/kubemod-0.1.0.tgz
     version: 0.1.0
+  kubemod-crds:
+  - apiVersion: v2
+    appVersion: 0.13.0
+    created: "2022-05-31T16:37:26.707988128Z"
+    description: A Helm chart to manage Kubemod CRDs
+    digest: 4651c415d58add101601b98a3dc889ab9d6f59e42beb13f08299893fc0a41b7e
+    maintainers:
+    - email: platform@wiremind.io
+      name: Wiremind
+    name: kubemod-crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/kubemod-crds-0.3.1/kubemod-crds-0.3.1.tgz
+    version: 0.3.1
   nginx:
   - apiVersion: v2
     created: "2020-11-24T16:08:07.975878328Z"
@@ -4922,4 +4935,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2022-05-25T13:42:13.163679456Z"
+generated: "2022-05-31T16:37:26.708489331Z"
