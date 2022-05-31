@@ -1,0 +1,9 @@
+apiVersion: v2
+name: kubemod-crds
+description: A Helm chart to manage Kubemod CRDs
+# Refer to Kubemod Chart version (https://github.com/kubemod/kubemod-helm)
+version: 0.3.0
+appVersion: 0.13.0
+maintainers:
+  - name: Wiremind
+    email: platform@wiremind.io
