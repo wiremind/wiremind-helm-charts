@@ -1,6 +1,6 @@
 apiVersion: v2
 name: dex
-version: 2.15.5
+version: 2.15.6
 appVersion: 2.24.0
 description: OpenID Connect Identity (OIDC) and OAuth 2.0 Provider with Pluggable Connectors
 keywords:
