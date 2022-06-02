@@ -8,10 +8,4 @@ All charts are visible from the Artifact Hub: https://artifacthub.io/packages/se
 
 ## CRDs charts
 
-To update CRDs of a specific chart, please refer to its README.md
-
-Then you need to execute the following script to add labels:
-
-```
-bash scripts/add_crd_labels.sh path/to/chart-crds
-```
+To update CRDs of a specific chart, please refer to its README.md, if there is none, just copy paste the upstream CRDs into ours.
