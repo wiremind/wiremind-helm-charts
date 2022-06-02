@@ -1,11 +1,11 @@
 apiVersion: v2
 name: clair
 home: https://coreos.com/clair
-version: 0.2.9
+version: 0.2.10-dev0
 appVersion: 2.1.6
 dependencies:
   - name: postgresql
-    version: "10.0.0"
+    version: "10.16.2"
     condition: postgresql.enabled
     repository: "https://charts.bitnami.com/bitnami"
 description: Clair is an open source project for the static analysis of vulnerabilities in application containers.
