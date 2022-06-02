@@ -1,7 +1,0 @@
-fullnameOverride: druid
-
-zookeeper:
-  fullnameOverride: druid-zookeeper
-
-envVars:
-  druid_zk_service_host: "druid-zookeeper:2181"
