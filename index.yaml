@@ -3175,6 +3175,34 @@ entries:
       category: DeveloperTools
     apiVersion: v2
     appVersion: 1.12.0
+    created: "2022-06-02T17:17:40.830434522Z"
+    description: Manage istio-operator CRDs
+    digest: e70c27629bceebc678ef06dd343a84df176851c3cfb0dbd60027360d070fc7ed
+    icon: https://istio.io/latest/favicons/android-192x192.png
+    keywords:
+    - istio
+    - operator
+    - crds
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    - email: 19607336+maxime1907@users.noreply.github.com
+      name: maxime1907
+    name: istio-operator-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/istio-operator-crds
+    - https://github.com/istio/istio/tree/master/operator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/istio-operator-crds-1.12.4/istio-operator-crds-1.12.4.tgz
+    version: 1.12.4
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 1.12.0
     created: "2022-05-16T20:20:57.210841369Z"
     description: Manage istio-operator CRDs
     digest: 571c1a71f2d373aa265a344a0c81385bfc7bd875b1afdbc9d1da1bc16fb3301c
@@ -5018,4 +5046,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2022-06-02T10:43:44.160252128Z"
+generated: "2022-06-02T17:17:40.831051426Z"
