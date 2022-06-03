@@ -2,7 +2,7 @@
 {{- $fullName := include "dex.fullname" . -}}
 {{- $servicePort := .Values.ports.web.servicePort -}}
 {{- $ingressPath := .Values.ingress.path -}}
-{{- $use_networking_v1 := semverCompare ">= 1.19.0" .Capabilities.KubeVersion.Version -}}
+{{- $use_networking_v1 := semverCompare ">= 1.19.0" (regexReplaceAll "v?([^+-]*).*" .Capabilities.KubeVersion.Version "${1}") -}}
 apiVersion: {{ $use_networking_v1 | ternary "networking.k8s.io/v1" "extensions/v1beta1" }}
 kind: Ingress
 metadata:
