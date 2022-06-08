@@ -15,7 +15,7 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: 3310
+      targetPort: clamavport
       protocol: TCP
       name: clamavport
     {{- if .Values.service.nodePort }}
