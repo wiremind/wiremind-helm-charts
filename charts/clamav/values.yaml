@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: mailu/clamav
+  repository: clamav/clamav
   tag: ""  # If not defined, uses appVersion
   pullPolicy: IfNotPresent
 
@@ -51,14 +51,20 @@ ingress:
 
 ## Ref: https://linux.die.net/man/5/clamd.conf
 ## Note: will completely override default clamd.conf file at https://github.com/Mailu/Mailu/tree/master/optional/clamav/conf
-clamdConfig: ""
+clamdConfig: |
+  # Set pid file to world writeable path
+  PidFile /tmp/clamd.pid
+
 # Example:
 # clamdConfig: |
 #   MaxScanSize 1000M
 
 ## Ref: https://linux.die.net/man/5/freshclam.conf
 ## Note: will completely override default clamd.conf file at https://github.com/Mailu/Mailu/tree/master/optional/clamav/conf
-freshclamConfig: ""
+freshclamConfig: |
+  # Set pid file to world writeable path
+  PidFile /tmp/freshclam.pid
+
 # Example:
 # freshclamConfig: |
 #   Checks 25
