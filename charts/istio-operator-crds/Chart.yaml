@@ -2,8 +2,8 @@ annotations:
   category: DeveloperTools
 apiVersion: v2
 name: istio-operator-crds
-version: 1.12.4
-appVersion: "1.12.0"
+version: 1.14.1
+appVersion: "1.14.1"
 description: Manage istio-operator CRDs
 keywords:
   - istio
