@@ -32,6 +32,8 @@ data:
   CHARTREUSE_UPGRADE_BEFORE_DEPLOYMENT: ""
 {{- end }}
 
+  CHARTREUSE_ALEMBIC_DIRECTORY_PATH: {{ .Values.alembic.directoryPath }}
+
   CHARTREUSE_MIGRATE_CONTAINER_IMAGE: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
   CHARTREUSE_MIGRATE_IMAGE_PULL_SECRET: "{{ .Values.image.pullSecret }}"
   CHARTREUSE_RELEASE_NAME: {{ .Release.Name }}
