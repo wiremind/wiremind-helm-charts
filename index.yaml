@@ -457,6 +457,32 @@ entries:
     version: 1.7.1
   chartreuse:
   - apiVersion: v1
+    appVersion: 4.0.5
+    created: "2022-08-01T13:29:25.036879096Z"
+    description: Automate Alembic SQL schema migrations.
+    digest: b21056ccfe81dac1fb315851ea60d8039176eedc2245d8556ee89118cc6762ad
+    keywords:
+    - alembic
+    - database
+    - migration
+    - postgresql
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    - email: 19607336+maxime1907@users.noreply.github.com
+      name: maxime1907
+    name: chartreuse
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/chartreuse
+    - https://github.com/wiremind/chartreuse
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/chartreuse-4.0.5/chartreuse-4.0.5.tgz
+    version: 4.0.5
+  - apiVersion: v1
     appVersion: 4.0.0
     created: "2021-10-04T13:51:20.813286282Z"
     description: Automate Alembic SQL schema migrations.
@@ -5174,4 +5200,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2022-07-19T09:16:33.713475623Z"
+generated: "2022-08-01T13:29:25.037934708Z"
