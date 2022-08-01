@@ -16,6 +16,10 @@ spec:
 {{ include "chartreuse.labels" . | indent 8 }}
         app.kubernetes.io/component: chartreuse-upgrade{{ template "chartreuse.hook.suffix" . }}
         {{ .Release.Name }}-postgresql-client: "true"
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       {{- if .Values.priorityClassName }}
       priorityClassName: "{{ .Values.priorityClassName }}"
@@ -57,3 +61,15 @@ spec:
           env:
       serviceAccountName: {{ template "chartreuse.serviceAccountName" . }}{{ template "chartreuse.hook.suffix" . }}
       terminationGracePeriodSeconds: 0
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
