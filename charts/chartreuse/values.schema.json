@@ -31,6 +31,12 @@
                 },
                 "username": {
                     "type": "string"
+                },
+                "directoryPath": {
+                    "type": "string"
+                },
+                "configPath": {
+                    "type": "string"
                 }
             }
         },

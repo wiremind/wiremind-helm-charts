@@ -33,6 +33,7 @@ data:
 {{- end }}
 
   CHARTREUSE_ALEMBIC_DIRECTORY_PATH: {{ .Values.alembic.directoryPath }}
+  CHARTREUSE_ALEMBIC_CONFIG_FILE_PATH: {{ .Values.alembic.configPath }}
 
   CHARTREUSE_MIGRATE_CONTAINER_IMAGE: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
   CHARTREUSE_MIGRATE_IMAGE_PULL_SECRET: "{{ .Values.image.pullSecret }}"
