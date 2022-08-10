@@ -1,0 +1,24 @@
+annotations:
+  category: DeveloperTools
+apiVersion: v2
+name: dask-crds
+version: 2022.6.1
+appVersion: 2022.6.1
+description: Manage dask CRDs
+keywords:
+  - dask
+  - gateway
+  - crds
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/dask-crds
+  - https://github.com/dask/dask-gateway/tree/main/resources/helm/dask-gateway
+engine: gotpl
+maintainers:
+- name: desaintmartin
+  email: cdesaintmartin@wiremind.io
+- name: machine424
+  email: amrini@wiremind.io
+- name: francoisminaud
+  email: fminaud@wiremind.io
+- name: maxime1907
+  email: 19607336+maxime1907@users.noreply.github.com
