@@ -1180,6 +1180,33 @@ entries:
       category: DeveloperTools
     apiVersion: v2
     appVersion: 2022.6.1
+    created: "2022-08-10T14:53:41.309784725Z"
+    description: Manage dask CRDs
+    digest: dce8125a60ce610d0c71236deb360ec5376b7ff765ddb9f17f8056013661273c
+    keywords:
+    - dask
+    - gateway
+    - crds
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    - email: 19607336+maxime1907@users.noreply.github.com
+      name: maxime1907
+    name: dask-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/dask-crds
+    - https://github.com/dask/dask-gateway/tree/main/resources/helm/dask-gateway
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/dask-crds-2022.6.2/dask-crds-2022.6.2.tgz
+    version: 2022.6.2
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 2022.6.1
     created: "2022-08-10T13:40:49.666915254Z"
     description: Manage dask CRDs
     digest: e6ea72d958f489bfce2bb570816da81249f20f75a938c84702d904e477802b16
@@ -5280,4 +5307,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2022-08-10T13:40:49.667578063Z"
+generated: "2022-08-10T14:53:41.310302351Z"
