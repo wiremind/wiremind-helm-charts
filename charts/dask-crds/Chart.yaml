@@ -1,19 +1,18 @@
 annotations:
   category: DeveloperTools
 apiVersion: v2
-name: istio-operator-crds
-version: 1.14.1
-appVersion: "1.14.1"
-description: Manage istio-operator CRDs
+name: dask-crds
+version: 2022.6.2
+appVersion: 2022.6.1
+description: Manage dask CRDs
 keywords:
-  - istio
-  - operator
+  - dask
+  - gateway
   - crds
 sources:
-  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/istio-operator-crds
-  - https://github.com/istio/istio/tree/master/operator
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/dask-crds
+  - https://github.com/dask/dask-gateway/tree/main/resources/helm/dask-gateway
 engine: gotpl
-icon: https://istio.io/latest/favicons/android-192x192.png
 maintainers:
 - name: desaintmartin
   email: cdesaintmartin@wiremind.io

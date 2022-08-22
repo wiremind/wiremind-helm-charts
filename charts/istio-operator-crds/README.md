@@ -1,9 +1,21 @@
 # istio-operator-crds
 
-Helm chart for deploying Keycloak Operator CRDs.
+Helm chart for deploying Istio Operator CRDs.
 
 ### How to update the Chart
 
 The Chart has the same version as the `istio-operator`s, try to keep them equal.
 
-CRDs are retrieved from [here](https://github.com/istio/istio/tree/master/manifests/charts/istio-operator/crds).
+CRDs are located here:
+- [Kiali operator](https://github.com/kiali/kiali-operator/blob/v1.30.0/manifests/kiali-ossm/manifests/kiali.monitoringdashboards.crd.yaml)
+- [Istio operator](https://github.com/istio/istio/blob/1.14.1/manifests/charts/base/crds/crd-operator.yaml)
+- [Istio base](https://github.com/istio/istio/blob/1.14.1/manifests/charts/base/crds/crd-all.gen.yaml) but are built by bazel, so you need to do the following instead of just copy pasting:
+
+**Do not forget to change APP_VERSION**
+
+```
+export APP_VERSION=1.14.1
+cd charts/istio-operator-crds
+curl https://raw.githubusercontent.com/istio/istio/$APP_VERSION/manifests/charts/base/crds/crd-all.gen.yaml -L -o crds.yaml
+bash ../../scripts/cut_crds.sh crds.yaml
+```

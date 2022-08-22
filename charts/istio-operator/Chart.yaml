@@ -1,7 +1,7 @@
 apiVersion: v2
 name: istio-operator
-version: 1.12.0
-appVersion: "1.12.0"
+version: 1.14.1
+appVersion: "1.14.1"
 description: Helm chart for deploying Istio operator. This is a carbon-copy of the chart found in https://github.com/istio/istio, with container image versions pinned
 keywords:
   - istio
@@ -18,3 +18,5 @@ maintainers:
   email: amrini@wiremind.io
 - name: francoisminaud
   email: fminaud@wiremind.io
+- name: maxime1907
+  email: 19607336+maxime1907@users.noreply.github.com

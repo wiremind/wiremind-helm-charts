@@ -38,6 +38,8 @@ alembic:
   ## This value is the suffix to append to the Release name to obtain postgresql URL
   ## TODO add support for standalone URL
   urlSuffix: "-postgresql"
+  directoryPath: "/app/alembic"
+  configPath: "alembic.ini"
 
 ## The entry point to use. Unless you want to re-use chartreuse as library in your code
 ## you have no reason to edit it.
@@ -59,3 +61,5 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+podAnnotations: {}
