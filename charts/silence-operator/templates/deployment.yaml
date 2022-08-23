@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "silence-operator.fullname"  . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "silence-operator.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.operator.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "silence-operator.selectorLabels" . | nindent 6 }}
+  strategy: {{- toYaml .Values.operator.updateStrategy | nindent 4 }}
+  template:
+    metadata:
+      labels:
+        {{- include "silence-operator.labels" . | nindent 8 }}
+      annotations:
+        releaseRevision: {{ .Release.Revision | quote }}
+    spec:
+      {{- if .Values.operator.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.operator.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.operator.priorityClassName }}
+      priorityClassName: {{ .Values.operator.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.operator.affinity }}
+      affinity: {{- toYaml .Values.operator.affinity | nindent 8 }}
+      {{- end }}
+      volumes:
+      - name: {{ include "silence-operator.fullname" . }}-configmap
+        configMap:
+          name: {{ include "silence-operator.fullname"  . }}
+          items:
+          - key: config.yml
+            path: config.yml
+      serviceAccountName: {{ include "silence-operator.serviceAccountName"  . }}
+      containers:
+      - name: {{ include "silence-operator.fullname" . }}
+        image: "{{ .Values.image.name }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        args:
+        - daemon
+        - --config.dirs=/var/run/{{ include "silence-operator.name" . }}/configmap/
+        - --config.files=config
+        volumeMounts:
+        - name: {{ include "silence-operator.fullname" . }}-configmap
+          mountPath: /var/run/{{ include "silence-operator.name" . }}/configmap/
+        ports:
+          - name: server
+            containerPort: {{ .Values.operator.containerPorts.server }}
+        {{- if .Values.operator.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: {{ .Values.operator.containerPorts.server }}
+          initialDelaySeconds: {{ .Values.operator.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.operator.livenessProbe.periodSeconds }}
+          # One second longer than command timeout should prevent generation of zombie processes.
+          timeoutSeconds: {{ add1 .Values.operator.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.operator.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.operator.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.operator.resources }}
+        resources: {{- toYaml .Values.operator.resources | nindent 10 }}
+        {{- end }}
+        {{- if .Values.operator.containerSecurityContext.enabled }}
+        securityContext: {{- omit .Values.operator.containerSecurityContext "enabled" | toYaml | nindent 10 }}
+        {{- end }}

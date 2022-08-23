@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "silence-operator.fullname"  . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "silence-operator.labels" . | nindent 4 }}
+data:
+  config.yml: |
+    server:
+      enable:
+        debug:
+          server: {{ .Values.operator.config.server.debug }}
+      listen:
+        address: "http://0.0.0.0:{{ .Values.operator.containerPorts.server }}"
+    service:
+      alertmanager:
+        address: "{{ .Values.operator.config.alertmanager.service.address }}"
+      kubernetes:
+        address: "{{ .Values.operator.config.kubernetes.service.address }}"
+        inCluster: {{ .Values.operator.config.kubernetes.service.inCluster }}
+        tls:
+          caFile: "{{ .Values.tls.certCAFilename }}"
+          crtFile: "{{ .Values.tls.certFilename }}"
+          keyFile: "{{ .Values.tls.certKeyFilename }}"
