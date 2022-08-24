@@ -5,6 +5,7 @@
 replicaCount: 1
 
 image:
+  # TODO: Switch to clamav/clamav container
   repository: mailu/clamav
   tag: ""  # If not defined, uses appVersion
   pullPolicy: IfNotPresent
@@ -19,6 +20,16 @@ imagePullSecrets: []
 
 nameOverride: ""
 fullnameOverride: ""
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 2000
+  runAsGroup: 2000
+
+securityContext:
+  capabilities:
+    drop:
+      - ALL
 
 service:
   type: ClusterIP
@@ -41,17 +52,90 @@ ingress:
 
 ## Ref: https://linux.die.net/man/5/clamd.conf
 ## Note: will completely override default clamd.conf file at https://github.com/Mailu/Mailu/tree/master/optional/clamav/conf
-clamdConfig: ""
-# Example:
-# clamdConfig: |
-#   MaxScanSize 1000M
+clamdConfig: |
+  ###############
+  # General
+  ###############
+
+  DatabaseDirectory /data
+  TemporaryDirectory /tmp
+  LogTime yes
+  # CUSTOM: Use pid file in tmp
+  PidFile /tmp/clamd.pid
+  LocalSocket /tmp/clamd.sock
+  # CUSTOM: Set local socket group to defined group id
+  LocalSocketGroup 2000
+  TCPSocket 3310
+  Foreground yes
+
+  ###############
+  # Results
+  ###############
+
+  DetectPUA yes
+  ExcludePUA NetTool
+  ExcludePUA PWTool
+  HeuristicAlerts yes
+  Bytecode yes
+
+  ###############
+  # Scan
+  ###############
+
+  ScanPE yes
+  DisableCertCheck yes
+  ScanELF yes
+  AlertBrokenExecutables yes
+  ScanOLE2 yes
+  ScanPDF yes
+  ScanSWF yes
+  ScanMail yes
+  PhishingSignatures yes
+  PhishingScanURLs yes
+  ScanHTML yes
+  ScanArchive yes
+
+  ###############
+  # Scan
+  ###############
+
+  MaxScanSize 150M
+  MaxFileSize 30M
+  MaxRecursion 10
+  MaxFiles 15000
+  MaxEmbeddedPE 10M
+  MaxHTMLNormalize 10M
+  MaxHTMLNoTags 2M
+  MaxScriptNormalize 5M
+  MaxZipTypeRcg 1M
+  MaxPartitions 128
+  MaxIconsPE 200
+  PCREMatchLimit 10000
+  PCRERecMatchLimit 10000
 
 ## Ref: https://linux.die.net/man/5/freshclam.conf
 ## Note: will completely override default clamd.conf file at https://github.com/Mailu/Mailu/tree/master/optional/clamav/conf
-freshclamConfig: ""
-# Example:
-# freshclamConfig: |
-#   Checks 25
+freshclamConfig: |
+  ###############
+  # General
+  ###############
+
+  DatabaseDirectory /data
+  UpdateLogFile /dev/stdout
+  LogTime yes
+  # CUSTOM: Use pid file in tmp
+  PidFile /tmp/freshclam.pid
+  # CUSTOM: Set defined user
+  DatabaseOwner 2000
+
+  ###############
+  # Updates
+  ###############
+
+  DatabaseMirror database.clamav.net
+  ScriptedUpdates yes
+  NotifyClamd /etc/clamav/clamd.conf
+  Bytecode yes
 
 # Use freshclamConfig to define the content of /etc/clamav/freshclam.conf. Example:
 # freshclamConfig: |
