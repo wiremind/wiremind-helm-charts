@@ -1,3 +1,4 @@
+{{- if .Values.psp.create }}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
@@ -30,3 +31,4 @@ spec:
   hostNetwork: false
   hostIPC: false
   hostPID: false
+{{- end }}
