@@ -1,0 +1,61 @@
+{{- if .Values.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "silence-operator.fullname"  . }}
+  labels:
+    {{- include "silence-operator.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - "monitoring.giantswarm.io"
+    resources:
+      - silences
+    verbs:
+      - "*"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "silence-operator.fullname"  . }}
+  labels:
+    {{- include "silence-operator.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "silence-operator.serviceAccountName"  . }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "silence-operator.fullname"  . }}
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "silence-operator.fullname"  . }}-psp
+  labels:
+    {{- include "silence-operator.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - extensions
+    resources:
+      - podsecuritypolicies
+    verbs:
+      - use
+    resourceNames:
+      - {{ include "silence-operator.fullname"  . }}-psp
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "silence-operator.fullname"  . }}-psp
+  labels:
+    {{- include "silence-operator.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "silence-operator.serviceAccountName"  . }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "silence-operator.fullname"  . }}-psp
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}

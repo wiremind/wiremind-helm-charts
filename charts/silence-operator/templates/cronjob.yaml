@@ -1,0 +1,101 @@
+{{- if .Values.sync.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "silence-operator.fullname"  . }}-sync
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "silence-operator.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.sync.schedule | quote }}
+  successfulJobsHistoryLimit: {{ .Values.sync.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.sync.failedJobsHistoryLimit }}
+  startingDeadlineSeconds: {{ .Values.sync.startingDeadlineSeconds }}
+  concurrencyPolicy: {{ .Values.sync.concurrencyPolicy | quote }}
+  jobTemplate:
+    metadata:
+      labels:
+        {{- include "silence-operator.labels" . | nindent 8 }}
+      annotations:
+        releaseRevision: {{ .Release.Revision | quote }}
+    spec:
+      template:
+        metadata:
+          labels:
+            {{- include "silence-operator.labels" . | nindent 12 }}
+          annotations:
+            releaseRevision: {{ .Release.Revision | quote }}
+        spec:
+          {{- if .Values.sync.podSecurityContext.enabled }}
+          securityContext: {{- omit .Values.sync.podSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.sync.priorityClassName }}
+          priorityClassName: {{ .Values.sync.priorityClassName | quote }}
+          {{- end }}
+          {{- if .Values.sync.affinity }}
+          affinity: {{- toYaml .Values.sync.affinity | nindent 12 }}
+          {{- end }}
+          serviceAccountName: {{ include "silence-operator.serviceAccountName"  . }}
+          initContainers:
+          - name: {{ include "silence-operator.fullname"  . }}-pull-silences
+            image: "{{ .Values.sync.init.image.name }}:{{ .Values.sync.init.image.tag }}"
+            imagePullPolicy: {{ .Values.sync.init.image.pullPolicy | quote }}
+            args:
+            - clone
+            - --depth=1
+            - https://$(GIT_USER):$(GIT_PASSWORD)@$(GIT_PASSWORD)
+            - /data/silences
+            env:
+            - name: GIT_REPOSITORY
+              valueFrom:
+                secretKeyRef:
+                  key: git-repository
+                  name: {{ include "silence-operator.fullname"  . }}
+            - name: GIT_USER
+              valueFrom:
+                secretKeyRef:
+                  key: git-user
+                  name: {{ include "silence-operator.fullname"  . }}
+            - name: GIT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: git-password
+                  name: {{ include "silence-operator.fullname"  . }}
+            volumeMounts:
+            - mountPath: /data
+              name: silences
+              readOnly: false
+            {{- if .Values.sync.init.resources }}
+            resources: {{- toYaml .Values.sync.init.resources | nindent 14 }}
+            {{- end }}
+            {{- if .Values.sync.init.containerSecurityContext.enabled }}
+            securityContext: {{- omit .Values.sync.init.containerSecurityContext "enabled" | toYaml | nindent 14 }}
+            {{- end }}
+          containers:
+          - name: {{ include "silence-operator.fullname"  . }}-sync-silences
+            image: "{{ .Values.image.name }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+            args:
+            - sync
+            - --dir=/data/silences
+            - --kubernetes.incluster=true
+            {{- range $targetTag := default dict .Values.sync.targetTags }}
+            - --tag={{ $targetTag.name }}={{ $targetTag.value }}
+            {{- end }}
+            imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+            volumeMounts:
+            - mountPath: /data
+              name: silences
+              readOnly: true
+            {{- if .Values.sync.resources }}
+            resources: {{- toYaml .Values.sync.resources | nindent 14 }}
+            {{- end }}
+            {{- if .Values.sync.containerSecurityContext.enabled }}
+            securityContext: {{- omit .Values.sync.containerSecurityContext "enabled" | toYaml | nindent 14 }}
+            {{- end }}
+          dnsPolicy: {{ .Values.sync.dnsPolicy }}
+          restartPolicy: {{ .Values.sync.restartPolicy }}
+          schedulerName: {{ .Values.sync.schedulerName }}
+          volumes:
+          - name: silences
+            emptyDir: {}
+{{- end }}

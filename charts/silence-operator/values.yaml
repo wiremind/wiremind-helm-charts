@@ -1,0 +1,134 @@
+image:
+  # https://hub.docker.com/r/giantswarm/silence-operator
+  # https://quay.io/repository/giantswarm/silence-operator?tab=tags
+  name: "giantswarm/silence-operator"
+  tag: ""
+  pullPolicy: "IfNotPresent"
+
+sync:
+  enabled: false
+
+  init:
+    image:
+      # https://hub.docker.com/r/giantswarm/alpinegit
+      # https://quay.io/repository/giantswarm/alpinegit?tab=tags
+      name: "giantswarm/alpinegit"
+      tag: "v2.26.2-giantswarm"
+      pullPolicy: "IfNotPresent"
+
+    git:
+      # Repository where your Silence CRs are stored
+      repository: "github.com/giantswarm/silences"
+      user: "silence-operator"
+      password: ""
+
+    resources:
+      limits: {}
+      requests:
+        cpu: 100m
+        memory: 220Mi
+
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1000
+      runAsGroup: 1000
+
+  targetTags: []
+    # - name: "cluster"
+    #   value: "kind"
+    # - name: "provider"
+    #   value: "local"
+
+  schedule: "*/5 * * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  startingDeadlineSeconds: 240
+  concurrencyPolicy: Allow
+
+  priorityClassName: ""
+  affinity: {}
+
+  restartPolicy: OnFailure
+  dnsPolicy: ClusterFirst
+  schedulerName: "default-scheduler"
+
+  resources:
+    limits: {}
+    requests:
+      cpu: 100m
+      memory: 220Mi
+
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1000
+
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+
+operator:
+  replicaCount: 1
+
+  config:
+    server:
+      debug: false
+
+    alertmanager:
+      service:
+        address: "http://alertmanager-operated.monitoring:9093"
+
+    kubernetes:
+      service:
+        address: ""
+        inCluster: true
+
+  priorityClassName: ""
+  affinity: {}
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+
+  resources:
+    limits: {}
+    requests:
+      cpu: 100m
+      memory: 220Mi
+
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1000
+
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+
+  containerPorts:
+    server: 8000
+
+  service:
+    ports:
+      server: 8000
+
+serviceAccount:
+  create: true
+  name: ""
+  automountServiceAccountToken: true
+  annotations: {}
+
+tls:
+  certFilename: ""
+  certKeyFilename: ""
+  certCAFilename: ""
+
+rbac:
+  create: false
