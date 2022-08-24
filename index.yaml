@@ -5274,6 +5274,33 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/scrapoxy-0.3.1/scrapoxy-0.3.1.tgz
     version: 0.3.1
+  silence-operator-crds:
+  - apiVersion: v2
+    appVersion: v0.7.0
+    created: "2022-08-24T08:03:26.410133382Z"
+    description: Silence operator manages Alertmanager silences via custom resources.
+    digest: 53df24cd17a64787cf1e63afc20f7479974b1e01e03e4a9ef818cfa1919da6dd
+    icon: https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.png
+    keywords:
+    - silence
+    - operator
+    - crds
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    - email: 19607336+maxime1907@users.noreply.github.com
+      name: maxime1907
+    name: silence-operator-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/silence-operator-crds
+    - https://github.com/giantswarm/silence-operator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/silence-operator-crds-0.0.1/silence-operator-crds-0.0.1.tgz
+    version: 0.0.1
   sshd:
   - apiVersion: v2
     appVersion: "1.0"
@@ -5356,4 +5383,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2022-08-22T14:06:57.97178958Z"
+generated: "2022-08-24T08:03:26.4114108Z"
