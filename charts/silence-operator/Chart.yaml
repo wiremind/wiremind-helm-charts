@@ -1,6 +1,6 @@
 apiVersion: v2
 name: silence-operator
-version: 0.0.1
+version: 0.0.2
 appVersion: "0.7.0-a65f8453873ad6247b753528cec63f94fd0c8fa7"
 description: Silence operator manages Alertmanager silences via custom resources.
 keywords:

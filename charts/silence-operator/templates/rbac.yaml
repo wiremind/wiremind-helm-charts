@@ -28,6 +28,7 @@ roleRef:
   name: {{ include "silence-operator.fullname"  . }}
   apiGroup: rbac.authorization.k8s.io
 ---
+{{- if .Values.psp.create }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -58,4 +59,5 @@ roleRef:
   kind: ClusterRole
   name: {{ include "silence-operator.fullname"  . }}-psp
   apiGroup: rbac.authorization.k8s.io
+{{- end }}
 {{- end }}
