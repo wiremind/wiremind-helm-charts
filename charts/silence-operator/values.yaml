@@ -135,3 +135,6 @@ tls:
 
 rbac:
   create: false
+
+# You can deploy your Silence CRs here
+extraDeploy: []
