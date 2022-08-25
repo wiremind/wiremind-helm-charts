@@ -1,0 +1,4 @@
+{{- range $extraDeploy := .Values.extraDeploy }}
+---
+{{ toYaml $extraDeploy }}
+{{- end }}
