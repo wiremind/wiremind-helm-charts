@@ -2,8 +2,8 @@ annotations:
   category: DeveloperTools
 apiVersion: v2
 name: kube-prometheus-stack-crds
-version: 35.5.1
-appVersion: 0.56.0
+version: 39.9.0
+appVersion: 0.58.0
 description: Manage kube-prometheus-stack CRDs
 kubeVersion: ">=1.16.0-0"
 keywords:
