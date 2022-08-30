@@ -9,18 +9,33 @@ sync:
   enabled: false
 
   init:
-    image:
-      # https://hub.docker.com/r/giantswarm/alpinegit
-      # https://quay.io/repository/giantswarm/alpinegit?tab=tags
-      name: "giantswarm/alpinegit"
-      tag: "v2.26.2-giantswarm"
-      pullPolicy: "IfNotPresent"
+    # Different method to get your Silence CRs
+    # Enable only one of these
+    method:
+      kubernetes:
+        enabled: false
+        image:
+          # https://hub.docker.com/r/bitnami/kubectl
+          name: "bitnami/kubectl"
+          tag: "1.24"
+          pullPolicy: "IfNotPresent"
 
-    git:
-      # Repository where your Silence CRs are stored
-      repository: "github.com/giantswarm/silences"
-      user: "silence-operator"
-      password: ""
+        kubectlNeatVersion: "v2.0.3"
+        yqVersion: "v4.27.3"
+
+      git:
+        enabled: false
+        image:
+          # https://hub.docker.com/r/giantswarm/alpinegit
+          # https://quay.io/repository/giantswarm/alpinegit?tab=tags
+          name: "giantswarm/alpinegit"
+          tag: "v2.26.2-giantswarm"
+          pullPolicy: "IfNotPresent"
+
+        # Repository where your Silence CRs are stored
+        repository: "github.com/giantswarm/silences"
+        user: "silence-operator"
+        password: ""
 
     resources:
       limits: {}

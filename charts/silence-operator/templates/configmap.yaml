@@ -23,3 +23,18 @@ data:
           caFile: "{{ .Values.tls.certCAFilename }}"
           crtFile: "{{ .Values.tls.certFilename }}"
           keyFile: "{{ .Values.tls.certKeyFilename }}"
+
+---
+
+{{- if and .Values.sync.enabled .Values.sync.init.method.kubernetes.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "silence-operator.fullname"  . }}-kube
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "silence-operator.labels" . | nindent 4 }}
+data:
+  kubectl-neat-version: {{ .Values.sync.init.method.kubernetes.kubectlNeatVersion | quote }}
+  kubectl-yq-version: {{ .Values.sync.init.method.kubernetes.yqVersion | quote }}
+{{- end }}

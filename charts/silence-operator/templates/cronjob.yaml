@@ -37,9 +37,10 @@ spec:
           {{- end }}
           serviceAccountName: {{ include "silence-operator.serviceAccountName"  . }}
           initContainers:
+          {{- if .Values.sync.init.method.git.enabled }}
           - name: {{ include "silence-operator.fullname"  . }}-pull-silences
-            image: "{{ .Values.sync.init.image.name }}:{{ .Values.sync.init.image.tag }}"
-            imagePullPolicy: {{ .Values.sync.init.image.pullPolicy | quote }}
+            image: "{{ .Values.sync.init.method.git.image.name }}:{{ .Values.sync.init.method.git.image.tag }}"
+            imagePullPolicy: {{ .Values.sync.init.method.git.image.pullPolicy | quote }}
             args:
             - clone
             - --depth=1
@@ -50,17 +51,17 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: git-repository
-                  name: {{ include "silence-operator.fullname"  . }}
+                  name: {{ include "silence-operator.fullname"  . }}-git
             - name: GIT_USER
               valueFrom:
                 secretKeyRef:
                   key: git-user
-                  name: {{ include "silence-operator.fullname"  . }}
+                  name: {{ include "silence-operator.fullname"  . }}-git
             - name: GIT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: git-password
-                  name: {{ include "silence-operator.fullname"  . }}
+                  name: {{ include "silence-operator.fullname"  . }}-git
             volumeMounts:
             - mountPath: /data
               name: silences
@@ -71,6 +72,68 @@ spec:
             {{- if .Values.sync.init.containerSecurityContext.enabled }}
             securityContext: {{- omit .Values.sync.init.containerSecurityContext "enabled" | toYaml | nindent 14 }}
             {{- end }}
+          {{- end }}
+          {{- if .Values.sync.init.method.kubernetes.enabled }}
+          - name: {{ include "silence-operator.fullname"  . }}-pull-silences
+            image: "{{ .Values.sync.init.method.kubernetes.image.name }}:{{ .Values.sync.init.method.kubernetes.image.tag }}"
+            imagePullPolicy: {{ .Values.sync.init.method.kubernetes.image.pullPolicy | quote }}
+            command:
+              - /bin/bash
+              - -ec
+              - |
+                cd /data
+                rm -Rf *
+
+                echo -n "Installing kubectl neat $KUBECTL_NEAT_VERSION..."
+                curl -sLO https://github.com/itaysk/kubectl-neat/releases/download/$KUBECTL_NEAT_VERSION/kubectl-neat_linux_amd64.tar.gz >> /dev/null
+                tar -xvf kubectl-neat_linux_amd64.tar.gz >> /dev/null
+                chmod +x kubectl-neat
+                echo "DONE"
+
+                echo -n "Installing yq $KUBECTL_YQ_VERSION..."
+                curl -sLO https://github.com/mikefarah/yq/releases/download/$KUBECTL_YQ_VERSION/yq_linux_amd64.tar.gz >> /dev/null
+                tar -xvf yq_linux_amd64.tar.gz >> /dev/null
+                chmod +x yq_linux_amd64
+                mv yq_linux_amd64 yq
+                echo "DONE"
+
+                echo -n "Retrieving cluster silences..."
+                mkdir -p /data/silences
+                kubectl get silences.monitoring.giantswarm.io --all-namespaces -o yaml | ./kubectl-neat > /data/silences/crs.yaml
+                CR_COUNT=`cat /data/silences/crs.yaml | ./yq '.items | length'`
+                i=0
+                while [ $i -lt $CR_COUNT ]
+                do
+                  silence_name=`cat /data/silences/crs.yaml | ./yq ".items[${i}].metadata.name"`
+                  cat /data/silences/crs.yaml | ./yq ".items[${i}]" > /data/silences/${silence_name}.yaml
+                  ((i=i+1))
+                done
+                rm /data/silences/crs.yaml
+                echo "DONE"
+                echo "Retrieved ${CR_COUNT} silences:"
+                ls /data/silences/*
+            env:
+            - name: KUBECTL_NEAT_VERSION
+              valueFrom:
+                configMapKeyRef:
+                  key: kubectl-neat-version
+                  name: {{ include "silence-operator.fullname"  . }}-kube
+            - name: KUBECTL_YQ_VERSION
+              valueFrom:
+                configMapKeyRef:
+                  key: kubectl-yq-version
+                  name: {{ include "silence-operator.fullname"  . }}-kube
+            volumeMounts:
+            - mountPath: /data
+              name: silences
+              readOnly: false
+            {{- if .Values.sync.init.resources }}
+            resources: {{- toYaml .Values.sync.init.resources | nindent 14 }}
+            {{- end }}
+            {{- if .Values.sync.init.containerSecurityContext.enabled }}
+            securityContext: {{- omit .Values.sync.init.containerSecurityContext "enabled" | toYaml | nindent 14 }}
+            {{- end }}
+          {{- end }}
           containers:
           - name: {{ include "silence-operator.fullname"  . }}-sync-silences
             image: "{{ .Values.image.name }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
