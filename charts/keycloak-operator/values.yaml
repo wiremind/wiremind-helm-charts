@@ -40,6 +40,10 @@ autoscaling:
   labels: {}
   annotations: {}
 
+## Arguments given to keycloak operator executable
+# args:
+#   - --zap-level=error
+
 keycloak:
   enabled: false
   keycloakDeploymentSpec:
