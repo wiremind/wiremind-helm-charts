@@ -36,6 +36,10 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
             - keycloak-operator
+          {{- with .Values.args }}
+          args:
+{{ toYaml . | trim | indent 12 }}
+          {{- end }}
           {{- if .Values.containerSecurityContext }}
           securityContext:
 {{ toYaml .Values.containerSecurityContext | trim | indent 12 }}
