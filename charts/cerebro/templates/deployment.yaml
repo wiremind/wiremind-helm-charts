@@ -114,8 +114,8 @@ spec:
             secretName: {{ .Values.configFromSecretRef }}
     {{- else }}
         - name: config
-          configMap:
-            name: {{ template "cerebro.fullname" . }}
+          secret:
+            secretName: {{ template "cerebro.fullname" . }}
     {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
