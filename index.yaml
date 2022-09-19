@@ -5446,6 +5446,33 @@ entries:
     version: 0.3.1
   silence-operator:
   - apiVersion: v2
+    appVersion: 0.7.0-9f22cc20e399c2779de81ce77f0fb21ec4858245
+    created: "2022-09-19T08:02:24.555564677Z"
+    description: Silence operator manages Alertmanager silences via custom resources.
+    digest: 1bb09b0d667c6fa452ff77ce0a9dbc77d4d2bab95ca3491032f52a32fbbe5b11
+    icon: https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.png
+    keywords:
+    - silence
+    - operator
+    - prometheus
+    - alertmanager
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    - email: 19607336+maxime1907@users.noreply.github.com
+      name: maxime1907
+    name: silence-operator
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/silence-operator
+    - https://github.com/giantswarm/silence-operator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/silence-operator-0.0.5/silence-operator-0.0.5.tgz
+    version: 0.0.5
+  - apiVersion: v2
     appVersion: 0.7.0-a65f8453873ad6247b753528cec63f94fd0c8fa7
     created: "2022-08-31T10:05:53.121378353Z"
     description: Silence operator manages Alertmanager silences via custom resources.
@@ -5662,4 +5689,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2022-09-16T10:31:33.917825632Z"
+generated: "2022-09-19T08:02:24.55639028Z"
