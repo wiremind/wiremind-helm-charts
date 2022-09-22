@@ -62,6 +62,31 @@ entries:
   cerebro:
   - apiVersion: v2
     appVersion: 0.9.4
+    created: "2022-09-22T14:27:32.858006895Z"
+    description: A Helm chart for Cerebro - a web admin tool to manage ElasticSearch
+    digest: 7e396ed436376a041b3472fcc8e2b674055698b5b98560b9137ac66379b7dd0e
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cerebro
+    icon: https://raw.githubusercontent.com/lmenezes/cerebro/main/public/img/logo.png
+    keywords:
+    - cerebro
+    - elasticsearch
+    - admin
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: cerebro
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cerebro
+    - https://github.com/lmenezes/cerebro-docker
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/cerebro-2.0.3/cerebro-2.0.3.tgz
+    version: 2.0.3
+  - apiVersion: v2
+    appVersion: 0.9.4
     created: "2022-06-08T07:23:46.39809116Z"
     description: A Helm chart for Cerebro - a web admin tool to manage ElasticSearch
     digest: 8a89d67268ef38ac35810ce9cae447c2d3868df538f768fca5540214d45b645e
@@ -5689,4 +5714,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2022-09-19T08:02:24.55639028Z"
+generated: "2022-09-22T14:27:32.858619902Z"
