@@ -3154,6 +3154,25 @@ entries:
     version: 3.0.0
   external-monitoring:
   - apiVersion: v2
+    created: "2022-09-28T15:18:08.5654238Z"
+    dependencies:
+    - name: prometheus-blackbox-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 7.1.0
+    description: Simple monitoring for things outside of kubernetes
+    digest: d29d87d1491187c2c959afc57d432d48ba2c3c9590935926962360d08f7144e8
+    maintainers:
+    - email: cdesaintmartin@wiremind.io
+      name: desaintmartin
+    - email: amrini@wiremind.io
+      name: machine424
+    - email: fminaud@wiremind.io
+      name: francoisminaud
+    name: external-monitoring
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/external-monitoring-0.2.4/external-monitoring-0.2.4.tgz
+    version: 0.2.4
+  - apiVersion: v2
     created: "2021-09-27T12:08:56.066147179Z"
     dependencies:
     - name: prometheus-blackbox-exporter
@@ -5829,4 +5848,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2022-09-26T10:28:08.340340741Z"
+generated: "2022-09-28T15:18:08.56598381Z"
