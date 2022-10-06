@@ -1,8 +1,8 @@
 apiVersion: v1
 name: chartreuse
 # NOTE: when setting a development version, please explicitly specify it in e2e test helm chart, otherwise just put *.
-appVersion: 4.2.0
-version: 4.2.0
+appVersion: 4.3.0
+version: 4.3.0
 description: Automate Alembic SQL schema migrations.
 maintainers:
   - name: desaintmartin
