@@ -16,6 +16,6 @@ icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-110x117.
 sources:
   - https://github.com/bitnami/bitnami-docker-postgresql
 maintainers:
-- name: desaintmartin
-  email: cdesaintmartin@wiremind.io
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
 engine: gotpl

@@ -14,9 +14,5 @@ sources:
 engine: gotpl
 icon: https://www.keycloak.org/resources/images/keycloak_icon_512px.svg
 maintainers:
-- name: desaintmartin
-  email: cdesaintmartin@wiremind.io
-- name: machine424
-  email: amrini@wiremind.io
-- name: maxime1907
-  email: 19607336+maxime1907@users.noreply.github.com
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
