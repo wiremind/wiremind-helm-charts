@@ -15,5 +15,5 @@ sources:
   - https://github.com/quay/clair
 maintainers:
   - name: Wiremind
-    email: dev@wiremind.io
+    url: https://github.com/wiremind/wiremind-helm-charts
 kubeVersion: ">=1.14.0-0"

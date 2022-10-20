@@ -9,4 +9,4 @@ sources:
   - https://github.com/francoisminaud/grafana-pdf-exporter
 maintainers:
   - name: Wiremind
-    email: platform@wiremind.io
+    url: https://github.com/wiremind/wiremind-helm-charts

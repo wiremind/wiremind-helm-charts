@@ -12,9 +12,5 @@ sources:
 engine: gotpl
 icon: https://istio.io/latest/favicons/android-192x192.png
 maintainers:
-- name: desaintmartin
-  email: cdesaintmartin@wiremind.io
-- name: machine424
-  email: amrini@wiremind.io
-- name: maxime1907
-  email: 19607336+maxime1907@users.noreply.github.com
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts

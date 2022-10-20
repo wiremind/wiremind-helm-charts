@@ -5,7 +5,5 @@ name: pypi
 version: 0.2.1
 icon: https://raw.githubusercontent.com/pypiserver/pypiserver/master/pypiserver_logo.png
 maintainers:
-- name: desaintmartin
-  email: cdesaintmartin@wiremind.io
-- name: machine424
-  email: amrini@wiremind.io
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts

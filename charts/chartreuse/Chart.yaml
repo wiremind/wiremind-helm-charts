@@ -5,12 +5,8 @@ appVersion: 4.3.0
 version: 4.3.0
 description: Automate Alembic SQL schema migrations.
 maintainers:
-  - name: desaintmartin
-    email: cdesaintmartin@wiremind.io
-  - name: machine424
-    email: amrini@wiremind.io
-  - name: maxime1907
-    email: 19607336+maxime1907@users.noreply.github.com
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
 sources:
   - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/chartreuse
   - https://github.com/wiremind/chartreuse
