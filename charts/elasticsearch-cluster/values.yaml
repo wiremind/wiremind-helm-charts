@@ -398,3 +398,21 @@ cerebro:
 
 ## Array of extra K8s manifests to deploy
 extraObjects: []
+
+## List of queries that will be executed when kibana is up and running
+setup:
+  enabled: false
+  ## priority class to use for the job setup
+  # priorityClassName: my-priority-class
+  # queries:
+  #   indexPatternLogstash:
+  #     enabled: true
+  #     debug: false
+  #     method: POST
+  #     endpoint: "api/index_patterns/index_pattern"
+  #     query: |
+  #       {
+  #         "index_pattern": {
+  #           "title": "hello"
+  #         }
+  #       }

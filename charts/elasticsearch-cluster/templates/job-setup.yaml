@@ -1,0 +1,84 @@
+{{- if .Values.setup.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "elasticsearch-cluster.fullname" . }}-setup
+  labels:
+{{ include "elasticsearch-cluster.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": post-install, post-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": "before-hook-creation, hook-succeeded"
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+{{ include "elasticsearch-cluster.labels" . | indent 8 }}
+    spec:
+      {{- with .Values.setup.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
+      restartPolicy: Never
+      containers:
+        - name: setup
+          image: curlimages/curl:7.79.1
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: setup
+              mountPath: /app/config
+          env:
+            - name: SERVER_URL
+              value: {{ include "elasticsearch-cluster.elasticsearch-url" . }}
+          command:
+            - /bin/sh
+          args:
+            - -c
+            - |
+              echo "Configuring Elasticsearch..."
+              FILES="/app/config/query-*.json"
+              for f in $FILES
+              do
+                echo "Processing $f file..."
+                export QUERY=`cat $f`
+                FILENAME=`basename $f`
+                CONFIG_FILENAME="${FILENAME/query-/}"
+                CONFIG_FILENAME="${CONFIG_FILENAME%.*}"
+                CONFIG_ENV_PATH="/app/config/config-$CONFIG_FILENAME.env"
+
+                source $CONFIG_ENV_PATH
+
+                if [[ "$DEBUG" == "true" ]]; then
+                  set -x
+                fi
+
+                if [[ "$DEBUG" == "true" ]]; then
+                  cat "$f"
+                  cat $CONFIG_ENV_PATH
+                fi
+
+                until curl --silent --show-error "$SERVER_URL/_cluster/health?wait_for_status=yellow&timeout=300s";
+                do
+                  echo "Waiting for elasticsearch";
+                  sleep 10;
+                done;
+
+                RESPONSE=$(curl -X $METHOD --silent --show-error -H 'Content-Type: application/json' "$SERVER_URL/$ENDPOINT" -d "$QUERY");
+
+                if echo "$RESPONSE" | grep -v '{"acknowledged":true}'; then
+                  echo "Success $f"
+                  if [[ "$DEBUG" == "true" ]]; then
+                    echo $RESPONSE
+                  fi
+                else
+                  echo "Failed $f:"
+                fi
+              done
+      terminationGracePeriodSeconds: 0
+      volumes:
+        - name: setup
+          configMap:
+            # Provide the name of the ConfigMap containing the files you want
+            # to add to the container
+            name: {{ include "elasticsearch-cluster.fullname" . }}-setup
+{{- end }}

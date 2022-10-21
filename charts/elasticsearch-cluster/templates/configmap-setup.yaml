@@ -1,0 +1,19 @@
+{{- if .Values.setup.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "elasticsearch-cluster.fullname" . }}-setup
+  labels:
+{{ include "elasticsearch-cluster.labels" . | indent 4 }}
+data:
+  {{- range $queryConfigKey, $queryConfig := .Values.setup.queries }}
+  {{- if $queryConfig.enabled }}
+  query-{{ $queryConfigKey | kebabcase }}.json:
+    {{ $queryConfig.query | toJson | nindent 4 }}
+  config-{{ $queryConfigKey | kebabcase }}.env: |
+    ENDPOINT="{{ $queryConfig.endpoint }}"
+    METHOD="{{ $queryConfig.method }}"
+    DEBUG="{{ hasKey $queryConfig "debug" | ternary $queryConfig.debug false }}"
+  {{- end }}
+  {{- end }}
+{{- end }}
