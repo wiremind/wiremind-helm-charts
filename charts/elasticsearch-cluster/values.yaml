@@ -277,7 +277,7 @@ backup:
 kibana:
   enabled: false
   ## Change me
-  elasticsearchHosts: http://my-elasticsearch-hot-url:9200
+  elasticsearchHosts: http://my-elasticsearch-cluster-data-hot:9200
   resources:
     limits:
       cpu: 2
@@ -394,7 +394,7 @@ cerebro:
     hosts:
       - name: elasticsearch-cluster
         ## Change me
-        host: http://my-elasticsearch-hot-url:9200
+        host: http://my-elasticsearch-cluster-data-hot:9200
 
 ## Array of extra K8s manifests to deploy
 extraObjects: []
@@ -403,14 +403,24 @@ extraObjects: []
 setup:
   enabled: false
   terminationGracePeriodSeconds: 0
-  ## priority class to use for the job setup
+  ttlSecondsAfterFinished: 1800
   # priorityClassName: my-priority-class
+  # annotations:
+  #   "helm.sh/hook": post-install, post-upgrade
+  #   "helm.sh/hook-weight": "1"
+  #   "helm.sh/hook-delete-policy": "before-hook-creation, hook-succeeded"
   # queries:
   #   indexPatternLogstash:
   #     enabled: true
   #     debug: false
-  #     method: POST
+  #     elasticsearchHost: http://my-elasticsearch-cluster-data-hot:9200
+  #     serverUrl: "elasticsearch-cluster-kibana:5601"
   #     endpoint: "api/index_patterns/index_pattern"
+  #     method: "POST"
+  #     headers:
+  #       - "Content-Type: application/json"
+  #       - "osd-xsrf: true"
+  #       - "kbn-xsrf: reporting"
   #     query: |
   #       {
   #         "index_pattern": {

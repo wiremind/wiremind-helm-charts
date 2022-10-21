@@ -5,12 +5,13 @@ metadata:
   name: {{ include "elasticsearch-cluster.fullname" . }}-setup
   labels:
 {{ include "elasticsearch-cluster.labels" . | indent 4 }}
+  {{- with .Values.setup.annotations }}
   annotations:
-    "helm.sh/hook": post-install, post-upgrade
-    "helm.sh/hook-weight": "1"
-    "helm.sh/hook-delete-policy": "before-hook-creation, hook-succeeded"
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   backoffLimit: 0
+  ttlSecondsAfterFinished: {{ .Values.setup.ttlSecondsAfterFinished }}
   template:
     metadata:
       labels:
@@ -27,9 +28,6 @@ spec:
           volumeMounts:
             - name: setup
               mountPath: /app/config
-          env:
-            - name: SERVER_URL
-              value: {{ include "elasticsearch-cluster.elasticsearch-url" . }}
           command:
             - /bin/sh
           args:
@@ -57,22 +55,44 @@ spec:
                   cat $CONFIG_ENV_PATH
                 fi
 
-                until curl --silent --show-error "$SERVER_URL/_cluster/health?wait_for_status=yellow&timeout=300s";
+                while true;
                 do
-                  echo "Waiting for elasticsearch";
-                  sleep 10;
+                  echo "Waiting for elasticsearch"
+                  RESPONSE_HEALTH=`curl --silent --show-error "$ELASTICSEARCH_HOST/_cluster/health?wait_for_status=yellow&timeout=300s"`
+                  if [ "$?" == "0" ]; then
+                    echo $RESPONSE_HEALTH
+                    break
+                  else
+                    echo $RESPONSE_HEALTH
+                    sleep 10;
+                  fi
                 done;
 
-                RESPONSE=$(curl -X $METHOD --silent --show-error -H 'Content-Type: application/json' "$SERVER_URL/$ENDPOINT" -d "$QUERY");
+                HEADERS_CMD=""
+                echo "$HEADERS" | tr ";" '\n' | \
+                {
+                  CURL_CMD="curl -X $METHOD --silent --show-error"
 
-                if echo "$RESPONSE" | grep -v '{"acknowledged":true}'; then
-                  echo "Success $f"
-                  if [[ "$DEBUG" == "true" ]]; then
-                    echo $RESPONSE
+                  while read header;
+                  do
+                    if [ ! -z "$header" ]; then
+                      CURL_CMD="${CURL_CMD} -H \"${header}\""
+                    fi
+                  done
+
+                  CURL_CMD="${CURL_CMD} \"$SERVER_URL/$ENDPOINT\""
+
+                  if [ ! -z '$QUERY' ]; then
+                    QUERY_CMD=\'$QUERY\'
+                    CURL_CMD="${CURL_CMD} -d $QUERY_CMD"
                   fi
-                else
-                  echo "Failed $f:"
-                fi
+
+                  echo "Sending request"
+
+                  RESPONSE=`eval $CURL_CMD`
+
+                  echo $RESPONSE
+                }
               done
       terminationGracePeriodSeconds: {{ .Values.setup.terminationGracePeriodSeconds }}
       volumes:
