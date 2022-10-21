@@ -402,6 +402,7 @@ extraObjects: []
 ## List of queries that will be executed when kibana is up and running
 setup:
   enabled: false
+  terminationGracePeriodSeconds: 0
   ## priority class to use for the job setup
   # priorityClassName: my-priority-class
   # queries:
