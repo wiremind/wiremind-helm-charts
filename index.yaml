@@ -784,6 +784,26 @@ entries:
   clamav:
   - apiVersion: v2
     appVersion: "1.9"
+    created: "2022-10-25T09:56:12.899717756Z"
+    description: An Open-Source antivirus engine for detecting trojans, viruses, malware
+      & other malicious threats. Using Mailu docker image.
+    digest: 9016a0d089824a84d09ed4b0bd181c345ccb175cd30e7d497b931b376d657ea6
+    home: https://www.clamav.net
+    icon: https://www.clamav.net/assets/clamav-trademark.png
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: clamav
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/clamav
+    - https://github.com/Mailu/Mailu/tree/master/optional/clamav
+    - https://hub.docker.com/r/mailu/clamav
+    - https://github.com/Cisco-Talos/clamav-devel
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/clamav-2.6.0/clamav-2.6.0.tgz
+    version: 2.6.0
+  - apiVersion: v2
+    appVersion: "1.9"
     created: "2022-08-24T10:06:53.42328332Z"
     description: An Open-Source antivirus engine for detecting trojans, viruses, malware
       & other malicious threats. Using Mailu docker image.
@@ -6002,4 +6022,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2022-10-21T12:26:00.314623264Z"
+generated: "2022-10-25T09:56:12.902102699Z"
