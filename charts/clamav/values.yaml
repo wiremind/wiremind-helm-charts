@@ -31,6 +31,12 @@ securityContext:
     drop:
       - ALL
 
+serviceAccount:
+  create: true
+  name: ""
+  automountServiceAccountToken: false
+  annotations: {}
+
 service:
   type: ClusterIP
   port: 3310
