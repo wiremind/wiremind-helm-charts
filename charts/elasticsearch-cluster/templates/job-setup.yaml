@@ -80,7 +80,7 @@ spec:
                     fi
                   done
 
-                  CURL_CMD="${CURL_CMD} \"$SERVER_URL/$ENDPOINT\""
+                  CURL_CMD="${CURL_CMD} \"$ELASTICSEARCH_HOST/$ENDPOINT\""
 
                   if [ ! -z '$QUERY' ]; then
                     QUERY_CMD=\'$QUERY\'
@@ -91,7 +91,11 @@ spec:
 
                   RESPONSE=`eval $CURL_CMD`
 
-                  echo $RESPONSE
+                  if echo "$RESPONSE" | grep -v '{"acknowledged":true}'; then
+                    exit 1
+                  else
+                    echo $RESPONSE
+                  fi
                 }
               done
       terminationGracePeriodSeconds: {{ .Values.setup.terminationGracePeriodSeconds }}

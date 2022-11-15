@@ -7,20 +7,6 @@ metadata:
 {{ include "elasticsearch-cluster.labels" . | indent 4 }}
 data:
   {{- range $queryConfigKey, $queryConfig := .Values.setup.queries }}
-  {{- if $queryConfig.enabled }}
-  query-{{ $queryConfigKey | kebabcase }}.json:
-    {{ $queryConfig.query | toJson | nindent 4 }}
-  config-{{ $queryConfigKey | kebabcase }}.env: |
-    ELASTICSEARCH_HOST="{{ $queryConfig.elasticsearchHost }}"
-    SERVER_URL="{{ $queryConfig.serverUrl }}"
-    ENDPOINT="{{ $queryConfig.endpoint }}"
-    METHOD="{{ $queryConfig.method }}"
-    DEBUG="{{ hasKey $queryConfig "debug" | ternary $queryConfig.debug false }}"
-    {{- if $queryConfig.headers }}
-    HEADERS="{{ printf "%s" ($queryConfig.headers | join ";") }}"
-    {{- else }}
-    HEADERS=""
-    {{- end }}
-  {{- end }}
+  {{ include "elasticsearch-cluster.setup.configmap" (dict "queryConfig" $queryConfig "query" $queryConfig.query "queryConfigName" $queryConfigKey "context" $) | nindent 2 }}
   {{- end }}
 {{- end }}
