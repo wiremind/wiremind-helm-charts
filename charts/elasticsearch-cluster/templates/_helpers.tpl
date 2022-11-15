@@ -53,3 +53,20 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- define "elasticsearch-cluster.elasticsearch-url" -}}
 {{ printf "http://%s-%s-headless:9200" (index .Values "es-data-hot" "clusterName") (index .Values "es-data-hot" "nodeGroup") }}
 {{- end }}
+
+{{- define "elasticsearch-cluster.setup.configmap" -}}
+{{- if .queryConfig.enabled }}
+query-{{ .queryConfigName | kebabcase }}.json:
+    {{ .query | toJson | nindent 2 }}
+config-{{ .queryConfigName | kebabcase }}.env: |
+    ELASTICSEARCH_HOST="{{ hasKey .queryConfig "elasticsearchHost" | ternary .queryConfig.elasticsearchHost (include "elasticsearch-cluster.elasticsearch-url" .context) }}"
+    ENDPOINT="{{ .queryConfig.endpoint }}"
+    METHOD="{{ .queryConfig.method }}"
+    DEBUG="{{ hasKey .queryConfig "debug" | ternary .queryConfig.debug false }}"
+    {{- if .queryConfig.headers }}
+    HEADERS="{{ printf "%s" (.queryConfig.headers | join ";") }}"
+    {{- else }}
+    HEADERS=""
+    {{- end }}
+{{- end }}
+{{- end }}

@@ -208,6 +208,7 @@ es-master:
   #    limits:
   #      memory: "1Gi"
   #      cpu: "2"
+  replicas: 1
   volumeClaimTemplate:
     resources:
       requests:
@@ -401,7 +402,7 @@ extraObjects: []
 
 ## List of queries that will be executed when kibana is up and running
 setup:
-  enabled: false
+  enabled: true
   terminationGracePeriodSeconds: 0
   ttlSecondsAfterFinished: 1800
   # priorityClassName: my-priority-class
@@ -409,21 +410,17 @@ setup:
   #   "helm.sh/hook": post-install, post-upgrade
   #   "helm.sh/hook-weight": "1"
   #   "helm.sh/hook-delete-policy": "before-hook-creation, hook-succeeded"
-  # queries:
-  #   indexPatternLogstash:
-  #     enabled: true
-  #     debug: false
-  #     elasticsearchHost: http://my-elasticsearch-cluster-data-hot:9200
-  #     serverUrl: "elasticsearch-cluster-kibana:5601"
-  #     endpoint: "api/index_patterns/index_pattern"
-  #     method: "POST"
-  #     headers:
-  #       - "Content-Type: application/json"
-  #       - "osd-xsrf: true"
-  #       - "kbn-xsrf: reporting"
-  #     query: |
-  #       {
-  #         "index_pattern": {
-  #           "title": "hello"
-  #         }
-  #       }
+  queries:
+    0-allSettings:
+      enabled: true
+      debug: false
+      endpoint: "_all/_settings"
+      method: "PUT"
+      headers:
+        - "Content-Type: application/json"
+      query: |
+        {
+          "settings": {
+            "index.unassigned.node_left.delayed_timeout": "15m"
+          }
+        }
