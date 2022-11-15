@@ -11,7 +11,7 @@ data:
   query-{{ $queryConfigKey | kebabcase }}.json:
     {{ $queryConfig.query | toJson | nindent 4 }}
   config-{{ $queryConfigKey | kebabcase }}.env: |
-    ELASTICSEARCH_HOST="{{ $queryConfig.elasticsearchHost }}"
+    ELASTICSEARCH_HOST="{{ $queryConfig.elasticsearchHosts }}"
     SERVER_URL="{{ $queryConfig.serverUrl }}"
     ENDPOINT="{{ $queryConfig.endpoint }}"
     METHOD="{{ $queryConfig.method }}"
