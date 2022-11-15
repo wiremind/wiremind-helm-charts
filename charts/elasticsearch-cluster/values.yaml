@@ -411,7 +411,7 @@ setup:
   #   "helm.sh/hook-weight": "1"
   #   "helm.sh/hook-delete-policy": "before-hook-creation, hook-succeeded"
   queries:
-    0-allSettings:
+    0AllSettings:
       enabled: true
       debug: false
       endpoint: "_all/_settings"
