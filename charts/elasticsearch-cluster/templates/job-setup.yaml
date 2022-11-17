@@ -57,9 +57,20 @@ spec:
 
                 while true;
                 do
-                  echo "Waiting for elasticsearch"
-                  RESPONSE_HEALTH=`curl --silent --show-error "$ELASTICSEARCH_HOST/_cluster/health?wait_for_status=yellow&timeout=300s"`
-                  if [ "$?" == "0" ]; then
+                  echo "Waiting for elasticsearch..."
+                  HEALTH_ENDPOINT="$ELASTICSEARCH_HOST/_cluster/health?wait_for_status=yellow&timeout=10s"
+                  HTTP_CODE=""
+                  RESPONSE_HEALTH=`curl --max-time 5 --silent --show-error $HEALTH_ENDPOINT`
+                  RESPONSE_HEALTH_CMD=\'$RESPONSE_HEALTH\'
+                  if [[ "$?" == "0" ]]; then
+                    HTTP_CODE=`curl --max-time 5 -s -o /dev/null -w "%{http_code}" $HEALTH_ENDPOINT`
+                    CLUSTER_READY=`echo $RESPONSE_HEALTH_CMD | grep -q '"status":"yellow"'`
+                    if [[ "$?" != "0" ]]; then
+                      CLUSTER_READY=`echo $RESPONSE_HEALTH_CMD | grep -q '"status":"green"'`
+                    fi
+                  fi
+                  # Status is yellow or green and http code is 200
+                  if [[ "$?" == "0" && "$HTTP_CODE" == "200" ]]; then
                     echo $RESPONSE_HEALTH
                     break
                   else
@@ -67,6 +78,8 @@ spec:
                     sleep 10;
                   fi
                 done;
+
+                echo "Cluster is ready"
 
                 HEADERS_CMD=""
                 echo "$HEADERS" | tr ";" '\n' | \
