@@ -35,11 +35,11 @@ spec:
             - |
               echo "Configuring Elasticsearch..."
               FILES="/app/config/query-*.json"
-              for f in $FILES
+              for filequeryjson in $FILES
               do
-                echo "Processing $f file..."
-                export QUERY=`cat $f`
-                FILENAME=`basename $f`
+                echo "Processing $filequeryjson file..."
+                export QUERY=`cat $filequeryjson`
+                FILENAME=`basename $filequeryjson`
                 CONFIG_FILENAME="${FILENAME/query-/}"
                 CONFIG_FILENAME="${CONFIG_FILENAME%.*}"
                 CONFIG_ENV_PATH="/app/config/config-$CONFIG_FILENAME.env"
@@ -51,7 +51,7 @@ spec:
                 fi
 
                 if [[ "$DEBUG" == "true" ]]; then
-                  cat "$f"
+                  cat "$filequeryjson"
                   cat $CONFIG_ENV_PATH
                 fi
 
@@ -96,8 +96,7 @@ spec:
                   CURL_CMD="${CURL_CMD} \"$ELASTICSEARCH_HOST/$ENDPOINT\""
 
                   if [ ! -z '$QUERY' ]; then
-                    QUERY_CMD=\'$QUERY\'
-                    CURL_CMD="${CURL_CMD} -d $QUERY_CMD"
+                    CURL_CMD="${CURL_CMD} --data-binary \"@$filequeryjson\""
                   fi
 
                   echo "Sending request"
