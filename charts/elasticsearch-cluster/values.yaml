@@ -59,9 +59,8 @@ es-data-hot:
   #           ssl:
   #             enabled: false
   roles:
-    master: "false"
-    ingest: "true"
-    data: "true"
+    - ingest
+    - data_hot
   replicas: 1
   # esJavaOpts: "-Xmx1g  -Xms1g"
   # resources:
@@ -104,9 +103,7 @@ es-data-warm:
   #           ssl:
   #             enabled: false
   roles:
-    master: "false"
-    ingest: "false"
-    data: "true"
+    - data_warm
   replicas: 1
   esJavaOpts: "-Xmx1g  -Xms1g"
   # resources:
@@ -140,9 +137,7 @@ es-data-cold:
   #           ssl:
   #             enabled: false
   roles:
-    master: "false"
-    ingest: "false"
-    data: "true"
+    - data_cold
   replicas: 1
   # esJavaOpts: "-Xmx1g  -Xms1g"
   # resources:
@@ -163,9 +158,7 @@ es-ingest:
   nodeGroup: "ingest"
   enabled: false
   roles:
-    master: "false"
-    ingest: "true"
-    data: "false"
+    - ingest
   replicas: 1
   # esJavaOpts: "-Xmx1g  -Xms1g"
   # resources:
@@ -197,9 +190,7 @@ es-master:
   #           ssl:
   #             enabled: false
   roles:
-    master: "true"
-    ingest: "false"
-    data: "false"
+    - master
   # esJavaOpts: "-Xms128m -Xmx128m"
   #  resources:
   #    requests:
@@ -278,7 +269,7 @@ backup:
 kibana:
   enabled: false
   ## Change me
-  elasticsearchHosts: http://my-elasticsearch-cluster-data-hot:9200
+  elasticsearchHosts: https://my-elasticsearch-cluster-data-hot:9200
   resources:
     limits:
       cpu: 2
@@ -395,7 +386,7 @@ cerebro:
     hosts:
       - name: elasticsearch-cluster
         ## Change me
-        host: http://my-elasticsearch-cluster-data-hot:9200
+        host: https://my-elasticsearch-cluster-data-hot:9200
 
 ## Array of extra K8s manifests to deploy
 extraObjects: []
