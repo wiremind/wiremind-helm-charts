@@ -56,9 +56,9 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 
 {{- define "elasticsearch-cluster.setup.configmap" -}}
 {{- if .queryConfig.enabled }}
-query-{{ .queryConfigName | kebabcase }}.json: |
+{{ .queryConfigName | kebabcase }}-query.json: |
     {{ .query | toJson }}
-config-{{ .queryConfigName | kebabcase }}.env: |
+{{ .queryConfigName | kebabcase }}-config.env: |
     ELASTICSEARCH_HOST="{{ hasKey .queryConfig "elasticsearchHost" | ternary .queryConfig.elasticsearchHost (include "elasticsearch-cluster.elasticsearch-url" .context) }}"
     ENDPOINT="{{ .queryConfig.endpoint }}"
     METHOD="{{ .queryConfig.method }}"
