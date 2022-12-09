@@ -34,15 +34,15 @@ spec:
             - -c
             - |
               echo "Configuring Elasticsearch..."
-              FILES="/app/config/query-*.json"
+              FILES="/app/config/*-query.json"
               for filequeryjson in $FILES
               do
                 echo "Processing $filequeryjson file..."
                 export QUERY=`cat $filequeryjson`
                 FILENAME=`basename $filequeryjson`
-                CONFIG_FILENAME="${FILENAME/query-/}"
+                CONFIG_FILENAME="${FILENAME/-query/}"
                 CONFIG_FILENAME="${CONFIG_FILENAME%.*}"
-                CONFIG_ENV_PATH="/app/config/config-$CONFIG_FILENAME.env"
+                CONFIG_ENV_PATH="/app/config/$CONFIG_FILENAME-config.env"
 
                 source $CONFIG_ENV_PATH
 
