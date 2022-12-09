@@ -418,9 +418,6 @@ setup:
       method: "PUT"
       headers:
         - "Content-Type: application/json"
-      query: |
-        {
-          "settings": {
-            "index.unassigned.node_left.delayed_timeout": "15m"
-          }
-        }
+      query:
+        settings:
+          index.unassigned.node_left.delayed_timeout: 15m
