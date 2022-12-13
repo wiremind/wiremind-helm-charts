@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "buildkitd.fullname" . }}
+  labels:
+    {{- include "buildkitd.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 12345
+      targetPort: 12345
+      protocol: TCP
+      name: tcp
+  selector:
+    {{- include "buildkitd.selectorLabels" . | nindent 4 }}

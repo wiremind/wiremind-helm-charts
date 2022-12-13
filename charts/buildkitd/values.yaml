@@ -1,0 +1,23 @@
+image:
+  repository: moby/buildkit
+  pullPolicy: IfNotPresent
+  tag: "v0.10.6"
+
+nameOverride: ""
+fullnameOverride: ""
+
+resources: {}
+
+env: {}
+
+persistence:
+  size: "1Gi"
+  storageClass: ""
+
+priorityClassName: ""
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

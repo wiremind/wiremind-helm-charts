@@ -1,0 +1,8 @@
+apiVersion: v2
+name: buildkitd
+description: A Helm chart for https://github.com/moby/buildkit
+type: application
+version: 0.1.0
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
