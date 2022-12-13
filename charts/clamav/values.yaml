@@ -179,6 +179,12 @@ tolerations: []
 
 affinity: {}
 
+startupProbe:
+  initialDelaySeconds: 60
+  periodSeconds: 30
+  failureThreshold: 3
+  timeoutSeconds: 1
+
 livenessProbe:
   initialDelaySeconds: 300
   periodSeconds: 10

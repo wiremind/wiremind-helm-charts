@@ -55,6 +55,13 @@ spec:
             - name: clamavport
               containerPort: 3310
               protocol: TCP
+          startupProbe:
+            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            tcpSocket:
+              port: clamavport
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
