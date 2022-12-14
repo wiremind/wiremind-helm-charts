@@ -59,6 +59,19 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/argo-crds-1.0.1/argo-crds-1.0.1.tgz
     version: 1.0.1
+  buildkitd:
+  - apiVersion: v2
+    created: "2022-12-14T13:05:45.631787207Z"
+    description: A Helm chart for https://github.com/moby/buildkit
+    digest: cfc072b8a484eb6a8199d68aeba168e6285d1ddf4a9e978b0eafd45696f4194a
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: buildkitd
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/buildkitd-0.1.0/buildkitd-0.1.0.tgz
+    version: 0.1.0
   cerebro:
   - apiVersion: v2
     appVersion: 0.9.4
@@ -6564,4 +6577,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2022-12-13T12:37:13.325162109Z"
+generated: "2022-12-14T13:05:45.632571223Z"
