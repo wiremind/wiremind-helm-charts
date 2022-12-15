@@ -7,15 +7,13 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-  - name: clair-api
+  - name: "{{ .Values.service.name }}-api"
     port: {{ .Values.service.externalApiPort }}
     targetPort: {{ .Values.service.internalApiPort }}
     protocol: TCP
-    name: "{{ .Values.service.name }}-api"
-  - name: clair-health
+  - name: "{{ .Values.service.name }}-health"
     port: {{ .Values.service.externalHealthPort }}
     targetPort: {{ .Values.service.internalHealthPort }}
     protocol: TCP
-    name: "{{ .Values.service.name }}-health"
   selector:
 {{ include "clair.matchLabels" $ | indent 4 }}
