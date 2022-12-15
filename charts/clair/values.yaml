@@ -2,19 +2,23 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 replicaCount: 1
+
 logLevel: debug
+
 insecureTls: false
+
 image:
   repository: quay.io/coreos/clair
-  tag: v2.1.6
+  tag: v2.1.8
   pullPolicy: IfNotPresent
+
 service:
-  name: clair
   type: ClusterIP
   internalApiPort: 6060
   externalApiPort: 6060
   internalHealthPort: 6061
   externalHealthPort: 6061
+
 ingress:
   enabled: false
   # ingressClassName: ""
@@ -29,13 +33,31 @@ ingress:
     # - secretName: chart-example-tls
     #   hosts:
     #     - chart-example.local
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+  successThreshold: 1
+
 resources:
   limits:
     cpu: 2
-    memory: 3000Mi
+    memory: 3Gi
   requests:
     cpu: 50m
-    memory: 2000Mi
+    memory: 2Gi
+
 config:
   # postgresURI: "postgres://user:password@host:5432/postgres?sslmode=disable"
   # paginationKey: "XxoPtCUzrUv4JV5dS+yQ+MdW7yLEJnRMwigVY/bpgtQ="
@@ -57,24 +79,19 @@ config:
   - apk
   - dpkg
   - rpm
+
 # Configuration values for the postgresql dependency.
-# ref: https://github.com/kubernetes/charts/blob/master/stable/postgresql/README.md
+# https://github.com/bitnami/charts/blob/main/bitnami/postgresql/README.md
 postgresql:
-# The dependant Postgres chart can be disabled, to connect to
-# an existing database by defining config.postgresURI
   enabled: true
   image:
-    debug: true
-  resources:
-    requests:
-      cpu: 50m
-      memory: 512Mi
-    limits:
-      cpu: 2
-      memory: 512Mi
-  postgresqlUsername: postgres
-  postgresqlPassword: clair
-  persistence:
-    size: 1Gi
-  networkPolicy:
-    enabled: true
+    tag: 11.14.0-debian-10-r57
+  auth:
+    username: clair
+    password: clair
+    database: clair
+  primary:
+    persistence:
+      size: 1Gi
+    networkPolicy:
+      enabled: true

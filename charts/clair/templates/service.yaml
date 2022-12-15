@@ -3,19 +3,17 @@ kind: Service
 metadata:
   name: {{ template "fullname" . }}
   labels:
-{{ include "clair.labels" . | indent 4 }}
+    {{- include "clair.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
-  - name: clair-api
-    port: {{ .Values.service.externalApiPort }}
-    targetPort: {{ .Values.service.internalApiPort }}
-    protocol: TCP
-    name: "{{ .Values.service.name }}-api"
-  - name: clair-health
-    port: {{ .Values.service.externalHealthPort }}
-    targetPort: {{ .Values.service.internalHealthPort }}
-    protocol: TCP
-    name: "{{ .Values.service.name }}-health"
+    - name: api
+      port: {{ .Values.service.externalApiPort }}
+      protocol: TCP
+      targetPort: api
+    - name: health
+      port: {{ .Values.service.externalHealthPort }}
+      protocol: TCP
+      targetPort: health
   selector:
-{{ include "clair.matchLabels" $ | indent 4 }}
+    {{- include "clair.matchLabels" $ | nindent 4 }}

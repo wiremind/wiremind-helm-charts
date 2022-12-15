@@ -6,13 +6,24 @@ runs:
   using: composite
   steps:
     - name: Set up Helm
-      uses: azure/setup-helm@v3
+      uses: azure/setup-helm@v4
       with:
-        version: v3.14.3
+        version: v3.15.4
 
     - name: Set up Helm repositories
       shell: bash
       run: |
+        echo -n "" > ./helm-raw-update.sh
         for dir in $(ls -d charts/*/); do
-          helm dependency list $dir 2> /dev/null | tail +2 | head -n -1 | awk '{ print "helm repo add --force-update " $1 " " $3 }' | while read cmd; do $cmd; done
+          helm dependency list "$dir" 2>/dev/null |
+          tail -n +2 |
+          head -n -1 |
+          awk '{ print "helm repo add --force-update " $1 " " $3 }' >> ./helm-raw-update.sh
         done
+
+        cat ./helm-raw-update.sh | sort | uniq | grep -v "oci://" > ./helm-update.sh
+
+        while IFS= read -r cmd; do
+          echo $cmd
+          $cmd
+        done < ./helm-update.sh

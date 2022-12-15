@@ -1,32 +1,35 @@
-{{- if .Values.ingress.enabled -}}
+{{- if .Values.ingress.enabled }}
 {{- $serviceName := include "fullname" . -}}
 {{- $servicePort := .Values.service.externalApiPort -}}
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ template "fullname" . }}
   labels:
-{{ include "clair.labels" . | indent 4 }}
+    {{- include "clair.labels" . | nindent 4 }}
   annotations:
     {{- range $key, $value := .Values.ingress.annotations }}
-      {{ $key }}: {{ $value | quote }}
+    {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
-{{- if .Values.ingress.ingressClassName }}
-  ingressClassName: {{ .Values.ingress.ingressClassName }}
-{{- end }}
+  {{- with .Values.ingress.ingressClassName }}
+  ingressClassName: {{ . }}
+  {{- end }}
   rules:
     {{- range $host := .Values.ingress.hosts }}
     - host: {{ $host }}
       http:
         paths:
-          - path: /
-            backend:
-              serviceName: {{ $serviceName }}
-              servicePort: {{ $servicePort }}
-    {{- end -}}
-  {{- if .Values.ingress.tls }}
+        - backend:
+            service:
+              name: {{ $serviceName }}
+              port:
+                number: {{ $servicePort }}
+          path: /
+          pathType: Prefix
+    {{- end }}
+  {{- with .Values.ingress.tls }}
   tls:
-{{ toYaml .Values.ingress.tls | indent 4 }}
-  {{- end -}}
-{{- end -}}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}
