@@ -27,6 +27,9 @@ podSecurityContext:
   runAsGroup: 2000
 
 securityContext:
+  allowPrivilegeEscalation: false
+  runAsNonRoot: true
+  privileged: false
   capabilities:
     drop:
       - ALL
