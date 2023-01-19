@@ -2,41 +2,41 @@ apiVersion: v2
 description: Elasticsearch cluster - a hat chart for several elasticsearch charts
 home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch-cluster
 name: elasticsearch-cluster
-version: 3.7.10
+version: 3.7.11
 appVersion: 7.17.3
 dependencies:
   - name: elasticsearch
     repository: "https://helm.elastic.co"
-    version: "*"
+    version: "7.17.3"
     alias: es-data-hot
     condition: es-data-hot.enabled
   - name: elasticsearch
     repository: "https://helm.elastic.co"
-    version: "*"
+    version: "7.17.3"
     alias: es-data-warm
     condition: es-data-warm.enabled
   - name: elasticsearch
     repository: "https://helm.elastic.co"
-    version: "*"
+    version: "7.17.3"
     alias: es-data-cold
     condition: es-data-cold.enabled
   - name: elasticsearch
     repository: "https://helm.elastic.co"
-    version: "*"
+    version: "7.17.3"
     alias: es-master
     condition: es-master.enabled
   - name: elasticsearch
     repository: "https://helm.elastic.co"
-    version: "*"
+    version: "7.17.3"
     alias: es-ingest
     condition: es-ingest.enabled
   - name: kibana
     repository: "https://helm.elastic.co"
-    version: "*"
+    version: "7.17.3"
     condition: kibana.enabled
   - name: prometheus-elasticsearch-exporter
     repository: "https://prometheus-community.github.io/helm-charts"
-    version: "*"
+    version: "4.15.0"
     condition: prometheus-elasticsearch-exporter.enabled
   - name: cerebro
     repository: "https://wiremind.github.io/wiremind-helm-charts"
