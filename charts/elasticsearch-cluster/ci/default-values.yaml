@@ -27,3 +27,7 @@ indexLifecycleManagement:
   enabled: true
   delete:
     enabled: true
+
+prometheus-elasticsearch-exporter:
+  serviceMonitor:
+    enabled: true
