@@ -19,9 +19,9 @@ dependencies:
   version: 7.17.3
 - name: prometheus-elasticsearch-exporter
   repository: https://prometheus-community.github.io/helm-charts
-  version: 4.15.0
+  version: 5.0.0
 - name: cerebro
   repository: https://wiremind.github.io/wiremind-helm-charts
   version: 2.0.3
-digest: sha256:b322642487192720bc79d480a181c6de966983b3877342fafa2bb2f220c4f65c
-generated: "2022-09-22T16:46:47.56544+02:00"
+digest: sha256:005fca0d5a5833918dc214d57a8f9a67e7b4796493f3b39e2e9aa8da3c538424
+generated: "2023-01-19T14:50:45.151022+01:00"

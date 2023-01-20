@@ -1,6 +1,0 @@
-# Repository_name=Repository_URL
-bitnami=https://charts.bitnami.com/bitnami
-elastic=https://helm.elastic.co
-minio=https://helm.min.io/
-prometheus-community=https://prometheus-community.github.io/helm-charts
-wiremind=https://wiremind.github.io/wiremind-helm-charts
