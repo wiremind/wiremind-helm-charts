@@ -205,7 +205,7 @@ hpa:
   maxReplicas: 5
   # average CPU usage utilization percentage per pod (1-100)
   cpu: 80
-  # average Memory usage utilization percentage per pod (1-100) 
+  # average Memory usage utilization percentage per pod (1-100)
   # memory: 80
 
 podDisruptionBudget:
