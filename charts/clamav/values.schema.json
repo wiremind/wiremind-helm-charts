@@ -213,7 +213,7 @@
           "type": "integer"
         },
         "memory": {
-          "type": "string"
+          "type": "integer"
         },
         "requests": {
           "type": "string"
