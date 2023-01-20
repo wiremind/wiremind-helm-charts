@@ -1,5 +1,5 @@
 {{- if .Values.hpa.enabled -}}
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "clamav.fullname" . }}
@@ -15,13 +15,17 @@ spec:
   - type: Resource
     resource:
       name: cpu
-      targetAverageUtilization: {{ .Values.hpa.cpu }}
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.hpa.cpu }}
   {{- end }}
   {{- if .Values.hpa.memory }}
   - type: Resource
     resource:
       name: memory
-      targetAverageValue: {{ .Values.hpa.memory }}
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.hpa.memory }}
   {{- end }}
   {{- if .Values.hpa.requests }}
   - type: Pod
