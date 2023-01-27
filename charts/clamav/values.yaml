@@ -203,11 +203,12 @@ readinessProbe:
 hpa:
   enabled: true
   maxReplicas: 5
-  # average total CPU usage per pod (1-100)
+  # average CPU usage utilization percentage per pod (1-100)
   cpu: 80
-  # average memory usage per pod (100Mi-1Gi)
-  # memory: "1000Mi"
-  # requests: "500m"
+  # average Memory usage utilization percentage per pod (1-100)
+  # memory: 80
+  # average http_requests utilization per pod (value as a string)
+  # requests: 1k
 
 podDisruptionBudget:
   enabled: false
