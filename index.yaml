@@ -4145,6 +4145,28 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/grafana-pdf-exporter-0.3.0/grafana-pdf-exporter-0.3.0.tgz
     version: 0.3.0
+  iam-chart:
+  - apiVersion: v1
+    appVersion: v0.1.1
+    created: "2023-02-03T12:30:49.320628681Z"
+    description: Manage CRDs of the ACK service controller for AWS Identity & Access
+      Management (IAM)
+    digest: 7de134a21dc47e7819ba884fb7a88a68fad1819760a09347b5c82639e368d232
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/ack-iam-controller-crds
+    icon: https://raw.githubusercontent.com/aws/eks-charts/master/docs/logo/aws.png
+    keywords:
+    - aws
+    - kubernetes
+    - iam
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: iam-chart
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/ack-iam-controller-crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/iam-chart-v0.1.1/iam-chart-v0.1.1.tgz
+    version: v0.1.1
   istio-operator:
   - apiVersion: v2
     appVersion: 1.14.3
@@ -6390,6 +6412,28 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/remoulade-0.1.0/remoulade-0.1.0.tgz
     version: 0.1.0
+  s3-chart:
+  - apiVersion: v1
+    appVersion: v0.1.7
+    created: "2023-02-03T12:30:49.548661909Z"
+    description: Manage CRDs of the ACK service controller for Amazon Simple Storage
+      Service (S3)
+    digest: 2342aa76d4f468a39ff43cba01f6eac1f31dd1091c075f419aa48a9eec9578a2
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/ack-s3-controller-crds
+    icon: https://raw.githubusercontent.com/aws/eks-charts/master/docs/logo/aws.png
+    keywords:
+    - aws
+    - kubernetes
+    - s3
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: s3-chart
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/ack-s3-controller-crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/s3-chart-v0.1.7/s3-chart-v0.1.7.tgz
+    version: v0.1.7
   scrapoxy:
   - apiVersion: v2
     appVersion: 3.1.1
@@ -6713,4 +6757,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2023-01-27T16:32:30.826828Z"
+generated: "2023-02-03T12:30:49.549433402Z"
