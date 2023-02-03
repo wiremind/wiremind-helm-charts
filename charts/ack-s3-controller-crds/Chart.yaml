@@ -1,0 +1,16 @@
+apiVersion: v1
+name: s3-chart
+description: Manage CRDs of the ACK service controller for Amazon Simple Storage Service (S3)
+version: v0.1.7
+appVersion: v0.1.7
+home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/ack-s3-controller-crds
+icon: https://raw.githubusercontent.com/aws/eks-charts/master/docs/logo/aws.png
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/ack-s3-controller-crds
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
+keywords:
+  - aws
+  - kubernetes
+  - s3
