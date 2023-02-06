@@ -27,3 +27,6 @@ spec:
               name: {{ .Release.Name }}-grafana-pdf-exporter-secret
         resources:
 {{ toYaml .Values.resources | indent 10 }}
+      {{- with .Values.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}

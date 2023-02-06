@@ -98,6 +98,10 @@ spec:
                 cpu: 4
                 memory: 8Gi
           restartPolicy: Never
+          {{- with $.Values.priorityClassName }}
+          priorityClassName: {{ . }}
+          {{- end }}
+
 ---
 {{- end }}
 {{- end }}
