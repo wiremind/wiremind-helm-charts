@@ -1,6 +1,6 @@
 {{- if .Values.config.cronJobs.enabled }}
 {{- range $job, $val := .Values.cronjob }}
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: grafana-pdf-export-cronjob-{{ $val.name }}
@@ -98,6 +98,10 @@ spec:
                 cpu: 4
                 memory: 8Gi
           restartPolicy: Never
+          {{- with $.Values.priorityClassName }}
+          priorityClassName: {{ . }}
+          {{- end }}
+
 ---
 {{- end }}
 {{- end }}

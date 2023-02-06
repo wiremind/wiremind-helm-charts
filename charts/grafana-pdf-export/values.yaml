@@ -28,6 +28,9 @@ config:
   cronJobs:
     enabled: true
 
+# Priority class name for all components
+# priorityClassName:
+
 # Dashboard URLs, please make sure to format it well:
 #  TODO: Improve it
 #  Date should be formatted in a certain way from=xxx&to=xxx&kiosk in order to parse and replace dates easily
