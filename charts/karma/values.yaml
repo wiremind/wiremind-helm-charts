@@ -94,6 +94,10 @@ podAnnotations: {}
 
 securityContext: {}
 
+containerSecurityContext:
+  runAsUser: 2000
+  allowPrivilegeEscalation: false
+
 ## configuration for liveness probe
 livenessProbe:
   delay: 5

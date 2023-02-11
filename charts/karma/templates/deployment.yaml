@@ -94,10 +94,9 @@ spec:
             - --log-json
           {{- end }}
          {{- end }}
-        {{- if .Values.securityContext }}
+        {{- if .Values.containerSecurityContext }}
           securityContext:
-            runAsUser: 2000
-            allowPrivilegeEscalation: false
+{{ toYaml .Values.containerSecurityContext | indent 12 }}
         {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:

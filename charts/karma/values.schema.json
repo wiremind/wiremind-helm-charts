@@ -102,6 +102,9 @@
         "securityContext": {
             "type": "object"
         },
+        "containerSecurityContext": {
+            "type": "object"
+        },
         "service": {
             "type": "object",
             "properties": {
