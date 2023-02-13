@@ -1,4 +1,6 @@
 schema-location:
   - default
+  # For "CustomResourceDefinition" support (https://github.com/yannh/kubeconform/issues/100#issuecomment-1096832969)
+  - https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/{{ .NormalizedKubernetesVersion }}/{{ .ResourceKind }}{{ .KindSuffix }}.json
   - https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json
   - https://raw.githubusercontent.com/wiremind/wiremind-kube-schemas/master/schemas/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json
