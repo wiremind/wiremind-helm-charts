@@ -73,11 +73,10 @@ spec:
                                       - UPGRADE
                                     type: string
                                   http1MaxPendingRequests:
-                                    description: Maximum number of pending HTTP requests to a destination.
                                     format: int32
                                     type: integer
                                   http2MaxRequests:
-                                    description: Maximum number of requests to a backend.
+                                    description: Maximum number of active requests to a destination.
                                     format: int32
                                     type: integer
                                   idleTimeout:
@@ -99,6 +98,9 @@ spec:
                                 properties:
                                   connectTimeout:
                                     description: TCP connection timeout.
+                                    type: string
+                                  maxConnectionDuration:
+                                    description: The maximum duration of a connection.
                                     type: string
                                   maxConnections:
                                     description: Maximum number of HTTP1 /TCP connections to a destination host.
@@ -299,11 +301,10 @@ spec:
                                             - UPGRADE
                                           type: string
                                         http1MaxPendingRequests:
-                                          description: Maximum number of pending HTTP requests to a destination.
                                           format: int32
                                           type: integer
                                         http2MaxRequests:
-                                          description: Maximum number of requests to a backend.
+                                          description: Maximum number of active requests to a destination.
                                           format: int32
                                           type: integer
                                         idleTimeout:
@@ -325,6 +326,9 @@ spec:
                                       properties:
                                         connectTimeout:
                                           description: TCP connection timeout.
+                                          type: string
+                                        maxConnectionDuration:
+                                          description: The maximum duration of a connection.
                                           type: string
                                         maxConnections:
                                           description: Maximum number of HTTP1 /TCP connections to a destination host.
@@ -607,11 +611,10 @@ spec:
                                 - UPGRADE
                               type: string
                             http1MaxPendingRequests:
-                              description: Maximum number of pending HTTP requests to a destination.
                               format: int32
                               type: integer
                             http2MaxRequests:
-                              description: Maximum number of requests to a backend.
+                              description: Maximum number of active requests to a destination.
                               format: int32
                               type: integer
                             idleTimeout:
@@ -633,6 +636,9 @@ spec:
                           properties:
                             connectTimeout:
                               description: TCP connection timeout.
+                              type: string
+                            maxConnectionDuration:
+                              description: The maximum duration of a connection.
                               type: string
                             maxConnections:
                               description: Maximum number of HTTP1 /TCP connections to a destination host.
@@ -833,11 +839,10 @@ spec:
                                       - UPGRADE
                                     type: string
                                   http1MaxPendingRequests:
-                                    description: Maximum number of pending HTTP requests to a destination.
                                     format: int32
                                     type: integer
                                   http2MaxRequests:
-                                    description: Maximum number of requests to a backend.
+                                    description: Maximum number of active requests to a destination.
                                     format: int32
                                     type: integer
                                   idleTimeout:
@@ -859,6 +864,9 @@ spec:
                                 properties:
                                   connectTimeout:
                                     description: TCP connection timeout.
+                                    type: string
+                                  maxConnectionDuration:
+                                    description: The maximum duration of a connection.
                                     type: string
                                   maxConnections:
                                     description: Maximum number of HTTP1 /TCP connections to a destination host.
@@ -1190,11 +1198,10 @@ spec:
                                       - UPGRADE
                                     type: string
                                   http1MaxPendingRequests:
-                                    description: Maximum number of pending HTTP requests to a destination.
                                     format: int32
                                     type: integer
                                   http2MaxRequests:
-                                    description: Maximum number of requests to a backend.
+                                    description: Maximum number of active requests to a destination.
                                     format: int32
                                     type: integer
                                   idleTimeout:
@@ -1216,6 +1223,9 @@ spec:
                                 properties:
                                   connectTimeout:
                                     description: TCP connection timeout.
+                                    type: string
+                                  maxConnectionDuration:
+                                    description: The maximum duration of a connection.
                                     type: string
                                   maxConnections:
                                     description: Maximum number of HTTP1 /TCP connections to a destination host.
@@ -1416,11 +1426,10 @@ spec:
                                             - UPGRADE
                                           type: string
                                         http1MaxPendingRequests:
-                                          description: Maximum number of pending HTTP requests to a destination.
                                           format: int32
                                           type: integer
                                         http2MaxRequests:
-                                          description: Maximum number of requests to a backend.
+                                          description: Maximum number of active requests to a destination.
                                           format: int32
                                           type: integer
                                         idleTimeout:
@@ -1442,6 +1451,9 @@ spec:
                                       properties:
                                         connectTimeout:
                                           description: TCP connection timeout.
+                                          type: string
+                                        maxConnectionDuration:
+                                          description: The maximum duration of a connection.
                                           type: string
                                         maxConnections:
                                           description: Maximum number of HTTP1 /TCP connections to a destination host.
@@ -1724,11 +1736,10 @@ spec:
                                 - UPGRADE
                               type: string
                             http1MaxPendingRequests:
-                              description: Maximum number of pending HTTP requests to a destination.
                               format: int32
                               type: integer
                             http2MaxRequests:
-                              description: Maximum number of requests to a backend.
+                              description: Maximum number of active requests to a destination.
                               format: int32
                               type: integer
                             idleTimeout:
@@ -1750,6 +1761,9 @@ spec:
                           properties:
                             connectTimeout:
                               description: TCP connection timeout.
+                              type: string
+                            maxConnectionDuration:
+                              description: The maximum duration of a connection.
                               type: string
                             maxConnections:
                               description: Maximum number of HTTP1 /TCP connections to a destination host.
@@ -1950,11 +1964,10 @@ spec:
                                       - UPGRADE
                                     type: string
                                   http1MaxPendingRequests:
-                                    description: Maximum number of pending HTTP requests to a destination.
                                     format: int32
                                     type: integer
                                   http2MaxRequests:
-                                    description: Maximum number of requests to a backend.
+                                    description: Maximum number of active requests to a destination.
                                     format: int32
                                     type: integer
                                   idleTimeout:
@@ -1976,6 +1989,9 @@ spec:
                                 properties:
                                   connectTimeout:
                                     description: TCP connection timeout.
+                                    type: string
+                                  maxConnectionDuration:
+                                    description: The maximum duration of a connection.
                                     type: string
                                   maxConnections:
                                     description: Maximum number of HTTP1 /TCP connections to a destination host.
