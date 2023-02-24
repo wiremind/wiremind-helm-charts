@@ -1,0 +1,18 @@
+annotations:
+  category: DeveloperTools
+apiVersion: v2
+name: snapshot-controller-crds
+version: 6.2.1
+appVersion: "v6.2.1"
+description: Manage snapshot-controller CRDs
+keywords:
+  - storage
+  - snapshot
+  - crds
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/snapshot-controller-crds
+  - https://github.com/kubernetes-csi/external-snapshotter
+engine: gotpl
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
