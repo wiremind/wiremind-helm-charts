@@ -4745,6 +4745,24 @@ entries:
     version: 1.12.0
   karma:
   - apiVersion: v2
+    appVersion: v0.112
+    created: "2023-02-24T07:23:41.2572306Z"
+    description: A Helm chart for Karma - an UI for Prometheus Alertmanager
+    digest: 198769ba1660f2cfae3e2d29b263fa15ad426779067a7b1300b4cef3a010f636
+    home: https://github.com/prymitive/karma
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: karma
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/karma
+    - https://github.com/prymitive/karma
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/karma-2.2.1/karma-2.2.1.tgz
+    version: 2.2.1
+  - apiVersion: v2
     appVersion: v0.111
     created: "2023-02-24T07:19:46.010348825Z"
     description: A Helm chart for Karma - an UI for Prometheus Alertmanager
@@ -6961,4 +6979,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2023-02-24T07:19:46.011182938Z"
+generated: "2023-02-24T07:23:41.258787324Z"
