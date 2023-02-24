@@ -6881,6 +6881,28 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/silence-operator-crds-0.0.1/silence-operator-crds-0.0.1.tgz
     version: 0.0.1
+  snapshot-controller-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: v6.2.1
+    created: "2023-02-24T13:02:53.393565764Z"
+    description: Manage snapshot-controller CRDs
+    digest: a304c8d058e7de19100aad22eb430c8f3b9bd0acf5d2af15e9a1abebc5ab4218
+    keywords:
+    - storage
+    - snapshot
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: snapshot-controller-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/snapshot-controller-crds
+    - https://github.com/kubernetes-csi/external-snapshotter
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/snapshot-controller-crds-6.2.1/snapshot-controller-crds-6.2.1.tgz
+    version: 6.2.1
   sshd:
   - apiVersion: v2
     appVersion: "1.0"
@@ -6979,4 +7001,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2023-02-24T07:23:41.258787324Z"
+generated: "2023-02-24T13:02:53.394234966Z"
