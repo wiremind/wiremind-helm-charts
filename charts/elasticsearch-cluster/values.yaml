@@ -4,6 +4,7 @@ fullnameOverride: ""
 ## To define common settings, it may be useful to use YAML anchors to use the same
 ## base settings for all node types (data + master) + ingest
 es-defaults: &defaults
+  imageTag: 7.17.9
   ## Change me, and change urls using elasticsearch below
   clusterName: "my-elasticsearch-cluster"
   ## Enable if you want backup (see below)
