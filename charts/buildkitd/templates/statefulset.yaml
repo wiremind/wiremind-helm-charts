@@ -18,9 +18,8 @@ spec:
         - name: buildkitd
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           args:
-            - '--addr=tcp://0.0.0.0:12345'
-            - '--oci-worker-gc'
-            - '--oci-worker-gc-keepstorage=1070000'
+            - --addr=tcp://0.0.0.0:12345
+            {{- toYaml .Values.args | nindent 12  }}
           ports:
             - name: tcp
               containerPort: 12345
