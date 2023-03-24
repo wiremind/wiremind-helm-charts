@@ -8,6 +8,10 @@ fullnameOverride: ""
 
 resources: {}
 
+args:
+  - "--oci-worker-gc"
+  - "--oci-worker-gc-keepstorage=1000"
+
 env: {}
 
 persistence:
