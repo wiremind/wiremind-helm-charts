@@ -102,6 +102,9 @@ spec:
       nodeSelector:
 {{ toYaml . | indent 8 }}
     {{- end }}
+    {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+    {{- end }}
     {{- with .Values.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}
