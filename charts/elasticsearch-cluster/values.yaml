@@ -233,15 +233,16 @@ indexLifecycleManagement:
   # priorityClassName: my-priority-class
 
 ## Configure a backup repository and snapshot policy on it
+keystore:
+  ## Create a secret containing credentials
+  ## Currently only supports s3
+  ## You can manually create a secret instead
+  enabled: false
+  accessKey: setme  # change me
+  secretKey: setme  # change me
+
 backup:
   enabled: false
-  keystore:
-    ## Create a secret containing credentials
-    ## Currently only supports s3
-    ## You can manually create a secret instead
-    enabled: false
-    accessKey: setme  # change me
-    secretKey: setme  # change me
   ## Ref:
   ## https://www.elastic.co/guide/en/elasticsearch/reference/7.x/snapshots-register-repository.html
   repository:
