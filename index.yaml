@@ -1507,6 +1507,26 @@ entries:
   dex:
   - apiVersion: v2
     appVersion: 2.24.0
+    created: "2023-04-11T08:15:35.722002436Z"
+    description: OpenID Connect Identity (OIDC) and OAuth 2.0 Provider with Pluggable
+      Connectors
+    digest: ca0836c702630def030a758ecb4883815a77613311da5d0ce69c2ec693412995
+    home: https://github.com/dexidp/dex/
+    icon: https://github.com/dexidp/dex/raw/master/Documentation/logos/dex-glyph-color.png
+    keywords:
+    - dex
+    - oidc
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: dex
+    sources:
+    - https://github.com/dexidp/dex/
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/dex-2.15.7/dex-2.15.7.tgz
+    version: 2.15.7
+  - apiVersion: v2
+    appVersion: 2.24.0
     created: "2022-06-03T11:22:05.106683682Z"
     description: OpenID Connect Identity (OIDC) and OAuth 2.0 Provider with Pluggable
       Connectors
@@ -7271,4 +7291,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2023-04-11T08:00:34.452061577Z"
+generated: "2023-04-11T08:15:35.723758737Z"
