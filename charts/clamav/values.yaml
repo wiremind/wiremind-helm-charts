@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   # TODO: Switch to clamav/clamav container
-  repository: mailu/clamav
+  repository: ghcr.io/mailu/clamav
   tag: ""  # If not defined, uses appVersion
   pullPolicy: IfNotPresent
 
