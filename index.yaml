@@ -7221,6 +7221,27 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: 0.18.2
+    created: "2023-05-12T12:31:52.549520006Z"
+    description: Manage topolvm CRDs
+    digest: efe2b06694894777683161a0ae1f58dcf08b71fd073cfc28446ea4e67ea94bd7
+    icon: https://i.imgur.com/iqSQEf7.png
+    keywords:
+    - topolvm
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: topolvm-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/topolvm-crds
+    - https://github.com/topolvm/topolvm/tree/main/charts/topolvm
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/topolvm-crds-11.2.0/topolvm-crds-11.2.0.tgz
+    version: 11.2.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: 0.10.5
     created: "2022-04-04T08:56:22.835204038Z"
     description: Manage topolvm CRDs
@@ -7311,4 +7332,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2023-05-11T08:35:21.747043809Z"
+generated: "2023-05-12T12:31:52.550729003Z"
