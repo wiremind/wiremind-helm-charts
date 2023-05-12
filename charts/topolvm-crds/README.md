@@ -6,4 +6,4 @@ Helm chart for deploying Keycloak Operator CRDs.
 
 The Chart has the same version as the `topolvm`s, try to keep them equal.
 
-CRDs are retrieved from [here](https://github.com/topolvm/topolvm/tree/main/charts/topolvm/crds).
+CRDs are retrieved from [here](https://github.com/topolvm/topolvm/blob/main/config/crd/bases).
