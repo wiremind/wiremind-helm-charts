@@ -7332,4 +7332,17 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
-generated: "2023-05-12T12:31:52.550729003Z"
+  wiremind-baremetal:
+  - apiVersion: v2
+    created: "2023-05-25T12:33:58.305736113Z"
+    description: Helm chart to use BareMetal Encrypted at Rest disks
+    digest: 98f6b6ff441011fa8addf3d5465866e58901931653919ce8a1f9735440f80d3a
+    icon: https://www.wiremind.io/assets/logo.png
+    maintainers:
+    - email: platform@wiremind.io
+      name: platform
+    name: wiremind-baremetal
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-baremetal-1.2.0/wiremind-baremetal-1.2.0.tgz
+    version: 1.2.0
+generated: "2023-05-25T12:33:58.306842803Z"
