@@ -1,8 +1,12 @@
 # Changelog
 
+# v1.3.0 (2022-06-20)
+## Feat
+- Support topolvm nodes (through the `TOPOLVM_ENABLED` env var), only decrypt in this case
+
 # v1.2.0 (2022-06-20)
 ## Feat
-- Add the possibility to set an `affinity` to the DaemonSet Pods.
+- Add the possibility to set an `affinity` to the DaemonSet Pods
 
 # v1.1.1 (2021-10-30)
 ## Fix
@@ -15,7 +19,7 @@
 
 # v1.0.2 (2021-09-09)
 ## Fix
-- Do not define default values, this is the job of the final values.yaml.
+- Do not define default values, this is the job of the final values.yaml
 
 # v1.0.1 (2021-08-03)
 ## Fix
