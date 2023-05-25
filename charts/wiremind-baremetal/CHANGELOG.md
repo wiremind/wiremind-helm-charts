@@ -1,5 +1,9 @@
 # Changelog
 
+# v1.3.1 (2022-03-02)
+## Fix
+- livenessprobe: less strict, run less often
+
 # v1.3.0 (2022-06-20)
 ## Feat
 - Support topolvm nodes (through the `TOPOLVM_ENABLED` env var), only decrypt in this case
