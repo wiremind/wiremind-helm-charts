@@ -1,0 +1,10 @@
+secret:
+  password: "something"  # set it
+
+tolerations: []
+
+affinity: {}
+
+nodeSelector: {}
+
+priorityClassName:
