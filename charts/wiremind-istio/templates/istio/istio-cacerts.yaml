@@ -1,0 +1,14 @@
+{{ if .Values.istio.caCerts.enabled }}
+kind: Secret
+apiVersion: v1
+metadata:
+  name: cacerts
+  labels:
+{{ include "wiremind-istio.labels" . | indent 4 }}
+stringData:
+  ca-cert.pem: {{ toYaml .Values.istio.caCerts.caCert | nindent 4 }}
+  ca-key.pem: {{ toYaml .Values.istio.caCerts.caKey | nindent 4 }}
+  cert-chain.pem: {{toYaml .Values.istio.caCerts.certChain | nindent 4 }}
+  root-cert.pem: {{toYaml .Values.istio.caCerts.rootCert | nindent 4 }}
+type: Opaque
+{{ end }}

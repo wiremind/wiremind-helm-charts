@@ -56,12 +56,14 @@ jobs:
         uses: helm/kind-action@v1.5.0
         if: steps.list-changed.outputs.changed == 'true'
 
-      - name: Deploy Prometheus Operator crds
+      - name: Deploy CRDs
         run: |
-          kubectl apply --server-side -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.55.0/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.55.0/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.55.0/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.55.0/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml
+          # Prometheus
+          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+          helm install prometheus-operator-crds prometheus-community/prometheus-operator-crds --version 4.0.0
+          # Istio
+          helm repo add wiremind https://wiremind.github.io/wiremind-helm-charts
+          helm install istio-operator-crds wiremind/istio-operator-crds --version 1.15.5
         if: steps.list-changed.outputs.changed == 'true'
 
       - name: Run chart-testing (install)

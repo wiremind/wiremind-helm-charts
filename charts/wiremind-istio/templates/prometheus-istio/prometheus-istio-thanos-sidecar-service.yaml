@@ -1,0 +1,18 @@
+{{- if .Values.prometheus.thanos.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.prometheus.name }}-thanos
+  namespace: {{ .Values.prometheus.namespace }}
+  labels:
+    app: {{ .Values.prometheus.name }}-thanos
+spec:
+  type: ClusterIP
+  ports:
+    - name: grpc
+      port: 10901
+      targetPort: grpc
+  selector:
+    app: prometheus
+    prometheus: {{ .Values.prometheus.name }}
+{{- end }}

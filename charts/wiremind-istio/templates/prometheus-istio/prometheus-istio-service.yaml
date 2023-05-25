@@ -1,0 +1,19 @@
+{{- if .Values.prometheus.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "wiremind-istio.fullname" . }}-{{ .Values.prometheus.name }}
+  namespace: {{ .Values.prometheus.namespace }}
+  labels:
+{{ include "wiremind-istio.labels" . | indent 4 }}
+    prometheus: {{ .Values.prometheus.name }}
+spec:
+  type: ClusterIP
+  ports:
+    - name: http-web
+      port: 9090
+      protocol: TCP
+      targetPort: http-web
+  selector:
+    prometheus: {{ .Values.prometheus.name }}
+{{- end }}

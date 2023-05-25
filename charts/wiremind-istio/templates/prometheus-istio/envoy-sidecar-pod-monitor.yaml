@@ -1,0 +1,44 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ include "wiremind-istio.fullname" . }}-envoy-stats-monitor
+  labels:
+    monitoring: istio-proxies
+    prometheus: {{ .Values.prometheus.name }}
+{{ include "wiremind-istio.labels" . | indent 4 }}
+spec:
+  selector:
+    matchExpressions:
+    - {key: istio.io/rev, operator: Exists}
+  namespaceSelector:
+    any: true
+  jobLabel: envoy-stats
+  podMetricsEndpoints:
+    - path: /stats/prometheus
+      port: http-envoy-prom
+      interval: 15s
+      scrapeTimeout: 15s
+      relabelings:
+        - action: keep
+          sourceLabels: [__meta_kubernetes_pod_container_name]
+          regex: "istio-proxy"
+        - action: keep
+          sourceLabels: [__meta_kubernetes_pod_annotationpresent_prometheus_io_scrape]
+        - sourceLabels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+          action: replace
+          regex: ([^:]+)(?::\d+)?;(\d+)
+          replacement: $1:$2
+          targetLabel: __address__
+        - action: labeldrop
+          regex: "__meta_kubernetes_pod_label_(.+)"
+        - sourceLabels: [__meta_kubernetes_namespace]
+          action: replace
+          targetLabel: namespace
+        - sourceLabels: [__meta_kubernetes_pod_name]
+          action: replace
+          targetLabel: pod_name
+      # Drop all metrics that are talking about ... metrics scraping
+      metricRelabelings:
+        - action: drop
+          sourceLabels: [source_canonical_service]
+          regex: "prometheus"
