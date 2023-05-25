@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ .Release.Name }}-baremetal-daemonset
+spec:
+  selector:
+    matchLabels:
+      job: {{ .Release.Name }}-baremetal-daemonset
+  template:
+    metadata:
+      labels:
+        job: {{ .Release.Name }}-baremetal-daemonset
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/baremetal-configmap.yaml") . | sha256sum }}
+    spec:
+{{- with .Values.priorityClassName }}
+      priorityClassName: {{ . }}
+{{- end }}
+      containers:
+      - image: alpine:latest
+        command:
+        - /baremetal-config/main.sh
+        name: {{ .Release.Name }}-baremetal-installer
+        envFrom:
+          - secretRef:
+              name: {{ .Release.Name }}-baremetal-secret
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: {{ .Release.Name }}-install-script
+          mountPath: /baremetal-config
+        - name: {{ .Release.Name }}-host-mount
+          mountPath: /host-tmp
+        livenessProbe:
+          exec:
+            command:
+              - sh
+              - "-c"
+              # Has this file been updated less than 1 minute ago?
+              - find /tmp/raidLivenessFile -mmin -1 | grep /tmp/raidLivenessFile
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          failureThreshold: 1
+      volumes:
+      - name: {{ .Release.Name }}-install-script
+        configMap:
+          name: {{ .Release.Name }}-baremetal-configmap
+          defaultMode: 0777
+      - name: {{ .Release.Name }}-host-mount
+        hostPath:
+          path: /tmp/bare-metal-daemonset
+      hostPID: true
+      nodeSelector:
+{{ .Values.nodeSelector | toYaml | indent 8 }}
+      affinity:
+{{ .Values.affinity | toYaml | indent 8 }}
+      tolerations:
+{{ .Values.tolerations | toYaml | indent 8 }}
+      terminationGracePeriodSeconds: 0
