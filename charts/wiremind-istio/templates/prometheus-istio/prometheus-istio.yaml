@@ -1,0 +1,77 @@
+{{- if .Values.prometheus.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: {{ .Values.prometheus.name }}
+  namespace: {{ .Values.prometheus.namespace }}
+  labels:
+{{ include "wiremind-istio.labels" . | indent 4 }}
+spec:
+  enableAdminAPI: true
+  podMetadata:
+    annotations:
+      # We can afford a few missing points
+      cluster-autoscaler.kubernetes.io/safe-to-evict: 'true'
+  podMonitorNamespaceSelector: {}
+  podMonitorSelector:
+    matchExpressions:
+      - key: prometheus
+        operator: In
+        values:
+          - {{ .Values.prometheus.name }}
+  portName: http-web
+  priorityClassName: app-critical-prod
+  probeNamespaceSelector: {}
+  probeSelector:
+    matchExpressions:
+      - key: prometheus
+        operator: In
+        values:
+          - {{ .Values.prometheus.name }}
+  replicas: 1
+{{- if .Values.prometheus.resources }}
+  resources: {{- toYaml .Values.prometheus.resources | nindent 4 }}
+{{- end }}
+  retention: {{ .Values.prometheus.retention }}
+  routePrefix: /
+  ruleNamespaceSelector: {}
+  ruleSelector:
+    matchExpressions:
+      - key: prometheus
+        operator: In
+        values:
+          - {{ .Values.prometheus.name }}
+  securityContext:
+    fsGroup: 2000
+    runAsGroup: 2000
+    runAsNonRoot: true
+    runAsUser: 1000
+  serviceAccountName: {{ .Values.prometheus.mainPrometheusName}}-prometheus
+  serviceMonitorNamespaceSelector: {}
+  serviceMonitorSelector:
+    matchExpressions:
+      - key: prometheus
+        operator: In
+        values:
+          - {{ .Values.prometheus.name }}
+  shards: 1
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: {{ .Values.prometheus.persistence.size }}
+        storageClassName: standard
+{{- if .Values.prometheus.thanos.enabled }}
+  thanos:
+    image: thanosio/thanos:v0.20.0
+    listenLocal: true
+    {{- if .Values.prometheus.thanos.objectStorage.enabled }}
+    objectStorageConfig: # blob storage configuration to upload metrics
+      key: {{ .Values.prometheus.thanos.objectStorage.key }}
+      name: {{ .Values.prometheus.thanos.objectStorage.name }}
+    {{- end }}
+{{- end }}
+{{- end }}

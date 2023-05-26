@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "wiremind-istio.fullname" . }}-component-monitor
+  labels:
+    monitoring: istio-components
+    prometheus: {{ .Values.prometheus.name }}
+{{ include "wiremind-istio.labels" . | indent 4 }}
+spec:
+  jobLabel: istio
+  targetLabels: [app]
+  selector:
+    matchExpressions:
+      - key: istio
+        operator: In
+        values:
+          - pilot
+  namespaceSelector:
+    any: true
+  endpoints:
+    - port: http-monitoring
+      interval: 15s

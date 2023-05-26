@@ -1,0 +1,80 @@
+# Required
+# cluster: name-of-cluster
+# networkName: name-of-network
+
+base:
+  # For istioctl usage to disable istio config crds in base
+  enableIstioConfigCRDs: false
+
+istio:
+  meshID: mesh-kubernetes-default
+  # meshNetworks:
+  proxy:
+    resources: {}
+  tracer: {}
+  eastwestgateway:
+    label: {}
+    resources: {}
+    service:
+      nodePort:
+        enabled: false
+    hpa:
+      minReplicas: 2
+      maxReplicas: 3
+  sidecarInjectorWebhook:
+    enableNamespacesByDefault: false
+    neverInjectSelector:
+      # Never inject istio without explicitely state it (opt-in). istio already ignores sidecar.istio.io/inject=false
+      - matchExpressions:
+        - key: sidecar.istio.io/inject
+          operator: DoesNotExist
+      # Don't use istio for jobs (prometheus helm upgrade, elasticsearch-dump, etc)
+      # Because of https://github.com/istio/istio/issues/6324
+      # Note in case we enable CNI for jobs that use any network in initcontainer: https://istio.io/latest/docs/setup/additional-setup/cni/#compatibility-with-application-init-containers
+      - matchExpressions:
+        - key: job-name
+          operator: Exists
+  remoteSecret:
+    enabled: false
+    # certificateAuthorityData:
+    # token:
+    remoteClusterName: kubernetes-default
+    server: https://127.0.0.1:6443
+  caCerts:
+    enabled: false
+    caCert: |
+      foo
+    caKey: |
+      foo
+    certChain: |
+      foo
+    rootCert: |
+      foo
+  meshConfig:
+    verbose: false
+    interceptionMode: "TPROXY"
+    drainDuration: 180s
+    terminationDrainDuration: 300s
+  pilot:
+    hpa:
+      minReplicas: 1
+      maxReplicas: 5
+    resources: {}
+
+prometheus:
+  enabled: false
+  # Namespace to create the `Prometheus` Kubernetes Resource
+  namespace: default
+  # Name of prometheus, also used for servicemonitors & co selectors
+  name: prometheus-istio
+  allowOverlappingBlocks: true
+  resources: {}
+  retention: 1d
+  persistence:
+    size: 1Gi
+  mainPrometheusName: kube-prometheus-stack
+  thanos:
+    # Enable both Side-car and Service Discovery
+    enabled: true
+    objectStorage:
+      enabled: false

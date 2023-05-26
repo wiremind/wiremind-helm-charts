@@ -1,0 +1,208 @@
+# https://github.com/istio/istio/tree/master/operator
+# https://github.com/istio/istio/blob/master/operator/ARCHITECTURE.md#manifest-creation
+# https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: {{ include "wiremind-istio.fullname" . }}
+  labels:
+{{ include "wiremind-istio.labels" . | indent 4 }}
+spec:
+  profile: default  # https://github.com/istio/istio/blob/master/manifests/profiles
+  components:  # https://istio.io/latest/docs/setup/install/istioctl/#identify-an-istio-component
+    pilot:
+      k8s:
+{{ if .Values.istio.priorityClassName }}
+        priorityClassName: {{ .Values.istio.priorityClassName }}
+{{ end }}
+        resources: {{- .Values.istio.pilot.resources | toYaml | nindent 10 }}
+        podAnnotations:
+          cluster-autoscaler.kubernetes.io/safe-to-evict: 'true'
+{{- with .Values.istio.pilot.podAnnotations }}
+{{ toYaml . | indent 10 }}
+{{- end }}
+        {{- if .Values.istio.pilot.env }}
+        env:
+          {{- range $key, $val := .Values.istio.pilot.env }}
+          - name: {{ $key }}
+            value: {{ $val | quote }}
+          {{- end }}
+        {{- end }}
+{{- if .Values.istio.pilot.affinity }}
+        affinity:
+{{ .Values.istio.pilot.affinity | toYaml | indent 10 }}
+{{ end }}
+{{- if .Values.istio.pilot.tolerations }}
+        tolerations:
+{{ .Values.istio.pilot.tolerations | toYaml | indent 10 }}
+{{ end }}
+        hpaSpec:
+          maxReplicas: {{ .Values.istio.pilot.hpa.maxReplicas }}
+          minReplicas: {{ .Values.istio.pilot.hpa.minReplicas }}
+    ingressGateways:
+      - name: istio-ingressgateway
+        enabled: false
+      - name: istio-eastwestgateway
+        enabled: true
+        label:
+          istio: eastwestgateway
+          app: istio-eastwestgateway
+          topology.istio.io/network: {{ .Values.network }}
+{{- with .Values.istio.eastwestgateway.label }}
+{{ toYaml . | indent 10 }}
+{{- end }}
+        k8s:
+{{ if .Values.istio.priorityClassName }}
+          priorityClassName: {{ .Values.istio.priorityClassName }}
+{{ end }}
+          podAnnotations:
+            cluster-autoscaler.kubernetes.io/safe-to-evict: 'true'
+{{- with .Values.istio.eastwestgateway.podAnnotations }}
+{{ toYaml . | indent 12 }}
+{{- end }}
+{{- with .Values.istio.eastwestgateway.resources }}
+          resources:
+{{ toYaml . | indent 12 }}
+{{- end }}
+
+
+{{- if .Values.istio.eastwestgateway.affinity }}
+          affinity:
+{{ .Values.istio.eastwestgateway.affinity | toYaml | indent 12 }}
+{{ end }}
+{{- if .Values.istio.eastwestgateway.tolerations }}
+          tolerations:
+{{ .Values.istio.eastwestgateway.tolerations | toYaml | indent 12 }}
+{{ end }}
+          env:
+            # sni-dnat adds the clusters required for AUTO_PASSTHROUGH mode
+            - name: ISTIO_META_ROUTER_MODE
+              value: "sni-dnat"
+            # traffic through this gateway should be routed inside the network
+            - name: ISTIO_META_REQUESTED_NETWORK_VIEW
+              value: {{ .Values.network }}
+          hpaSpec:
+            maxReplicas: {{ .Values.istio.eastwestgateway.hpa.maxReplicas }}
+            minReplicas: {{ .Values.istio.eastwestgateway.hpa.minReplicas }}
+          service:
+            ports:
+              - name: status-port
+                port: 15021
+                targetPort: 15021
+{{ if .Values.istio.eastwestgateway.service.nodePort.enabled }}
+                nodePort: 30021
+{{ end }}
+              - name: tls
+                port: 15443
+                targetPort: 15443
+{{ if .Values.istio.eastwestgateway.service.nodePort.enabled }}
+                nodePort: 30443
+{{ end }}
+              - name: tls-istiod
+                port: 15012
+                targetPort: 15012
+{{ if .Values.istio.eastwestgateway.service.nodePort.enabled }}
+                nodePort: 30012
+{{ end }}
+              - name: tls-webhook
+                port: 15017
+                targetPort: 15017
+{{ if .Values.istio.eastwestgateway.service.nodePort.enabled }}
+                nodePort: 30017
+{{ end }}
+          # nodeSelector:
+          #   node-role.kubernetes.io/istio-eastwestgateway: "true"
+          # overlays:  # https://istio.io/latest/docs/setup/install/istioctl/#configure-gateways
+          # - kind: Service
+          #   name: istio-eastwestgateway
+          #   - kind: Deployment
+          #     name: istio-eastwestgateway
+          #     patches:
+          #       # We change it to a daemonset
+          #       - path: kind
+          #         value: DaemonSet
+          #       - path: spec.strategy
+          #         value:
+          #       - path: spec.template.spec.containers.[name:istio-proxy].ports.[containerPort:15021].hostPort
+          #         value: 15021
+          #       - path: spec.template.spec.containers.[name:istio-proxy].ports.[containerPort:15443].hostPort
+          #         value: 15443
+          #       - path: spec.template.spec.containers.[name:istio-proxy].ports.[containerPort:15012].hostPort
+          #         value: 15012
+          #       - path: spec.template.spec.containers.[name:istio-proxy].ports.[containerPort:15017].hostPort
+          #         value: 15017
+    # egressGateways:
+    #   - name: istio-egressgateway
+    #     enabled: true
+    cni:  # https://istio.io/latest/docs/setup/additional-setup/cni
+      enabled: false
+
+  ## Ref: https://istio.io/latest/docs/reference/config/istio.mesh.v1alpha1/
+  meshConfig:
+    {{ if .Values.istio.meshConfig.verbose }}
+    accessLogFile: /dev/stdout
+    {{ end }}
+    enablePrometheusMerge: false
+    # Restrict access to services in registry (Requires namespaced Sidecars)
+    # https://istio.io/latest/docs/tasks/traffic-management/egress/egress-control/#envoy-passthrough-to-external-services
+    # https://www.funkypenguin.co.nz/blog/istio-namespace-isolation-tricks/
+    # outboundTrafficPolicy:
+    #   mode: REGISTRY_ONLY
+    ## Ref: https://istio.io/latest/docs/reference/config/networking/destination-rule/#ConnectionPoolSettings-TCPSettings-TcpKeepalive
+    tcpKeepalive:
+      ## This is the default value in our machines, but we need to state something in order for istio to enable SO_KEEPALIVE
+      ## Ref: https://github.com/istio/istio/blob/4ecbb5e8d193ce59687a79f27cf84c98124f8e52/pilot/pkg/networking/core/v1alpha3/cluster.go#L538
+      time: 60s
+    enableTracing: false
+    defaultConfig:
+      proxyMetadata:  # provides native support for DNS resolution with ServiceEntries (https://istio.io/latest/news/releases/1.8.x/announcing-1.8/upgrade-notes/#istio-coredns-plugin-deprecation)
+      # (OLD) Disabled because it seems to cause dns issues ("temporary failure") when containers start quickly and try to resolve dns names.
+      # Re enabled because it seems like using those setting we do not need to create services in namespaces in order to reach other istio meshed clusters, to be monitored (2022-05 istio 1.12).
+        ISTIO_META_DNS_CAPTURE: "true"
+      tracing:
+        sampling: 100  # XXX too much for production
+      drainDuration: {{ .Values.istio.meshConfig.drainDuration }}
+      # We basically never want a connection to be dropped BEFORE the main container stops
+      terminationDrainDuration:  {{ .Values.istio.meshConfig.terminationDrainDuration }}
+      parentShutdownDuration: 181s
+      holdApplicationUntilProxyStarts: true
+      # https://istio.io/latest/docs/reference/config/istio.mesh.v1alpha1/#ProxyConfig-InboundInterceptionMode
+      {{ with .Values.istio.meshConfig.interceptionMode }}
+      interceptionMode: {{ . }}
+      {{ end }}
+
+  values:  # Helm pass-through API, https://github.com/istio/istio/blob/1.9.0/manifests/charts
+    # https://github.com/istio/istio/blob/master/manifests/charts/base/values.yaml
+    base:
+      enableIstioConfigCRDs: {{ .Values.base.enableIstioConfigCRDs }}
+    global:
+      logging:
+        level: "default:warn,ads:warn,kube:warn"
+      meshID: {{ .Values.istio.meshID }}
+{{- with .Values.istio.meshNetworks }}
+      meshNetworks:
+{{ toYaml . | indent 8 }}
+{{- end }}
+      multiCluster:
+        enabled: true
+        clusterName: {{ .Values.cluster }}
+      network: {{ .Values.network }}
+      proxy:
+        resources: {{- .Values.istio.proxy.resources | toYaml | nindent 10 }}
+      tracer: {{- .Values.istio.tracer | toYaml | nindent 8 }}
+
+    # cni:  # https://istio.io/latest/docs/setup/additional-setup/cni
+    #   excludeNamespaces:
+    #     - istio-operator
+    #     - istio-system
+    #     - kube-system
+    #   logLevel: info
+    #   cniBinDir: /opt/cni/bin
+    #   cniConfDir: /etc/cni/net.d
+
+    sidecarInjectorWebhook:  # https://github.com/istio/istio/blob/master/manifests/charts/istio-control/istio-discovery/values.yaml
+      enableNamespacesByDefault: {{ .Values.istio.sidecarInjectorWebhook.enableNamespacesByDefault }}
+      neverInjectSelector: {{- toYaml .Values.istio.sidecarInjectorWebhook.neverInjectSelector | nindent 8 }}
+{{ with .Values.istio.additionalNeverInjectSelector }}
+{{ toYaml . | indent 8 }}
+{{ end }}

@@ -1,0 +1,8 @@
+apiVersion: v2
+name: wiremind-istio
+description: wiremind-istio
+type: application
+version: 2.0.0
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts

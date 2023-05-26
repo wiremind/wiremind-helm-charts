@@ -1,0 +1,30 @@
+# See https://istio.io/latest/docs/ops/best-practices/observability/#using-prometheus-for-production-scale-monitoring
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ include "wiremind-istio.fullname" . }}-federation
+  namespace: {{ .Values.prometheus.namespace }}
+  labels:
+{{ include "wiremind-istio.labels" . | indent 4 }}
+spec:
+  namespaceSelector:
+    matchNames:
+    - {{ .Values.prometheus.namespace }}
+  selector:
+    matchLabels:
+      prometheus: {{ .Values.prometheus.name }}
+  podMetricsEndpoints:
+  - interval: 30s
+    scrapeTimeout: 30s
+    params:
+      'match[]':
+      - '{__name__=~"workload:(.*)"}'
+      - '{__name__=~"pilot(.*)"}'
+    path: /federate
+    port: "9090"
+    honorLabels: true
+    metricRelabelings:
+    - sourceLabels: ["__name__"]
+      regex: 'workload:(.*)'
+      targetLabel: "__name__"
+      action: replace
