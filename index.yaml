@@ -7369,4 +7369,17 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-baremetal-1.2.0/wiremind-baremetal-1.2.0.tgz
     version: 1.2.0
-generated: "2023-05-25T12:53:01.140288811Z"
+  wiremind-istio:
+  - apiVersion: v2
+    created: "2023-05-26T10:06:54.624074031Z"
+    description: wiremind-istio
+    digest: b6221bdda2115f7fe9b18f5b1b75216594bdcb0a629e0b867de93bcec4adc447
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: wiremind-istio
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-istio-2.0.0/wiremind-istio-2.0.0.tgz
+    version: 2.0.0
+generated: "2023-05-26T10:06:54.624834541Z"
