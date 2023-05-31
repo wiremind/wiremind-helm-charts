@@ -179,9 +179,13 @@ spec:
       logging:
         level: "default:warn,ads:warn,kube:warn"
       meshID: {{ .Values.istio.meshID }}
-{{- with .Values.istio.meshNetworks }}
+{{- if .Values.istio.meshNetworks }}
       meshNetworks:
-{{ toYaml . | indent 8 }}
+      {{- range $meshNetworkName, $meshNetworkConfig := .Values.istio.meshNetworks }}
+      {{- if $meshNetworkConfig }}
+        {{ $meshNetworkName }}: {{ toYaml $meshNetworkConfig | nindent 10 }}
+      {{- end }}
+      {{- end }}
 {{- end }}
       multiCluster:
         enabled: true

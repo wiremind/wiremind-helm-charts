@@ -8,7 +8,7 @@ base:
 
 istio:
   meshID: mesh-kubernetes-default
-  # meshNetworks:
+  meshNetworks: {}
   proxy:
     resources: {}
   tracer: {}
