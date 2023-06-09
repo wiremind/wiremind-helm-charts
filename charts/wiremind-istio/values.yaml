@@ -55,6 +55,7 @@ istio:
     interceptionMode: "TPROXY"
     drainDuration: 180s
     terminationDrainDuration: 300s
+    serviceSettings: {}
   pilot:
     hpa:
       minReplicas: 1
