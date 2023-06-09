@@ -171,7 +171,7 @@ spec:
       interceptionMode: {{ . }}
       {{ end }}
     {{ with .Values.istio.meshConfig.serviceSettings }}
-    serviceSettings: {{ . }}
+    serviceSettings: {{ toYaml . | nindent 6 }}
     {{ end }}
 
   values:  # Helm pass-through API, https://github.com/istio/istio/blob/1.9.0/manifests/charts
