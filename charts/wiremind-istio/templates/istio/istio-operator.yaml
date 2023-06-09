@@ -170,6 +170,9 @@ spec:
       {{ with .Values.istio.meshConfig.interceptionMode }}
       interceptionMode: {{ . }}
       {{ end }}
+    {{ with .Values.istio.meshConfig.serviceSettings }}
+    serviceSettings: {{ . }}
+    {{ end }}
 
   values:  # Helm pass-through API, https://github.com/istio/istio/blob/1.9.0/manifests/charts
     # https://github.com/istio/istio/blob/master/manifests/charts/base/values.yaml
