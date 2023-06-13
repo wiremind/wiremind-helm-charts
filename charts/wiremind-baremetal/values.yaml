@@ -1,5 +1,9 @@
+image:
+  name: "alpine"
+  tag: ""
+
 secret:
-  password: "something"  # set it
+  password: "setthisvalue"
 
 tolerations: []
 
@@ -7,4 +11,27 @@ affinity: {}
 
 nodeSelector: {}
 
-priorityClassName:
+priorityClassName: ""
+
+resources: {}
+
+containerSecurityContext:
+  privileged: true
+
+livenessProbe:
+  exec:
+    command:
+      - sh
+      - "-c"
+      # Has this file been updated less than 1 minute ago?
+      - find /tmp/raidLivenessFile -mmin -1 | grep /tmp/raidLivenessFile
+  initialDelaySeconds: 30
+  periodSeconds: 120
+  timeoutSeconds: 30
+  failureThreshold: 1
+
+readinessProbe: {}
+
+terminationGracePeriodSeconds: 0
+
+hostPID: true
