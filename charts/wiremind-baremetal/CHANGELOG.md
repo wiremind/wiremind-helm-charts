@@ -1,5 +1,11 @@
 # Changelog
 
+# v1.4.0 (2022-06-13)
+## Feat
+- Support resources, containerSecurityContext, readinessProbe, livenessProbe, image, hostPID
+- Convenient names for resources
+- Use with instead of if and hardcoded values
+
 # v1.3.1 (2022-03-02)
 ## Fix
 - livenessprobe: less strict, run less often
