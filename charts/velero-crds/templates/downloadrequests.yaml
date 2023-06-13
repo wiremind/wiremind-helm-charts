@@ -7,7 +7,6 @@ metadata:
     component: velero
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  #creationTimestamp: null
   name: downloadrequests.velero.io
 spec:
   group: velero.io
@@ -48,10 +47,13 @@ spec:
                     - BackupLog
                     - BackupContents
                     - BackupVolumeSnapshots
-                    - BackupItemSnapshots
+                    - BackupItemOperations
                     - BackupResourceList
+                    - BackupResults
                     - RestoreLog
                     - RestoreResults
+                    - RestoreResourceList
+                    - RestoreItemOperations
                     - CSIBackupVolumeSnapshots
                     - CSIBackupVolumeSnapshotContents
                     type: string

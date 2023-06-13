@@ -7,7 +7,6 @@ metadata:
     component: velero
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  #creationTimestamp: null
   name: volumesnapshotlocations.velero.io
 spec:
   group: velero.io
