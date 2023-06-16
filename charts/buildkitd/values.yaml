@@ -1,7 +1,7 @@
 image:
   repository: moby/buildkit
   pullPolicy: IfNotPresent
-  tag: "v0.10.6"
+  tag: "v0.11.6-rootless"
 
 nameOverride: ""
 fullnameOverride: ""
@@ -9,6 +9,8 @@ fullnameOverride: ""
 resources: {}
 
 extraArgs: []
+
+replicaCount: 1
 
 env: {}
 
@@ -47,5 +49,4 @@ readinessProbe:
   successThreshold: 1
   failureThreshold: 5
 
-containerSecurityContext:
-  privileged: true
+extraSecurityContext: {}
