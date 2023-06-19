@@ -8,9 +8,7 @@ fullnameOverride: ""
 
 resources: {}
 
-args:
-  - "--oci-worker-gc"
-  - "--oci-worker-gc-keepstorage=1000"
+extraArgs: []
 
 env: {}
 
@@ -25,3 +23,23 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+service:
+  port: 12345
+
+config:
+  port: 12345
+  gc:
+    enabled: true
+    keepstoragePercentage: 0.90
+
+livenessProbe:
+  initialDelaySeconds: 5
+  periodSeconds: 30
+
+readinessProbe:
+  initialDelaySeconds: 5
+  periodSeconds: 30
+
+containerSecurityContext:
+  privileged: true

@@ -18,11 +18,17 @@ spec:
         - name: buildkitd
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           args:
-            - --addr=tcp://0.0.0.0:12345
-            {{- toYaml .Values.args | nindent 12  }}
+            - --addr=tcp://0.0.0.0:{{ .Values.config.port }}
+            {{- if .Values.config.gc.enabled }}
+            - "--oci-worker-gc"
+            - "--oci-worker-gc-keepstorage={{ floor (mulf (mulf (trimSuffix "Gi" .Values.persistence.size) 1024) .Values.config.gc.keepstoragePercentage) }}"
+            {{- end }}
+            {{- with .Values.extraArgs }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           ports:
             - name: tcp
-              containerPort: 12345
+              containerPort: {{ .Values.config.port }}
               protocol: TCP
           env:
           {{- range $key, $value := .Values.env }}
@@ -40,22 +46,23 @@ spec:
             exec:
               command:
                 - buildctl
-                - '--addr=tcp://0.0.0.0:12345'
+                - '--addr=tcp://0.0.0.0:{{ .Values.config.port }}'
                 - debug
                 - workers
-            initialDelaySeconds: 5
-            periodSeconds: 30
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
           readinessProbe:
             exec:
               command:
                 - buildctl
-                - '--addr=tcp://0.0.0.0:12345'
+                - '--addr=tcp://0.0.0.0:{{ .Values.config.port }}'
                 - debug
                 - workers
-            initialDelaySeconds: 5
-            periodSeconds: 30
-          securityContext:
-            privileged: true
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          {{- with .Values.containerSecurityContext }}
+          securityContext: {{- toYaml . | nindent 12 }}
+          {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
