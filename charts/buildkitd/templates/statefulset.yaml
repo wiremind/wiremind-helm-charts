@@ -37,7 +37,7 @@ spec:
             {{- with .limits }}
             {{- with .cpu }}
             - name: GOMAXPROCS
-              value: {{ . }}
+              value: {{ . | quote }}
             {{- end }}
             {{- end }}
             {{- end }}
