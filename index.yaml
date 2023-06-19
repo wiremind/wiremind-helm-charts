@@ -105,6 +105,18 @@ entries:
     version: 1.0.1
   buildkitd:
   - apiVersion: v2
+    created: "2023-06-19T13:24:30.988537056Z"
+    description: A Helm chart for https://github.com/moby/buildkit
+    digest: 1add4994653daf765b16506057f8c461cf35a80df3fe2a168c79d3bbd4931cd7
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: buildkitd
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/buildkitd-0.4.0/buildkitd-0.4.0.tgz
+    version: 0.4.0
+  - apiVersion: v2
     created: "2023-06-19T12:11:01.057245493Z"
     description: A Helm chart for https://github.com/moby/buildkit
     digest: 2ed6abc683d15ccf1220658bf0727dca537e8e215533745ba57563585bc4530e
@@ -7480,4 +7492,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-istio-2.0.0/wiremind-istio-2.0.0.tgz
     version: 2.0.0
-generated: "2023-06-19T12:11:01.058953619Z"
+generated: "2023-06-19T13:24:30.989709076Z"
