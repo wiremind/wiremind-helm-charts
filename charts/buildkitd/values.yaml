@@ -36,10 +36,16 @@ config:
 livenessProbe:
   initialDelaySeconds: 5
   periodSeconds: 30
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
 
 readinessProbe:
   initialDelaySeconds: 5
   periodSeconds: 30
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
 
 containerSecurityContext:
   privileged: true
