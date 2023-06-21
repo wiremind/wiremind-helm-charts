@@ -17,10 +17,23 @@ spec:
       annotations:
         container.apparmor.security.beta.kubernetes.io/buildkitd: unconfined
     spec:
+      securityContext:
+        fsGroup: 1000
       volumes:
         - name: {{ include "buildkitd.fullname" . }}
           persistentVolumeClaim:
             claimName: {{ include "buildkitd.fullname" . }}
+        - name: config
+          configMap:
+            defaultMode: 420
+            name: {{ include "buildkitd.fullname" . }}
+      initContainers:
+        - name: init
+          image: busybox:latest
+          command: ['sh', '-c', "chown -R 1000:1000 /tmp/buildkit"]
+          volumeMounts:
+            - name: {{ include "buildkitd.fullname" . }}
+              mountPath: "/tmp/buildkit"
       containers:
         - name: buildkitd
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -32,16 +45,10 @@ spec:
             # https://github.com/moby/buildkit/issues/879#issuecomment-1240347038
             - name: {{ include "buildkitd.fullname" . }}
               mountPath: /home/user/.local/share/buildkit
+            - name: config
+              mountPath: /home/user/.config/buildkit
           args:
-            - --addr=tcp://0.0.0.0:{{ .Values.config.port }}
-            - '--rootless'
-            - '--oci-worker=true'
-            - '--oci-worker-rootless'
-            - '--oci-worker-no-process-sandbox'
-            {{- if .Values.config.gc.enabled }}
-            - "--oci-worker-gc"
-            - "--oci-worker-gc-keepstorage={{ floor (mulf (mulf (trimSuffix "Gi" .Values.persistence.size) 1024) .Values.config.gc.keepstoragePercentage) }}"
-            {{- end }}
+            - "--config /home/user/.config/buildkit/config.toml"
             {{- with .Values.extraArgs }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
