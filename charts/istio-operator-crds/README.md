@@ -14,7 +14,7 @@ CRDs are located here:
 **Do not forget to change APP_VERSION**
 
 ```
-export APP_VERSION=1.15.5
+export APP_VERSION=1.16.5
 cd charts/istio-operator-crds
 curl https://raw.githubusercontent.com/istio/istio/$APP_VERSION/manifests/charts/base/crds/crd-all.gen.yaml -L > crds.yaml
 curl https://raw.githubusercontent.com/istio/istio/$APP_VERSION/manifests/charts/base/crds/crd-operator.yaml -L >> crds.yaml
