@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "buildkitd.labels" . | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       {{- include "buildkitd.selectorLabels" . | nindent 6 }}
@@ -13,12 +13,15 @@ spec:
     metadata:
       labels:
         {{- include "buildkitd.selectorLabels" . | nindent 8 }}
+      annotations:
+        container.apparmor.security.beta.kubernetes.io/buildkitd: unconfined
     spec:
       containers:
         - name: buildkitd
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           args:
             - --addr=tcp://0.0.0.0:{{ .Values.config.port }}
+            - --oci-worker-no-process-sandbox
             {{- if .Values.config.gc.enabled }}
             - "--oci-worker-gc"
             - "--oci-worker-gc-keepstorage={{ floor (mulf (mulf (trimSuffix "Gi" .Values.persistence.size) 1024) .Values.config.gc.keepstoragePercentage) }}"
@@ -49,9 +52,6 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
-          volumeMounts:
-            - name: buildkit
-              mountPath: /var/lib/buildkit
           livenessProbe:
             exec:
               command:
@@ -76,9 +76,23 @@ spec:
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-          {{- with .Values.containerSecurityContext }}
-          securityContext: {{- toYaml . | nindent 12 }}
-          {{- end }}
+          securityContext:
+            seccompProfile:
+              type: Unconfined
+            # To change UID/GID, you need to rebuild the image
+            runAsUser: 1000
+            runAsGroup: 1000
+            {{- with .Values.extraSecurityContext }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          volumeMounts:
+            # Dockerfile has `VOLUME /home/user/.local/share/buildkit` by
+            # default too, but the default VOLUME does not work with rootless
+            # on Google's Container-Optimized OS as it is mounted with
+            # `nosuid,nodev`.
+            # https://github.com/moby/buildkit/issues/879#issuecomment-1240347038
+            - mountPath: /home/user/.local/share/buildkit
+              name: buildkit
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
