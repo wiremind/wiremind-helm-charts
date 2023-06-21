@@ -17,6 +17,7 @@ env: {}
 persistence:
   size: "1Gi"
   storageClass: ""
+  accessModes: "ReadWriteOnce"
 
 priorityClassName: ""
 

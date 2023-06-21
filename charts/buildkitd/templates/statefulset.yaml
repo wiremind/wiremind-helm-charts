@@ -6,6 +6,7 @@ metadata:
     {{- include "buildkitd.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  serviceName: {{ include "buildkitd.fullname" . }}
   selector:
     matchLabels:
       {{- include "buildkitd.selectorLabels" . | nindent 6 }}
@@ -16,9 +17,21 @@ spec:
       annotations:
         container.apparmor.security.beta.kubernetes.io/buildkitd: unconfined
     spec:
+      volumes:
+        - name: {{ include "buildkitd.fullname" . }}
+          persistentVolumeClaim:
+            claimName: {{ include "buildkitd.fullname" . }}
       containers:
         - name: buildkitd
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          volumeMounts:
+            # Dockerfile has `VOLUME /home/user/.local/share/buildkit` by
+            # default too, but the default VOLUME does not work with rootless
+            # on Google's Container-Optimized OS as it is mounted with
+            # `nosuid,nodev`.
+            # https://github.com/moby/buildkit/issues/879#issuecomment-1240347038
+            - name: {{ include "buildkitd.fullname" . }}
+              mountPath: /home/user/.local/share/buildkit
           args:
             - --addr=tcp://0.0.0.0:{{ .Values.config.port }}
             - '--rootless'
@@ -85,31 +98,10 @@ spec:
             # To change UID/GID, you need to rebuild the image
             runAsUser: 1000
             runAsGroup: 1000
+            fsGroup: 1000
             {{- with .Values.extraSecurityContext }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
-          volumeMounts:
-            # Dockerfile has `VOLUME /home/user/.local/share/buildkit` by
-            # default too, but the default VOLUME does not work with rootless
-            # on Google's Container-Optimized OS as it is mounted with
-            # `nosuid,nodev`.
-            # https://github.com/moby/buildkit/issues/879#issuecomment-1240347038
-            - mountPath: /home/user/.local/share/buildkit
-              name: buildkit
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
-  volumeClaimTemplates:
-    - kind: PersistentVolumeClaim
-      apiVersion: v1
-      metadata:
-        name: buildkit
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: {{ .Values.persistence.size }}
-        storageClassName: {{ .Values.persistence.storageClass }}
-        volumeMode: Filesystem
-  serviceName: {{ include "buildkitd.fullname" . }}
