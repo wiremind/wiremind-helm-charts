@@ -1,0 +1,14 @@
+name: Setup tools
+
+description: 'Sets up required tools for charts'
+
+runs:
+  using: composite
+  steps:
+    - name: Set up chart-testing
+      uses: helm/chart-testing-action@v2
+
+    - name: Install kubecomform
+      shell: bash
+      run: |
+        helm plugin install https://github.com/jtyr/kubeconform-helm --version v0.1.12
