@@ -21,7 +21,10 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           args:
             - --addr=tcp://0.0.0.0:{{ .Values.config.port }}
-            - --oci-worker-no-process-sandbox
+            - '--rootless'
+            - '--oci-worker=true'
+            - '--oci-worker-rootless'
+            - '--oci-worker-no-process-sandbox'
             {{- if .Values.config.gc.enabled }}
             - "--oci-worker-gc"
             - "--oci-worker-gc-keepstorage={{ floor (mulf (mulf (trimSuffix "Gi" .Values.persistence.size) 1024) .Values.config.gc.keepstoragePercentage) }}"
