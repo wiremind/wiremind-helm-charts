@@ -31,6 +31,7 @@ spec:
       initContainers:
         - name: init
           image: busybox:latest
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ['sh', '-c', "chown -R 1000:1000 /tmp/buildkit"]
           volumeMounts:
             - name: {{ include "buildkitd.fullname" . }}
@@ -38,6 +39,7 @@ spec:
       containers:
         - name: buildkitd
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
             # Dockerfile has `VOLUME /home/user/.local/share/buildkit` by
             # default too, but the default VOLUME does not work with rootless
@@ -49,7 +51,6 @@ spec:
             - name: config
               mountPath: /home/user/.config/buildkit
           args:
-            - "--config=/home/user/.config/buildkit/config.toml"
             {{- with .Values.extraArgs }}
             {{- toYaml . | nindent 12 }}
             {{- end }}

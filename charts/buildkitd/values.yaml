@@ -34,15 +34,21 @@ tolerations: []
 affinity: {}
 
 config:
+  debug: false
   port: 12345
   gc:
     enabled: true
     keepstoragePercentage: 0.90
+    policy:
+      all: true
+      keepDuration: ""
+      filters: ['"type==source.local"', '"type==exec.cachemount"', '"type==source.git.checkout"']
   workerOci:
     enabled: true
-    platforms: ["linux/amd64"]
+    selinux: false
+    platforms: ['"linux/amd64"']
     snapshotter: "auto"
-    maxParallelism:
+    maxParallelism: ""
   history:
     maxAge: 172800
     maxEntries: 50
