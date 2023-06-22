@@ -33,14 +33,19 @@ tolerations: []
 
 affinity: {}
 
-service:
-  port: 12345
-
 config:
   port: 12345
   gc:
     enabled: true
     keepstoragePercentage: 0.90
+  workerOci:
+    enabled: true
+    platforms: ["linux/amd64"]
+    snapshotter: "auto"
+    maxParallelism:
+  history:
+    maxAge: 172800
+    maxEntries: 50
 
 livenessProbe:
   initialDelaySeconds: 5
