@@ -8,41 +8,49 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 data:
-  # See: https://docs.docker.com/build/buildkit/toml-configuration/
-  config.toml: |
-    group = 1000
-    # Needed for liveness & readiness probes
-    debug = true
+  buildkitd.toml: |
+    # See: https://docs.docker.com/build/buildkit/toml-configuration/
+    # See: https://github.com/moby/buildkit/blob/master/docs/buildkitd.toml.md
     rootless = true
+    debug = {{ .Values.config.debug }}
 
     [grpc]
-    address = [ "tcp://0.0.0.0:{{ .Values.config.port }}" ]
+      address = [ "tcp://0.0.0.0:{{ .Values.config.port }}" ]
 
     [worker.oci]
-    enabled = true
-    rootless = true
-    platforms = {{ .Values.config.workerOci.platforms }}
-    snapshotter = {{ .Values.config.workerOci.snapshotter }}
-    # Whether run subprocesses in main pid namespace or not, this is useful for
-    # running rootless buildkit inside a container.
-    noProcessSandbox = true
-    {{- if .Values.config.workerOci.maxParallelism }}
-    max-parallelism = {{ .Values.config.workerOci.maxParallelism }}
-    {{- end }}
-    {{- if .Values.config.gc.enabled }}
-    gc = true
-    gckeepstorage = {{ floor (mulf (mulf (trimSuffix "Gi" .Values.persistence.size) 1024) .Values.config.gc.keepstoragePercentage) }}
-    {{- else }}
-    gc = false
-    {{- end }}
+      enabled = true
+      rootless = true
+      selinux = {{ .Values.config.workerOci.selinux }}
+      platforms = [{{ join "," .Values.config.workerOci.platforms }}]
+      snapshotter = {{ .Values.config.workerOci.snapshotter | quote }}
+      # Whether run subprocesses in main pid namespace or not, this is useful for
+      # running rootless buildkit inside a container.
+      noProcessSandbox = true
+      {{- if .Values.config.workerOci.maxParallelism }}
+      max-parallelism = {{ .Values.config.workerOci.maxParallelism }}
+      {{- end }}
+      {{- if .Values.config.gc.enabled }}
+      gc = true
+      gckeepstorage = {{ floor (mulf (mulf (trimSuffix "Gi" .Values.persistence.size) 1024) .Values.config.gc.keepstoragePercentage) }}
+      {{- else }}
+      gc = false
+      {{- end }}
+
+      [[worker.oci.gcpolicy]]
+        all = {{ .Values.config.gc.policy.all }}
+        keepBytes = {{ floor (mulf (mulf (trimSuffix "Gi" .Values.persistence.size) 1024) .Values.config.gc.keepstoragePercentage) }}
+        {{- if .Values.config.gc.policy.keepDuration }}
+        keepDuration = {{ .Values.config.gc.policy.keepDuration }}
+        {{- end }}
+        filters = [{{ join "," .Values.config.gc.policy.filters }}]
 
     [worker.containerd]
-    enabled = false
+      enabled = false
 
     # config for build history API that stores information about completed
     # build commands
     [history]
-    # maxAge is the maximum age of history entries to keep, in seconds.
-    maxAge = {{ .Values.config.history.maxAge }}
-    # maxEntries is the maximum number of history entries to keep.
-    maxEntries = {{ .Values.config.history.maxEntries }}
+      # maxAge is the maximum age of history entries to keep, in seconds.
+      maxAge = {{ .Values.config.history.maxAge }}
+      # maxEntries is the maximum number of history entries to keep.
+      maxEntries = {{ .Values.config.history.maxEntries }}
