@@ -18,6 +18,7 @@ spec:
         container.apparmor.security.beta.kubernetes.io/buildkitd: unconfined
     spec:
       securityContext:
+        # To change UID/GID, you need to rebuild the image
         fsGroup: 1000
       volumes:
         - name: {{ include "buildkitd.fullname" . }}
@@ -48,7 +49,7 @@ spec:
             - name: config
               mountPath: /home/user/.config/buildkit
           args:
-            - "--config /home/user/.config/buildkit/config.toml"
+            - "--config=/home/user/.config/buildkit/config.toml"
             {{- with .Values.extraArgs }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
@@ -111,4 +112,16 @@ spec:
             {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
       {{- end }}

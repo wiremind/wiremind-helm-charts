@@ -7,7 +7,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: {{ .Values.service.port }}
+    - port: {{ .Values.config.port }}
       targetPort: tcp
       protocol: TCP
       name: tcp
