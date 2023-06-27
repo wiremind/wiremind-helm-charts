@@ -1,0 +1,57 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: expecteddeploymentscales.wiremind.io
+  labels:
+{{ include "wiremind-crds.labels" . | indent 4 }}
+spec:
+  group: wiremind.io
+  names:
+    kind: ExpectedDeploymentScale
+    listKind: ExpectedDeploymentScaleList
+    plural: expecteddeploymentscales
+    shortNames:
+      - eds
+    singular: expecteddeploymentscale
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: The name of the Deployment under control
+      jsonPath: .spec.deploymentName
+      name: Deployment Name
+      type: string
+    - description: The expected Scale for the Deployment under control
+      jsonPath: .spec.expectedScale
+      name: Expected Scale
+      type: integer
+    - description: |
+        The priority of the Deployment under control for scale down order.
+
+        wiremind-kubernetes will, for each different priority found for all considered ExpectedDeploymentScale,
+        scale down all deployments with a given priority, then wait for their pods to be actually deleted,
+        then continue with the next priority (in descending order).
+
+        Higher priority means that the Deployment will be scaled down before others with lower priority.
+      jsonPath: .spec.priority
+      name: Priority
+      type: integer
+    name: v1
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            allOf:
+            - required:
+              - deploymentName
+              - expectedScale
+            properties:
+              deploymentName:
+                type: string
+              expectedScale:
+                type: integer
+              priority:
+                type: integer
+            type: object
+        type: object
+    served: true
+    storage: true
