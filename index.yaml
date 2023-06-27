@@ -7549,6 +7549,28 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-baremetal-1.2.0/wiremind-baremetal-1.2.0.tgz
     version: 1.2.0
+  wiremind-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 0.1.0
+    created: "2023-06-27T11:44:56.904344233Z"
+    description: Manage Wiremind CRDs
+    digest: d41cb498e2d9b8d8042cf2fdcfe397493cbd09c7058aee6e60e1d5e8b510eb3f
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/wiremind-crds
+    icon: https://avatars.githubusercontent.com/u/9391624?s=200&v=4
+    keywords:
+    - wiremind
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: wiremind-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/wiremind-crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-crds-0.1.0/wiremind-crds-0.1.0.tgz
+    version: 0.1.0
   wiremind-istio:
   - apiVersion: v2
     created: "2023-06-09T11:39:29.489647769Z"
@@ -7598,4 +7620,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-istio-2.0.0/wiremind-istio-2.0.0.tgz
     version: 2.0.0
-generated: "2023-06-22T13:15:51.497162298Z"
+generated: "2023-06-27T11:44:56.905085353Z"
