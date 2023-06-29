@@ -103,8 +103,26 @@ spec:
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           securityContext:
+            capabilities:
+              add:
+                - CHOWN
+                - DAC_OVERRIDE
+                - FOWNER
+                - FSETID
+                - SETGID
+                - SETUID
+                - SETFCAP
+              drop:
+                - ALL
+            # allowPrivilegeEscalation has to be true for initializing the user
+            # namespace with newuidmap setuid binary.
+            allowPrivilegeEscalation: true
+            # It needs to create some local files in /home/user/.local
+            readOnlyRootFilesystem: false
             seccompProfile:
               type: Unconfined
+            privileged: false
+            runAsNonRoot: true
             runAsUser: {{ .Values.user.uid }}
             runAsGroup:  {{ .Values.user.gid }}
             fsGroup: {{ .Values.user.uid }}
