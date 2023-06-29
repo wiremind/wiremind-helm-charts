@@ -40,6 +40,9 @@ spec:
         - name: buildkitd
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "buildkitd.fullname" . }}-env-vars
           volumeMounts:
             # Dockerfile has `VOLUME /home/user/.local/share/buildkit` by
             # default too, but the default VOLUME does not work with rootless
@@ -81,7 +84,6 @@ spec:
             exec:
               command:
                 - buildctl
-                - '--addr=tcp://0.0.0.0:{{ .Values.config.port }}'
                 - debug
                 - workers
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
@@ -93,7 +95,6 @@ spec:
             exec:
               command:
                 - buildctl
-                - '--addr=tcp://0.0.0.0:{{ .Values.config.port }}'
                 - debug
                 - workers
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
