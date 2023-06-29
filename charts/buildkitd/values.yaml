@@ -3,6 +3,12 @@ image:
   pullPolicy: IfNotPresent
   tag: "v0.11.6-rootless"
 
+# User 1000 is used in official images
+user:
+  name: "user"
+  uid: 1000
+  gid: 1000
+
 nameOverride: ""
 fullnameOverride: ""
 
