@@ -54,3 +54,21 @@ data:
       maxAge = {{ .Values.config.history.maxAge }}
       # maxEntries is the maximum number of history entries to keep.
       maxEntries = {{ .Values.config.history.maxEntries }}
+
+---
+
+# See https://github.com/moby/buildkit/blob/master/Dockerfile
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "buildkitd.fullname" . }}-env-vars
+  labels:
+    app: {{ template "buildkitd.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  XDG_RUNTIME_DIR: "/run/user/1000"
+  TMPDIR: "/home/user/.local/tmp"
+  BUILDKIT_HOST: "tcp://localhost:{{ .Values.config.port }}"
