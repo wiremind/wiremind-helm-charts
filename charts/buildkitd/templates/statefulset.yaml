@@ -19,7 +19,7 @@ spec:
     spec:
       securityContext:
         # To change UID/GID, you need to rebuild the image
-        fsGroup: 1000
+        fsGroup: {{ .Values.user.uid }}
       volumes:
         - name: {{ include "buildkitd.fullname" . }}
           persistentVolumeClaim:
@@ -32,7 +32,7 @@ spec:
         - name: init
           image: busybox:latest
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ['sh', '-c', "chown -R 1000:1000 /tmp/buildkit"]
+          command: ['sh', '-c', "chown -R {{ .Values.user.uid }}:{{ .Values.user.gid }} /tmp/buildkit"]
           volumeMounts:
             - name: {{ include "buildkitd.fullname" . }}
               mountPath: "/tmp/buildkit"
@@ -50,9 +50,9 @@ spec:
             # `nosuid,nodev`.
             # https://github.com/moby/buildkit/issues/879#issuecomment-1240347038
             - name: {{ include "buildkitd.fullname" . }}
-              mountPath: /home/user/.local/share/buildkit
+              mountPath: /home/{{ .Values.user.name }}/.local/share/buildkit
             - name: config
-              mountPath: /home/user/.config/buildkit
+              mountPath: /home/{{ .Values.user.name }}/.config/buildkit
           args:
             {{- with .Values.extraArgs }}
             {{- toYaml . | nindent 12 }}
@@ -105,10 +105,9 @@ spec:
           securityContext:
             seccompProfile:
               type: Unconfined
-            # To change UID/GID, you need to rebuild the image
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
+            runAsUser: {{ .Values.user.uid }}
+            runAsGroup:  {{ .Values.user.gid }}
+            fsGroup: {{ .Values.user.uid }}
             {{- with .Values.extraSecurityContext }}
             {{- toYaml . | nindent 12 }}
             {{- end }}

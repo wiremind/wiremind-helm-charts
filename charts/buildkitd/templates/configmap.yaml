@@ -69,6 +69,6 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 data:
-  XDG_RUNTIME_DIR: "/run/user/1000"
-  TMPDIR: "/home/user/.local/tmp"
+  XDG_RUNTIME_DIR: "/run/{{ .Values.user.name }}/{{ .Values.user.uid }}"
+  TMPDIR: "/home/{{ .Values.user.name }}/.local/tmp"
   BUILDKIT_HOST: "tcp://localhost:{{ .Values.config.port }}"
