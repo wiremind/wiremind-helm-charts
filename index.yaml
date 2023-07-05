@@ -7516,6 +7516,19 @@ entries:
   wiremind-baremetal:
   - apiVersion: v2
     appVersion: 3.18.0
+    created: "2023-07-05T13:48:40.541912859Z"
+    description: Helm chart to use BareMetal Encrypted at Rest disks
+    digest: 0728039b8f9373478297bb482cdd5a70214d87fe0edaab58d2769a01502f2092
+    icon: https://www.wiremind.io/assets/logo.png
+    maintainers:
+    - email: platform@wiremind.io
+      name: platform
+    name: wiremind-baremetal
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-baremetal-1.4.3/wiremind-baremetal-1.4.3.tgz
+    version: 1.4.3
+  - apiVersion: v2
+    appVersion: 3.18.0
     created: "2023-07-05T13:19:02.804309762Z"
     description: Helm chart to use BareMetal Encrypted at Rest disks
     digest: 11bda498980d4ae88ec942b20d01d352eccfd6a7b2c23ce30fb4f35d99adea1c
@@ -7660,4 +7673,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-istio-2.0.0/wiremind-istio-2.0.0.tgz
     version: 2.0.0
-generated: "2023-07-05T13:19:02.804712962Z"
+generated: "2023-07-05T13:48:40.542541375Z"
