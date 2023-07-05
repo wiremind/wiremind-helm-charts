@@ -2,7 +2,7 @@ apiVersion: v2
 name: wiremind-baremetal
 description: Helm chart to use BareMetal Encrypted at Rest disks
 icon: https://www.wiremind.io/assets/logo.png
-version: 1.4.2
+version: 1.4.3
 appVersion: "3.18.0"
 maintainers:
   - name: platform
