@@ -7,6 +7,11 @@ DECRYPTED_LUKS_DEVICE_NAME="md0crypt"
 DECRYPTED_LUKS_DEVICE="/dev/mapper/md0crypt"
 LVM_PARTITION_DEVICES="/dev/md0cryptlvm/persistentvolume*"
 
+if [[ ! -f "$RAID_DEVICE" ]]; then
+    echo "Raid device <${RAID_DEVICE}> not found, skipping"
+    exit 0
+fi
+
 
 wmb_decrypt_device() {
   if ! cryptsetup status $DECRYPTED_LUKS_DEVICE_NAME; then
