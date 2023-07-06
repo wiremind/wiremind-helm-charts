@@ -61,6 +61,8 @@ istio:
       minReplicas: 1
       maxReplicas: 5
     resources: {}
+  envoyFilter:
+    tcp_idle_timeout: 24h
 
 prometheus:
   enabled: false
