@@ -1,0 +1,27 @@
+{{- range $servingHash, $servingValue := .Values.tensorflowServing.models }}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: model-{{ $servingHash }}
+  labels:
+{{ include "pythie.labels" $ | indent 4 }}
+{{ include "pythie.modelLabels" $servingValue | indent 4 }}
+    serving/hash: {{ $servingHash }}
+data:
+{{- with $servingValue.version }}
+  version: {{ . }}
+{{- end }}
+  models.config: |
+    model_config_list {
+{{- range $model := $servingValue.models }}
+        config {
+            name: "{{ $model.name }}"
+            base_path: "/mnt/models/{{ $model.name }}"
+            model_platform: "tensorflow"
+        }
+{{- end }}
+    }
+---
+
+{{- end }}

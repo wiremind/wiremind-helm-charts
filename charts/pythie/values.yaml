@@ -1,0 +1,40 @@
+pythieServing:
+  image:
+    repository: "ghcr.io/wiremind/pythie-serving"
+    tag: "v3.4.2"
+    pullPolicy: IfNotPresent
+  istio:
+    enabled: false
+  models: {}
+
+tensorflowServing:
+  image:
+    repository: "tensorflow/serving"
+    tag: "2.12.1"
+    pullPolicy: IfNotPresent
+  istio:
+    enabled: false
+  models: {}
+
+mc:
+  image:
+    repository: "minio/mc"
+    tag: "RELEASE.2020-11-25T23-04-07Z"
+    pullPolicy: IfNotPresent
+
+  auth:
+    enabled: false
+    accessKeyID: ""
+    accessKeySecret: ""
+    endpointUrl: ""
+    regionName: ""
+
+fullnameOverride: ""
+
+nameOverride: ""
+
+priorityClassName: ""
+
+affinity: {}
+
+tolerations: []

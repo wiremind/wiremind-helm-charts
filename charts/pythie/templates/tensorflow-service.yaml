@@ -1,0 +1,22 @@
+{{- range $servingHash, $servingValue := .Values.tensorflowServing.models }}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: model-{{ $servingHash }}
+  labels:
+{{ include "pythie.labels" $ | indent 4 }}
+{{ include "pythie.modelLabels" $servingValue | indent 4 }}
+    serving/hash: {{ $servingHash }}
+spec:
+  type: ClusterIP
+  ports:
+    - name: grpc
+      port: 9090
+      targetPort: grpc
+  selector:
+{{ include "pythie.matchLabels" $ | indent 4 }}
+    serving/hash: {{ $servingHash }}
+---
+
+{{- end }}

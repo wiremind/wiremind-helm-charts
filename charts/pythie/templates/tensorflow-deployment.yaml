@@ -1,0 +1,132 @@
+{{- range $servingHash, $servingValue := .Values.tensorflowServing.models }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: model-{{ $servingHash }}
+  labels:
+{{ include "pythie.labels" $ | indent 4 }}
+{{ include "pythie.modelLabels" $servingValue | indent 4 }}
+    serving/hash: {{ $servingHash }}
+spec:
+  replicas: {{ $servingValue.replicaCount }}
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+{{ include "pythie.matchLabels" $ | indent 6 }}
+      serving/hash: {{ $servingHash }}
+  template:
+    metadata:
+      labels:
+{{ include "pythie.labels" $ | indent 8 }}
+{{ include "pythie.modelLabels" $servingValue | indent 8 }}
+        serving/hash: {{ $servingHash }}
+      annotations:
+        # Used in clusters with node autoscalers, to state that we can safely delete the underlying node in case of scale down (emptyDir, a.k.a local storage, prevents it)
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+        checksum/configmap: {{ include (print $.Template.BasePath "/pythie-serving-configmap.yaml") $ | sha256sum }}
+        {{- if $.Values.tensorflowServing.istio.enabled }}
+        sidecar.istio.io/inject: 'true'
+        {{- end }}
+# Adding the etags of the S3 buckets containing the models so the pods restart when a model does.
+# This may lead the pod to restart while upgrading the release if the order of the models changes inside a serving in values.yaml
+{{- range $index, $model := $servingValue.models }}
+        etag-{{ $index }}: {{ $model.etag }}
+{{- end }}
+{{- with $servingValue.version }}
+        checksum/version: {{ . }}
+{{- end }}
+    spec:
+      {{- if $.Values.priorityClassName }}
+      priorityClassName: {{ $.Values.priorityClassName }}
+      {{- end }}
+      initContainers:
+        - name: model-download
+          image: {{ $.Values.mc.image.repository }}:{{ $.Values.mc.image.tag }}
+          imagePullPolicy: {{ $.Values.mc.image.pullPolicy | quote }}
+          command:
+            - /bin/sh
+          args:
+            - -c
+            - |
+{{ include "pythie.untar" $servingValue | indent 14 }}
+          envFrom:
+            - secretRef:
+                name: {{ include "pythie.fullname" $ }}-s3
+          resources: {{- toYaml $servingValue.resources | nindent 12 }}
+          volumeMounts:
+            - name: model-volume
+              mountPath: /mnt/models
+          securityContext:
+            capabilities:
+              drop:
+                - all
+      containers:
+        - name: tensorflow-serving
+          image: {{ $.Values.tensorflowServing.image.repository }}:{{ default $.Values.tensorflowServing.image.tag $servingValue.image.tag }}
+          imagePullPolicy: {{ $.Values.tensorflowServing.image.pullPolicy | quote }}
+          command:
+            - /usr/bin/tensorflow_model_server
+          args:
+            - --port=9090
+            - --rest_api_port=9091
+            - --model_config_file=/etc/tensorflow/models.config
+          ports:
+            - containerPort: 9090
+              protocol: TCP
+              name: grpc
+            - containerPort: 9091
+              protocol: TCP
+              name: rest
+          readinessProbe:
+            httpGet:
+              path: /v1/models/{{ (index $servingValue.models 0).name }}  # XXX it checks only the first model
+              port: rest
+              scheme: HTTP
+            initialDelaySeconds: 20
+            timeoutSeconds: 10
+            periodSeconds: 60
+          resources: {{- toYaml $servingValue.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /mnt/models
+              name: model-volume
+            - mountPath: /etc/tensorflow
+              name: model-config
+          securityContext:
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - all
+              add:
+                - NET_BIND_SERVICE
+            runAsNonRoot: true
+            runAsUser: 10001
+            runAsGroup: 10001
+{{- with $.Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+{{- end }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 5
+            podAffinityTerm:
+              topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+{{ include "pythie.labels" $ | indent 18 }}
+{{ include "pythie.modelLabels" $servingValue | indent 18 }}
+                  serving/hash: {{ $servingHash }}
+{{- with $.Values.affinity }}
+{{ toYaml . | indent 8 }}
+{{- end }}
+      volumes:
+        - name: model-volume
+          emptyDir: {}
+        - name: model-config
+          configMap:
+            name: model-{{ $servingHash }}
+---
+
+{{- end }}

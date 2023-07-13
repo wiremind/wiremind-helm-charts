@@ -1,0 +1,19 @@
+apiVersion: v2
+name: pythie
+version: 0.2.0
+appVersion: "1.0"
+description: Serve machine learning models with tensorflow and pythie
+keywords:
+  - pythie
+  - serving
+  - machine
+  - learning
+  - model
+home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/pythie
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/pythie
+  - https://github.com/wiremind/pythie-serving
+icon: https://avatars.githubusercontent.com/u/9391624?s=200&v=4
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
