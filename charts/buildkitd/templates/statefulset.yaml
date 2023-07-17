@@ -28,14 +28,6 @@ spec:
           configMap:
             defaultMode: 420
             name: {{ include "buildkitd.fullname" . }}
-      initContainers:
-        - name: init
-          image: busybox:latest
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ['sh', '-c', "chown -R {{ .Values.user.uid }}:{{ .Values.user.gid }} /tmp/buildkit"]
-          volumeMounts:
-            - name: {{ include "buildkitd.fullname" . }}
-              mountPath: "/tmp/buildkit"
       containers:
         - name: buildkitd
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
