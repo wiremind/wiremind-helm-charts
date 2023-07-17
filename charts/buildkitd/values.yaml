@@ -1,7 +1,7 @@
 image:
   repository: moby/buildkit
   pullPolicy: IfNotPresent
-  tag: "v0.11.6-rootless"
+  tag: "v0.12.0-rootless"
 
 # User 1000 is used in official images
 user:
