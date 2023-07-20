@@ -6484,6 +6484,18 @@ entries:
     version: 0.1.0
   kubemod-crds:
   - apiVersion: v2
+    appVersion: 0.19.1
+    created: "2023-07-20T08:11:07.668337121Z"
+    description: A Helm chart to manage Kubemod CRDs
+    digest: 31935bb1167febe0eef489249ddff5d9590d772e21194ff66990884e5dccab41
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: kubemod-crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/kubemod-crds-0.4.0/kubemod-crds-0.4.0.tgz
+    version: 0.4.0
+  - apiVersion: v2
     appVersion: 0.13.0
     created: "2022-05-31T16:37:26.707988128Z"
     description: A Helm chart to manage Kubemod CRDs
@@ -7771,4 +7783,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-istio-2.0.0/wiremind-istio-2.0.0.tgz
     version: 2.0.0
-generated: "2023-07-18T09:35:16.634300001Z"
+generated: "2023-07-20T08:11:07.669471697Z"
