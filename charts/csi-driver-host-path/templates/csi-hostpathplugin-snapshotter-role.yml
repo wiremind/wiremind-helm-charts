@@ -1,0 +1,12 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: csi-hostpathplugin-snapshotter-role
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: external-snapshotter-leaderelection
+subjects:
+  - kind: ServiceAccount
+    name: csi-hostpathplugin-sa

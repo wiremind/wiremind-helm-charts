@@ -1,0 +1,14 @@
+{{- if .Values.hostpathClass.enabled }}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ .Values.hostpathClass.name }}
+  annotations:
+    storageclass.kubernetes.io/is-default-class: {{ .Values.hostpathClass.isDefaultClass | quote }}
+  labels:
+    driver: {{ .Values.hostpathClass.name }}
+provisioner: hostpath.csi.k8s.io
+volumeBindingMode: {{ .Values.hostpathClass.volumeBindingMode }}
+reclaimPolicy: {{ .Values.hostpathClass.reclaimPolicy }}
+allowVolumeExpansion: {{ .Values.hostpathClass.allowVolumeExpansion }}
+{{- end }}

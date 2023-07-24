@@ -97,6 +97,11 @@ jobs:
             helm repo add wiremind https://wiremind.github.io/wiremind-helm-charts
             helm install istio-operator-crds wiremind/istio-operator-crds --version 1.15.5
           fi
+          # csi-driver-host-path
+          if [[ "$CHART_NAME" == *"csi-driver-host-path" ]]; then
+            helm repo add wiremind https://wiremind.github.io/wiremind-helm-charts
+            helm install snapshot-controller-crds wiremind/snapshot-controller-crds --version 6.2.1
+          fi
 
       - name: Run chart-testing (install)
         run: ct install --config ct.yaml

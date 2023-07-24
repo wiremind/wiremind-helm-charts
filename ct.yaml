@@ -10,7 +10,7 @@ chart-repos:
   - minio=https://helm.min.io/
   - prometheus-community=https://prometheus-community.github.io/helm-charts
   - wiremind=https://wiremind.github.io/wiremind-helm-charts
-helm-extra-args: "--timeout 600s"
+helm-extra-args: "--timeout 120s"
 additional-commands:
   - helm kubeconform {{ .Path }}
   # - helm template {{ .Path }} | kubeconform
