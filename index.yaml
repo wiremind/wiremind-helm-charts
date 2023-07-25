@@ -1632,6 +1632,29 @@ entries:
   csi-driver-host-path:
   - apiVersion: v2
     appVersion: v1.11.0
+    created: "2023-07-25T09:49:02.791328451Z"
+    description: A sample (non-production) CSI Driver that creates a local directory
+      as a volume on a single node
+    digest: c5a695b423f55f0e0e110d2127e8432df9760052852212ab323c239ff414f321
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/csi-driver-host-path
+    icon: https://avatars.githubusercontent.com/u/33050221?s=48&v=4
+    keywords:
+    - csi
+    - driver
+    - host
+    - path
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: csi-driver-host-path
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/csi-driver-host-path
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/csi-driver-host-path-0.1.1/csi-driver-host-path-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: v1.11.0
     created: "2023-07-25T08:45:40.892511133Z"
     description: A sample (non-production) CSI Driver that creates a local directory
       as a volume on a single node
@@ -7807,4 +7830,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-istio-2.0.0/wiremind-istio-2.0.0.tgz
     version: 2.0.0
-generated: "2023-07-25T08:45:40.892915386Z"
+generated: "2023-07-25T09:49:02.791947755Z"
