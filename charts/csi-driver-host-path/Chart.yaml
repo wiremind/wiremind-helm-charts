@@ -2,7 +2,7 @@ apiVersion: v2
 name: csi-driver-host-path
 description: A sample (non-production) CSI Driver that creates a local directory as a volume on a single node
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "v1.11.0"
 icon: https://avatars.githubusercontent.com/u/33050221?s=48&v=4
 home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/csi-driver-host-path
