@@ -69,7 +69,7 @@ env: {}
 config:
   basePath: '/'
   restHistorySize: 50
-  hosts:
+  hosts: []
     # - host: https://es-cluster-es-http
     #   name: 'Elastic Cluster Name'
     #   headersWhitelist: ["X-Forwarded-For" ]
