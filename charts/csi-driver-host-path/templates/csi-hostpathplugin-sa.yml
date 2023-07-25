@@ -1,0 +1,7 @@
+# All of the individual sidecar RBAC roles get bound
+# to this account.
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: csi-hostpathplugin-sa
+  namespace: {{ .Release.Namespace }}
