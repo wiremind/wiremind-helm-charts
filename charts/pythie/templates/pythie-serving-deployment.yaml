@@ -9,7 +9,9 @@ metadata:
 {{ include "pythie.modelLabels" $servingValue | indent 4 }}
     serving/hash: {{ $servingHash }}
 spec:
-  replicas: {{ $servingValue.replicaCount }}
+  {{- with $servingValue.replicaCount }}
+  replicas: {{ . }}
+  {{- end }}
   strategy:
     type: RollingUpdate
   selector:
