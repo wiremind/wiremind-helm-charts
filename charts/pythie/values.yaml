@@ -6,6 +6,30 @@ pythieServing:
   istio:
     enabled: false
   models: {}
+    # my-example-model:
+    #   autoscaling:
+    #     enabled: true
+    #     maxReplicas: 80
+    #     minReplicas: 6
+    #     targetMetricValue: 80
+    #   maximumConcurrentRpcs: 2
+    #   image:
+    #     tag: v3.4.2
+    #   models:
+    #   - etag: 123456789
+    #     name: my-model
+    #     path: s3/path/to/model
+    #     platform: treelite
+    #     version: 1
+    #   replicaCount: 2
+    #   resources:
+    #     limits:
+    #       cpu: 500m
+    #       memory: 120Mi
+    #     requests:
+    #       cpu: 100m
+    #       memory: 50Mi
+    #   workerCount: 1
 
 tensorflowServing:
   image:

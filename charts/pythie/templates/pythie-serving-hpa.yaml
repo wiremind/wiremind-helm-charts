@@ -21,7 +21,7 @@ spec:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 30
+          averageUtilization: {{ $modelValue.autoscaling.targetMetricValue | default 30 }}
 
 ---
 
