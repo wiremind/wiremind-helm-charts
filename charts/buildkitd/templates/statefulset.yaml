@@ -30,7 +30,7 @@ spec:
             name: {{ include "buildkitd.fullname" . }}
       containers:
         - name: buildkitd
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag | default (printf "v%s-rootless" .Chart.AppVersion) }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
             - configMapRef:
