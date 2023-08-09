@@ -18,7 +18,7 @@ This chart bootstraps a ClamAV deployment and service on a Kubernetes cluster us
 
 ## Prerequisites
 
-- Kubernetes 1.9+
+- Kubernetes 1.19+
 
 ## Installing the Chart
 
