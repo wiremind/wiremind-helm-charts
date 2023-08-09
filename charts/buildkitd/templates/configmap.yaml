@@ -29,20 +29,32 @@ data:
       {{- if .Values.config.workerOci.maxParallelism }}
       max-parallelism = {{ .Values.config.workerOci.maxParallelism }}
       {{- end }}
+
       {{- if .Values.config.gc.enabled }}
       gc = true
       gckeepstorage = {{ floor (mulf (mulf (trimSuffix "Gi" .Values.persistence.size) 1024) .Values.config.gc.keepstoragePercentage) }}
+
+      {{- range $v := .Values.config.gc.policies }}
+      {{- with $ }}
+
+      [[worker.oci.gcpolicy]]
+        {{- if $v.all }}
+        all = {{ $v.all }}
+        {{- end }}
+        keepBytes = {{ $v.keepBytes | default (floor (mulf (mulf (trimSuffix "Gi" .Values.persistence.size) 1024) .Values.config.gc.keepstoragePercentage)) }}
+        {{- if $v.keepDuration }}
+        keepDuration = {{ $v.keepDuration }}
+        {{- end }}
+        {{- if $v.filters }}
+        filters = [{{ join "," $v.filters }}]
+        {{- end }}
+
+      {{- end }}
+      {{- end }}
+
       {{- else }}
       gc = false
       {{- end }}
-
-      [[worker.oci.gcpolicy]]
-        all = {{ .Values.config.gc.policy.all }}
-        keepBytes = {{ floor (mulf (mulf (trimSuffix "Gi" .Values.persistence.size) 1024) .Values.config.gc.keepstoragePercentage) }}
-        {{- if .Values.config.gc.policy.keepDuration }}
-        keepDuration = {{ .Values.config.gc.policy.keepDuration }}
-        {{- end }}
-        filters = [{{ join "," .Values.config.gc.policy.filters }}]
 
     [worker.containerd]
       enabled = false

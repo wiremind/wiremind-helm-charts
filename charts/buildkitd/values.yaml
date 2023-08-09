@@ -45,10 +45,14 @@ config:
   gc:
     enabled: true
     keepstoragePercentage: 0.90
-    policy:
-      all: true
-      keepDuration: ""
-      filters: ['"type==source.local"', '"type==exec.cachemount"', '"type==source.git.checkout"']
+    policies:
+      - keepDuration: '"48h"'
+        keepBytes: '"100MB"'
+        filters: ['"type==source.local"', '"type==exec.cachemount"', '"type==source.git.checkout"']
+      - all: true
+        keepDuration: ""
+        keepBytes: ""
+        filters: []
   workerOci:
     enabled: true
     selinux: false
