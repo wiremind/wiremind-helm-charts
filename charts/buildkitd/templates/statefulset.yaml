@@ -21,9 +21,6 @@ spec:
         # To change UID/GID, you need to rebuild the image
         fsGroup: {{ .Values.user.uid }}
       volumes:
-        - name: {{ include "buildkitd.fullname" . }}
-          persistentVolumeClaim:
-            claimName: {{ include "buildkitd.fullname" . }}
         - name: config
           configMap:
             defaultMode: 420
@@ -136,3 +133,22 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+  volumeClaimTemplates:
+    - kind: PersistentVolumeClaim
+      apiVersion: v1
+      metadata:
+        name: {{ include "buildkitd.fullname" . }}
+        namespace: {{ .Release.Namespace }}
+        labels:
+          app: {{ template "buildkitd.fullname" . }}
+          chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+          release: {{ .Release.Name }}
+          heritage: {{ .Release.Service }}
+      spec:
+        accessModes:
+          - {{ .Values.persistence.accessModes | quote }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size }}
+        storageClassName: {{ .Values.persistence.storageClass }}
+        volumeMode: Filesystem
