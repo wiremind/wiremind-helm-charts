@@ -803,6 +803,26 @@ entries:
     version: 1.7.1
   chartreuse:
   - apiVersion: v1
+    appVersion: 4.3.3
+    created: "2023-08-17T10:17:05.958143158Z"
+    description: Automate Alembic SQL schema migrations.
+    digest: c8bf56a954b91166ea0d9609e5e784db1509a13f643147ae916d4a2e1346387e
+    keywords:
+    - alembic
+    - database
+    - migration
+    - postgresql
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: chartreuse
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/chartreuse
+    - https://github.com/wiremind/chartreuse
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/chartreuse-4.3.3/chartreuse-4.3.3.tgz
+    version: 4.3.3
+  - apiVersion: v1
     appVersion: 4.3.0
     created: "2022-10-06T08:14:07.77803767Z"
     description: Automate Alembic SQL schema migrations.
@@ -7982,4 +8002,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-istio-2.0.0/wiremind-istio-2.0.0.tgz
     version: 2.0.0
-generated: "2023-08-11T13:32:19.734943113Z"
+generated: "2023-08-17T10:17:05.958857964Z"
