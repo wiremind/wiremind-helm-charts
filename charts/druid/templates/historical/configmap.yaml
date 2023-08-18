@@ -1,0 +1,32 @@
+{{- if .Values.historical.enabled }}
+
+{{- range $tierName, $tierValue := .Values.historical.tiers }}
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "druid.historical.fullname" (dict "tierName" $tierName "context" $) }}-config
+  labels:
+{{ include "druid.common-labels" $ | indent 4 }}
+    app.kubernetes.io/part-of: historical
+    app.kubernetes.io/component: historical-{{ $tierName }}
+data:
+{{ toYaml $tierValue.envVars | indent 2 }}
+
+---
+
+{{- end }}
+
+{{- $historicalDefaults := $.Values.historical.defaults }}
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "druid.fullname" $ }}-historical-config
+  labels:
+{{ include "druid.common-labels" $ | indent 4 }}
+    app.kubernetes.io/part-of: historical
+data:
+{{ toYaml $historicalDefaults.envVars | indent 2 }}
+
+{{- end }}

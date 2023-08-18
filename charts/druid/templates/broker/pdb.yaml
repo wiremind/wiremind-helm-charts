@@ -1,0 +1,19 @@
+{{- if .Values.broker.enabled }}
+
+{{- if .Values.broker.podDisruptionBudget }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "druid.broker.fullname" . }}
+  labels:
+{{ include "druid.common-labels" . | indent 4 }}
+    app.kubernetes.io/component: {{ .Values.broker.name }}
+spec:
+  selector:
+    matchLabels:
+{{ include "druid.common-matchLabels" . | indent 6 }}
+      app.kubernetes.io/component: {{ .Values.broker.name }}
+{{ toYaml .Values.broker.podDisruptionBudget | indent 2 }}
+{{- end }}
+
+{{- end }}

@@ -1,0 +1,29 @@
+{{- if .Values.broker.enabled }}
+
+{{- if .Values.broker.autoscaling.enabled }}
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "druid.broker.fullname" . }}
+spec:
+  scaleTargetRef:
+    # Only apps/v1 resources are accepted
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "druid.broker.fullname" . }}
+  minReplicas: {{ .Values.broker.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.broker.autoscaling.maxReplicas }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.broker.autoscaling.averageCpuUtilization }}
+
+{{- end }}
+
+---
+
+{{- end }}

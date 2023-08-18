@@ -1,0 +1,42 @@
+{{- if .Values.indexer.enabled }}
+
+{{- range $categoryrName, $categoryValue := .Values.indexer.categories }}
+
+{{- if $categoryValue.autoscaling.enabled }}
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "druid.indexer.fullname" (dict "categoryrName" $categoryrName "context" $) }}
+spec:
+  scaleTargetRef:
+    # Only apps/v1 resources are accepted
+    apiVersion: apps/v1
+    kind: {{ $categoryValue.mode }}
+    name: {{ include "druid.indexer.fullname" (dict "categoryrName" $categoryrName "context" $) }}
+  minReplicas: {{ $categoryValue.autoscaling.minReplicas }}
+  maxReplicas: {{ $categoryValue.autoscaling.maxReplicas }}
+  metrics:
+    - type: Object
+      object:
+        metric:
+          name: {{ $categoryValue.autoscaling.metricName | default "druid_remaining_tasks_instantaneous" }}
+        describedObject:
+          apiVersion: "/v1"
+          kind: Service
+          name: {{ $.Release.Name }}-druid-tasks-exporter
+        target:
+          type: Value
+          value: {{ $categoryValue.autoscaling.targetMetricValue }}
+  behavior:
+    scaleDown:
+      # 5mins is the default value.
+      stabilizationWindowSeconds: {{ $categoryValue.autoscaling.scaleDownStabilizationWindowSeconds | default 300 }}
+
+{{- end }}
+
+---
+
+{{- end }}
+
+{{- end }}

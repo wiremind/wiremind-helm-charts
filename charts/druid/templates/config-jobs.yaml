@@ -1,0 +1,98 @@
+{{- if .Values.configJobs.enabled }}
+
+{{- range $jobName, $jobDefinition := .Values.configJobs.dict }}
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "druid.configJobs.fullname" $ }}-{{ $jobName }}
+  labels:
+{{ include "druid.common-labels" $ | indent 4 }}
+    app.kubernetes.io/component: config-job-{{ $jobName }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  backoffLimit: 7
+  ttlSecondsAfterFinished: 3600
+  template:
+    metadata:
+      labels:
+{{ include "druid.common-labels" $ | indent 8 }}
+        app.kubernetes.io/component: config-job-{{ $jobName }}
+    spec:
+      priorityClassName: {{ $.Values.configJobs.priorityClassName }}
+      restartPolicy: Never
+      containers:
+        - name: job
+          image: curlimages/curl:7.85.0
+          command: ["curl"]
+          args:
+            - "-v"
+            - "--fail-with-body"
+            - "--connect-timeout"
+            - "5"
+            - "--max-time"
+            - "10"
+            - "--retry"
+            - "5"
+            - "--retry-delay"
+            - "0"
+            - "--retry-max-time"
+            - "60"
+            - "-X"
+            - "POST"
+            - {{ $jobDefinition.componentURL | quote }}
+            - "-H"
+            - "Content-Type: application/json"
+            - "-H"
+            - "X-Druid-Author: config-job-{{ $jobName }}"
+            - "-H"
+            - "X-Druid-Comment: {{ $.Values.configJobs.changeComment | default "changed by config-job" }}"
+            - "-d"
+            - "@/config.json"
+          resources:
+            limits:
+              cpu: '1'
+              memory: 1Gi
+            requests:
+              cpu: '10m'
+              memory: 32Mi
+          volumeMounts:
+            - name: config
+              mountPath: /config.json
+              subPath: config.json
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "druid.configJobs.fullname" $ }}-{{ $jobName }}
+            defaultMode: 420
+      {{- with $.Values.configJobs.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+      {{- end }}
+      {{- with $.Values.configJobs.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+      {{- end }}
+
+---
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "druid.configJobs.fullname" $ }}-{{ $jobName }}
+  labels:
+{{ include "druid.common-labels" $ | indent 4 }}
+    app.kubernetes.io/component: config-job-{{ $jobName }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+data:
+  config.json: {{ $jobDefinition.payload | toJson | quote }}
+
+---
+
+{{- end }}
+
+{{- end }}
