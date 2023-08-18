@@ -1,0 +1,72 @@
+{{- if and .Values.postgresql.enabled .Values.postgresql.backup.s3.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "druid.postgresql-s3-backup.fullname" . }}
+  labels:
+{{ include "druid.common-labels" . | indent 4 }}
+    app.kubernetes.io/component: {{ .Values.postgresql.backup.s3.cronJob.name }}
+spec:
+  schedule: {{ .Values.postgresql.backup.s3.cronJob.schedule | quote }}
+  startingDeadlineSeconds: {{ .Values.postgresql.backup.s3.cronJob.startingDeadlineSeconds }}
+  concurrencyPolicy: {{ .Values.postgresql.backup.s3.cronJob.concurrencyPolicy | quote }}
+  failedJobsHistoryLimit: {{ .Values.postgresql.backup.s3.cronJob.failedJobsHistoryLimit }}
+  successfulJobsHistoryLimit: {{ .Values.postgresql.backup.s3.cronJob.successfulJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        metadata:
+          labels:
+{{ include "druid.common-labels" . | indent 12 }}
+            app.kubernetes.io/component: {{ .Values.postgresql.backup.s3.cronJob.name }}
+{{- with .Values.postgresql.backup.podAnnotations }}
+          annotations:
+{{ toYaml . | indent 12 }}
+{{- end }}
+        spec:
+          {{- if .Values.postgresql.backup.s3.cronJob.priorityClassName }}
+          priorityClassName: {{ .Values.postgresql.backup.s3.cronJob.cronJobpriorityClassName }}
+          {{- end }}
+          restartPolicy: Never
+          {{- if .Values.postgresql.imagePullSecrets }}
+          imagePullSecrets:
+            {{- range $imagePullSecret := .Values.postgresql.imagePullSecrets }}
+            - name: {{ $imagePullSecret }}
+            {{- end }}
+          {{- end }}
+          containers:
+            - name: job
+              image: {{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}
+              command: [ "/bin/bash" ]
+              args: [ "/backup.sh" ]
+              envFrom:
+              - secretRef:
+                  name: {{ include "druid.postgresql-s3-backup.fullname" . }}
+              resources:
+{{ toYaml .Values.postgresql.backup.s3.cronJob.resources | indent 16 }}
+              volumeMounts:
+                - name: config
+                  mountPath: /backup.sh
+                  subPath: backup.sh
+          securityContext:
+            runAsUser: 0
+            fsGroup: 0
+{{- with .Values.postgresql.backup.s3.cronJob.nodeSelector }}
+          nodeSelector:
+{{ toYaml . | indent 12 }}
+{{- end }}
+{{- with .Values.postgresql.backup.s3.cronJob.affinity }}
+          affinity:
+{{ toYaml . | indent 12 }}
+{{- end }}
+{{- with .Values.postgresql.backup.s3.cronJob.tolerations }}
+          tolerations:
+{{ toYaml . | indent 12 }}
+{{- end }}
+          volumes:
+            - name: config
+              configMap:
+                name: {{ include "druid.postgresql-s3-backup.fullname" . }}
+                defaultMode: 420
+{{- end }}

@@ -1,0 +1,21 @@
+{{- if .Values.broker.enabled }}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "druid.broker.fullname" . }}
+  labels:
+{{ include "druid.common-labels" . | indent 4 }}
+    app.kubernetes.io/component: {{ .Values.broker.name }}
+spec:
+  type: {{ .Values.broker.serviceType }}
+  ports:
+    - port: {{ .Values.broker.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+{{ include "druid.common-matchLabels" . | indent 4 }}
+    app.kubernetes.io/component: {{ .Values.broker.name }}
+
+{{- end }}

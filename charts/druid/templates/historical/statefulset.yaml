@@ -1,0 +1,142 @@
+{{- if .Values.historical.enabled }}
+
+{{- range $tierName, $tierValue := .Values.historical.tiers }}
+
+{{- $historicalDefaults := $.Values.historical.defaults }}
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "druid.historical.fullname" (dict "tierName" $tierName "context" $) }}
+  labels:
+{{ include "druid.common-labels" $ | indent 4 }}
+    app.kubernetes.io/part-of: historical
+    app.kubernetes.io/component: historical-{{ $tierName }}
+spec:
+  serviceName: {{ include "druid.historical.fullname" (dict "tierName" $tierName "context" $) }}
+  podManagementPolicy: {{ default $historicalDefaults.podManagementPolicy $tierValue.podManagementPolicy }}
+  replicas: {{ if not (kindIs "invalid" $tierValue.replicaCount) }}{{ $tierValue.replicaCount }}{{ else }}{{ $historicalDefaults.replicaCount }}{{ end }}
+  selector:
+    matchLabels:
+{{ include "druid.common-matchLabels" $ | indent 6 }}
+      app.kubernetes.io/part-of: historical
+      app.kubernetes.io/component: historical-{{ $tierName }}
+  template:
+    metadata:
+      labels:
+{{ include "druid.common-labels" $ | indent 8 }}
+        app.kubernetes.io/part-of: historical
+        app.kubernetes.io/component: historical-{{ $tierName }}
+      annotations:
+        # This restarts all historicals for now as we use the same file
+        checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") $ | sha256sum }}
+        checksum/configmap-historicals: {{ include (print $.Template.BasePath "/historical/configmap.yaml") $ | sha256sum }}
+        checksum/secret-historicals: {{ include (print $.Template.BasePath "/historical/secret.yaml") $ | sha256sum }}
+{{- with $historicalDefaults.podAnnotations }}
+{{ toYaml . | indent 8 }}
+{{- end }}
+    spec:
+      nodeSelector:
+{{- if $tierValue.nodeSelector }}
+{{ toYaml $tierValue.nodeSelector | indent 8 }}
+{{- else }}
+{{ toYaml $historicalDefaults.nodeSelector | indent 8 }}
+{{- end }}
+    {{- with $historicalDefaults.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with $historicalDefaults.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+      {{- if $historicalDefaults.priorityClassName }}
+      priorityClassName: {{ $historicalDefaults.priorityClassName }}
+      {{- end }}
+      containers:
+      - name: historical
+        args: [ "historical" ]
+        env:
+          - name: druid_extensions_loadList
+            value: {{ $.Values.extensions.loadList | toJson | quote }}
+        # Order defines precedence
+        envFrom:
+          - configMapRef:
+              name: {{ include "druid.fullname" $ }}-config
+          - secretRef:
+              name: {{ include "druid.fullname" $ }}-config
+          - configMapRef:
+              name: {{ include "druid.fullname" $ }}-historical-config
+          - secretRef:
+              name: {{ include "druid.fullname" $ }}-historical-config
+          - configMapRef:
+              name: {{ include "druid.historical.fullname" (dict "tierName" $tierName "context" $) }}-config
+          - secretRef:
+              name: {{ include "druid.historical.fullname" (dict "tierName" $tierName "context" $) }}-config
+        resources:
+{{- if $tierValue.resources }}
+{{ toYaml $tierValue.resources | indent 10 }}
+{{- else }}
+{{ toYaml $historicalDefaults.resources | indent 10 }}
+{{- end }}
+        # Startup may be slow if a lot of segments.
+        startupProbe:
+          failureThreshold: 400
+          periodSeconds: 60
+          httpGet:
+            path: /status/health
+            port: 8083
+        livenessProbe:
+          periodSeconds: 60
+          timeoutSeconds: 10
+          failureThreshold: 15
+          httpGet:
+            path: /status/health
+            port: 8083
+        readinessProbe:
+          periodSeconds: 60
+          timeoutSeconds: 10
+          failureThreshold: 10
+          httpGet:
+            path: /druid/historical/v1/readiness
+            port: 8083
+        image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+        imagePullPolicy: {{ $.Values.image.pullPolicy | quote }}
+        ports:
+        - containerPort: 8083
+          name: http
+        {{- if .Values.metrics.enabled }}
+        - name: http-metrics
+          containerPort: {{ .Values.metrics.service.port }}
+          protocol: TCP
+        {{- end }}
+        volumeMounts:
+        - mountPath: /opt/druid/var
+          name: data
+  {{- if not $historicalDefaults.persistence.enabled }}
+      volumes:
+      - name: data
+        emptyDir: {}
+  {{- end }}
+      securityContext:
+        fsGroup: 1000
+  updateStrategy:
+    type: {{ $historicalDefaults.updateStrategy.type }}
+{{- if $historicalDefaults.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: {{ default "standard" $historicalDefaults.persistence.storageClass }}
+        resources:
+          requests:
+            storage: "{{ $tierValue.persistence.size }}"
+{{ end }}
+---
+
+{{- end }}
+
+{{- end }}

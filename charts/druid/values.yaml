@@ -1,0 +1,279 @@
+image:
+  repository: apache/druid
+  tag: ""
+  pullPolicy: IfNotPresent
+
+metrics:
+  enabled: false
+  service:
+    port: 9876
+  podMonitor:
+    enabled: true
+
+extensions:
+  loadList:
+    - druid-basic-security
+    - druid-bloom-filter
+    - druid-datasketches
+    - druid-histogram
+    - druid-kinesis-indexing-service
+    - druid-lookups-cached-global
+    - druid-lookups-cached-single
+    - druid-pac4j
+    - druid-parquet-extensions
+    - druid-s3-extensions
+    - druid-stats
+    - postgresql-metadata-storage
+    - prometheus-emitter
+
+secretEnvVars: {}
+
+configMap:
+  enabled: true
+
+configVars:
+  ## DRUID env vars. ref: https://github.com/apache/druid/blob/master/distribution/docker/druid.sh#L29
+  # DRUID_LOG_LEVEL: "warn"
+  # DRUID_LOG4J: <?xml version="1.0" encoding="UTF-8" ?><Configuration status="WARN"><Appenders><Console name="Console" target="SYSTEM_OUT"><PatternLayout pattern="%d{ISO8601} %p [%t] %c - %m%n"/></Console></Appenders><Loggers><Root level="info"><AppenderRef ref="Console"/></Root><Logger name="org.apache.druid.jetty.RequestLog" additivity="false" level="DEBUG"><AppenderRef ref="Console"/></Logger></Loggers></Configuration>
+  DRUID_USE_CONTAINER_IP: "true"
+
+  # Monitoring
+  # See https://druid.apache.org/docs/latest/development/extensions-contrib/prometheus.html to configure
+  # TODO: Use pushgateway for indexers (avoid losing scale_interval amount of metrics + they may )
+  # https://druid.apache.org/docs/latest/configuration/index.html#emitting-metrics
+  druid_emitter: noop
+  druid_emitter_logging_logLevel: debug
+
+  # Storage
+  # https://druid.apache.org/docs/latest/configuration/index.html#common-configurations
+  druid_storage_type: local
+  druid_indexer_logs_type: file
+  druid_indexer_logs_directory: /opt/data/indexing-logs
+
+router:
+  enabled: true
+  replicaCount: 1
+  name: router
+  port: 8888
+  servicePort: 80
+  serviceType: ClusterIP
+  ingress:
+    enabled: false
+    annotations:
+      nginx.ingress.kubernetes.io/auth-realm: Authentication Required
+      nginx.ingress.kubernetes.io/auth-secret: basic-auth
+      nginx.ingress.kubernetes.io/auth-type: basic
+      kubernetes.io/tls-acme: "false"
+    path: /
+  resources: {}
+  priorityClassName: ""
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  annotations: {}
+  podAnnotations: {}
+  podDisruptionBudget: {}
+  envVars:
+    druid_router_managementProxy_enabled: "true"
+  secretEnvVars: {}
+
+broker:
+  enabled: true
+  replicaCount: 1
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    averageCpuUtilization: 80
+  name: broker
+  port: 8082
+  serviceType: ClusterIP
+  ingress:
+    enabled: false
+    annotations: {}
+    path: /
+    tls: []
+  resources: {}
+  priorityClassName: ""
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  annotations: {}
+  podAnnotations: {}
+  podDisruptionBudget: {}
+  envVars: {}
+  secretEnvVars: {}
+  defaults:
+    updateStrategy:
+      type: RollingUpdate
+
+coordinator:
+  enabled: true
+  replicaCount: 1
+  name: coordinator
+  port: 8081
+  serviceType: ClusterIP
+  ingress:
+    enabled: false
+    annotations: {}
+    path: /
+    tls: []
+  resources: {}
+  priorityClassName: ""
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  annotations: {}
+  podAnnotations: {}
+  podDisruptionBudget: {}
+  envVars: {}
+  secretEnvVars: {}
+
+historical:
+  enabled: true
+  defaults:
+    replicaCount: 1
+    podManagementPolicy: Parallel
+    envVars: {}
+    secretEnvVars: {}
+    persistence:
+      enabled: true
+    priorityClassName: ""
+    affinity: {}
+    nodeSelector: {}
+    tolerations: []
+    resources: {}
+    updateStrategy:
+      type: RollingUpdate
+  tiers: {}
+#    default:
+#      envVars:
+#        DRUID_XMX: 256m
+#        DRUID_XMS: 256m
+#        DRUID_MAXNEWSIZE: 256m
+#        DRUID_NEWSIZE: 250m
+#        DRUID_MAXDIRECTMEMORYSIZE: 256m
+#        druid_server_tier: "tier_default"
+#        druid_segmentCache_locations: '[{"path":"var/druid/segment-cache","maxSize":"1GiB"}]'
+#      resources:
+#        requests:
+#          memory: 256Mi
+#          cpu: 50m
+#      persistence:
+#        size: 2Gi
+
+indexer:
+  enabled: true
+  defaults:
+    replicaCount: 1
+    podManagementPolicy: Parallel
+    priorityClassName: ""
+    affinity: {}
+    nodeSelector: {}
+    tolerations: []
+    resources: {}
+    envVars: {}
+    secretEnvVars: {}
+  categories: {}
+#    default:
+#      mode: "Deployment"
+#      envVars:
+#        DRUID_XMX: 256m
+#        DRUID_XMS: 256m
+#        druid_worker_capacity: "1"
+#        druid_worker_category: "default"
+#      resources:
+#        requests:
+#          memory: 256Mi
+#          cpu: 50m
+#      emptyDir:
+#        size: 1Gi
+#      autoscaling:
+#        enabled: false
+
+# If using a zookeeper installed outside of this chart you must uncomment and set this line
+# zkHosts: "druid-zookeeper-headless:2181"
+zkHosts: ""
+
+zookeeper:
+  enabled: true
+  image:
+    debug: true
+  podAnnotations: {}
+
+gCloudStorage:
+  enabled: false
+  secretName: google-cloud-key
+
+mysql:
+  enabled: false
+  auth:
+    rootPassword: mysql
+    username: druid
+    password: druid
+    database: druid
+
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: postgres
+    username: druid
+    password: druid
+    database: druid
+  backup:
+    s3:
+      enabled: false
+      cronJob:
+        name: druid-postgresql-backup
+        imagePullSecrets: []
+        schedule: "0 12 * * *"
+        startingDeadlineSeconds: 600
+        concurrencyPolicy: "Forbid"
+        failedJobsHistoryLimit: 1
+        successfulJobsHistoryLimit: 1
+        resources: {}
+        priorityClassName: ""
+      awsConfig:
+        accessKeyId: ""
+        secretAccessKey: ""
+        bucketName: druid-postgresql-backup
+        retention: "15 days"
+        region: us-west-1
+
+kube-hpa-scale-to-zero:
+  enabled: false
+  # args: ["--hpa-namespace", "{{ .Release.Namespace }}"]
+  args: ["--hpa-namespace", "foo"]
+  resources:
+    requests:
+      memory: 100Mi
+      cpu: 10m
+
+configJobs:
+  enabled: false
+  priorityClassName: ""
+  affinity: {}
+  tolerations: []
+  changeComment: ""
+  dict: {}
+    # overlord-dyn-cfg:
+    #   componentURL: "http://{{ .Release.Name }}-coordinator:8081/druid/indexer/v1/worker"
+    #   payload:
+    #     selectStrategy:
+    #       type: "equalDistributionWithCategorySpec"
+    #       workerCategorySpec:
+    #         strong: true
+    #         categoryMap:
+    #           index_parallel:
+    #             defaultCategory: "default"
+    #           index:
+    #             defaultCategory: "default"
+    #           single_phase_sub_task:
+    #             defaultCategory: "default"
+    #           kill:
+    #             defaultCategory: "default"
+    #           compact:
+    #             defaultCategory: "default"
+
+extra-objects:
+  enabled: false

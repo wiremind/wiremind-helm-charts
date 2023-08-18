@@ -1,0 +1,79 @@
+{{- if .Values.broker.enabled }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "druid.broker.fullname" . }}
+  labels:
+{{ include "druid.common-labels" . | indent 4 }}
+    app.kubernetes.io/component: {{ .Values.broker.name }}
+{{- with .Values.broker.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+  replicas: {{ .Values.broker.replicaCount }}
+  selector:
+    matchLabels:
+{{ include "druid.common-matchLabels" . | indent 6 }}
+      app.kubernetes.io/component: {{ .Values.broker.name }}
+  template:
+    metadata:
+      labels:
+{{ include "druid.common-labels" . | indent 8 }}
+        app.kubernetes.io/component: {{ .Values.broker.name }}
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") $ | sha256sum }}
+        checksum/configmap-broker: {{ include (print $.Template.BasePath "/broker/configmap.yaml") $ | sha256sum }}
+        checksum/secret-broker: {{ include (print $.Template.BasePath "/broker/secret.yaml") $ | sha256sum }}
+{{- with .Values.broker.podAnnotations }}
+{{ toYaml . | indent 8 }}
+{{- end }}
+    spec:
+      {{- if .Values.broker.priorityClassName }}
+      priorityClassName: {{ .Values.broker.priorityClassName }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.broker.terminationGracePeriodSeconds }}
+      containers:
+        - name: {{ include "druid.broker.fullname" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: [ "broker" ]
+          env:
+            - name: druid_extensions_loadList
+              value: {{ .Values.extensions.loadList | toJson | quote }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "druid.fullname" . }}-config
+            - configMapRef:
+                name: {{ include "druid.broker.fullname" . }}-config
+            - secretRef:
+                name: {{ include "druid.fullname" . }}-config
+            - secretRef:
+                name: {{ include "druid.broker.fullname" . }}-config
+          ports:
+            - name: http
+              containerPort: {{ .Values.broker.port }}
+              protocol: TCP
+            {{- if .Values.metrics.enabled }}
+            - name: http-metrics
+              containerPort: {{ .Values.metrics.service.port }}
+              protocol: TCP
+            {{- end }}
+          resources:
+{{ toYaml .Values.broker.resources | indent 12 }}
+    {{- with .Values.broker.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.broker.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.broker.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+
+{{- end }}

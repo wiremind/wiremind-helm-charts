@@ -1,0 +1,19 @@
+{{- if .Values.coordinator.enabled }}
+
+{{- if .Values.coordinator.podDisruptionBudget }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "druid.coordinator.fullname" . }}
+  labels:
+{{ include "druid.common-labels" . | indent 4 }}
+    app.kubernetes.io/component: {{ .Values.coordinator.name }}
+spec:
+  selector:
+    matchLabels:
+{{ include "druid.common-matchLabels" . | indent 6 }}
+      app.kubernetes.io/component: {{ .Values.coordinator.name }}
+{{ toYaml .Values.coordinator.podDisruptionBudget | indent 2 }}
+{{- end }}
+
+{{- end }}

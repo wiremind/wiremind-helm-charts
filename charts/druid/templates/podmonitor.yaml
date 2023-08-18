@@ -1,0 +1,27 @@
+{{- if and .Values.metrics.enabled .Values.metrics.podMonitor.enabled }}
+
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ include "druid.fullname" . }}
+  labels:
+{{ include "druid.common-labels" . | indent 4 }}
+spec:
+  podMetricsEndpoints:
+    - interval: 90s
+      port: http-metrics
+      # the amount metrics to be fetched is proportional to the number of tasks, when there are a lot, it times out.
+      scrapeTimeout: 60s
+      metricRelabelings:
+        - action: drop
+          regex: druid_emitted_metrics_histogram_(sum|count|bucket)
+          sourceLabels:
+            - __name__
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+{{ include "druid.common-matchLabels" $ | indent 6 }}
+
+{{- end }}
