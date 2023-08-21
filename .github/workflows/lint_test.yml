@@ -90,16 +90,16 @@ jobs:
           CHART_NAME: ${{ matrix.chart }}
         run: |
           # Prometheus
-          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts --force-update
           helm install prometheus-operator-crds prometheus-community/prometheus-operator-crds --version 4.0.0
           # Istio
           if [[ "$CHART_NAME" != *"istio-operator-crds" ]]; then
-            helm repo add wiremind https://wiremind.github.io/wiremind-helm-charts
+            helm repo add wiremind https://wiremind.github.io/wiremind-helm-charts --force-update
             helm install istio-operator-crds wiremind/istio-operator-crds --version 1.15.5
           fi
           # csi-driver-host-path
           if [[ "$CHART_NAME" == *"csi-driver-host-path" ]]; then
-            helm repo add wiremind https://wiremind.github.io/wiremind-helm-charts
+            helm repo add wiremind https://wiremind.github.io/wiremind-helm-charts --force-update
             helm install snapshot-controller-crds wiremind/snapshot-controller-crds --version 6.2.1
           fi
 
