@@ -1,6 +1,6 @@
 {{- if .Values.indexer.enabled }}
 
-{{- range $categoryrName, $categoryValue := .Values.indexer.categories }}
+{{- range $categoryName, $categoryValue := .Values.indexer.categories }}
 
 {{- if eq $categoryValue.mode "StatefulSet" }}
 
@@ -9,26 +9,26 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "druid.indexer.fullname" (dict "categoryrName" $categoryrName "context" $) }}
+  name: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}
   labels:
 {{ include "druid.common-labels" $ | indent 4 }}
     app.kubernetes.io/part-of: indexer
-    app.kubernetes.io/component: indexer-{{ $categoryrName }}
+    app.kubernetes.io/component: indexer-{{ $categoryName }}
 spec:
-  serviceName: {{ include "druid.indexer.fullname" (dict "categoryrName" $categoryrName "context" $) }}
+  serviceName: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}
   podManagementPolicy: {{ default $indexerDefaults.podManagementPolicy $categoryValue.podManagementPolicy }}
   replicas: {{ if not (kindIs "invalid" $categoryValue.replicaCount) }}{{ $categoryValue.replicaCount }}{{ else }}{{ $indexerDefaults.replicaCount }}{{ end }}
   selector:
     matchLabels:
 {{ include "druid.common-matchLabels" $ | indent 6 }}
       app.kubernetes.io/part-of: indexer
-      app.kubernetes.io/component: indexer-{{ $categoryrName }}
+      app.kubernetes.io/component: indexer-{{ $categoryName }}
   template:
     metadata:
       labels:
 {{ include "druid.common-labels" $ | indent 8 }}
         app.kubernetes.io/part-of: indexer
-        app.kubernetes.io/component: indexer-{{ $categoryrName }}
+        app.kubernetes.io/component: indexer-{{ $categoryName }}
       annotations:
         # This restarts all indexers for now as we use the same file
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
@@ -66,11 +66,11 @@ spec:
           - configMapRef:
               name: {{ include "druid.fullname" $ }}-config
           - configMapRef:
-              name: {{ include "druid.indexer.fullname" (dict "categoryrName" $categoryrName "context" $) }}-config
+              name: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}-config
           - secretRef:
               name: {{ include "druid.fullname" $ }}-config
           - secretRef:
-              name: {{ include "druid.indexer.fullname" (dict "categoryrName" $categoryrName "context" $) }}-config
+              name: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}-config
         resources:
 {{- if $categoryValue.resources }}
 {{ toYaml $categoryValue.resources | indent 10 }}

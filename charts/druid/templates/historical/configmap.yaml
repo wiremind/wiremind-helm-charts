@@ -2,6 +2,8 @@
 
 {{- range $tierName, $tierValue := .Values.historical.tiers }}
 
+---
+
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -13,11 +15,11 @@ metadata:
 data:
 {{ toYaml $tierValue.envVars | indent 2 }}
 
----
-
 {{- end }}
 
 {{- $historicalDefaults := $.Values.historical.defaults }}
+
+---
 
 kind: ConfigMap
 apiVersion: v1

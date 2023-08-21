@@ -1,23 +1,23 @@
 {{- if .Values.indexer.enabled }}
 
-{{- range $categoryrName, $categoryValue := .Values.indexer.categories }}
+{{- range $categoryName, $categoryValue := .Values.indexer.categories }}
 
 {{- if $categoryValue.podDisruptionBudget }}
 
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "druid.indexer.fullname" (dict "categoryrName" $categoryrName "context" $) }}
+  name: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}
   labels:
 {{ include "druid.common-labels" $ | indent 4 }}
     app.kubernetes.io/part-of: indexer
-    app.kubernetes.io/component: indexer-{{ $categoryrName }}
+    app.kubernetes.io/component: indexer-{{ $categoryName }}
 spec:
   selector:
     matchLabels:
 {{ include "druid.common-matchLabels" $ | indent 6 }}
       app.kubernetes.io/part-of: indexer
-      app.kubernetes.io/component: indexer-{{ $categoryrName }}
+      app.kubernetes.io/component: indexer-{{ $categoryName }}
 {{ toYaml $categoryValue.podDisruptionBudget | indent 2 }}
 
 {{- end }}

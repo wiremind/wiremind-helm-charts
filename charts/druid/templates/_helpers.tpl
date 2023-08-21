@@ -44,7 +44,7 @@ Create a default fully qualified indexer name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "druid.indexer.fullname" -}}
-{{ template "druid.fullname" .context }}-indexer-{{ .categoryrName }}
+{{ template "druid.fullname" .context }}-indexer-{{ .categoryName }}
 {{- end -}}
 
 {{/*
