@@ -4,7 +4,11 @@
 
 {{- if $categoryValue.autoscaling.enabled }}
 
+{{- if semverCompare ">=1.23-0" $.Capabilities.KubeVersion.GitVersion -}}
+apiVersion: autoscaling/v2
+{{- else -}}
 apiVersion: autoscaling/v2beta2
+{{- end }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "druid.indexer.fullname" (dict "categoryrName" $categoryrName "context" $) }}

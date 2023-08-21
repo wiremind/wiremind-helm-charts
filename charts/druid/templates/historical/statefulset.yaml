@@ -104,13 +104,13 @@ spec:
         image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
         imagePullPolicy: {{ $.Values.image.pullPolicy | quote }}
         ports:
-        - containerPort: 8083
-          name: http
-        {{- if .Values.metrics.enabled }}
-        - name: http-metrics
-          containerPort: {{ .Values.metrics.service.port }}
-          protocol: TCP
-        {{- end }}
+          - containerPort: 8083
+            name: http
+          {{- if $.Values.metrics.enabled }}
+          - name: http-metrics
+            containerPort: {{ $.Values.metrics.service.port }}
+            protocol: TCP
+          {{- end }}
         volumeMounts:
         - mountPath: /opt/druid/var
           name: data
