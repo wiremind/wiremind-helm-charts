@@ -26,12 +26,12 @@ spec:
 {{- end }}
         spec:
           {{- if .Values.postgresql.backup.s3.cronJob.priorityClassName }}
-          priorityClassName: {{ .Values.postgresql.backup.s3.cronJob.cronJobpriorityClassName }}
+          priorityClassName: {{ .Values.postgresql.backup.s3.cronJob.priorityClassName }}
           {{- end }}
           restartPolicy: Never
-          {{- if .Values.postgresql.imagePullSecrets }}
+          {{- if .Values.postgresql.backup.s3.cronJob.imagePullSecrets }}
           imagePullSecrets:
-            {{- range $imagePullSecret := .Values.postgresql.imagePullSecrets }}
+            {{- range $imagePullSecret := .Values.postgresql.backup.s3.cronJob.imagePullSecrets }}
             - name: {{ $imagePullSecret }}
             {{- end }}
           {{- end }}

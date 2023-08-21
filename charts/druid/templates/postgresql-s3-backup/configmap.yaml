@@ -5,7 +5,7 @@ metadata:
   name: {{ include "druid.postgresql-s3-backup.fullname" . }}
   labels:
 {{ include "druid.common-labels" . | indent 4 }}
-    app.kubernetes.io/component: {{ .Values.postgresql.backup.s3.name }}
+    app.kubernetes.io/component: {{ .Values.postgresql.backup.s3.cronJob.name }}
 data:
   backup.sh: |
     #!/bin/bash

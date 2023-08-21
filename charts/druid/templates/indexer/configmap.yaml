@@ -1,23 +1,25 @@
 {{- if .Values.indexer.enabled }}
 
-{{- range $categoryrName, $categoryValue := .Values.indexer.categories }}
+{{- range $categoryName, $categoryValue := .Values.indexer.categories }}
+
+---
 
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: {{ include "druid.indexer.fullname" (dict "categoryrName" $categoryrName "context" $) }}-config
+  name: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}-config
   labels:
 {{ include "druid.common-labels" $ | indent 4 }}
     app.kubernetes.io/part-of: indexer
-    app.kubernetes.io/component: indexer-{{ $categoryrName }}
+    app.kubernetes.io/component: indexer-{{ $categoryName }}
 data:
 {{ toYaml $categoryValue.envVars | indent 2 }}
-
----
 
 {{- end }}
 
 {{- $indexerDefaults := $.Values.indexer.defaults }}
+
+---
 
 kind: ConfigMap
 apiVersion: v1
@@ -28,7 +30,5 @@ metadata:
     app.kubernetes.io/part-of: indexer
 data:
 {{ toYaml $indexerDefaults.envVars | indent 2 }}
-
----
 
 {{- end }}

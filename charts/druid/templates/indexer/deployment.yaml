@@ -1,6 +1,6 @@
 {{- if .Values.indexer.enabled }}
 
-{{- range $categoryrName, $categoryValue := .Values.indexer.categories }}
+{{- range $categoryName, $categoryValue := .Values.indexer.categories }}
 
 {{- if eq $categoryValue.mode "Deployment" }}
 
@@ -9,18 +9,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "druid.indexer.fullname" (dict "categoryrName" $categoryrName "context" $) }}
+  name: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}
   labels:
 {{ include "druid.common-labels" $ | indent 4 }}
     app.kubernetes.io/part-of: indexer
-    app.kubernetes.io/component: indexer-{{ $categoryrName }}
+    app.kubernetes.io/component: indexer-{{ $categoryName }}
 spec:
   replicas: {{ if not (kindIs "invalid" $categoryValue.replicaCount) }}{{ $categoryValue.replicaCount }}{{ else }}{{ $indexerDefaults.replicaCount }}{{ end }}
   selector:
     matchLabels:
 {{ include "druid.common-matchLabels" $ | indent 6 }}
       app.kubernetes.io/part-of: indexer
-      app.kubernetes.io/component: indexer-{{ $categoryrName }}
+      app.kubernetes.io/component: indexer-{{ $categoryName }}
   strategy:
     type: Recreate
   template:
@@ -28,7 +28,7 @@ spec:
       labels:
 {{ include "druid.common-labels" $ | indent 8 }}
         app.kubernetes.io/part-of: indexer
-        app.kubernetes.io/component: indexer-{{ $categoryrName }}
+        app.kubernetes.io/component: indexer-{{ $categoryName }}
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") $ | sha256sum }}
@@ -73,9 +73,9 @@ spec:
           - secretRef:
               name: {{ include "druid.fullname" $ }}-indexer-config
           - configMapRef:
-              name: {{ include "druid.indexer.fullname" (dict "categoryrName" $categoryrName "context" $) }}-config
+              name: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}-config
           - secretRef:
-              name: {{ include "druid.indexer.fullname" (dict "categoryrName" $categoryrName "context" $) }}-config
+              name: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}-config
         resources:
 {{- if $categoryValue.resources }}
 {{ toYaml $categoryValue.resources | indent 10 }}
