@@ -118,8 +118,16 @@ TierToBrokerMap
 */}}
 {{- define "tiertobroker.map" -}}
 {{- $tiertobroker := list }}
-{{- range $tierName, $tierConfig := .Values.historical.tiers  }}
-{{- $tiertobroker = append $tiertobroker (printf "\"%s\":\"%s\"" $tierConfig.envVars.druid_server_tier $.Values.broker.envVars.druid_service) }}
+{{- range $tierName, $tierConfig := .Values.historical.tiers }}
+{{- $tiertobroker = append $tiertobroker (printf "\"%s\":\"%s\"" (include "druid.server.tier" (dict "tierName" $tierName "tierConfig" $tierConfig)) (include "druid.service.broker" $)) }}
 {{- end }}
 {{- join "," $tiertobroker -}}
+{{- end -}}
+
+{{- define "druid.server.tier" -}}
+{{- .tierConfig.envVars.druid_server_tier | default (printf "tier_%s" .tierName) -}}
+{{- end -}}
+
+{{- define "druid.service.broker" -}}
+{{- printf "%s" (.Values.broker.envVars.druid_service | default "druid/broker") -}}
 {{- end -}}
