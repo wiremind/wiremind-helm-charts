@@ -7692,6 +7692,19 @@ entries:
   scrapoxy:
   - apiVersion: v2
     appVersion: 3.1.1
+    created: "2023-08-24T08:58:08.560571566Z"
+    description: Helm chart for the Scrapoxy service.
+    digest: df4d0a54a698fce04995b3a3c7fc8c787e8c9dfd06facd07911c3d23f87df3d5
+    home: https://github.com/fabienvauchelles/scrapoxy
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: scrapoxy
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/scrapoxy-0.3.3/scrapoxy-0.3.3.tgz
+    version: 0.3.3
+  - apiVersion: v2
+    appVersion: 3.1.1
     created: "2022-02-17T17:23:43.079148081Z"
     description: Helm chart for the Scrapoxy service.
     digest: 71174c2f7b43945363cca3347f22c5d32fe40ef12de3eecfdab8e0e8e659f21c
@@ -8266,4 +8279,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-istio-2.0.0/wiremind-istio-2.0.0.tgz
     version: 2.0.0
-generated: "2023-08-22T09:15:54.283071009Z"
+generated: "2023-08-24T08:58:08.561079405Z"
