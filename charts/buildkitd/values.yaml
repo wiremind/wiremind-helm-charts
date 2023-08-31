@@ -12,13 +12,13 @@ user:
 nameOverride: ""
 fullnameOverride: ""
 
-resources:
-  requests:
-    cpu: "100m"
-    memory: 1Gi
-  limits:
-    cpu: "1"
-    memory: 2Gi
+resources: {}
+#  requests:
+#    cpu: "100m"
+#    memory: 1Gi
+#  limits:
+#    cpu: "1"
+#    memory: 2Gi
 
 extraArgs: []
 
