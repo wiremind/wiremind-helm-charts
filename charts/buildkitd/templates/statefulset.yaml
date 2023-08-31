@@ -20,6 +20,8 @@ spec:
       securityContext:
         # To change UID/GID, you need to rebuild the image
         fsGroup: {{ .Values.user.uid }}
+        # Set this to avoid massive cascading chown on restart
+        fsGroupChangePolicy: "OnRootMismatch"
       volumes:
         - name: config
           configMap:
@@ -91,6 +93,14 @@ spec:
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          startupProbe:
+            exec:
+              command:
+                - buildctl
+                - debug
+                - workers
+            failureThreshold: {{ .Values.startupProbe.retries }}
+            periodSeconds: 1
           securityContext:
             capabilities:
               add:
