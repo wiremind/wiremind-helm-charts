@@ -2,6 +2,8 @@
 
 {{- range $categoryName, $categoryValue := .Values.indexer.categories }}
 
+{{- if hasKey $categoryValue "enabled" | ternary $categoryValue.enabled true }}
+
 {{- if $categoryValue.autoscaling.enabled }}
 
 ---
@@ -38,6 +40,8 @@ spec:
     scaleDown:
       # 5mins is the default value.
       stabilizationWindowSeconds: {{ $categoryValue.autoscaling.scaleDownStabilizationWindowSeconds | default 300 }}
+
+{{- end }}
 
 {{- end }}
 

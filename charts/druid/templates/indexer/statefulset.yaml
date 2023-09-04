@@ -2,9 +2,13 @@
 
 {{- range $categoryName, $categoryValue := .Values.indexer.categories }}
 
+{{- if hasKey $categoryValue "enabled" | ternary $categoryValue.enabled true }}
+
 {{- if eq $categoryValue.mode "StatefulSet" }}
 
 {{- $indexerDefaults := $.Values.indexer.defaults }}
+
+---
 
 apiVersion: apps/v1
 kind: StatefulSet
@@ -107,7 +111,7 @@ spec:
     type: {{ $categoryValue.updateStrategy.type }}
 {{- end }}
 
----
+{{- end }}
 
 {{- end }}
 
