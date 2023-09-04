@@ -2,6 +2,10 @@
 
 {{- range $categoryName, $categoryValue := .Values.indexer.categories }}
 
+{{- if hasKey $categoryValue "enabled" | ternary $categoryValue.enabled true }}
+
+---
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -22,7 +26,7 @@ spec:
     app.kubernetes.io/part-of: indexer
     app.kubernetes.io/component: indexer-{{ $categoryName }}
 
----
+{{- end }}
 
 {{- end }}
 

@@ -2,9 +2,13 @@
 
 {{- range $categoryName, $categoryValue := .Values.indexer.categories }}
 
+{{- if hasKey $categoryValue "enabled" | ternary $categoryValue.enabled true }}
+
 {{- if eq $categoryValue.mode "Deployment" }}
 
 {{- $indexerDefaults := $.Values.indexer.defaults }}
+
+---
 
 apiVersion: apps/v1
 kind: Deployment
@@ -111,7 +115,7 @@ spec:
       securityContext:
           fsGroup: 1000
 
----
+{{- end }}
 
 {{- end }}
 
