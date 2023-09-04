@@ -99,7 +99,7 @@ spec:
           resources:
 {{ toYaml .Values.resources | indent 12 }}
           securityContext:
-{{ toYaml .Values.podSecurityContext | indent 12}}
+{{ toYaml .Values.containerSecurityContext | indent 12}}
       volumes:
         - name: db
           emptyDir: {}
