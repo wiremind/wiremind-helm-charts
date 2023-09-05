@@ -13,7 +13,10 @@ metadata:
     app.kubernetes.io/part-of: historical
     app.kubernetes.io/component: historical-{{ $tierName }}
 data:
-{{ toYaml $tierValue.envVars | indent 2 }}
+  druid_host: {{ include "druid.historical.fullname" (dict "tierName" $tierName "context" $) }}
+  {{- with $tierValue.envVars }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
 
 {{- end }}
 
