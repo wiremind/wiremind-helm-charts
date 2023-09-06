@@ -62,6 +62,18 @@ spec:
               containerPort: {{ .Values.metrics.service.port }}
               protocol: TCP
             {{- end }}
+          {{- if .Values.router.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.router.livenessProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /status/health
+              port: http
+          {{- end }}
+          {{- if .Values.router.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.router.readinessProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /status/selfDiscovered
+              port: http
+          {{- end }}
           resources:
 {{ toYaml .Values.router.resources | indent 12 }}
     {{- with .Values.router.nodeSelector }}

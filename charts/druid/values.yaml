@@ -100,6 +100,20 @@ router:
   port: 8888
   servicePort: 80
   serviceType: ClusterIP
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 15
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 5
+    successThreshold: 1
   ingress:
     enabled: false
     annotations:
@@ -131,6 +145,20 @@ broker:
   name: broker
   port: 8082
   serviceType: ClusterIP
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 15
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 5
+    successThreshold: 1
   ingress:
     enabled: false
     annotations: {}
@@ -162,6 +190,20 @@ coordinator:
     annotations: {}
     path: /
     tls: []
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 15
+    timeoutSeconds: 60
+    failureThreshold: 15
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 15
+    timeoutSeconds: 60
+    failureThreshold: 5
+    successThreshold: 1
   resources: {}
   priorityClassName: ""
   nodeSelector: {}
@@ -194,6 +236,28 @@ historical:
     resources: {}
     updateStrategy:
       type: RollingUpdate
+    # Startup may be slow if a lot of segments.
+    startupProbe:
+      enabled: true
+      initialDelaySeconds: 60
+      periodSeconds: 60
+      timeoutSeconds: 10
+      failureThreshold: 400
+      successThreshold: 1
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 10
+      failureThreshold: 15
+      successThreshold: 1
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 10
+      failureThreshold: 10
+      successThreshold: 1
   tiers:
     default:
       envVars:
@@ -216,6 +280,20 @@ indexer:
     replicaCount: 1
     podManagementPolicy: Parallel
     priorityClassName: ""
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 15
+      successThreshold: 1
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 1
+      failureThreshold: 5
+      successThreshold: 1
     affinity: {}
     nodeSelector: {}
     tolerations: []
