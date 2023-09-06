@@ -61,6 +61,18 @@ spec:
               containerPort: {{ .Values.metrics.service.port }}
               protocol: TCP
             {{- end }}
+          {{- if .Values.broker.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.broker.livenessProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /status/health
+              port: http
+          {{- end }}
+          {{- if .Values.broker.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.broker.readinessProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /druid/broker/v1/readiness
+              port: http
+          {{- end }}
           resources:
 {{ toYaml .Values.broker.resources | indent 12 }}
     {{- with .Values.broker.nodeSelector }}

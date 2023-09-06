@@ -55,65 +55,62 @@ spec:
       priorityClassName: {{ $historicalDefaults.priorityClassName }}
       {{- end }}
       containers:
-      - name: historical
-        args: [ "historical" ]
-        env:
-          - name: druid_extensions_loadList
-            value: {{ $.Values.extensions.loadList | toJson | quote }}
-        # Order defines precedence
-        envFrom:
-          - configMapRef:
-              name: {{ include "druid.fullname" $ }}-config
-          - secretRef:
-              name: {{ include "druid.fullname" $ }}-config
-          - configMapRef:
-              name: {{ include "druid.fullname" $ }}-historical-config
-          - secretRef:
-              name: {{ include "druid.fullname" $ }}-historical-config
-          - configMapRef:
-              name: {{ include "druid.historical.fullname" (dict "tierName" $tierName "context" $) }}-config
-          - secretRef:
-              name: {{ include "druid.historical.fullname" (dict "tierName" $tierName "context" $) }}-config
-        resources:
+        - name: historical
+          args: [ "historical" ]
+          env:
+            - name: druid_extensions_loadList
+              value: {{ $.Values.extensions.loadList | toJson | quote }}
+          # Order defines precedence
+          envFrom:
+            - configMapRef:
+                name: {{ include "druid.fullname" $ }}-config
+            - secretRef:
+                name: {{ include "druid.fullname" $ }}-config
+            - configMapRef:
+                name: {{ include "druid.fullname" $ }}-historical-config
+            - secretRef:
+                name: {{ include "druid.fullname" $ }}-historical-config
+            - configMapRef:
+                name: {{ include "druid.historical.fullname" (dict "tierName" $tierName "context" $) }}-config
+            - secretRef:
+                name: {{ include "druid.historical.fullname" (dict "tierName" $tierName "context" $) }}-config
+          resources:
 {{- if $tierValue.resources }}
-{{ toYaml $tierValue.resources | indent 10 }}
+{{ toYaml $tierValue.resources | indent 12 }}
 {{- else }}
-{{ toYaml $historicalDefaults.resources | indent 10 }}
+{{ toYaml $historicalDefaults.resources | indent 12 }}
 {{- end }}
-        # Startup may be slow if a lot of segments.
-        startupProbe:
-          failureThreshold: 400
-          periodSeconds: 60
-          httpGet:
-            path: /status/health
-            port: 8083
-        livenessProbe:
-          periodSeconds: 60
-          timeoutSeconds: 10
-          failureThreshold: 15
-          httpGet:
-            path: /status/health
-            port: 8083
-        readinessProbe:
-          periodSeconds: 60
-          timeoutSeconds: 10
-          failureThreshold: 10
-          httpGet:
-            path: /druid/historical/v1/readiness
-            port: 8083
-        image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
-        imagePullPolicy: {{ $.Values.image.pullPolicy | quote }}
-        ports:
-          - containerPort: 8083
-            name: http
-          {{- if $.Values.metrics.enabled }}
-          - name: http-metrics
-            containerPort: {{ $.Values.metrics.service.port }}
-            protocol: TCP
+          {{- if $historicalDefaults.startupProbe.enabled }}
+          startupProbe: {{- omit $historicalDefaults.startupProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /status/health
+              port: http
           {{- end }}
-        volumeMounts:
-        - mountPath: /opt/druid/var
-          name: data
+          {{- if $historicalDefaults.livenessProbe.enabled }}
+          livenessProbe: {{- omit $historicalDefaults.livenessProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /status/health
+              port: http
+          {{- end }}
+          {{- if $historicalDefaults.readinessProbe.enabled }}
+          readinessProbe: {{- omit $historicalDefaults.readinessProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /druid/historical/v1/readiness
+              port: http
+          {{- end }}
+          image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy | quote }}
+          ports:
+            - containerPort: 8083
+              name: http
+            {{- if $.Values.metrics.enabled }}
+            - name: http-metrics
+              containerPort: {{ $.Values.metrics.service.port }}
+              protocol: TCP
+            {{- end }}
+          volumeMounts:
+          - mountPath: /opt/druid/var
+            name: data
   {{- if not $historicalDefaults.persistence.enabled }}
       volumes:
       - name: data

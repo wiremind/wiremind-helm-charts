@@ -8,6 +8,9 @@ metadata:
 {{ include "druid.common-labels" . | indent 4 }}
     app.kubernetes.io/component: {{ .Values.router.name }}
 data:
-{{ toYaml .Values.router.envVars | indent 2 }}
+  druid_host: {{ include "druid.router.fullname" . }}
+  {{- with .Values.router.envVars }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
 
 {{- end }}
