@@ -124,7 +124,6 @@ spec:
             runAsNonRoot: true
             runAsUser: {{ .Values.user.uid }}
             runAsGroup:  {{ .Values.user.gid }}
-            fsGroup: {{ .Values.user.uid }}
             {{- with .Values.extraSecurityContext }}
             {{- toYaml . | nindent 12 }}
             {{- end }}

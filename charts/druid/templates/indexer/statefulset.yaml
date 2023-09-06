@@ -2,9 +2,13 @@
 
 {{- range $categoryName, $categoryValue := .Values.indexer.categories }}
 
+{{- if hasKey $categoryValue "enabled" | ternary $categoryValue.enabled true }}
+
 {{- if eq $categoryValue.mode "StatefulSet" }}
 
 {{- $indexerDefaults := $.Values.indexer.defaults }}
+
+---
 
 apiVersion: apps/v1
 kind: StatefulSet
@@ -57,44 +61,46 @@ spec:
       priorityClassName: {{ $indexerDefaults.priorityClassName }}
       {{- end }}
       containers:
-      - name: indexer
-        args: [ "middleManager" ]
-        env:
-          - name: druid_extensions_loadList
-            value: {{ $.Values.extensions.loadList | toJson | quote }}
-        envFrom:
-          - configMapRef:
-              name: {{ include "druid.fullname" $ }}-config
-          - configMapRef:
-              name: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}-config
-          - secretRef:
-              name: {{ include "druid.fullname" $ }}-config
-          - secretRef:
-              name: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}-config
-        resources:
+        - name: indexer
+          args: [ "middleManager" ]
+          env:
+            - name: druid_extensions_loadList
+              value: {{ $.Values.extensions.loadList | toJson | quote }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "druid.fullname" $ }}-config
+            - configMapRef:
+                name: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}-config
+            - secretRef:
+                name: {{ include "druid.fullname" $ }}-config
+            - secretRef:
+                name: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}-config
+          resources:
 {{- if $categoryValue.resources }}
-{{ toYaml $categoryValue.resources | indent 10 }}
+{{ toYaml $categoryValue.resources | indent 12 }}
 {{- else }}
-{{ toYaml $indexerDefaults.resources | indent 10 }}
+{{ toYaml $indexerDefaults.resources | indent 12 }}
 {{- end }}
-        livenessProbe:
-          initialDelaySeconds: 10
-          httpGet:
-            path: /status/health
-            port: 8091
-        readinessProbe:
-          initialDelaySeconds: 10
-          httpGet:
-            path: /status/health
-            port: 8091
-        image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
-        imagePullPolicy: {{ $.Values.image.pullPolicy | quote }}
-        ports:
-          - containerPort: 8091
-            name: http
-        volumeMounts:
-          - mountPath: /opt/druid/var
-            name: data
+          {{- if $indexerDefaults.livenessProbe.enabled }}
+          livenessProbe: {{- omit $indexerDefaults.livenessProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /status/health
+              port: http
+          {{- end }}
+          {{- if $indexerDefaults.readinessProbe.enabled }}
+          readinessProbe: {{- omit $indexerDefaults.readinessProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /status/selfDiscovered
+              port: http
+          {{- end }}
+          image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy | quote }}
+          ports:
+            - containerPort: 8091
+              name: http
+          volumeMounts:
+            - mountPath: /opt/druid/var
+              name: data
       volumes:
       - name: data
         emptyDir:
@@ -107,7 +113,7 @@ spec:
     type: {{ $categoryValue.updateStrategy.type }}
 {{- end }}
 
----
+{{- end }}
 
 {{- end }}
 
