@@ -9,11 +9,12 @@ spec:
   ports:
     - port: {{ .Values.config.commander.port }}
       targetPort: {{ .Values.config.commander.port }}
-      protocol: TCP
+      protocol: {{ .Values.config.commander.protocol }}
       name: commander
     - port: {{ .Values.config.proxy.port }}
       targetPort: {{ .Values.config.proxy.port }}
-      protocol: TCP
+      protocol: {{ .Values.config.proxy.protocol }}
+      appProtocol: {{ .Values.config.proxy.appProtocol }}
       name: proxy
   selector:
     app.kubernetes.io/name: {{ include "scrapoxy.name" . }}
