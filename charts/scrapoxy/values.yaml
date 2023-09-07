@@ -47,12 +47,15 @@ config:
   commander:
     port: 7778
     password: "setme"
+    protocol: TCP
 
   proxy:
     auth:
       username: "setme"
       password: "setme"
     port: 7777
+    protocol: TCP
+    appProtocol: tcp
 
   instance:
     port: 3128

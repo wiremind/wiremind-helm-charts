@@ -36,10 +36,10 @@ spec:
           ports:
             - name: commander
               containerPort: {{ .Values.config.commander.port }}
-              protocol: TCP
+              protocol: {{ .Values.config.commander.protocol }}
             - name: proxy
               containerPort: {{ .Values.config.proxy.port }}
-              protocol: TCP
+              protocol: {{ .Values.config.proxy.protocol }}
           livenessProbe:
             httpGet:
               path: /
