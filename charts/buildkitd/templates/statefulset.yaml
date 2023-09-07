@@ -54,10 +54,6 @@ spec:
               containerPort: {{ .Values.config.port }}
               protocol: TCP
           env:
-            - name: CONFIG_SHA256SUM
-              valueFrom:
-                fieldRef:
-                  fieldPath: spec.template.metadata.annotations[checksum/config]
             - name: NO_COLOR
               value: "true"
             {{- with .Values.resources }}
