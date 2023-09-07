@@ -16,6 +16,7 @@ spec:
         {{- include "buildkitd.selectorLabels" . | nindent 8 }}
       annotations:
         container.apparmor.security.beta.kubernetes.io/buildkitd: unconfined
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
       securityContext:
         # To change UID/GID, you need to rebuild the image
@@ -53,6 +54,10 @@ spec:
               containerPort: {{ .Values.config.port }}
               protocol: TCP
           env:
+            - name: CONFIG_SHA256SUM
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.template.metadata.annotations[checksum/config]
             - name: NO_COLOR
               value: "true"
             {{- with .Values.resources }}
