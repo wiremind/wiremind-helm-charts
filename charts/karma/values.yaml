@@ -38,6 +38,8 @@ serviceAccount:
   name:
   # Automount API credentials for the Service Account
   automountServiceAccountToken: false
+  # ImagePullSecrets
+  imagePullSecrets: []
 
 ingress:
   enabled: false
