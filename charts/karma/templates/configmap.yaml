@@ -13,6 +13,12 @@ metadata:
 {{- end }}
   name: "{{ .Release.Name }}-config"
 data:
+{{- with .Values.configMap.aclsConfig }}
+  acls.yaml: |
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- with .Values.configMap.rawConfig }}
   karma.conf: |
-{{ toYaml .Values.configMap.rawConfig | indent 4 }}
+{{ toYaml . | indent 4 }}
+{{- end }}
 {{- end }}
