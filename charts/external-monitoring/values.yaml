@@ -6,6 +6,7 @@ hosts: {}
   # - name: service-name
   #   ip: ip-address
   #   namespace: namespace
+  #   port: 9100
 
 prometheus-blackbox-exporter:
   config:
