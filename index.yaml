@@ -5145,6 +5145,21 @@ entries:
     version: 3.0.0
   external-monitoring:
   - apiVersion: v2
+    created: "2023-09-22T13:03:29.825955749Z"
+    dependencies:
+    - name: prometheus-blackbox-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 8.3.0
+    description: Simple monitoring for things outside of kubernetes
+    digest: f04330f51671e18a6f9f4790fa215586a700c4cb2317796850f40905519cc78b
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: external-monitoring
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/external-monitoring-0.3.0/external-monitoring-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     created: "2022-09-28T15:18:08.5654238Z"
     dependencies:
     - name: prometheus-blackbox-exporter
@@ -8701,4 +8716,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-istio-2.0.0/wiremind-istio-2.0.0.tgz
     version: 2.0.0
-generated: "2023-09-18T11:05:16.522514587Z"
+generated: "2023-09-22T13:03:29.82649384Z"
