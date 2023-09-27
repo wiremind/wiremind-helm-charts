@@ -36,9 +36,10 @@ spec:
         tolerations:
 {{ .Values.istio.pilot.tolerations | toYaml | indent 10 }}
 {{ end }}
+{{ with .Values.istio.pilot.hpa }}
         hpaSpec:
-          maxReplicas: {{ .Values.istio.pilot.hpa.maxReplicas }}
-          minReplicas: {{ .Values.istio.pilot.hpa.minReplicas }}
+{{ . | toYaml | indent 10 }}
+{{ end }}
     ingressGateways:
       - name: istio-ingressgateway
         enabled: false
@@ -81,9 +82,10 @@ spec:
             # traffic through this gateway should be routed inside the network
             - name: ISTIO_META_REQUESTED_NETWORK_VIEW
               value: {{ .Values.network }}
+{{ with .Values.istio.eastwestgateway.hpa }}
           hpaSpec:
-            maxReplicas: {{ .Values.istio.eastwestgateway.hpa.maxReplicas }}
-            minReplicas: {{ .Values.istio.eastwestgateway.hpa.minReplicas }}
+{{ . | toYaml | indent 12 }}
+{{ end }}
           service:
             ports:
               - name: status-port
