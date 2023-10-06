@@ -1,0 +1,55 @@
+image:
+  repository: ghcr.io/wiremind/koherence
+  pullPolicy: IfNotPresent
+  tag: ""
+
+tolerations: []
+
+affinity: {}
+
+hostPID: true
+
+nodeSelector: {}
+
+priorityClassName: ""
+
+resources: {}
+
+securityContext: {}
+
+containerSecurityContext:
+  privileged: true
+  readOnlyRootFilesystem: true
+
+livenessProbe:
+  initialDelaySeconds: 5
+  periodSeconds: 30
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
+
+readinessProbe:
+  initialDelaySeconds: 5
+  periodSeconds: 30
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
+
+startupProbe:
+  retries: 60
+
+env:
+  KOHERENCE_SLEEP_SECONDS: 3600
+
+provider:
+  secret: {}
+    # Exemple for Openstack
+    # OS_AUTH_URL: "https://dunno.org/"
+    # OS_DOMAIN_ID: "default"
+    # OS_PROJECT_ID: "007"
+    # OS_PROJECT_NAME: "chocolatine"
+    # OS_USERNAME: "user"
+    # OS_PASSWORD: "password"
+    # OS_REGION_NAME: "somewhere"
+    # OS_INTERFACE: "public"
+    # OS_IDENTITY_API_VERSION: "3"
