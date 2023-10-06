@@ -1,0 +1,16 @@
+apiVersion: v2
+name: koherence
+description: Daemonset to check coherence between provider & machine block-storage db
+home: https://github.com/wiremind/koherence/
+sources:
+  - https://github.com/wiremind/koherence/
+keywords:
+  - wiremind
+  - openstack
+type: application
+appVersion: 0.1.1
+kubeVersion: ">=1.19.0-0"
+version: 0.1.0
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
