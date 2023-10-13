@@ -97,8 +97,10 @@ spec:
               value: "0"
             - name: "TREELITE_NTHREAD"
               value: "1"
+            {{- if $servingValue.grpcServerTimeoutSeconds }}
             - name: "GRPC_SERVER_TIMEOUT"
-              value: "10800"  # 3 hours
+              value: {{ $servingValue.grpcServerTimeoutSeconds }}
+            {{- end }}
             - name: "VERBOSITY_LEVEL"
               value: "0"
 {{- with $.Values.tolerations }}
