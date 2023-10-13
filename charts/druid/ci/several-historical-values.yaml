@@ -1,0 +1,20 @@
+router:
+  enabled: false
+
+historical:
+  enabled: true
+  tiers:
+    a:
+      persistence:
+        size: 1Gi
+      envVars:
+        a: a
+      secretEnvVars:
+        aa: aa
+    b:
+      persistence:
+        size: 10Gi
+      envVars:
+        b: b
+      secretEnvVars:
+        bb: bb
