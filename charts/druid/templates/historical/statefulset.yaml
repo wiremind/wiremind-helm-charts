@@ -31,7 +31,7 @@ spec:
         # This restarts all historicals for now as we use the same file
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") $ | sha256sum }}
-        checksum/configmap-historicals: {{ include (print $.Template.BasePath "/historical/configmap.yaml") (print "$historical.tiers." $tierName) | sha256sum }}
+        checksum/configmap-historicals: {{ (print $tierValue) | sha256sum }}
         checksum/secret-historicals: {{ include (print $.Template.BasePath "/historical/secret.yaml") $ | sha256sum }}
 {{- with $historicalDefaults.podAnnotations }}
 {{ toYaml . | indent 8 }}
