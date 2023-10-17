@@ -28,15 +28,12 @@ spec:
         app.kubernetes.io/part-of: historical
         app.kubernetes.io/component: historical-{{ $tierName }}
       annotations:
-        # This restarts all historicals for now as we use the same file
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
         checksum/configmap-historicals: {{ include (print $.Template.BasePath "/historical/configmap.yaml") $ | sha256sum }}
-        # Hack to mimic the content of the specific ConfigMap
-        checksum/configmap-historical-specific: {{ $tierValue.envVars | toString | sha256sum }}
+        checksum/configmap-historicals-individual: {{ include "druid.historical.config.individual.content" (dict "tierName" $tierName "tierConfig" $tierValue "context" $) | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") $ | sha256sum }}
         checksum/secret-historicals: {{ include (print $.Template.BasePath "/historical/secret.yaml") $ | sha256sum }}
-        # Hack to mimic the content of the specific Secret
-        checksum/secret-historical-specific: {{ $tierValue.secretEnvVars | toString | sha256sum }}
+        checksum/secret-historicals-individual: {{ include "druid.historical.secret.individual.content" (dict "tierConfig" $tierValue) | sha256sum }}
 {{- with $historicalDefaults.podAnnotations }}
 {{ toYaml . | indent 8 }}
 {{- end }}

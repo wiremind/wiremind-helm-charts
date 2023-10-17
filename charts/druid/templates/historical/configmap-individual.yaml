@@ -1,6 +1,6 @@
 {{- if .Values.historical.enabled }}
 
-{{- range $tierName, $tierValue := .Values.historical.tiers }}
+{{- range $tierName, $tierConfig := .Values.historical.tiers }}
 
 ---
 
@@ -13,11 +13,7 @@ metadata:
     app.kubernetes.io/part-of: historical
     app.kubernetes.io/component: historical-{{ $tierName }}
 data:
-  druid_host: {{ include "druid.historical.fullname" (dict "tierName" $tierName "context" $) }}
-  # Note: if changing this file, make sure to edit the statefulset annotation as well
-  {{- with $tierValue.envVars }}
-  {{- toYaml . | nindent 2 }}
-  {{- end }}
+{{- include "druid.historical.config.individual.content" (dict "tierName" $tierName "tierConfig" $tierConfig "context" $) | nindent 2 }}
 
 {{- end }}
 
