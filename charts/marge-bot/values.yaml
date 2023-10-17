@@ -40,3 +40,5 @@ secret:
   # yours: base64 -w0 <my_private_key>
   sshKey: ""
   authToken: ""
+  rebaseRemotely: "false"
+  batch: "false"
