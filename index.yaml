@@ -7032,6 +7032,28 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/keycloak-operator-crds-0.0.10/keycloak-operator-crds-0.0.10.tgz
     version: 0.0.10
+  koherence:
+  - apiVersion: v2
+    appVersion: 0.1.1
+    created: "2023-10-17T13:13:42.083232534Z"
+    description: Daemonset to check coherence between provider & machine block-storage
+      db
+    digest: f754e9f34b20932d16a940d32fe1bd2e43dade5d26dc03a30a9a3e43a91f73b4
+    home: https://github.com/wiremind/koherence/
+    keywords:
+    - wiremind
+    - openstack
+    kubeVersion: '>=1.19.0-0'
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: koherence
+    sources:
+    - https://github.com/wiremind/koherence/
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/koherence-0.1.0/koherence-0.1.0.tgz
+    version: 0.1.0
   kube-prometheus-stack-crds:
   - annotations:
       category: DeveloperTools
@@ -8751,4 +8773,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-istio-2.0.0/wiremind-istio-2.0.0.tgz
     version: 2.0.0
-generated: "2023-10-16T10:19:53.78482744Z"
+generated: "2023-10-17T13:13:42.084106333Z"
