@@ -28,7 +28,7 @@ spec:
           image: {{ .Values.image.repository }}:{{ .Values.image.tag | default (printf "v%s" .Chart.AppVersion) }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
-            - /run/koherence/main.sh
+            - /tmp/script/main.sh
           volumeMounts:
             - name: {{ .Release.Name }}-script
               mountPath: /tmp/script
@@ -56,30 +56,6 @@ spec:
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          livenessProbe:
-            exec:
-              command:
-                - koherence --version
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-          readinessProbe:
-            exec:
-              command:
-                - koherence --version
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-          startupProbe:
-            exec:
-              command:
-                - koherence --version
-            failureThreshold: {{ .Values.startupProbe.retries }}
-            periodSeconds: 1
       {{- with .Values.securityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
