@@ -53,7 +53,8 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           {{- with .Values.containerSecurityContext }}
-          securityContext: {{- toYaml . | nindent 10 }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           livenessProbe:
             exec:
@@ -80,7 +81,8 @@ spec:
             failureThreshold: {{ .Values.startupProbe.retries }}
             periodSeconds: 1
       {{- with .Values.securityContext }}
-      securityContext: {{- toYaml . | nindent 6 }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}

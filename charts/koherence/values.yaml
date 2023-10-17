@@ -20,6 +20,7 @@ securityContext: {}
 containerSecurityContext:
   privileged: true
   readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: true
 
 livenessProbe:
   initialDelaySeconds: 5
