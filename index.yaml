@@ -7035,6 +7035,27 @@ entries:
   koherence:
   - apiVersion: v2
     appVersion: 0.1.1
+    created: "2023-10-17T14:44:05.165217323Z"
+    description: Daemonset to check coherence between provider & machine block-storage
+      db
+    digest: 89a16bb5a61fa2dc5670b95fcd3c6176a2c82dc866c55708f6cb7a85d7748801
+    home: https://github.com/wiremind/koherence/
+    keywords:
+    - wiremind
+    - openstack
+    kubeVersion: '>=1.19.0-0'
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: koherence
+    sources:
+    - https://github.com/wiremind/koherence/
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/koherence-0.1.1/koherence-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 0.1.1
     created: "2023-10-17T13:13:42.083232534Z"
     description: Daemonset to check coherence between provider & machine block-storage
       db
@@ -8793,4 +8814,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-istio-2.0.0/wiremind-istio-2.0.0.tgz
     version: 2.0.0
-generated: "2023-10-17T14:17:03.987024244Z"
+generated: "2023-10-17T14:44:05.16571592Z"
