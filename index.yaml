@@ -7369,6 +7369,26 @@ entries:
     version: 0.3.1
   marge-bot:
   - apiVersion: v2
+    appVersion: 0.12.1
+    created: "2023-10-17T14:17:03.986451732Z"
+    description: Marge-bot is a merge-bot for GitLab
+    digest: 3c0dbfd0fb1d0fc1f4445bc5bd7382703e4eee573fdd9e6694625f42fbddedab
+    home: https://github.com/smarkets/marge-bot
+    icon: https://upload.wikimedia.org/wikipedia/en/0/0b/Marge_Simpson.png
+    keywords:
+    - merge
+    - marge
+    - bot
+    - gitlab
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: marge-bot
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/marge-bot-1.3.0/marge-bot-1.3.0.tgz
+    version: 1.3.0
+  - apiVersion: v2
     appVersion: 0.11.0
     created: "2023-07-18T09:35:16.633940603Z"
     description: Marge-bot is a merge-bot for GitLab
@@ -8773,4 +8793,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-istio-2.0.0/wiremind-istio-2.0.0.tgz
     version: 2.0.0
-generated: "2023-10-17T13:13:42.084106333Z"
+generated: "2023-10-17T14:17:03.987024244Z"
