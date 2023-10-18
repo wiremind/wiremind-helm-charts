@@ -132,6 +132,12 @@ TierToBrokerMap
 {{- printf "%s" (.Values.broker.envVars.druid_service | default "druid/broker") -}}
 {{- end -}}
 
+{{/*
+Parameters:
+- tierName
+- tierConfig
+- context
+*/}}
 {{- define "druid.historical.config.individual.content" -}}
 druid_host: {{ template "druid.historical.fullname" (dict "tierName" .tierName "context" .context) }}
 {{- range $key, $val := .tierConfig.envVars }}
@@ -139,6 +145,10 @@ druid_host: {{ template "druid.historical.fullname" (dict "tierName" .tierName "
 {{- end }}
 {{- end -}}
 
+{{/*
+Parameters:
+- tierConfig
+*/}}
 {{- define "druid.historical.secret.individual.content" -}}
 {{- range $key, $val := .tierConfig.secretEnvVars -}}
 {{ $key }}: {{ $val | b64enc }}
