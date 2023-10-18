@@ -2163,6 +2163,50 @@ entries:
   druid:
   - apiVersion: v2
     appVersion: 26.0.0
+    created: "2023-10-18T09:08:19.601882813Z"
+    dependencies:
+    - condition: zookeeper.enabled
+      name: zookeeper
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.0.0
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.6.10
+    - condition: mysql.enabled
+      name: mysql
+      repository: https://charts.bitnami.com/bitnami
+      version: 9.11.1
+    - condition: kube-hpa-scale-to-zero.enabled
+      name: kube-hpa-scale-to-zero
+      repository: https://machine424.github.io/kube-hpa-scale-to-zero
+      version: 0.3.0
+    - alias: extra-objects
+      condition: extra-objects.enabled
+      name: raw
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: 0.1.0
+    description: Apache Druid is a high performance real-time analytics database.
+    digest: 3165646468d050fb91f8debfdaadf0f03de1173c7da26a2625ab1fee0951d80e
+    home: https://druid.apache.org/
+    icon: https://druid.apache.org/img/favicon.png
+    keywords:
+    - olap
+    - database
+    - analytics
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: druid
+    sources:
+    - https://github.com/apache/druid
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/druid
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/druid-1.4.1/druid-1.4.1.tgz
+    version: 1.4.1
+  - apiVersion: v2
+    appVersion: 26.0.0
     created: "2023-09-06T12:25:20.487777301Z"
     dependencies:
     - condition: zookeeper.enabled
@@ -8835,4 +8879,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-istio-2.0.0/wiremind-istio-2.0.0.tgz
     version: 2.0.0
-generated: "2023-10-17T17:59:45.480294208Z"
+generated: "2023-10-18T09:08:19.602420307Z"
