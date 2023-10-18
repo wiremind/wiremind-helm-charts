@@ -81,6 +81,6 @@ spec:
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: 1
+      maxUnavailable: 10
       maxSurge: 0
   revisionHistoryLimit: 10
