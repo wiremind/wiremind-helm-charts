@@ -176,7 +176,28 @@ configMap:
   #   sentry:
   #     private: secret
   #   public: 123456789
-
+  ## acls setting
+  # aclsConfig:
+  #   rules:
+  #   - action: block
+  #     reason: all regex silences are blocked, use only concrete label names and values
+  #     scope:
+  #       filters:
+  #         - name_re: .+
+  #           value_re: .+
+  #           isRegex: true
+  #   - action: allow
+  #     reason: admins are allowed
+  #     scope:
+  #       groups:
+  #         - admins
+  #   - action: block
+  #     reason: only admins can create silences with cluster=prod
+  #     scope:
+  #       filters:
+  #         - name: cluster
+  #           value: prod
+  #           isEqual: true
 ## Names of secrets that will be mounted to `/etc/certs/<secret_name>` in the karma container.
 ## These secrets can be used to configure TLS for Karma's Alertmanagers by passing their paths to
 ## the appropriate Karma configuration parameters. For example, secret `foo` containing a `ca.crt`
