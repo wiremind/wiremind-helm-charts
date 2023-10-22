@@ -95,7 +95,7 @@ jobs:
           # Istio
           if [[ "$CHART_NAME" != *"istio-operator-crds" ]]; then
             helm repo add wiremind https://wiremind.github.io/wiremind-helm-charts --force-update
-            helm install istio-operator-crds wiremind/istio-operator-crds --version 1.15.5
+            helm install istio-operator-crds wiremind/istio-operator-crds --version 1.18.2
           fi
           # csi-driver-host-path
           if [[ "$CHART_NAME" == *"csi-driver-host-path" ]]; then
