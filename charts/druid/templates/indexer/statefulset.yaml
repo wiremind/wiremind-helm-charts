@@ -13,13 +13,13 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}
+  name: {{ include "druid.indexer.category.fullname" (dict "categoryName" $categoryName "context" $) }}
   labels:
 {{ include "druid.common-labels" $ | indent 4 }}
     app.kubernetes.io/part-of: indexer
     app.kubernetes.io/component: indexer-{{ $categoryName }}
 spec:
-  serviceName: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}
+  serviceName: {{ include "druid.indexer.category.fullname" (dict "categoryName" $categoryName "context" $) }}
   podManagementPolicy: {{ default $indexerDefaults.podManagementPolicy $categoryValue.podManagementPolicy }}
   replicas: {{ if not (kindIs "invalid" $categoryValue.replicaCount) }}{{ $categoryValue.replicaCount }}{{ else }}{{ $indexerDefaults.replicaCount }}{{ end }}
   selector:
@@ -34,6 +34,7 @@ spec:
         app.kubernetes.io/part-of: indexer
         app.kubernetes.io/component: indexer-{{ $categoryName }}
       annotations:
+        druid.k8s.enablePatching: "true"
         # This restarts all indexers for now as we use the same file
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") $ | sha256sum }}
@@ -60,21 +61,32 @@ spec:
       {{- if $indexerDefaults.priorityClassName }}
       priorityClassName: {{ $indexerDefaults.priorityClassName }}
       {{- end }}
+      {{- if $indexerDefaults.serviceAccount.create }}
+      serviceAccountName: {{ include "druid.indexer.serviceAccountName" $ }}
+      {{- end }}
       containers:
         - name: indexer
           args: [ "middleManager" ]
           env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
             - name: druid_extensions_loadList
               value: {{ $.Values.extensions.loadList | toJson | quote }}
           envFrom:
             - configMapRef:
                 name: {{ include "druid.fullname" $ }}-config
             - configMapRef:
-                name: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}-config
+                name: {{ include "druid.indexer.category.fullname" (dict "categoryName" $categoryName "context" $) }}-config
             - secretRef:
                 name: {{ include "druid.fullname" $ }}-config
             - secretRef:
-                name: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}-config
+                name: {{ include "druid.indexer.category.fullname" (dict "categoryName" $categoryName "context" $) }}-config
           resources:
 {{- if $categoryValue.resources }}
 {{ toYaml $categoryValue.resources | indent 12 }}

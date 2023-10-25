@@ -32,11 +32,27 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Create a default fully qualified historical tier name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "druid.historical.tier.fullname" -}}
+{{ template "druid.fullname" .context }}-{{ .context.Values.historical.defaults.name }}-{{ .tierName }}
+{{- end -}}
+
+{{/*
 Create a default fully qualified historical name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "druid.historical.fullname" -}}
-{{ template "druid.fullname" .context }}-historical-{{ .tierName }}
+{{ template "druid.fullname" . }}-{{ .Values.historical.defaults.name }}
+{{- end -}}
+
+{{/*
+Create a default fully qualified indexer category name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "druid.indexer.category.fullname" -}}
+{{ template "druid.fullname" .context }}-{{ .context.Values.indexer.defaults.name }}-{{ .categoryName }}
 {{- end -}}
 
 {{/*
@@ -44,7 +60,7 @@ Create a default fully qualified indexer name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "druid.indexer.fullname" -}}
-{{ template "druid.fullname" .context }}-indexer-{{ .categoryName }}
+{{ template "druid.fullname" . }}-{{ .Values.indexer.defaults.name }}
 {{- end -}}
 
 {{/*
@@ -139,7 +155,6 @@ Parameters:
 - context
 */}}
 {{- define "druid.historical.config.individual.content" -}}
-druid_host: {{ template "druid.historical.fullname" (dict "tierName" .tierName "context" .context) }}
 {{- range $key, $val := .tierConfig.envVars }}
 {{ $key }}: {{ $val | quote }}
 {{- end }}
@@ -154,3 +169,69 @@ Parameters:
 {{ $key }}: {{ $val | b64enc }}
 {{- end }}
 {{- end -}}
+
+{{/*
+Create the name of the broker service account
+*/}}
+{{- define "druid.broker.serviceAccountName" -}}
+  {{- if .Values.broker.serviceAccount.create }}
+    {{- default (include "druid.broker.fullname" .) .Values.broker.serviceAccount.name }}
+  {{- else }}
+    {{- default "default" .Values.broker.serviceAccount.name }}
+  {{- end }}
+{{- end }}
+
+{{/*
+Create the name of the historical service account
+*/}}
+{{- define "druid.historical.serviceAccountName" -}}
+  {{- if .Values.historical.defaults.serviceAccount.create }}
+    {{- default (include "druid.historical.fullname" .) .Values.historical.defaults.serviceAccount.name }}
+  {{- else }}
+    {{- default "default" .Values.historical.defaults.serviceAccount.name }}
+  {{- end }}
+{{- end }}
+
+{{/*
+Create the name of the indexer service account
+*/}}
+{{- define "druid.indexer.serviceAccountName" -}}
+  {{- if .Values.indexer.defaults.serviceAccount.create }}
+    {{- default (include "druid.indexer.fullname" .) .Values.indexer.defaults.serviceAccount.name }}
+  {{- else }}
+    {{- default "default" .Values.indexer.defaults.serviceAccount.name }}
+  {{- end }}
+{{- end }}
+
+{{/*
+Create the name of the coordinator service account
+*/}}
+{{- define "druid.coordinator.serviceAccountName" -}}
+  {{- if .Values.coordinator.serviceAccount.create }}
+    {{- default (include "druid.coordinator.fullname" .) .Values.coordinator.serviceAccount.name }}
+  {{- else }}
+    {{- default "default" .Values.coordinator.serviceAccount.name }}
+  {{- end }}
+{{- end }}
+
+{{/*
+Create the name of the overlord service account
+*/}}
+{{- define "druid.overlord.serviceAccountName" -}}
+  {{- if .Values.overlord.serviceAccount.create }}
+    {{- default (include "druid.overlord.fullname" .) .Values.overlord.serviceAccount.name }}
+  {{- else }}
+    {{- default "default" .Values.overlord.serviceAccount.name }}
+  {{- end }}
+{{- end }}
+
+{{/*
+Create the name of the router service account
+*/}}
+{{- define "druid.router.serviceAccountName" -}}
+  {{- if .Values.router.serviceAccount.create }}
+    {{- default (include "druid.router.fullname" .) .Values.router.serviceAccount.name }}
+  {{- else }}
+    {{- default "default" .Values.router.serviceAccount.name }}
+  {{- end }}
+{{- end }}

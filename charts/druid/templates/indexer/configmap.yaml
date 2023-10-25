@@ -9,13 +9,12 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}-config
+  name: {{ include "druid.indexer.category.fullname" (dict "categoryName" $categoryName "context" $) }}-config
   labels:
 {{ include "druid.common-labels" $ | indent 4 }}
     app.kubernetes.io/part-of: indexer
     app.kubernetes.io/component: indexer-{{ $categoryName }}
 data:
-  druid_host: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}
   {{- with $categoryValue.envVars }}
   {{- toYaml . | nindent 2 }}
   {{- end }}

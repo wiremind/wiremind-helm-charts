@@ -17,6 +17,7 @@ extensions:
     - druid-datasketches
     - druid-histogram
     - druid-kinesis-indexing-service
+    - druid-kubernetes-extensions
     - druid-lookups-cached-global
     - druid-lookups-cached-single
     - druid-pac4j
@@ -30,6 +31,10 @@ secretEnvVars: {}
 
 configMap:
   enabled: true
+
+# Required if using kubernetes extensions which modify resources like 'druid-kubernetes-extensions' or 'druid-kubernetes-overlord-extensions'
+rbac:
+  create: true
 
 configVars:
   ## DRUID env vars. ref: https://github.com/apache/druid/blob/master/distribution/docker/druid.sh#L29
@@ -93,6 +98,15 @@ configVars:
   druid_indexer_logs_type: file
   druid_indexer_logs_directory: /opt/data/indexing-logs
 
+  # Kubernetes discovery
+  druid_zk_service_enabled: "false"
+  druid_serverview_type: http
+  druid_coordinator_loadqueuepeon_type: http
+  druid_indexer_runner_type: httpRemote
+  druid_discovery_type: k8s
+
+  druid_discovery_k8s_clusterIdentifier: "default"
+
 router:
   enabled: true
   replicaCount: 1
@@ -133,6 +147,17 @@ router:
   envVars:
     druid_router_managementProxy_enabled: "true"
   secretEnvVars: {}
+  serviceAccount:
+    # -- Create a service account for the broker
+    create: true
+    # -- Service Account name
+    name:
+    # -- Annotations applied to created service account
+    annotations: {}
+    # -- Labels applied to created service account
+    labels: {}
+    # -- Automount API credentials for the service account
+    automountServiceAccountToken: true
 
 broker:
   enabled: true
@@ -178,6 +203,17 @@ broker:
   defaults:
     updateStrategy:
       type: RollingUpdate
+  serviceAccount:
+    # -- Create a service account for the broker
+    create: true
+    # -- Service Account name
+    name:
+    # -- Annotations applied to created service account
+    annotations: {}
+    # -- Labels applied to created service account
+    labels: {}
+    # -- Automount API credentials for the service account
+    automountServiceAccountToken: true
 
 coordinator:
   enabled: true
@@ -214,10 +250,22 @@ coordinator:
   podDisruptionBudget: {}
   envVars: {}
   secretEnvVars: {}
+  serviceAccount:
+    # -- Create a service account for the coordinator
+    create: true
+    # -- Service Account name
+    name:
+    # -- Annotations applied to created service account
+    annotations: {}
+    # -- Labels applied to created service account
+    labels: {}
+    # -- Automount API credentials for the service account
+    automountServiceAccountToken: true
 
 historical:
   enabled: true
   defaults:
+    name: historical
     replicaCount: 1
     podManagementPolicy: Parallel
     envVars:
@@ -258,6 +306,17 @@ historical:
       timeoutSeconds: 10
       failureThreshold: 10
       successThreshold: 1
+    serviceAccount:
+      # -- Create a service account for the coordinator
+      create: true
+      # -- Service Account name
+      name:
+      # -- Annotations applied to created service account
+      annotations: {}
+      # -- Labels applied to created service account
+      labels: {}
+      # -- Automount API credentials for the service account
+      automountServiceAccountToken: true
   tiers:
     default:
       envVars:
@@ -266,7 +325,7 @@ historical:
         DRUID_MAXDIRECTMEMORYSIZE: 400m
 
         druid_server_tier: "tier_default"
-        druid_segmentCache_locations: '[{"path":"var/druid/segment-cache","maxSize":"1GiB"}]'
+        druid_segmentCache_locations: '[{"path":"/opt/druid/var/druid/segment-cache","maxSize":"1GiB"}]'
       resources:
         requests:
           memory: 256Mi
@@ -277,6 +336,7 @@ historical:
 indexer:
   enabled: true
   defaults:
+    name: indexer
     replicaCount: 1
     podManagementPolicy: Parallel
     priorityClassName: ""
@@ -300,6 +360,17 @@ indexer:
     resources: {}
     envVars: {}
     secretEnvVars: {}
+    serviceAccount:
+      # -- Create a service account for the coordinator
+      create: true
+      # -- Service Account name
+      name:
+      # -- Annotations applied to created service account
+      annotations: {}
+      # -- Labels applied to created service account
+      labels: {}
+      # -- Automount API credentials for the service account
+      automountServiceAccountToken: true
   categories:
     default:
       mode: "Deployment"
@@ -322,7 +393,7 @@ indexer:
 zkHosts: ""
 
 zookeeper:
-  enabled: true
+  enabled: false
   image:
     debug: true
   podAnnotations: {}

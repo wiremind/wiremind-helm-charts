@@ -15,13 +15,13 @@ apiVersion: autoscaling/v2beta2
 {{- end }}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}
+  name: {{ include "druid.indexer.category.fullname" (dict "categoryName" $categoryName "context" $) }}
 spec:
   scaleTargetRef:
     # Only apps/v1 resources are accepted
     apiVersion: apps/v1
     kind: {{ $categoryValue.mode }}
-    name: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}
+    name: {{ include "druid.indexer.category.fullname" (dict "categoryName" $categoryName "context" $) }}
   minReplicas: {{ $categoryValue.autoscaling.minReplicas }}
   maxReplicas: {{ $categoryValue.autoscaling.maxReplicas }}
   metrics:

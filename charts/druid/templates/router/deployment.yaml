@@ -22,6 +22,7 @@ spec:
       labels:
 {{ include "druid.common-labels" . | indent 8 }}
         app.kubernetes.io/component: {{ .Values.router.name }}
+        druid.k8s.enablePatching: "true"
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") $ | sha256sum }}
@@ -34,12 +35,23 @@ spec:
       {{- if .Values.router.priorityClassName }}
       priorityClassName: {{ .Values.router.priorityClassName }}
       {{- end }}
+      {{- if .Values.router.serviceAccount.create }}
+      serviceAccountName: {{ include "druid.router.serviceAccountName" . }}
+      {{- end }}
       containers:
         - name: {{ include "druid.router.fullname" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args: [ "router" ]
           env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
             - name: druid_extensions_loadList
               value: {{ .Values.extensions.loadList | toJson | quote }}
             - name: druid_router_tierToBrokerMap
