@@ -8,7 +8,6 @@ metadata:
 {{ include "druid.common-labels" . | indent 4 }}
     app.kubernetes.io/component: {{ .Values.broker.name }}
 data:
-  druid_host: {{ include "druid.broker.fullname" . }}
   {{- with .Values.broker.envVars }}
   {{- toYaml . | nindent 2 }}
   {{- end }}

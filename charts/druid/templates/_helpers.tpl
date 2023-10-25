@@ -139,7 +139,6 @@ Parameters:
 - context
 */}}
 {{- define "druid.historical.config.individual.content" -}}
-druid_host: {{ template "druid.historical.fullname" (dict "tierName" .tierName "context" .context) }}
 {{- range $key, $val := .tierConfig.envVars }}
 {{ $key }}: {{ $val | quote }}
 {{- end }}

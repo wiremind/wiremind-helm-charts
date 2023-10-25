@@ -61,6 +61,10 @@ spec:
           env:
             - name: druid_extensions_loadList
               value: {{ $.Values.extensions.loadList | toJson | quote }}
+            - name: druid_host
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
           # Order defines precedence
           envFrom:
             - configMapRef:

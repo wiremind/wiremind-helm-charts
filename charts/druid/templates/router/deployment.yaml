@@ -44,6 +44,10 @@ spec:
               value: {{ .Values.extensions.loadList | toJson | quote }}
             - name: druid_router_tierToBrokerMap
               value: '{ {{- include "tiertobroker.map" . -}} }'
+            - name: druid_host
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
           envFrom:
             - configMapRef:
                 name: {{ include "druid.fullname" . }}-config

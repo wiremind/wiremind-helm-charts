@@ -15,7 +15,6 @@ metadata:
     app.kubernetes.io/part-of: indexer
     app.kubernetes.io/component: indexer-{{ $categoryName }}
 data:
-  druid_host: {{ include "druid.indexer.fullname" (dict "categoryName" $categoryName "context" $) }}
   {{- with $categoryValue.envVars }}
   {{- toYaml . | nindent 2 }}
   {{- end }}

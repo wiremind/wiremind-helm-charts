@@ -42,6 +42,10 @@ spec:
           env:
             - name: druid_extensions_loadList
               value: {{ .Values.extensions.loadList | toJson | quote }}
+            - name: druid_host
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
           envFrom:
             - configMapRef:
                 name: {{ include "druid.fullname" . }}-config
