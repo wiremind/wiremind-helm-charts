@@ -105,7 +105,7 @@ configVars:
   druid_indexer_runner_type: httpRemote
   druid_discovery_type: k8s
 
-  druid_discovery_k8s_clusterIdentifier: "default"
+  druid_discovery_k8s_clusterIdentifier: "druid-default"
 
 router:
   enabled: true
