@@ -23,6 +23,7 @@ spec:
 {{ include "druid.common-labels" . | indent 8 }}
         app.kubernetes.io/component: {{ .Values.broker.name }}
       annotations:
+        druid.k8s.enablePatching: "true"
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") $ | sha256sum }}
         checksum/configmap-broker: {{ include (print $.Template.BasePath "/broker/configmap.yaml") $ | sha256sum }}
@@ -35,12 +36,23 @@ spec:
       priorityClassName: {{ .Values.broker.priorityClassName }}
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.broker.terminationGracePeriodSeconds }}
+      {{- if .Values.broker.serviceAccount.create }}
+      serviceAccountName: {{ include "druid.broker.serviceAccountName" . }}
+      {{- end }}
       containers:
         - name: {{ include "druid.broker.fullname" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args: [ "broker" ]
           env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
             - name: druid_extensions_loadList
               value: {{ .Values.extensions.loadList | toJson | quote }}
           envFrom:

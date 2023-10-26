@@ -5,7 +5,7 @@
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "druid.historical.fullname" (dict "tierName" $tierName "context" $) }}
+  name: {{ include "druid.historical.tier.fullname" (dict "tierName" $tierName "context" $) }}
   labels:
 {{ include "druid.common-labels" $ | indent 4 }}
     app.kubernetes.io/part-of: historical

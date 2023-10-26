@@ -23,6 +23,7 @@ spec:
 {{ include "druid.common-labels" . | indent 8 }}
         app.kubernetes.io/component: {{ .Values.coordinator.name }}
       annotations:
+        druid.k8s.enablePatching: "true"
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") $ | sha256sum }}
         checksum/configmap-coordinator: {{ include (print $.Template.BasePath "/coordinator/configmap.yaml") $ | sha256sum }}
@@ -34,12 +35,23 @@ spec:
       {{- if .Values.coordinator.priorityClassName }}
       priorityClassName: {{ .Values.coordinator.priorityClassName }}
       {{- end }}
+      {{- if .Values.coordinator.serviceAccount.create }}
+      serviceAccountName: {{ include "druid.coordinator.serviceAccountName" . }}
+      {{- end }}
       containers:
         - name: {{ include "druid.coordinator.fullname" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args: [ "coordinator" ]
           env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
             - name: druid_extensions_loadList
               value: {{ .Values.extensions.loadList | toJson | quote }}
           envFrom:
