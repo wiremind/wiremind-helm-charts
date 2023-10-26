@@ -110,6 +110,11 @@ spec:
           ports:
             - containerPort: 8091
               name: http
+            {{- if $.Values.metrics.enabled }}
+            - name: http-metrics
+              containerPort: {{ $.Values.metrics.service.port }}
+              protocol: TCP
+            {{- end }}
           volumeMounts:
             - mountPath: /opt/druid/var
               name: data
