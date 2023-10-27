@@ -119,6 +119,7 @@ router:
   name: router
   port: 8888
   serviceType: ClusterIP
+  serviceExtraPorts: []
   livenessProbe:
     enabled: true
     initialDelaySeconds: 60
