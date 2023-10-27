@@ -4,7 +4,8 @@
 
 {{- if hasKey $categoryValue "enabled" | ternary $categoryValue.enabled true }}
 
-{{- if $categoryValue.autoscaling.enabled }}
+{{- $categoryAutoscaling := hasKey $categoryValue "autoscaling" | ternary $categoryValue.autoscaling dict }}
+{{- if hasKey $categoryAutoscaling "enabled" | ternary $categoryAutoscaling.enabled false }}
 
 ---
 

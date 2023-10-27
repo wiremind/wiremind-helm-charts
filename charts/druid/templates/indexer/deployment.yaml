@@ -8,6 +8,8 @@
 
 {{- $indexerDefaults := $.Values.indexer.defaults }}
 
+{{- $categoryService := hasKey $categoryValue "service" | ternary $categoryValue.service dict }}
+
 ---
 
 apiVersion: apps/v1
@@ -77,6 +79,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            {{- if hasKey $categoryService "overrideDruidHost" | ternary $categoryService.overrideDruidHost $.Values.indexer.defaults.service.overrideDruidHost }}
+            - name: druid_host
+              value: {{ include "druid.indexer.category.fullname" (dict "categoryName" $categoryName "context" $) }}
+            {{- end }}
             - name: druid_extensions_loadList
               value: {{ $.Values.extensions.loadList | toJson | quote }}
           envFrom:

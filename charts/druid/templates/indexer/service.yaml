@@ -4,6 +4,11 @@
 
 {{- if hasKey $categoryValue "enabled" | ternary $categoryValue.enabled true }}
 
+{{- $categoryService := hasKey $categoryValue "service" | ternary $categoryValue.service dict }}
+{{- $categoryServiceDedicated := hasKey $categoryService "dedicated" | ternary $categoryService.dedicated $.Values.indexer.defaults.service.dedicated }}
+
+{{- if not $categoryServiceDedicated -}}
+
 ---
 
 apiVersion: v1
@@ -25,6 +30,8 @@ spec:
 {{ include "druid.common-matchLabels" $ | indent 4 }}
     app.kubernetes.io/part-of: indexer
     app.kubernetes.io/component: indexer-{{ $categoryName }}
+
+{{- end }}
 
 {{- end }}
 
