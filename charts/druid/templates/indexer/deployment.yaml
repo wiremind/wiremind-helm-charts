@@ -79,7 +79,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            {{- if hasKey $categoryService "overrideDruidHost" | ternary $categoryService.overrideDruidHost $.Values.indexer.defaults.service.overrideDruidHost }}
+            {{- if hasKey $categoryService "overrideDruidHost" | ternary $categoryService.overrideDruidHost $.Values.service.overrideDruidHost }}
             - name: druid_host
               value: {{ include "druid.indexer.category.fullname" (dict "categoryName" $categoryName "context" $) }}
             {{- end }}
@@ -117,7 +117,7 @@ spec:
               port: http
           {{- end }}
           ports:
-            - containerPort: 8091
+            - containerPort: {{ $indexerDefaults.port }}
               name: http
             {{- if $.Values.metrics.enabled }}
             - name: http-metrics

@@ -71,6 +71,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            {{- if $.Values.service.overrideDruidHost }}
+            - name: druid_host
+              value: {{ include "druid.historical.tier.fullname" (dict "tierName" $tierName "context" $) }}
+            {{- end }}
             - name: druid_extensions_loadList
               value: {{ $.Values.extensions.loadList | toJson | quote }}
           # Order defines precedence
@@ -114,7 +118,7 @@ spec:
           image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
           imagePullPolicy: {{ $.Values.image.pullPolicy | quote }}
           ports:
-            - containerPort: 8083
+            - containerPort: {{ $historicalDefaults.port }}
               name: http
             {{- if $.Values.metrics.enabled }}
             - name: http-metrics

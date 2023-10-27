@@ -52,6 +52,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            {{- if .Values.service.overrideDruidHost }}
+            - name: druid_host
+              value: {{ include "druid.coordinator.fullname" $ }}
+            {{- end }}
             - name: druid_extensions_loadList
               value: {{ .Values.extensions.loadList | toJson | quote }}
           envFrom:
