@@ -10,6 +10,12 @@ metrics:
   podMonitor:
     enabled: true
 
+service:
+  # Creates dedicated services that targets each pod of statefulsets
+  dedicated: true
+  # Override druid_host to resolve components IP with DNS
+  overrideDruidHost: true
+
 extensions:
   loadList:
     - druid-basic-security
@@ -112,7 +118,6 @@ router:
   replicaCount: 1
   name: router
   port: 8888
-  servicePort: 80
   serviceType: ClusterIP
   livenessProbe:
     enabled: true
@@ -267,6 +272,7 @@ historical:
   defaults:
     name: historical
     replicaCount: 1
+    port: 8083
     podManagementPolicy: Parallel
     envVars:
       # Processing
@@ -338,10 +344,8 @@ indexer:
   defaults:
     name: indexer
     replicaCount: 1
+    port: 8091
     podManagementPolicy: Parallel
-    service:
-      dedicated: false
-      overrideDruidHost: false
     priorityClassName: ""
     livenessProbe:
       enabled: true
@@ -376,7 +380,7 @@ indexer:
       automountServiceAccountToken: true
   categories:
     default:
-      mode: "Deployment"
+      mode: "StatefulSet"
       envVars:
         DRUID_XMX: 256m
         DRUID_XMS: 256m
@@ -393,9 +397,6 @@ indexer:
         minReplicas: 1
         maxReplicas: 2
         averageCpuUtilization: 80
-      service:
-        dedicated: false
-        overrideDruidHost: false
 
 # If using a zookeeper installed outside of this chart you must uncomment and set this line
 # zkHosts: "druid-zookeeper-headless:2181"

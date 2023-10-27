@@ -5,7 +5,7 @@
 {{- if hasKey $categoryValue "enabled" | ternary $categoryValue.enabled true }}
 
 {{- $categoryService := hasKey $categoryValue "service" | ternary $categoryValue.service dict }}
-{{- $categoryServiceDedicated := hasKey $categoryService "dedicated" | ternary $categoryService.dedicated $.Values.indexer.defaults.service.dedicated }}
+{{- $categoryServiceDedicated := hasKey $categoryService "dedicated" | ternary $categoryService.dedicated $.Values.service.dedicated }}
 
 {{- if not $categoryServiceDedicated -}}
 
@@ -22,7 +22,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: 8091
+    - port: {{ $.Values.indexer.defaults.port }}
       targetPort: http
       protocol: TCP
       name: http

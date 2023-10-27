@@ -78,8 +78,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            {{- if hasKey $categoryService "overrideDruidHost" | ternary $categoryService.overrideDruidHost $.Values.indexer.defaults.service.overrideDruidHost }}
-            {{- if hasKey $categoryService "dedicated" | ternary $categoryService.dedicated $.Values.indexer.defaults.service.dedicated }}
+            {{- if hasKey $categoryService "overrideDruidHost" | ternary $categoryService.overrideDruidHost $.Values.service.overrideDruidHost }}
+            {{- if hasKey $categoryService "dedicated" | ternary $categoryService.dedicated $.Values.service.dedicated }}
             - name: druid_host
               valueFrom:
                 fieldRef:
@@ -121,7 +121,7 @@ spec:
           image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
           imagePullPolicy: {{ $.Values.image.pullPolicy | quote }}
           ports:
-            - containerPort: 8091
+            - containerPort: {{ $indexerDefaults.port }}
               name: http
             {{- if $.Values.metrics.enabled }}
             - name: http-metrics
