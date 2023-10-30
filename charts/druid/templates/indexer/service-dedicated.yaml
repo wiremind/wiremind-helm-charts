@@ -19,6 +19,13 @@
 {{- $replicaCount = hasKey $categoryValue "replicaCount" | ternary $categoryValue.replicaCount $.Values.indexer.defaults.replicaCount }}
 {{- end -}}
 
+{{ $peonCapacity := 1 }}
+{{- if hasKey $categoryValue "envVars" }}
+{{- if hasKey $categoryValue.envVars "druid_worker_capacity" }}
+{{ $peonCapacity = $categoryValue.envVars.druid_worker_capacity }}
+{{- end }}
+{{- end }}
+
 {{- range untilStep 0 ($replicaCount | int) 1 }}
 
 ---
@@ -39,6 +46,12 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+    {{- range untilStep 0 ($peonCapacity | int) 1 }}
+    - port: {{ add 8100 . }}
+      targetPort: {{ add 8100 . }}
+      protocol: TCP
+      name: http-peon-{{ . }}
+    {{- end }}
   selector:
 {{ include "druid.common-matchLabels" $ | indent 4 }}
     app.kubernetes.io/part-of: indexer
