@@ -1,18 +1,27 @@
-# cert-manager-crds
+# argo-crds
 
-Helm chart for deploying Cert Manager CRDs.
+Helm chart for deploying Argo Workflow CRDs.
 
 ### How to update the Chart
 
-The Chart has the same version as the `cert-manager`s, try to keep them equal.
+The Chart has the same version as the `argo`s, try to keep them equal.
 
-CRDs are located [here](https://github.com/cert-manager/cert-manager/tree/master/deploy/crds) but are built by bazel, so you need to do the following instead of just copy pasting:
+CRDs are located [here](https://github.com/argoproj/argo-helm/tree/argo-workflows-0.37.0/charts/argo-workflows/templates/crds)
 
-**Do not forget to change APP_VERSION**
+**Do not forget to change the branch version**
 
 ```
-export APP_VERSION=v1.7.1
-cd charts/cert-manager-crds
-curl https://github.com/cert-manager/cert-manager/releases/download/$APP_VERSION/cert-manager.crds.yaml -L -o crds.yaml
-bash ../../scripts/cut_crds.sh crds.yaml
+cd charts/argo-crds
+
+repo="argoproj/argo-helm"
+branch="argo-workflows-0.37.0"
+folder="charts/argo-workflows/templates/crds"
+
+files=$(curl -s "https://api.github.com/repos/$repo/contents/$folder?ref=$branch" | jq -r '.[].download_url')
+
+for file in $files
+do
+    filename=$(basename "$file")
+    curl -o "templates/$filename" -L "$file"
+done
 ```
