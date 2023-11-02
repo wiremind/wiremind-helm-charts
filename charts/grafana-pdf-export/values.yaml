@@ -31,35 +31,54 @@ config:
 # Priority class name for all components
 # priorityClassName:
 
-# Dashboard URLs, please make sure to format it well:
-#  TODO: Improve it
-#  Date should be formatted in a certain way from=xxx&to=xxx&kiosk in order to parse and replace dates easily
-#  exemple: from=1234587m&to=1654789&kiosk
-#
-# As for the dashboard output, it should be formatted in a certain way : +from_1234587m+to_1654789+kiosk
-# A human readable date  (eg from_2021-06-01m+to_2021-06-30+kiosk) will be used so that dashboard are easier to find and classify
-# All suggestions to make it smoother are welcome
-# Crontab guru: https://crontab.guru
 cronjob:
-  - name: my-first-cron
-    # schedule the export at 6AM the first day of each month
-    schedule: "0 6 1 * *"
-    monthly: true
-    dashboard_in: "https://xxxxxx/d/prometheus-blackbox-exporter/prometheus-blackbox-exporter?orgId=1&from=1619820000000&to=1622498399000&kiosk"
-    dashboard_out: "output.pdf"
-    emailRecipient: "platform@corporate.io"
-    emailSenderEmail: "platform@corporate.io"
-    emailSenderName: "My Team"
-    emailSubject: "Pod Dashboard"
-    emailBody: "Here is the monthly dashboard"
-  - name: my-second-cron
-    # schedule the export at 6AM the first day of each month
-    schedule: "0 6 1 * *"
-    monthly: true
-    dashboard_in: "https://xxxxxx/d/prometheus-blackbox-exporter/prometheus-blackbox-exporter?orgId=1&from=1619820000000&to=1622498399000&kiosk"
-    dashboard_out: "output.pdf"
-    emailRecipient: "platform@corporate.io"
-    emailSenderEmail: "myteam@corporate.io"
-    emailSenderName: "My Team"
-    emailSubject: "Pod Dashboard"
-    emailBody: "Here is the monthly dashboard"
+  resources: {}
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+  containerSecurityContext:
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+  jobs:
+    # Dashboard URLs, please make sure to format it well:
+    # TODO: Improve it
+    #
+    # Date should be formatted in a certain way from=xxx&to=xxx&kiosk in order
+    # to parse and replace dates easily exemple: from=1234587m&to=1654789&kiosk
+    #
+    # As for the dashboard output, it should be formatted in a certain way:
+    # +from_1234587m+to_1654789+kiosk
+    #
+    # A human readable date  (eg from_2021-06-01m+to_2021-06-30+kiosk) will be
+    # used so that dashboard are easier to find and classify All suggestions to
+    # make it smoother are welcome.
+    #
+    # Crontab guru: https://crontab.guru
+    - name: my-first-cron
+      # schedule the export at 6AM the first day of each month
+      schedule: "0 6 1 * *"
+      monthly: true
+      dashboard_in: "https://xxxxxx/d/prometheus-blackbox-exporter/prometheus-blackbox-exporter?orgId=1&from=1619820000000&to=1622498399000&kiosk"
+      dashboard_out: "output.pdf"
+      emailRecipient: "platform@corporate.io"
+      emailSenderEmail: "platform@corporate.io"
+      emailSenderName: "My Team"
+      emailSubject: "Pod Dashboard"
+      emailBody: "Here is the monthly dashboard"
+    - name: my-second-cron
+      # schedule the export at 6AM the first day of each month
+      schedule: "0 6 1 * *"
+      monthly: true
+      dashboard_in: "https://xxxxxx/d/prometheus-blackbox-exporter/prometheus-blackbox-exporter?orgId=1&from=1619820000000&to=1622498399000&kiosk"
+      dashboard_out: "output.pdf"
+      emailRecipient: "platform@corporate.io"
+      emailSenderEmail: "myteam@corporate.io"
+      emailSenderName: "My Team"
+      emailSubject: "Pod Dashboard"
+      emailBody: "Here is the monthly dashboard"

@@ -1,5 +1,5 @@
 {{- if .Values.config.cronJobs.enabled }}
-{{- range $job, $val := .Values.cronjob }}
+{{- range $job, $val := .Values.cronjob.jobs }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -7,10 +7,12 @@ metadata:
   labels:
     app.kubernetes.io/component: grafana-pdf-export-cronjob
 spec:
-  concurrencyPolicy: Allow  # We want to allow day+1 to run even if day did not finish
+  # We want to allow day+1 to run even if day did not finish
+  concurrencyPolicy: Allow
   successfulJobsHistoryLimit: 0
   failedJobsHistoryLimit: 1
-  # Avoid 00:00 -> 03:00, there are a lot of activities going on because of ElasticSearch ILM
+  # Avoid 00:00 -> 03:00, there are a lot of activities going on because of
+  # ElasticSearch ILM
   schedule: {{ $val.schedule | quote}}
   suspend: false
   jobTemplate:
@@ -88,20 +90,23 @@ spec:
               # Used to get AWS, Grafana and Sendgrid variables
               - secretRef:
                   name: {{ $.Release.Name }}-grafana-pdf-exporter-secret
-            image: {{ .Values.image.repository }}:{{ .Values.image.tag | default (printf "v%s" .Chart.AppVersion) }}
+            image: {{ $.Values.image.repository }}:{{ $.Values.image.tag | default (printf "v%s" $.Chart.AppVersion) }}
             name: {{ $val.name | quote}}
+            {{- if $.Values.cronjob.resources }}
             resources:
-              requests:
-                cpu: 2
-                memory: 8Gi
-              limits:
-                cpu: 4
-                memory: 8Gi
+            {{- toYaml $.Values.cronjob.resources | nindent 14 }}
+            {{- end }}
+            {{- with $.Values.cronjob.containerSecurityContext }}
+            securityContext:
+            {{- toYaml . | nindent 14 }}
+            {{- end }}
           restartPolicy: Never
           {{- with $.Values.priorityClassName }}
           priorityClassName: {{ . }}
           {{- end }}
-
----
+          {{- with $.Values.cronjob.securityContext }}
+          securityContext:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
 {{- end }}
 {{- end }}
