@@ -32,6 +32,11 @@ config:
 # priorityClassName:
 
 cronjob:
+  backoffLimit: 3
+  # We want to allow day+1 to run even if day did not finish
+  concurrencyPolicy: Allow
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
   resources: {}
   securityContext:
     runAsUser: 1000

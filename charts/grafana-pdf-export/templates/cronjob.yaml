@@ -7,17 +7,16 @@ metadata:
   labels:
     app.kubernetes.io/component: grafana-pdf-export-cronjob
 spec:
-  # We want to allow day+1 to run even if day did not finish
-  concurrencyPolicy: Allow
-  successfulJobsHistoryLimit: 0
-  failedJobsHistoryLimit: 1
+  concurrencyPolicy: {{ $.Values.cronjob.concurrencyPolicy }}
+  successfulJobsHistoryLimit: {{ $.Values.cronjob.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ $.Values.cronjob.failedJobsHistoryLimit }}
   # Avoid 00:00 -> 03:00, there are a lot of activities going on because of
   # ElasticSearch ILM
   schedule: {{ $val.schedule | quote}}
   suspend: false
   jobTemplate:
     spec:
-      backoffLimit: 6
+      backoffLimit: {{ $.Values.cronjob.backoffLimit }}
       template:
         spec:
           containers:
