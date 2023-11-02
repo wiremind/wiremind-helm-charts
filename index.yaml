@@ -5616,6 +5616,27 @@ entries:
   grafana-pdf-exporter:
   - apiVersion: v2
     appVersion: "1.7"
+    created: "2023-11-02T15:48:57.439203718Z"
+    description: Grafana pdf exporter is a tool to easily export any Grafana dashboard
+      as PDF. It will be rendered as if the dashboard was opened in a browser.
+    digest: 140c4cfbf8172d11d069674812840bc366feda9b08a3a9ee64617b3fd84b9506
+    home: https://www.wiremind.io
+    keywords:
+    - wiremind
+    - grafana
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: grafana-pdf-exporter
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/grafana-pdf-exporter
+    - https://github.com/wiremind/grafana-pdf-exporter
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/grafana-pdf-exporter-2.1.1/grafana-pdf-exporter-2.1.1.tgz
+    version: 2.1.1
+  - apiVersion: v2
+    appVersion: "1.7"
     created: "2023-11-02T15:26:07.409941752Z"
     description: Grafana pdf exporter is a tool to easily export any Grafana dashboard
       as PDF. It will be rendered as if the dashboard was opened in a browser.
@@ -9336,4 +9357,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-istio-2.0.0/wiremind-istio-2.0.0.tgz
     version: 2.0.0
-generated: "2023-11-02T15:26:07.410797874Z"
+generated: "2023-11-02T15:48:57.439962923Z"
