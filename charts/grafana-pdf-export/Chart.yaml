@@ -1,7 +1,7 @@
 apiVersion: v2
 name: grafana-pdf-exporter
 home: https://www.wiremind.io
-version: 2.0.0
+version: 2.0.1
 appVersion: 1.5
 type: application
 description: Grafana pdf exporter is a tool to easily export any Grafana dashboard as PDF. It will be rendered as if the dashboard was opened in a browser.
