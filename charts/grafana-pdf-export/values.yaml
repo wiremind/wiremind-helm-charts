@@ -2,8 +2,8 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 image:
-  repository: francoisminaud/grafana-pdf-export
-  tag: v1.11
+  repository: ghcr.io/wiremind/grafana-pdf-exporter
+  tag: ""
   pullPolicy: IfNotPresent
 resources:
   limits:
@@ -47,10 +47,10 @@ cronjob:
     monthly: true
     dashboard_in: "https://xxxxxx/d/prometheus-blackbox-exporter/prometheus-blackbox-exporter?orgId=1&from=1619820000000&to=1622498399000&kiosk"
     dashboard_out: "output.pdf"
-    emailRecipient: "platform@wiremind.io"
-    emailSenderEmail: "platform@wiremind.io"
-    emailSenderName: "Wiremind Platform"
-    emailSubject: "Wiremind Pod Dashboard"
+    emailRecipient: "platform@corporate.io"
+    emailSenderEmail: "platform@corporate.io"
+    emailSenderName: "My Team"
+    emailSubject: "Pod Dashboard"
     emailBody: "Here is the monthly dashboard"
   - name: my-second-cron
     # schedule the export at 6AM the first day of each month
@@ -58,8 +58,8 @@ cronjob:
     monthly: true
     dashboard_in: "https://xxxxxx/d/prometheus-blackbox-exporter/prometheus-blackbox-exporter?orgId=1&from=1619820000000&to=1622498399000&kiosk"
     dashboard_out: "output.pdf"
-    emailRecipient: "platform@wiremind.io"
-    emailSenderEmail: "platform@wiremind.io"
-    emailSenderName: "Wiremind Platform"
-    emailSubject: "Wiremind Pod Dashboard"
+    emailRecipient: "platform@corporate.io"
+    emailSenderEmail: "myteam@corporate.io"
+    emailSenderName: "My Team"
+    emailSubject: "Pod Dashboard"
     emailBody: "Here is the monthly dashboard"
