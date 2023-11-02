@@ -40,11 +40,11 @@ spec:
                 date_from=$(date -d "`date +%Y%m01` -1 month" +%s%3N)
                 #multiply=1000
                 # date_from_epoch=$($date_from * $multiply)
-                sed -i "s/from.*\&to/from=$date_from\&to/g" dashboard_url
+                sed -i "s/from=.*\&to/from=$date_from\&to/g" dashboard_url
                 # Replace TO field
                 date_to=$(date -d "`date +%Y%m01` " +%s%3N)
                 # date_to_epoch=$( $date_to * $multiply )
-                sed -i "s/to.*\&kiosk/to=$date_to\&kiosk/g" dashboard_url
+                sed -i "s/to=.*\&kiosk/to=$date_to\&kiosk/g" dashboard_url
 
                 # Prepare the Dashboard Output name
                 echo $DASHBOARD_OUT > dashboard_out
