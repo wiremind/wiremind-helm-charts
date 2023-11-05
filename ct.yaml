@@ -11,7 +11,7 @@ chart-repos:
   - prometheus-community=https://prometheus-community.github.io/helm-charts
   - wiremind=https://wiremind.github.io/wiremind-helm-charts
   - kube-hpa-scale-to-zero=https://machine424.github.io/kube-hpa-scale-to-zero
-helm-extra-args: "--timeout 300s"
+helm-extra-args: ""
 additional-commands:
   - helm kubeconform {{ .Path }}
   # - helm template {{ .Path }} | kubeconform

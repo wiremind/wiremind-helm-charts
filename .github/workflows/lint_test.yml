@@ -104,4 +104,4 @@ jobs:
           fi
 
       - name: Run chart-testing (install)
-        run: ct install --config ct.yaml
+        run: ct install --config ct.yaml --helm-extra-args "--timeout 300s"
