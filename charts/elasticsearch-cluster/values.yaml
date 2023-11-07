@@ -39,6 +39,9 @@ es-defaults: &defaults
   extraVolumeMounts: |
     - mountPath: /usr/share/elasticsearch/plugins/
       name: plugindir
+  securityContext:
+    allowPrivilegeEscalation: false
+    privileged: false
 
 ## The data nodes
 es-data-hot:
