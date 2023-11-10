@@ -1,0 +1,58 @@
+image:
+  repository: "ghcr.io/wiremind/druid-tasks-exporter"
+  pullPolicy: IfNotPresent
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+  automountServiceAccountToken: true
+
+service:
+  type: ClusterIP
+  port: 8080
+
+livenessProbe:
+  enabled: true
+  httpGet:
+    path: /
+    port: http
+
+readinessProbe:
+  enabled: true
+  httpGet:
+    path: /
+    port: http
+
+containerPorts:
+  http: 8080
+
+serviceMonitor:
+  enabled: false
+  interval: 15s
+  honorLabels: false
+  scrapeTimeout: ""
+  metricRelabelings:
+    []
+  relabelings:
+    []
+
+
+deployment:
+  replicaCount: 1
+  command: "/druid-tasks-exporter"
+  args:
+    - "-druid-uri"
+    - "http://YOUR-DRUID-URI:8888/druid/v2/sql"
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}

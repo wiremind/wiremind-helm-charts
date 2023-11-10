@@ -1,0 +1,33 @@
+{{- if and ( .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" ) .Values.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "druid-tasks-exporter.fullname" . }}
+  labels:
+    {{- include "druid-tasks-exporter.selectorLabels" . | nindent 4 }}
+spec:
+  jobLabel: app.kubernetes.io/name
+  endpoints:
+  - port: http
+    {{- if .Values.serviceMonitor.interval }}
+    interval: {{ .Values.serviceMonitor.interval }}
+    {{- end }}
+    path: /metrics
+    {{- if .Values.serviceMonitor.honorLabels }}
+    honorLabels: {{ .Values.serviceMonitor.honorLabels }}
+    {{- end }}
+    {{- if .Values.serviceMonitor.scrapeTimeout }}
+    scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
+    {{- end }}
+    {{- if .Values.serviceMonitor.metricRelabelings }}
+    metricRelabelings:
+        {{ tpl (toYaml .Values.serviceMonitor.metricRelabelings | indent 6) . }}
+    {{- end }}
+    {{- if .Values.serviceMonitor.relabelings }}
+    relabelings:
+    {{ toYaml .Values.serviceMonitor.relabelings | indent 6 }}
+    {{- end }}
+  selector:
+    matchLabels:
+      {{- include "druid-tasks-exporter.selectorLabels" . | nindent 4 }}
+{{- end }}
