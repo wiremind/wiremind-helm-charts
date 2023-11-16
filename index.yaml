@@ -3012,6 +3012,17 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/druid-1.0.0/druid-1.0.0.tgz
     version: 1.0.0
+  druid-tasks-exporter:
+  - apiVersion: v2
+    appVersion: v0.1.0
+    created: "2023-11-16T16:55:42.083419746Z"
+    description: A Helm chart for druid-tasks-exporter
+    digest: c6d298a89e2c04d49a5f28db7d94ad637f1c1f73dc8472350cee9637f2211213
+    name: druid-tasks-exporter
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/druid-tasks-exporter-0.1.0/druid-tasks-exporter-0.1.0.tgz
+    version: 0.1.0
   elasticsearch-cluster:
   - apiVersion: v2
     appVersion: 7.17.14
@@ -9431,4 +9442,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-istio-2.0.0/wiremind-istio-2.0.0.tgz
     version: 2.0.0
-generated: "2023-11-07T09:22:21.220075767Z"
+generated: "2023-11-16T16:55:42.084003697Z"
