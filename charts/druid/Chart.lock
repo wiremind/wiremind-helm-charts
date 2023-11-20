@@ -14,5 +14,8 @@ dependencies:
 - name: raw
   repository: https://wiremind.github.io/wiremind-helm-charts
   version: 0.1.0
-digest: sha256:8fb0aab4a87cbec41c1f8ef7446fb67e9659b0649ad3f54a86e4d070bf767568
-generated: "2023-08-18T16:31:54.776852799+02:00"
+- name: druid-tasks-exporter
+  repository: https://wiremind.github.io/wiremind-helm-charts
+  version: 0.1.0
+digest: sha256:45244fd542dc1d6fae167c6a5242a16826a2a526a6ee73aad52052243ae03857
+generated: "2023-11-20T16:32:46.038754249+01:00"
