@@ -26,32 +26,15 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          env:
-            - name: MARGE_GITLAB_URL
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "marge.fullname" . }}-secret
-                  key: gitlab-url
-            - name: MARGE_SSH_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "marge.fullname" . }}-secret
-                  key: ssh-key
-            - name: MARGE_AUTH_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "marge.fullname" . }}-secret
-                  key: auth-token
-            - name: MARGE_REBASE_REMOTELY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "marge.fullname" . }}-secret
-                  key: rebase-remotely
-            - name: MARGE_BATCH
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "marge.fullname" . }}-secret
-                  key: batch
+          envFrom:
+          - secretRef:
+              name: {{ include "marge.fullname" . }}-secret
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
@@ -66,6 +49,9 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
+      {{- with .Values.priorityClassName }}
+      priorityClassName: {{ . | quote }}
+      {{- end }}
       volumes:
         - name: 'marge-config'
           configMap:
