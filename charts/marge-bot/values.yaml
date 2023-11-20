@@ -17,14 +17,34 @@ fullnameOverride: ""
 podSecurityContext: {}
   # fsGroup: 2000
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  privileged: false
+  capabilities:
+    drop:
+      - ALL
+  # TODO run as non-root. Make our own dockerfile ?
   # runAsNonRoot: true
   # runAsUser: 1000
+  # runAsGroup: 1000
+  # fsGroup: 1000
 
+priorityClassName: ""
+
+livenessProbe:
+  enabled: false
+  exec:
+    command:
+      - pidof
+      - python
+
+readinessProbe:
+  enabled: false
+  exec:
+    command:
+      - pidof
+      - python
 
 resources: {}
 
