@@ -1,0 +1,75 @@
+{{- if .Values.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "cluster-manager.fullname" . }}
+  labels:
+    app.kubernetes.io/component: cluster-manager
+    {{- include "cluster-manager.labels" . | nindent 4 }}
+rules:
+  # Default resources
+  - apiGroups:
+      - ""
+      - apps
+      - batch
+    resources:
+      - deployments
+      - jobs
+      - pods
+      - persistentvolumes
+      - persistentvolumeclaims
+      - secrets
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+
+  - apiGroups:
+      - ""
+      - networking.k8s.io
+    resources:
+      - clusterroles
+      - clusterrolebindings
+      - configmaps
+      - ingresses
+      - ingressclasses
+      - namespaces
+      - nodes
+    verbs:
+      - get
+      - list
+      - watch
+
+  # CRD
+  - apiGroups:
+      - topolvm.io
+      - topolvm.cybozu.com
+    resources:
+      - logicalvolumes
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+
+  - apiGroups:
+      - wiremind.io
+    resources:
+      - releaseinfo
+      - expecteddeploymentscales
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+{{- end }}

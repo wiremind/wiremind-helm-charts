@@ -1,0 +1,31 @@
+{{- if .Values.metrics.enabled }}
+{{- range $commandKey, $commandDict := default dict .Values.deployments }}
+{{- if hasKey $commandDict "enabled" | ternary $commandDict.enabled true }}
+{{- $formattedCommandKey := kebabcase $commandKey}}
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ (include "cluster-manager.fullname" $) }}-{{ $formattedCommandKey }}
+  labels:
+    app.kubernetes.io/component: cluster-manager
+    {{- include "cluster-manager.labels" $ | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "cluster-manager.fullname" $ }}-{{ $formattedCommandKey }}
+      app.kubernetes.io/instance: {{ $.Release.Name }}
+  namespaceSelector:
+    matchNames:
+    - {{ $.Release.Namespace }}
+  podMetricsEndpoints:
+    - interval: 60s
+      scrapeTimeout: 55s
+      port: metrics
+      honorLabels: true
+      path: /
+
+{{- end }}
+{{- end }}
+{{- end }}

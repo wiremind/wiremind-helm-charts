@@ -1,0 +1,105 @@
+{{- range $commandKey, $commandDict := default dict .Values.cronJobs }}
+{{- if hasKey $commandDict "enabled" | ternary $commandDict.enabled true }}
+{{- $formattedCommandKey := kebabcase $commandKey}}
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "cluster-manager.fullname" $ }}-{{ $formattedCommandKey }}
+  labels:
+    app.kubernetes.io/component: cluster-manager
+    {{- include "cluster-manager.labels" $ | nindent 4 }}
+spec:
+  schedule: {{ hasKey $commandDict "schedule" | ternary $commandDict.schedule $.Values.schedule | quote }}
+  startingDeadlineSeconds: 600
+  concurrencyPolicy: "Forbid"
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: {{ include "cluster-manager.fullname" $ }}-{{ $formattedCommandKey }}
+            app.kubernetes.io/instance: {{ $.Release.Name }}
+        spec:
+          {{- if $.Values.priorityClassName }}
+          priorityClassName: "{{ $.Values.priorityClassName }}"
+          {{- end }}
+          restartPolicy: Never
+          {{- if $.Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- range $imagePullSecret := $.Values.imagePullSecrets }}
+            - name: {{ $imagePullSecret }}
+            {{- end }}
+          {{- end }}
+          {{- with $.Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $.Values.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $.Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          containers:
+            - name: {{ $formattedCommandKey }}
+              image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+              imagePullPolicy: {{ $.Values.image.pullPolicy }}
+              {{- if $commandDict.secretEnvVars }}
+              envFrom:
+                - secretRef:
+                    name: {{ include "cluster-manager.fullname" $ }}-{{ $formattedCommandKey }}
+              {{- end }}
+              command:
+                - {{ $.Values.rootCommand }}
+                {{- if $commandDict.command }}
+                {{- toYaml $commandDict.command | nindent 16 }}
+                {{- end }}
+              args:
+                - "--non-interactive"
+              {{- if $commandDict.args }}
+                {{- toYaml $commandDict.args | nindent 16 }}
+              {{- end }}
+              {{- if $commandDict.secretFiles }}
+              volumeMounts:
+                {{- range $secretFileKey, $secretFile := default dict $commandDict.secretFiles }}
+                - name: {{ $secretFileKey | kebabcase }}
+                  mountPath: {{ $secretFile.mountPath }}
+                  subPath: {{ $secretFile.filename }}
+                {{- end }}
+              {{- end }}
+              resources:
+                {{- if $commandDict.resources }}
+                {{- toYaml $commandDict.resources | nindent 16 }}
+                {{- else }}
+                {{- toYaml $.Values.resources | nindent 16 }}
+                {{- end }}
+              {{- with $.Values.securityContext }}
+              securityContext:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+          {{- if $commandDict.secretFiles }}
+          volumes:
+            {{- range $secretFileKey, $secretFile := default dict $commandDict.secretFiles }}
+            - name: {{ $secretFileKey | kebabcase }}
+              secret:
+                secretName: {{ (include "cluster-manager.fullname" $) }}-{{ $formattedCommandKey }}-{{ $secretFileKey | kebabcase }}
+                items:
+                  - key: {{ $secretFile.filename }}
+                    path: {{ $secretFile.filename }}
+            {{- end }}
+          {{- end }}
+          {{- if $commandDict.serviceAccountName }}
+          serviceAccountName: "{{ $commandDict.serviceAccountName }}"
+          {{- else }}
+          serviceAccountName: {{ template "cluster-manager.serviceAccountName" $ }}
+          {{- end }}
+
+{{- end }}
+{{- end }}

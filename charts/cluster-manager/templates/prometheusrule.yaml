@@ -1,0 +1,68 @@
+{{- if .Values.metrics.enabled }}
+{{- if .Values.metrics.prometheusRule.enabled }}
+
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ template "cluster-manager.fullname" . }}
+  labels:
+    app.kubernetes.io/component: cluster-manager
+    {{- include "cluster-manager.labels" $ | nindent 4 }}
+spec:
+  groups:
+    - name: {{ template "cluster-manager.fullname" . }}.rules
+      rules:
+        - alert: PVCIsTerminating
+          annotations:
+            summary: "A PVC was in the Terminating state for more than 10 minutes."
+            description: "The PVC {{`{{`}} $labels.persistentvolumeclaim {{`}}`}} on {{`{{`}} $labels.namespace {{`}}`}} was in the Terminating state for more than 10 minutes."
+          expr: (time() - label_replace(cluster_manager_terminating_persistentvolumeclaim_timestamp, "namespace", "$1", "persistentvolumeclaim_namespace", "(.*)")) / 60 > 10
+          for: 1s
+          labels:
+            severity: warning
+        - alert: HighUnusedVolumeStorage
+          annotations:
+            summary: "High unused volume storage"
+            description: "Sum of all detached volume sizes is high."
+          expr: sum(cluster_manager_gc_volume_without_node_volume_bytes / 1000 / 1000 / 1000) by (cluster,storage_provider_name) > 20000
+          for: 30m
+          labels:
+            severity: warning  
+        - alert: HighPVWithoutVolume
+          annotations:
+            summary: "High number of PV without volumes"
+            description: "Maybe the volume was deleted outside of GC or GC could not delete PV after deleting the volume."
+          expr: count(cluster_manager_gc_pv_without_volume) by (cluster,storage_provider_name) > 0
+          for: 30m
+          labels:
+            severity: warning
+        - alert: HighPVCWithoutPV
+          annotations:
+            summary: "High number of PVC without PV"
+            description: "Maybe PV was deleted before PVC or StorageClass cannot create PV."
+          expr: count(cluster_manager_gc_pvc_without_pv_creation_timestamp) by (cluster,storage_provider_name) > 5
+          for: 30m
+          labels:
+            severity: warning
+        - alert: HighVolumeWithoutPV
+          annotations:
+            summary: "High number of volumes without PV"
+            description: "Maybe PV was deleted outside of GC."
+          expr: count(cluster_manager_gc_volume_without_pv_created_at_timestamp{corresponding_k8s_pv!=""}) by (cluster,storage_provider_name) > 0
+          for: 30m
+          labels:
+            severity: warning
+        - alert: PVKeptForLong
+          annotations:
+            summary: "PV was marked to not be GC for long."
+            description: "The guardian is {{`{{`}} $labels.guardien {{`}}`}}."
+          expr: (time() - min by (cluster, persistentvolume, guardien) (cluster_manager_gc_pv_to_skip_timestamp)) > 3600 * 24 * 7
+          for: 30m
+          labels:
+            severity: warning
+        {{- if .Values.metrics.prometheusRule.additionalRules }}
+{{- toYaml .Values.prometheusRule.additionalRules | nindent 8 }}
+        {{- end }}
+
+{{- end }}
+{{- end }}
