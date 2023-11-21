@@ -1,0 +1,9 @@
+priorityClasses: []
+
+storageClasses:
+  enabled: true
+  list: {}
+
+volumeSnapshotClasses:
+  enabled: true
+  list: {}

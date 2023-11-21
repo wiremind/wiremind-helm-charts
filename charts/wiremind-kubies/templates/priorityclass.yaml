@@ -1,0 +1,15 @@
+{{- range $priorityClass := $.Values.priorityClasses }}
+
+---
+
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: {{ $priorityClass.name }}
+  labels:
+    {{- include "wiremind-kubies.labels" $ | nindent 4 }}
+preemptionPolicy: {{ $priorityClass.preemptionPolicy | default "PreemptLowerPriority" | quote }}
+value: {{ $priorityClass.value }}
+description: {{ $priorityClass.description }}
+
+{{- end }}
