@@ -61,7 +61,7 @@ spec:
           labels:
             severity: warning
         {{- if .Values.metrics.prometheusRule.additionalRules }}
-{{- toYaml .Values.prometheusRule.additionalRules | nindent 8 }}
+{{- toYaml .Values.metrics.prometheusRule.additionalRules | nindent 8 }}
         {{- end }}
 
 {{- end }}
