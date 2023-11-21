@@ -9523,4 +9523,25 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-istio-2.0.0/wiremind-istio-2.0.0.tgz
     version: 2.0.0
-generated: "2023-11-20T16:47:47.554023516Z"
+  wiremind-kubies:
+  - apiVersion: v2
+    appVersion: 1.27.7
+    created: "2023-11-21T11:01:48.051434446Z"
+    description: Helm chart to deploy non-chart specific kubernetes resources
+    digest: 28f5b9a239db47c6417b7a37a056d0af7d0aa64302572bc6826de28a32777a93
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/wiremind-kubies
+    icon: https://avatars.githubusercontent.com/u/9391624?s=200&v=4
+    keywords:
+    - wiremind
+    - kubies
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: wiremind-kubies
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/wiremind-kubies
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
+    version: 0.7.0
+generated: "2023-11-21T11:01:48.052469409Z"
