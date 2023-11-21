@@ -1851,6 +1851,28 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/clamav-1.0.9/clamav-1.0.9.tgz
     version: 1.0.9
+  cluster-manager:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: v0.30.0
+    created: "2023-11-21T12:08:15.913388213Z"
+    description: Helm chart to deploy cluster-manager
+    digest: c73b8a98d6d4573138b8f32e35065150360827aa31b1a3e145c41f4f775f15ab
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cluster-manager
+    icon: https://avatars.githubusercontent.com/u/9391624?s=200&v=4
+    keywords:
+    - cluster
+    - manager
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: cluster-manager
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cluster-manager
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/cluster-manager-0.16.2/cluster-manager-0.16.2.tgz
+    version: 0.16.2
   csi-driver-host-path:
   - apiVersion: v2
     appVersion: v1.11.0
@@ -9544,4 +9566,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2023-11-21T11:01:48.052469409Z"
+generated: "2023-11-21T12:08:15.913843445Z"
