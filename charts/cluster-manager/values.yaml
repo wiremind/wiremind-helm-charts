@@ -1,0 +1,57 @@
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  repository: docker.wiremind.fr/wiremind/devops/cluster-manager
+  pullPolicy: "IfNotPresent"
+  tag: ""
+
+imagePullSecrets: []
+
+priorityClassName: ""
+
+schedule: "0 10 * * *"
+
+rootCommand: "cluster-manager"
+
+cronJobs: {}
+  # GCInvalidPods:
+  #   command:
+  #     - garbage-collector
+  #     - kube-scheduler-invalid-pods
+  #   schedule: "*/10 * * * *"
+
+deployments: {}
+  # metricsReleases:
+  #   command:
+  #     - metrics-collector
+  #     - releases
+  #   resources:
+  #     requests:
+  #       cpu: 1000m
+  #       memory: 512Mi
+  #   secretEnvVars:
+  #     GOMAXPROCS: "1"
+
+metrics:
+  enabled: false
+  prometheusRule:
+    enabled: false
+    additionalRules: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+resources: {}
+
+securityContext: {}
+
+serviceAccount:
+  create: true
+  name: ""
+
+rbac:
+  create: true

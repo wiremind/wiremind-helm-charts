@@ -1,0 +1,8 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  # Hardcoded for now since other tools know it under this name
+  name: cluster-manager-gc-pv-to-skip
+  labels:
+    app.kubernetes.io/component: cluster-manager
+    {{- include "cluster-manager.labels" . | nindent 4 }}
