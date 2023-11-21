@@ -1,0 +1,16 @@
+apiVersion: v2
+name: wiremind-kubies
+description: Helm chart to deploy non-chart specific kubernetes resources
+type: application
+version: 0.7.0
+appVersion: 1.27.7
+icon: https://avatars.githubusercontent.com/u/9391624?s=200&v=4
+home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/wiremind-kubies
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/wiremind-kubies
+keywords:
+  - wiremind
+  - kubies
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts

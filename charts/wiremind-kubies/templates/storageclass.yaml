@@ -1,0 +1,38 @@
+{{- if .Values.storageClasses.enabled }}
+
+{{- range $storageClassName, $storageClassDefinition := .Values.storageClasses.list }}
+
+---
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ $storageClassName }}
+  labels:
+    {{- include "wiremind-kubies.labels" $ | nindent 4 }}
+  {{- if $storageClassDefinition.isDefaultClass }}
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+  {{- end }}
+{{ with $storageClassDefinition.mountOptions }}
+mountOptions:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{ with $storageClassDefinition.parameters }}
+parameters:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+provisioner: {{ $storageClassDefinition.provisioner | quote }}
+reclaimPolicy: {{ $storageClassDefinition.reclaimPolicy | default "Retain" | quote }}
+volumeBindingMode: {{ $storageClassDefinition.volumeBindingMode | default "Immediate" | quote }}
+{{- if $storageClassDefinition.allowVolumeExpansion }}
+allowVolumeExpansion: true
+{{- end }}
+{{ with $storageClassDefinition.allowedTopologies }}
+allowedTopologies:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+
+{{- end }}
+
+{{- end }}
