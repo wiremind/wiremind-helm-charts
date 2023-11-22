@@ -166,7 +166,6 @@ spec:
       drainDuration: {{ .Values.istio.meshConfig.drainDuration }}
       # We basically never want a connection to be dropped BEFORE the main container stops
       terminationDrainDuration:  {{ .Values.istio.meshConfig.terminationDrainDuration }}
-      parentShutdownDuration: 181s
       holdApplicationUntilProxyStarts: true
       # https://istio.io/latest/docs/reference/config/istio.mesh.v1alpha1/#ProxyConfig-InboundInterceptionMode
       {{ with .Values.istio.meshConfig.interceptionMode }}
