@@ -29,5 +29,5 @@ spec:
     {{- end }}
   selector:
     matchLabels:
-      {{- include "druid-tasks-exporter.selectorLabels" . | nindent 4 }}
+      {{- include "druid-tasks-exporter.selectorLabels" . | nindent 6 }}
 {{- end }}
