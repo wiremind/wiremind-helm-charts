@@ -7,7 +7,6 @@ chart-dirs:
 chart-repos:
   - bitnami=https://charts.bitnami.com/bitnami
   - elastic=https://helm.elastic.co
-  - minio=https://helm.min.io/
   - prometheus-community=https://prometheus-community.github.io/helm-charts
   - wiremind=https://wiremind.github.io/wiremind-helm-charts
   - kube-hpa-scale-to-zero=https://machine424.github.io/kube-hpa-scale-to-zero
