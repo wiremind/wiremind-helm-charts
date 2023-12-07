@@ -3332,6 +3332,16 @@ entries:
     version: 1.0.0
   druid-tasks-exporter:
   - apiVersion: v2
+    appVersion: v0.3.0
+    created: "2023-12-07T09:34:01.254869513Z"
+    description: A Helm chart for druid-tasks-exporter
+    digest: 9fa07fa67209545a036bb391f5160a680ecb8486697135379c6d813f4b4c3647
+    name: druid-tasks-exporter
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/druid-tasks-exporter-0.1.4/druid-tasks-exporter-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
     appVersion: v0.2.1
     created: "2023-12-05T09:56:35.168378604Z"
     description: A Helm chart for druid-tasks-exporter
@@ -9868,4 +9878,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2023-12-05T10:09:42.425281551Z"
+generated: "2023-12-07T09:34:01.255769038Z"
