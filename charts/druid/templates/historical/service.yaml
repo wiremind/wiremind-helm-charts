@@ -1,6 +1,13 @@
 {{- if .Values.historical.enabled }}
 
 {{- range $tierName, $tierValue := .Values.historical.tiers }}
+
+{{- $tierService := hasKey $tierValue "service" | ternary $tierValue.service dict }}
+{{- $tierServiceDedicated := hasKey $tierService "dedicated" | ternary $tierService.dedicated $.Values.service.dedicated }}
+
+{{- if not $tierServiceDedicated -}}
+
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -20,7 +27,9 @@ spec:
 {{ include "druid.common-matchLabels" $ | indent 4 }}
     app.kubernetes.io/part-of: historical
     app.kubernetes.io/component: historical-{{ $tierName }}
----
+
+{{- end }}
+
 {{- end }}
 
 {{- end }}
