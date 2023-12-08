@@ -1,0 +1,50 @@
+{{- if .Values.historical.enabled }}
+
+{{- range $tierName, $tierValue := .Values.historical.tiers }}
+
+{{- $tierService := hasKey $tierValue "service" | ternary $tierValue.service dict }}
+{{- $tierServiceDedicated := hasKey $tierService "dedicated" | ternary $tierService.dedicated $.Values.service.dedicated }}
+
+{{- if $tierServiceDedicated -}}
+
+{{- $replicaCount := 0 }}
+{{- $tierAutoscaling := hasKey $tierValue "autoscaling" | ternary $tierValue.autoscaling dict }}
+{{- if hasKey $tierAutoscaling "enabled" | ternary $tierAutoscaling.enabled false }}
+{{- $replicaCount = $tierAutoscaling.maxReplicas }}
+{{- else -}}
+{{- $replicaCount = hasKey $tierValue "replicaCount" | ternary $tierValue.replicaCount $.Values.historical.defaults.replicaCount }}
+{{- end -}}
+
+{{- range untilStep 0 ($replicaCount | int) 1 }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "druid.historical.tier.fullname" (dict "tierName" $tierName "context" $) }}-{{ . }}
+  labels:
+{{ include "druid.common-labels" $ | indent 4 }}
+    app.kubernetes.io/part-of: historical
+    app.kubernetes.io/component: historical-{{ $tierName }}
+    statefulset.kubernetes.io/pod-name: {{ include "druid.historical.tier.fullname" (dict "tierName" $tierName "context" $) }}-{{ . }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ $.Values.historical.defaults.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+{{ include "druid.common-matchLabels" $ | indent 4 }}
+    app.kubernetes.io/part-of: historical
+    app.kubernetes.io/component: historical-{{ $tierName }}
+    statefulset.kubernetes.io/pod-name: {{ include "druid.historical.tier.fullname" (dict "tierName" $tierName "context" $) }}-{{ . }}
+
+{{- end }}
+
+{{- end }}
+
+{{- end }}
+
+{{- end }}

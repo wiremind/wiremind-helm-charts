@@ -4,6 +4,8 @@
 
 {{- $historicalDefaults := $.Values.historical.defaults }}
 
+{{- $tierService := hasKey $tierValue "service" | ternary $tierValue.service dict }}
+
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -71,9 +73,16 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            {{- if $.Values.service.overrideDruidHost }}
+            {{- if hasKey $tierService "overrideDruidHost" | ternary $tierService.overrideDruidHost $.Values.service.overrideDruidHost }}
+            {{- if hasKey $tierService "dedicated" | ternary $tierService.dedicated $.Values.service.dedicated }}
+            - name: druid_host
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            {{- else }}
             - name: druid_host
               value: {{ include "druid.historical.tier.fullname" (dict "tierName" $tierName "context" $) }}
+            {{- end }}
             {{- end }}
             - name: druid_extensions_loadList
               value: {{ $.Values.extensions.loadList | toJson | quote }}
