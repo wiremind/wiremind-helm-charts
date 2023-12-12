@@ -5,6 +5,7 @@
 {{- $historicalDefaults := $.Values.historical.defaults }}
 
 {{- $tierService := hasKey $tierValue "service" | ternary $tierValue.service dict }}
+{{- $tierAutoscaling := hasKey $tierValue "autoscaling" | ternary $tierValue.autoscaling dict }}
 
 apiVersion: apps/v1
 kind: StatefulSet
@@ -17,7 +18,9 @@ metadata:
 spec:
   serviceName: {{ include "druid.historical.tier.fullname" (dict "tierName" $tierName "context" $) }}
   podManagementPolicy: {{ default $historicalDefaults.podManagementPolicy $tierValue.podManagementPolicy }}
+  {{- if not (hasKey $tierAutoscaling "enabled" | ternary $tierAutoscaling.enabled false) }}
   replicas: {{ if not (kindIs "invalid" $tierValue.replicaCount) }}{{ $tierValue.replicaCount }}{{ else }}{{ $historicalDefaults.replicaCount }}{{ end }}
+  {{- end }}
   selector:
     matchLabels:
 {{ include "druid.common-matchLabels" $ | indent 6 }}
