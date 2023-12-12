@@ -1,0 +1,75 @@
+{{- if .Values.historical.enabled }}
+
+{{- range $tierName, $tierValue := .Values.historical.tiers }}
+
+{{- if hasKey $tierValue "enabled" | ternary $tierValue.enabled true }}
+
+{{- $tierAutoscaling := hasKey $tierValue "autoscaling" | ternary $tierValue.autoscaling dict }}
+{{- if hasKey $tierAutoscaling "enabled" | ternary $tierAutoscaling.enabled false }}
+
+---
+
+{{- if semverCompare ">=1.23-0" $.Capabilities.KubeVersion.GitVersion }}
+apiVersion: autoscaling/v2
+{{- else }}
+apiVersion: autoscaling/v2beta2
+{{- end }}
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "druid.historical.tier.fullname" (dict "tierName" $tierName "context" $) }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: {{ include "druid.historical.tier.fullname" (dict "tierName" $tierName "context" $) }}
+  minReplicas: {{ $tierValue.autoscaling.minReplicas }}
+  maxReplicas: {{ $tierValue.autoscaling.maxReplicas }}
+  metrics:
+    {{- if $tierValue.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        {{- if semverCompare "<1.23-0" $.Capabilities.KubeVersion.GitVersion }}
+        targetAverageUtilization: {{ $tierValue.autoscaling.targetCPU }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ $tierValue.autoscaling.targetCPU }}
+        {{- end }}
+    {{- end }}
+    {{- if $tierValue.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        {{- if semverCompare "<1.23-0" $.Capabilities.KubeVersion.GitVersion }}
+        targetAverageUtilization: {{ $tierValue.autoscaling.targetMemory }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ $tierValue.autoscaling.targetMemory }}
+        {{- end }}
+    {{- end }}
+    {{- if $tierValue.autoscaling.targetMetric }}
+    - type: Object
+      object:
+        metric:
+          name: {{ $tierValue.autoscaling.targetMetric.name }}
+        describedObject:
+          apiVersion: "/v1"
+          kind: Service
+          name: {{ $tierValue.autoscaling.targetMetric.service | default printf "%s-%s" $.Release.Name "druid-tasks-exporter" }}
+        target:
+          type: Value
+          value: {{ $tierValue.autoscaling.targetMetric.value }}
+    {{- end }}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: {{ $tierValue.autoscaling.scaleDownStabilizationWindowSeconds | default 300 }}
+
+{{- end }}
+
+{{- end }}
+
+{{- end }}
+
+{{- end }}

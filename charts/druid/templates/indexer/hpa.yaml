@@ -19,7 +19,6 @@ metadata:
   name: {{ include "druid.indexer.category.fullname" (dict "categoryName" $categoryName "context" $) }}
 spec:
   scaleTargetRef:
-    # Only apps/v1 resources are accepted
     apiVersion: apps/v1
     kind: {{ $categoryValue.mode }}
     name: {{ include "druid.indexer.category.fullname" (dict "categoryName" $categoryName "context" $) }}
@@ -39,7 +38,6 @@ spec:
           value: {{ $categoryValue.autoscaling.targetMetricValue }}
   behavior:
     scaleDown:
-      # 5mins is the default value.
       stabilizationWindowSeconds: {{ $categoryValue.autoscaling.scaleDownStabilizationWindowSeconds | default 300 }}
 
 {{- end }}
