@@ -54,8 +54,10 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             {{- if .Values.service.overrideDruidHost }}
+            {{- if not .Values.broker.autoscaling.enabled }}
             - name: druid_host
               value: {{ include "druid.broker.fullname" $ }}
+            {{- end }}
             {{- end }}
             - name: druid_extensions_loadList
               value: {{ .Values.extensions.loadList | toJson | quote }}
