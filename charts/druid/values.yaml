@@ -273,6 +273,17 @@ historical:
   defaults:
     name: historical
     replicaCount: 1
+    autoscaling:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 5
+      scaleDownStabilizationWindowSeconds: 300
+      # targetCPU: 80
+      # targetMemory: 80
+      # targetMetric:
+      #   name: druid_remaining_maintainer_tasks_instantaneous
+      #   service:
+      #   value: 7
     port: 8083
     podManagementPolicy: Parallel
     envVars:
@@ -339,16 +350,16 @@ historical:
           cpu: 50m
       persistence:
         size: 2Gi
-      autoscaling:
-        enabled: true
-        minReplicas: 1
-        maxReplicas: 2
-        targetCPU: 80
-        # targetMemory: 80
-        # targetMetric:
-        #   name: druid_remaining_maintainer_tasks_instantaneous
-        #   service:
-        #   value: 7
+      # autoscaling:
+      #   enabled: false
+      #   minReplicas: 1
+      #   maxReplicas: 2
+      #   targetCPU: 80
+      #   targetMemory: 80
+      #   targetMetric:
+      #     name: druid_remaining_maintainer_tasks_instantaneous
+      #     service:
+      #     value: 7
 
 indexer:
   enabled: true
