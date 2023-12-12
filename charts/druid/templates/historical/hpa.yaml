@@ -4,8 +4,17 @@
 
 {{- if hasKey $tierValue "enabled" | ternary $tierValue.enabled true }}
 
+{{- $historicalDefaults := $.Values.historical.defaults }}
+
 {{- $tierAutoscaling := hasKey $tierValue "autoscaling" | ternary $tierValue.autoscaling dict }}
-{{- if hasKey $tierAutoscaling "enabled" | ternary $tierAutoscaling.enabled false }}
+{{- if hasKey $tierAutoscaling "enabled" | ternary $tierAutoscaling.enabled $historicalDefaults.autoscaling.enabled }}
+
+{{- $tierAutoscalingTargetMetric := dict }}
+{{- if $tierAutoscaling }}
+{{- $tierAutoscalingTargetMetric = hasKey $tierAutoscaling "targetMetric" | ternary $tierAutoscaling.targetMetric dict }}
+{{- end }}
+
+{{- $tierAutoscalingTargetMetricDefault := hasKey $historicalDefaults.autoscaling "targetMetric" | ternary $historicalDefaults.autoscaling.targetMetric dict }}
 
 ---
 
@@ -22,49 +31,49 @@ spec:
     apiVersion: apps/v1
     kind: StatefulSet
     name: {{ include "druid.historical.tier.fullname" (dict "tierName" $tierName "context" $) }}
-  minReplicas: {{ $tierValue.autoscaling.minReplicas }}
-  maxReplicas: {{ $tierValue.autoscaling.maxReplicas }}
+  minReplicas: {{ $tierAutoscaling.minReplicas | default $historicalDefaults.autoscaling.minReplicas }}
+  maxReplicas: {{ $tierAutoscaling.maxReplicas | default $historicalDefaults.autoscaling.maxReplicas }}
   metrics:
-    {{- if $tierValue.autoscaling.targetCPU }}
+    {{- if or $tierAutoscaling.targetCPU $historicalDefaults.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         {{- if semverCompare "<1.23-0" $.Capabilities.KubeVersion.GitVersion }}
-        targetAverageUtilization: {{ $tierValue.autoscaling.targetCPU }}
+        targetAverageUtilization: {{ $tierAutoscaling.targetCPU | default $historicalDefaults.autoscaling.targetCPU }}
         {{- else }}
         target:
           type: Utilization
-          averageUtilization: {{ $tierValue.autoscaling.targetCPU }}
+          averageUtilization: {{ $tierAutoscaling.targetCPU | default $historicalDefaults.autoscaling.targetCPU }}
         {{- end }}
     {{- end }}
-    {{- if $tierValue.autoscaling.targetMemory }}
+    {{- if or $tierAutoscaling.targetMemory $historicalDefaults.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         {{- if semverCompare "<1.23-0" $.Capabilities.KubeVersion.GitVersion }}
-        targetAverageUtilization: {{ $tierValue.autoscaling.targetMemory }}
+        targetAverageUtilization: {{ $tierAutoscaling.targetMemory | default $historicalDefaults.autoscaling.targetMemory }}
         {{- else }}
         target:
           type: Utilization
-          averageUtilization: {{ $tierValue.autoscaling.targetMemory }}
+          averageUtilization: {{ $tierAutoscaling.targetMemory | default $historicalDefaults.autoscaling.targetMemory }}
         {{- end }}
     {{- end }}
-    {{- if $tierValue.autoscaling.targetMetric }}
+    {{- if or $tierAutoscalingTargetMetric $tierAutoscalingTargetMetricDefault }}
     - type: Object
       object:
         metric:
-          name: {{ $tierValue.autoscaling.targetMetric.name }}
+          name: {{ $tierAutoscalingTargetMetric.name | default $tierAutoscalingTargetMetricDefault.name }}
         describedObject:
           apiVersion: "/v1"
           kind: Service
-          name: {{ $tierValue.autoscaling.targetMetric.service | default printf "%s-%s" $.Release.Name "druid-tasks-exporter" }}
+          name: {{ $tierAutoscalingTargetMetric.service | default ($tierAutoscalingTargetMetricDefault.service | default (printf "%s-%s" $.Release.Name "druid-tasks-exporter")) }}
         target:
           type: Value
-          value: {{ $tierValue.autoscaling.targetMetric.value }}
+          value: {{ $tierAutoscalingTargetMetric.value | default $tierAutoscalingTargetMetricDefault.value }}
     {{- end }}
   behavior:
     scaleDown:
-      stabilizationWindowSeconds: {{ $tierValue.autoscaling.scaleDownStabilizationWindowSeconds | default 300 }}
+      stabilizationWindowSeconds: {{ $tierAutoscaling.scaleDownStabilizationWindowSeconds | default $historicalDefaults.autoscaling.scaleDownStabilizationWindowSeconds }}
 
 {{- end }}
 
