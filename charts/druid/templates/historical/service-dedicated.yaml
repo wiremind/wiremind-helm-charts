@@ -1,5 +1,7 @@
 {{- if .Values.historical.enabled }}
 
+{{- $historicalDefaults := $.Values.historical.defaults }}
+
 {{- range $tierName, $tierValue := .Values.historical.tiers }}
 
 {{- $tierService := hasKey $tierValue "service" | ternary $tierValue.service dict }}
@@ -9,11 +11,11 @@
 
 {{- $replicaCount := 0 }}
 {{- $tierAutoscaling := hasKey $tierValue "autoscaling" | ternary $tierValue.autoscaling dict }}
-{{- if hasKey $tierAutoscaling "enabled" | ternary $tierAutoscaling.enabled false }}
-{{- $replicaCount = $tierAutoscaling.maxReplicas }}
-{{- else -}}
-{{- $replicaCount = hasKey $tierValue "replicaCount" | ternary $tierValue.replicaCount $.Values.historical.defaults.replicaCount }}
-{{- end -}}
+{{- if hasKey $tierAutoscaling "enabled" | ternary $tierAutoscaling.enabled $historicalDefaults.autoscaling.enabled }}
+{{- $replicaCount = $tierAutoscaling.maxReplicas | default $historicalDefaults.autoscaling.maxReplicas }}
+{{- else }}
+{{- $replicaCount = hasKey $tierValue "replicaCount" | ternary $tierValue.replicaCount $historicalDefaults.replicaCount }}
+{{- end }}
 
 {{- range untilStep 0 ($replicaCount | int) 1 }}
 
@@ -31,7 +33,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: {{ $.Values.historical.defaults.port }}
+    - port: {{ $historicalDefaults.port }}
       targetPort: http
       protocol: TCP
       name: http
