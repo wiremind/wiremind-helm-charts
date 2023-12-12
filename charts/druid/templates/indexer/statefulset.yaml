@@ -9,9 +9,9 @@
 {{- $indexerDefaults := $.Values.indexer.defaults }}
 
 {{- $categoryService := hasKey $categoryValue "service" | ternary $categoryValue.service dict }}
+{{- $categoryAutoscaling := hasKey $categoryValue "autoscaling" | ternary $categoryValue.autoscaling dict }}
 
 ---
-
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -23,7 +23,9 @@ metadata:
 spec:
   serviceName: {{ include "druid.indexer.category.fullname" (dict "categoryName" $categoryName "context" $) }}
   podManagementPolicy: {{ default $indexerDefaults.podManagementPolicy $categoryValue.podManagementPolicy }}
+  {{- if not (hasKey $categoryAutoscaling "enabled" | ternary $categoryAutoscaling.enabled false) }}
   replicas: {{ if not (kindIs "invalid" $categoryValue.replicaCount) }}{{ $categoryValue.replicaCount }}{{ else }}{{ $indexerDefaults.replicaCount }}{{ end }}
+  {{- end }}
   selector:
     matchLabels:
 {{ include "druid.common-matchLabels" $ | indent 6 }}
