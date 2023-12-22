@@ -3,7 +3,13 @@
 {{- if $modelValue.autoscaling }}
 {{- if $modelValue.autoscaling.enabled }}
 
+{{- if .Capabilities.APIVersions.Has "autoscaling/v2" }}
+# See: autoscaling/v2beta2 HorizontalPodAutoscaler is deprecated in v1.23+,
+# unavailable in v1.26+
+apiVersion: autoscaling/v2
+{{- else }}
 apiVersion: autoscaling/v2beta2
+{{- end }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: model-{{ $modelName }}
