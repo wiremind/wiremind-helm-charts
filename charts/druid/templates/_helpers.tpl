@@ -134,14 +134,14 @@ TierToBrokerMap
 */}}
 {{- define "tiertobroker.map" -}}
 {{- $tiertobroker := list }}
-{{- range $tierName, $tierConfig := .Values.historical.tiers }}
-{{- $tiertobroker = append $tiertobroker (printf "\"%s\":\"%s\"" (include "druid.server.tier" (dict "tierName" $tierName "tierConfig" $tierConfig)) (include "druid.service.broker" $)) }}
+{{- range $tierName, $tierValue := .Values.historical.tiers }}
+{{- $tiertobroker = append $tiertobroker (printf "\"%s\":\"%s\"" (include "druid.server.tier" (dict "tierName" $tierName "tierValue" $tierValue)) (include "druid.service.broker" $)) }}
 {{- end }}
 {{- join "," $tiertobroker -}}
 {{- end -}}
 
 {{- define "druid.server.tier" -}}
-{{- .tierConfig.envVars.druid_server_tier | default (printf "tier_%s" .tierName) -}}
+{{- .tierValue.envVars.druid_server_tier | default (printf "tier_%s" .tierName) -}}
 {{- end -}}
 
 {{- define "druid.service.broker" -}}
@@ -151,21 +151,21 @@ TierToBrokerMap
 {{/*
 Parameters:
 - tierName
-- tierConfig
+- tierValue
 - context
 */}}
 {{- define "druid.historical.config.individual.content" -}}
-{{- range $key, $val := .tierConfig.envVars }}
+{{- range $key, $val := .tierValue.envVars }}
 {{ $key }}: {{ $val | quote }}
 {{- end }}
 {{- end -}}
 
 {{/*
 Parameters:
-- tierConfig
+- tierValue
 */}}
 {{- define "druid.historical.secret.individual.content" -}}
-{{- range $key, $val := .tierConfig.secretEnvVars -}}
+{{- range $key, $val := .tierValue.secretEnvVars -}}
 {{ $key }}: {{ $val | b64enc }}
 {{- end }}
 {{- end -}}

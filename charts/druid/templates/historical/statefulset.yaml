@@ -2,6 +2,8 @@
 
 {{- range $tierName, $tierValue := .Values.historical.tiers }}
 
+{{- if hasKey $tierValue "enabled" | ternary $tierValue.enabled true }}
+
 {{- $historicalDefaults := $.Values.historical.defaults }}
 
 {{- $tierService := hasKey $tierValue "service" | ternary $tierValue.service dict }}
@@ -37,10 +39,10 @@ spec:
         druid.k8s.enablePatching: "true"
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
         checksum/configmap-historicals: {{ include (print $.Template.BasePath "/historical/configmap.yaml") $ | sha256sum }}
-        checksum/configmap-historicals-individual: {{ include "druid.historical.config.individual.content" (dict "tierName" $tierName "tierConfig" $tierValue "context" $) | sha256sum }}
+        checksum/configmap-historicals-individual: {{ include "druid.historical.config.individual.content" (dict "tierName" $tierName "tierValue" $tierValue "context" $) | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") $ | sha256sum }}
         checksum/secret-historicals: {{ include (print $.Template.BasePath "/historical/secret.yaml") $ | sha256sum }}
-        checksum/secret-historicals-individual: {{ include "druid.historical.secret.individual.content" (dict "tierConfig" $tierValue) | sha256sum }}
+        checksum/secret-historicals-individual: {{ include "druid.historical.secret.individual.content" (dict "tierValue" $tierValue) | sha256sum }}
 {{- with $historicalDefaults.podAnnotations }}
 {{ toYaml . | indent 8 }}
 {{- end }}
@@ -161,6 +163,8 @@ spec:
         resources:
           requests:
             storage: "{{ $tierValue.persistence.size }}"
+{{- end }}
+
 {{- end }}
 
 {{- end }}
