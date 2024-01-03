@@ -13,7 +13,7 @@ metrics:
 service:
   # Creates dedicated services that targets each pod of statefulsets
   dedicated: true
-  # Override druid_host to resolve components IP with DNS
+  # Override druid_host on statefulsets to resolve components IP with DNS
   overrideDruidHost: true
 
 extensions:

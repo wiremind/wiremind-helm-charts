@@ -21,12 +21,12 @@ spec:
   minReplicas: {{ .Values.broker.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.broker.autoscaling.maxReplicas }}
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: {{ .Values.broker.autoscaling.averageCpuUtilization }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.broker.autoscaling.averageCpuUtilization }}
 
 {{- end }}
 
