@@ -116,6 +116,17 @@ configVars:
 router:
   enabled: true
   replicaCount: 1
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    scaleDownStabilizationWindowSeconds: 300
+    # targetCPU: 80
+    # targetMemory: 80
+    # targetMetric:
+    #   name: druid_remaining_maintainer_tasks_instantaneous
+    #   service:
+    #   value: 7
   name: router
   port: 8888
   serviceType: ClusterIP
