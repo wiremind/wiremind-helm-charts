@@ -1,7 +1,12 @@
 {{- if .Values.historical.enabled }}
 
 {{- range $tierName, $tierValue := .Values.historical.tiers }}
+
+{{- if hasKey $tierValue "enabled" | ternary $tierValue.enabled true }}
+
 {{- if $tierValue.podDisruptionBudget }}
+
+---
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
@@ -17,8 +22,11 @@ spec:
       app.kubernetes.io/part-of: historical
       app.kubernetes.io/component: historical-{{ $tierName }}
 {{ toYaml $tierValue.podDisruptionBudget | indent 2 }}
----
+
 {{- end }}
+
+{{- end }}
+
 {{- end }}
 
 {{- end }}

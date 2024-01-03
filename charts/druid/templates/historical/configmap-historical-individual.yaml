@@ -1,6 +1,8 @@
 {{- if .Values.historical.enabled }}
 
-{{- range $tierName, $tierConfig := .Values.historical.tiers }}
+{{- range $tierName, $tierValue := .Values.historical.tiers }}
+
+{{- if hasKey $tierValue "enabled" | ternary $tierValue.enabled true }}
 
 ---
 
@@ -13,7 +15,9 @@ metadata:
     app.kubernetes.io/part-of: historical
     app.kubernetes.io/component: historical-{{ $tierName }}
 data:
-{{- include "druid.historical.config.individual.content" (dict "tierName" $tierName "tierConfig" $tierConfig "context" $) | nindent 2 }}
+{{- include "druid.historical.config.individual.content" (dict "tierName" $tierName "tierValue" $tierValue "context" $) | nindent 2 }}
+
+{{- end }}
 
 {{- end }}
 

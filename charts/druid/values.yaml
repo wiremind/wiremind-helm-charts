@@ -349,6 +349,7 @@ historical:
       automountServiceAccountToken: true
   tiers:
     default:
+      # enabled: false
       envVars:
         DRUID_XMX: 256m
         DRUID_XMS: 256m
@@ -414,6 +415,7 @@ indexer:
       automountServiceAccountToken: true
   categories:
     default:
+      # enabled: false
       mode: "StatefulSet"
       envVars:
         DRUID_XMX: 256m
