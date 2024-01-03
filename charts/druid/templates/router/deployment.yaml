@@ -54,12 +54,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            {{- if .Values.service.overrideDruidHost }}
-            {{- if not .Values.router.autoscaling.enabled }}
-            - name: druid_host
-              value: {{ include "druid.router.fullname" $ }}
-            {{- end }}
-            {{- end }}
             - name: druid_extensions_loadList
               value: {{ .Values.extensions.loadList | toJson | quote }}
             - name: druid_router_tierToBrokerMap

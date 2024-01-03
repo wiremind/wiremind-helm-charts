@@ -2,7 +2,7 @@
 
 {{- if .Values.router.autoscaling.enabled }}
 
-{{- if semverCompare ">=1.23-0" $.Capabilities.KubeVersion.GitVersion }}
+{{- if semverCompare ">=1.23-0" .Capabilities.KubeVersion.GitVersion }}
 apiVersion: autoscaling/v2
 {{- else }}
 apiVersion: autoscaling/v2beta2
@@ -22,25 +22,17 @@ spec:
     - type: Resource
       resource:
         name: cpu
-        {{- if semverCompare "<1.23-0" $.Capabilities.KubeVersion.GitVersion }}
-        targetAverageUtilization: {{ .Values.router.autoscaling.targetCPU }}
-        {{- else }}
         target:
           type: Utilization
           averageUtilization: {{ .Values.router.autoscaling.targetCPU }}
-        {{- end }}
     {{- end }}
     {{- if .Values.router.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
-        {{- if semverCompare "<1.23-0" $.Capabilities.KubeVersion.GitVersion }}
-        targetAverageUtilization: {{ .Values.router.autoscaling.targetMemory }}
-        {{- else }}
         target:
           type: Utilization
           averageUtilization: {{ .Values.router.autoscaling.targetMemory }}
-        {{- end }}
     {{- end }}
     {{- if .Values.router.autoscaling.targetMetric }}
     - type: Object

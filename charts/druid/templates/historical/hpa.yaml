@@ -38,25 +38,17 @@ spec:
     - type: Resource
       resource:
         name: cpu
-        {{- if semverCompare "<1.23-0" $.Capabilities.KubeVersion.GitVersion }}
-        targetAverageUtilization: {{ $tierAutoscaling.targetCPU | default $historicalDefaults.autoscaling.targetCPU }}
-        {{- else }}
         target:
           type: Utilization
           averageUtilization: {{ $tierAutoscaling.targetCPU | default $historicalDefaults.autoscaling.targetCPU }}
-        {{- end }}
     {{- end }}
     {{- if or $tierAutoscaling.targetMemory $historicalDefaults.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
-        {{- if semverCompare "<1.23-0" $.Capabilities.KubeVersion.GitVersion }}
-        targetAverageUtilization: {{ $tierAutoscaling.targetMemory | default $historicalDefaults.autoscaling.targetMemory }}
-        {{- else }}
         target:
           type: Utilization
           averageUtilization: {{ $tierAutoscaling.targetMemory | default $historicalDefaults.autoscaling.targetMemory }}
-        {{- end }}
     {{- end }}
     {{- if or $tierAutoscalingTargetMetric $tierAutoscalingTargetMetricDefault }}
     - type: Object
