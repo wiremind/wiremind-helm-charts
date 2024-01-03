@@ -1,0 +1,64 @@
+{{- if .Values.router.enabled }}
+
+{{- if .Values.router.autoscaling.enabled }}
+
+{{- if semverCompare ">=1.23-0" $.Capabilities.KubeVersion.GitVersion }}
+apiVersion: autoscaling/v2
+{{- else }}
+apiVersion: autoscaling/v2beta2
+{{- end }}
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "druid.router.fullname" . }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "druid.router.fullname" . }}
+  minReplicas: {{ .Values.router.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.router.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.router.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        {{- if semverCompare "<1.23-0" $.Capabilities.KubeVersion.GitVersion }}
+        targetAverageUtilization: {{ .Values.router.autoscaling.targetCPU }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.router.autoscaling.targetCPU }}
+        {{- end }}
+    {{- end }}
+    {{- if .Values.router.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        {{- if semverCompare "<1.23-0" $.Capabilities.KubeVersion.GitVersion }}
+        targetAverageUtilization: {{ .Values.router.autoscaling.targetMemory }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.router.autoscaling.targetMemory }}
+        {{- end }}
+    {{- end }}
+    {{- if .Values.router.autoscaling.targetMetric }}
+    - type: Object
+      object:
+        metric:
+          name: {{ .Values.router.autoscaling.targetMetric.name }}
+        describedObject:
+          apiVersion: "/v1"
+          kind: Service
+          name: {{ .Values.router.autoscaling.targetMetric.service | default (printf "%s-%s" .Release.Name "druid-tasks-exporter") }}
+        target:
+          type: Value
+          value: {{ .Values.router.autoscaling.targetMetric.value }}
+    {{- end }}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: {{ .Values.router.autoscaling.scaleDownStabilizationWindowSeconds }}
+
+{{- end }}
+
+{{- end }}

@@ -12,7 +12,9 @@ metadata:
 {{ toYaml . | indent 4 }}
 {{- end }}
 spec:
+  {{- if not .Values.broker.autoscaling.enabled }}
   replicas: {{ .Values.broker.replicaCount }}
+  {{- end }}
   selector:
     matchLabels:
 {{ include "druid.common-matchLabels" . | indent 6 }}

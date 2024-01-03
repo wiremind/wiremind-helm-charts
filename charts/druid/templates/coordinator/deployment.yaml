@@ -53,8 +53,10 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             {{- if .Values.service.overrideDruidHost }}
+            {{- if le .Values.coordinator.replicaCount 1.0 }}
             - name: druid_host
               value: {{ include "druid.coordinator.fullname" $ }}
+            {{- end }}
             {{- end }}
             - name: druid_extensions_loadList
               value: {{ .Values.extensions.loadList | toJson | quote }}
