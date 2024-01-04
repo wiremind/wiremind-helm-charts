@@ -135,7 +135,9 @@ TierToBrokerMap
 {{- define "tiertobroker.map" -}}
 {{- $tiertobroker := list }}
 {{- range $tierName, $tierValue := .Values.historical.tiers }}
+{{- if hasKey $tierValue "enabled" | ternary $tierValue.enabled true }}
 {{- $tiertobroker = append $tiertobroker (printf "\"%s\":\"%s\"" (include "druid.server.tier" (dict "tierName" $tierName "tierValue" $tierValue)) (include "druid.service.broker" $)) }}
+{{- end }}
 {{- end }}
 {{- join "," $tiertobroker -}}
 {{- end -}}

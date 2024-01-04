@@ -79,8 +79,10 @@ spec:
             {{- end }}
             - name: druid_extensions_loadList
               value: {{ .Values.extensions.loadList | toJson | quote }}
+            {{- with (include "tiertobroker.map" .) }}
             - name: druid_router_tierToBrokerMap
-              value: '{ {{- include "tiertobroker.map" . -}} }'
+              value: {{ printf "'{%s}'" . }}
+            {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "druid.fullname" . }}-config
