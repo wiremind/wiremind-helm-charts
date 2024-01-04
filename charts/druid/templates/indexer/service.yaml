@@ -74,7 +74,7 @@ spec:
     - port: {{ add 8100 . }}
       targetPort: {{ add 8100 . }}
       protocol: TCP
-      name: http-peon
+      name: http-peon-{{ . }}
     {{- end }}
   selector:
     {{- include "druid.common-matchLabels" $ | nindent 4 }}
