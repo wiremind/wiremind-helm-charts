@@ -42,6 +42,28 @@ spec:
 
 {{- end }}
 
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "druid.historical.tier.fullname" (dict "tierName" $tierName "context" $) }}
+  labels:
+    {{- include "druid.common-labels" $ | nindent 4 }}
+    app.kubernetes.io/part-of: historical
+    app.kubernetes.io/component: historical-{{ $tierName }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ $historicalDefaults.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "druid.common-matchLabels" $ | nindent 4 }}
+    app.kubernetes.io/part-of: historical
+    app.kubernetes.io/component: historical-{{ $tierName }}
+
 {{- end }}
 
 {{- end }}

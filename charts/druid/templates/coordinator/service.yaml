@@ -34,4 +34,27 @@ spec:
 
 {{- end }}
 
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "druid.coordinator.fullname" . }}
+  labels:
+    {{- include "druid.common-labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.coordinator.name }}
+spec:
+  type: {{ .Values.coordinator.serviceType }}
+  ports:
+    - port: {{ .Values.coordinator.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    {{- with .Values.coordinator.serviceExtraPorts }}
+    {{- . | toYaml | nindent 4 }}
+    {{- end }}
+  selector:
+    {{- include "druid.common-matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.coordinator.name }}
+
 {{- end }}

@@ -34,4 +34,27 @@ spec:
 
 {{- end }}
 
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "druid.router.fullname" . }}
+  labels:
+    {{- include "druid.common-labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.router.name }}
+spec:
+  type: {{ .Values.router.serviceType }}
+  ports:
+    - port: {{ .Values.router.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    {{- with .Values.router.serviceExtraPorts }}
+    {{- . | toYaml | nindent 4 }}
+    {{- end }}
+  selector:
+    {{- include "druid.common-matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.router.name }}
+
 {{- end }}
