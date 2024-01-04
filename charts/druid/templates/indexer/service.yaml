@@ -53,6 +53,34 @@ spec:
 
 {{- end }}
 
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "druid.indexer.category.fullname" (dict "categoryName" $categoryName "context" $) }}
+  labels:
+    {{- include "druid.common-labels" $ | nindent 4 }}
+    app.kubernetes.io/part-of: indexer
+    app.kubernetes.io/component: indexer-{{ $categoryName }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ $.Values.indexer.defaults.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    {{- range untilStep 0 ($peonCapacity | int) 1 }}
+    - port: {{ add 8100 . }}
+      targetPort: {{ add 8100 . }}
+      protocol: TCP
+      name: http-peon
+    {{- end }}
+  selector:
+    {{- include "druid.common-matchLabels" $ | nindent 4 }}
+    app.kubernetes.io/part-of: indexer
+    app.kubernetes.io/component: indexer-{{ $categoryName }}
+
 {{- end }}
 
 {{- end }}

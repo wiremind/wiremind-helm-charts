@@ -194,6 +194,7 @@ broker:
   name: broker
   port: 8082
   serviceType: ClusterIP
+  serviceExtraPorts: []
   podManagementPolicy: Parallel
   updateStrategy:
     type: RollingUpdate
@@ -254,6 +255,7 @@ coordinator:
   name: coordinator
   port: 8081
   serviceType: ClusterIP
+  serviceExtraPorts: []
   podManagementPolicy: Parallel
   updateStrategy:
     type: RollingUpdate
@@ -543,7 +545,7 @@ configJobs:
     overlord-dyn-cfg:
       component:
         scheme: http
-        name: coordinator-0
+        name: coordinator
         port: 8081
         route: "/druid/indexer/v1/worker"
       payload:
