@@ -1,24 +1,37 @@
 {{- if .Values.router.enabled }}
 
+{{- $replicaCount := .Values.router.replicaCount }}
+{{- if .Values.router.autoscaling.enabled }}
+{{- $replicaCount = .Values.router.autoscaling.maxReplicas }}
+{{- end -}}
+
+{{- range untilStep 0 ($replicaCount | int) 1 }}
+
+---
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "druid.router.fullname" . }}
+  name: {{ include "druid.router.fullname" $ }}-{{ . }}
   labels:
-{{ include "druid.common-labels" . | indent 4 }}
-    app.kubernetes.io/component: {{ .Values.router.name }}
+    {{- include "druid.common-labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $.Values.router.name }}
+    statefulset.kubernetes.io/pod-name: {{ include "druid.router.fullname" $ }}-{{ . }}
 spec:
-  type: {{ .Values.router.serviceType }}
+  type: {{ $.Values.router.serviceType }}
   ports:
-    - port: {{ .Values.router.port }}
+    - port: {{ $.Values.router.port }}
       targetPort: http
       protocol: TCP
       name: http
-    {{- with .Values.router.serviceExtraPorts }}
+    {{- with $.Values.router.serviceExtraPorts }}
     {{- . | toYaml | nindent 4 }}
     {{- end }}
   selector:
-{{ include "druid.common-matchLabels" . | indent 4 }}
-    app.kubernetes.io/component: {{ .Values.router.name }}
+    {{- include "druid.common-matchLabels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $.Values.router.name }}
+    statefulset.kubernetes.io/pod-name: {{ include "druid.router.fullname" $ }}-{{ . }}
+
+{{- end }}
 
 {{- end }}

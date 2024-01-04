@@ -1,19 +1,21 @@
 {{- if .Values.router.enabled }}
 
 {{- if .Values.router.podDisruptionBudget }}
+
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: {{ template "druid.router.fullname" . }}
   labels:
-{{ include "druid.common-labels" . | indent 4 }}
+    {{- include "druid.common-labels" . | nindent 4 }}
     app.kubernetes.io/component: {{ .Values.router.name }}
 spec:
   selector:
     matchLabels:
-{{ include "druid.common-matchLabels" . | indent 6 }}
+      {{- include "druid.common-matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: {{ .Values.router.name }}
-{{ toYaml .Values.router.podDisruptionBudget | indent 2 }}
+  {{- toYaml .Values.router.podDisruptionBudget | nindent 2 }}
+
 {{- end }}
 
 {{- end }}

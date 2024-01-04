@@ -12,16 +12,16 @@ kind: PodDisruptionBudget
 metadata:
   name: {{ include "druid.historical.tier.fullname" (dict "tierName" $tierName "context" $) }}
   labels:
-{{ include "druid.common-labels" $ | indent 4 }}
+    {{- include "druid.common-labels" $ | nindent 4 }}
     app.kubernetes.io/part-of: historical
     app.kubernetes.io/component: historical-{{ $tierName }}
 spec:
   selector:
     matchLabels:
-{{ include "druid.common-matchLabels" $ | indent 6 }}
+      {{- include "druid.common-matchLabels" $ | nindent 6 }}
       app.kubernetes.io/part-of: historical
       app.kubernetes.io/component: historical-{{ $tierName }}
-{{ toYaml $tierValue.podDisruptionBudget | indent 2 }}
+  {{- toYaml $tierValue.podDisruptionBudget | nindent 2 }}
 
 {{- end }}
 

@@ -1,21 +1,37 @@
 {{- if .Values.broker.enabled }}
 
+{{- $replicaCount := .Values.broker.replicaCount }}
+{{- if .Values.broker.autoscaling.enabled }}
+{{- $replicaCount = .Values.broker.autoscaling.maxReplicas }}
+{{- end -}}
+
+{{- range untilStep 0 ($replicaCount | int) 1 }}
+
+---
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "druid.broker.fullname" . }}
+  name: {{ include "druid.broker.fullname" $ }}-{{ . }}
   labels:
-{{ include "druid.common-labels" . | indent 4 }}
-    app.kubernetes.io/component: {{ .Values.broker.name }}
+    {{- include "druid.common-labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $.Values.broker.name }}
+    statefulset.kubernetes.io/pod-name: {{ include "druid.broker.fullname" $ }}-{{ . }}
 spec:
-  type: {{ .Values.broker.serviceType }}
+  type: {{ $.Values.broker.serviceType }}
   ports:
-    - port: {{ .Values.broker.port }}
+    - port: {{ $.Values.broker.port }}
       targetPort: http
       protocol: TCP
       name: http
+    {{- with $.Values.broker.serviceExtraPorts }}
+    {{- . | toYaml | nindent 4 }}
+    {{- end }}
   selector:
-{{ include "druid.common-matchLabels" . | indent 4 }}
-    app.kubernetes.io/component: {{ .Values.broker.name }}
+    {{- include "druid.common-matchLabels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $.Values.broker.name }}
+    statefulset.kubernetes.io/pod-name: {{ include "druid.broker.fullname" $ }}-{{ . }}
+
+{{- end }}
 
 {{- end }}

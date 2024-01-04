@@ -5,7 +5,7 @@ kind: PodMonitor
 metadata:
   name: {{ include "druid.fullname" . }}
   labels:
-{{ include "druid.common-labels" . | indent 4 }}
+    {{- include "druid.common-labels" . | nindent 4 }}
 spec:
   podMetricsEndpoints:
     - interval: 90s
@@ -22,6 +22,6 @@ spec:
       - {{ .Release.Namespace }}
   selector:
     matchLabels:
-{{ include "druid.common-matchLabels" $ | indent 6 }}
+      {{- include "druid.common-matchLabels" $ | nindent 6 }}
 
 {{- end }}
