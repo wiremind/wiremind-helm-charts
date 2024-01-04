@@ -20,7 +20,7 @@ metadata:
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
-    kind: {{ $categoryValue.mode }}
+    kind: StatefulSet
     name: {{ include "druid.indexer.category.fullname" (dict "categoryName" $categoryName "context" $) }}
   minReplicas: {{ $categoryValue.autoscaling.minReplicas }}
   maxReplicas: {{ $categoryValue.autoscaling.maxReplicas }}
