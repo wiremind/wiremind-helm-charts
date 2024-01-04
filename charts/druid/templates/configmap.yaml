@@ -1,33 +1,34 @@
 {{- if .Values.configMap.enabled }}
+
 kind: ConfigMap
 apiVersion: v1
 metadata:
   name: {{ include "druid.fullname" . }}-config
   labels:
-{{ include "druid.common-labels" . | indent 4 }}
+    {{- include "druid.common-labels" . | nindent 4 }}
 data:
-{{ toYaml .Values.configVars | indent 2 }}
-{{- if .Values.zookeeper.enabled }}
+  {{- toYaml .Values.configVars | nindent 2 }}
+  {{- if .Values.zookeeper.enabled }}
   druid_zk_service_host: {{ .Release.Name }}-zookeeper:{{ .Values.zookeeper.service.ports.client }}
-{{- else if .Values.zkHosts }}
+  {{- else if .Values.zkHosts }}
   druid_zk_service_host: {{ .Values.zkHosts }}
-{{- end }}
-{{- if .Values.mysql.enabled }}
+  {{- end }}
+  {{- if .Values.mysql.enabled }}
   druid_metadata_storage_type: mysql
   druid_metadata_storage_connector_connectURI: jdbc:mysql://{{ .Release.Name }}-mysql:{{ .Values.mysql.primary.service.ports.mysql }}/{{ .Values.mysql.auth.database }}
   druid_metadata_storage_connector_user: {{ .Values.mysql.auth.username }}
-{{- end }}
-{{- if .Values.postgresql.enabled }}
+  {{- end }}
+  {{- if .Values.postgresql.enabled }}
   druid_metadata_storage_type: postgresql
   druid_metadata_storage_connector_connectURI: jdbc:postgresql://{{ .Release.Name }}-postgresql:{{ .Values.postgresql.primary.service.ports.postgresql }}/{{ .Values.postgresql.auth.database }}
   druid_metadata_storage_connector_user: {{ .Values.postgresql.auth.username }}
-{{- end }}
-{{- if .Values.gCloudStorage.enabled }}
+  {{- end }}
+  {{- if .Values.gCloudStorage.enabled }}
   GOOGLE_APPLICATION_CREDENTIALS: /var/secrets/google/key.json
-{{- end }}
-{{- if .Values.metrics.enabled }}
+  {{- end }}
+  {{- if .Values.metrics.enabled }}
   druid_emitter: "prometheus"
   druid_emitter_prometheus_port: {{ .Values.metrics.service.port | quote }}
-{{- end }}
+  {{- end }}
 
 {{- end }}

@@ -5,7 +5,7 @@ apiVersion: v1
 metadata:
   name: {{ include "druid.router.fullname" . }}-config
   labels:
-{{ include "druid.common-labels" . | indent 4 }}
+    {{- include "druid.common-labels" . | nindent 4 }}
     app.kubernetes.io/component: {{ .Values.router.name }}
 data:
   {{- with .Values.router.envVars }}

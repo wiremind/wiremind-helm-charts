@@ -1,28 +1,30 @@
 {{- if .Values.router.enabled }}
 
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "druid.router.fullname" . }}
   labels:
-{{ include "druid.common-labels" . | indent 4 }}
+    {{- include "druid.common-labels" . | nindent 4 }}
     app.kubernetes.io/component: {{ .Values.router.name }}
-{{- with .Values.router.annotations }}
-  annotations:
-{{ toYaml . | indent 4 }}
-{{- end }}
+  {{- with .Values.router.annotations }}
+  annotations: {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   {{- if not .Values.router.autoscaling.enabled }}
   replicas: {{ .Values.router.replicaCount }}
   {{- end }}
+  podManagementPolicy: {{ .Values.router.podManagementPolicy }}
+  serviceName: {{ include "druid.router.fullname" . }}
+  updateStrategy: {{- toYaml .Values.router.updateStrategy | nindent 4 }}
   selector:
     matchLabels:
-{{ include "druid.common-matchLabels" . | indent 6 }}
+      {{- include "druid.common-matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: {{ .Values.router.name }}
   template:
     metadata:
       labels:
-{{ include "druid.common-labels" . | indent 8 }}
+        {{- include "druid.common-labels" . | nindent 8 }}
         app.kubernetes.io/component: {{ .Values.router.name }}
         druid.k8s.enablePatching: "true"
       annotations:
@@ -30,12 +32,24 @@ spec:
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") $ | sha256sum }}
         checksum/configmap-router: {{ include (print $.Template.BasePath "/router/configmap.yaml") $ | sha256sum }}
         checksum/secret-router: {{ include (print $.Template.BasePath "/router/secret.yaml") $ | sha256sum }}
-{{- with .Values.router.podAnnotations }}
-{{ toYaml . | indent 8 }}
-{{- end }}
+        {{- with .Values.router.podAnnotations }}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
     spec:
-      {{- if .Values.router.priorityClassName }}
-      priorityClassName: {{ .Values.router.priorityClassName }}
+      {{- with .Values.router.nodeSelector }}
+      nodeSelector: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.router.affinity }}
+      affinity: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.router.tolerations }}
+      tolerations: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.router.podSecurityContext }}
+      securityContext: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.router.priorityClassName }}
+      priorityClassName: {{ . }}
       {{- end }}
       {{- if .Values.router.serviceAccount.create }}
       serviceAccountName: {{ include "druid.router.serviceAccountName" . }}
@@ -44,6 +58,9 @@ spec:
         - name: {{ include "druid.router.fullname" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.router.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.router.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           args: [ "router" ]
           env:
             - name: POD_NAME
@@ -54,6 +71,12 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            {{- if hasKey .Values.router.service "resolveWithDNS" | ternary .Values.router.service.resolveWithDNS .Values.service.resolveWithDNS }}
+            - name: druid_host
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            {{- end }}
             - name: druid_extensions_loadList
               value: {{ .Values.extensions.loadList | toJson | quote }}
             - name: druid_router_tierToBrokerMap
@@ -88,19 +111,8 @@ spec:
               path: /status/selfDiscovered
               port: http
           {{- end }}
-          resources:
-{{ toYaml .Values.router.resources | indent 12 }}
-    {{- with .Values.router.nodeSelector }}
-      nodeSelector:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.router.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.router.tolerations }}
-      tolerations:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+          {{- with .Values.router.resources }}
+          resources: {{- toYaml . | nindent 12 }}
+          {{- end }}
 
 {{- end }}

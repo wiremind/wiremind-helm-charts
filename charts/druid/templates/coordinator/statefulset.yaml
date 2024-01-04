@@ -1,26 +1,30 @@
 {{- if .Values.coordinator.enabled }}
 
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "druid.coordinator.fullname" . }}
   labels:
-{{ include "druid.common-labels" . | indent 4 }}
+    {{- include "druid.common-labels" . | nindent 4 }}
     app.kubernetes.io/component: {{ .Values.coordinator.name }}
-{{- with .Values.coordinator.annotations }}
-  annotations:
-{{ toYaml . | indent 4 }}
-{{- end }}
+  {{- with .Values.coordinator.annotations }}
+  annotations: {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
+  {{- if not .Values.coordinator.autoscaling.enabled }}
   replicas: {{ .Values.coordinator.replicaCount }}
+  {{- end }}
+  podManagementPolicy: {{ .Values.coordinator.podManagementPolicy }}
+  serviceName: {{ include "druid.coordinator.fullname" . }}
+  updateStrategy: {{- toYaml .Values.coordinator.updateStrategy | nindent 4 }}
   selector:
     matchLabels:
-{{ include "druid.common-matchLabels" . | indent 6 }}
+      {{- include "druid.common-matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: {{ .Values.coordinator.name }}
   template:
     metadata:
       labels:
-{{ include "druid.common-labels" . | indent 8 }}
+        {{- include "druid.common-labels" . | nindent 8 }}
         app.kubernetes.io/component: {{ .Values.coordinator.name }}
       annotations:
         druid.k8s.enablePatching: "true"
@@ -28,12 +32,24 @@ spec:
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") $ | sha256sum }}
         checksum/configmap-coordinator: {{ include (print $.Template.BasePath "/coordinator/configmap.yaml") $ | sha256sum }}
         checksum/secret-coordinator: {{ include (print $.Template.BasePath "/coordinator/secret.yaml") $ | sha256sum }}
-{{- with .Values.coordinator.podAnnotations }}
-{{ toYaml . | indent 8 }}
-{{- end }}
+        {{- with .Values.coordinator.podAnnotations }}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
     spec:
-      {{- if .Values.coordinator.priorityClassName }}
-      priorityClassName: {{ .Values.coordinator.priorityClassName }}
+      {{- with .Values.coordinator.nodeSelector }}
+      nodeSelector: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.coordinator.affinity }}
+      affinity: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.coordinator.tolerations }}
+      tolerations: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.coordinator.podSecurityContext }}
+      securityContext: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.coordinator.priorityClassName }}
+      priorityClassName: {{ . }}
       {{- end }}
       {{- if .Values.coordinator.serviceAccount.create }}
       serviceAccountName: {{ include "druid.coordinator.serviceAccountName" . }}
@@ -42,6 +58,9 @@ spec:
         - name: {{ include "druid.coordinator.fullname" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.coordinator.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.coordinator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           args: [ "coordinator" ]
           env:
             - name: POD_NAME
@@ -52,6 +71,12 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            {{- if hasKey .Values.coordinator.service "resolveWithDNS" | ternary .Values.coordinator.service.resolveWithDNS .Values.service.resolveWithDNS }}
+            - name: druid_host
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            {{- end }}
             - name: druid_extensions_loadList
               value: {{ .Values.extensions.loadList | toJson | quote }}
           envFrom:
@@ -84,18 +109,8 @@ spec:
               path: /status/selfDiscovered
               port: http
           {{- end }}
-          resources: {{- toYaml .Values.coordinator.resources | nindent 12 }}
-    {{- with .Values.coordinator.nodeSelector }}
-      nodeSelector:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.coordinator.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.coordinator.tolerations }}
-      tolerations:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+          {{- with .Values.coordinator.resources }}
+          resources: {{- toYaml . | nindent 12 }}
+          {{- end }}
 
 {{- end }}

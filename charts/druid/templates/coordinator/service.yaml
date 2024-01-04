@@ -1,23 +1,37 @@
 {{- if .Values.coordinator.enabled }}
 
+{{- $replicaCount := .Values.coordinator.replicaCount }}
+{{- if .Values.coordinator.autoscaling.enabled }}
+{{- $replicaCount = .Values.coordinator.autoscaling.maxReplicas }}
+{{- end -}}
+
+{{- range untilStep 0 ($replicaCount | int) 1 }}
+
+---
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "druid.coordinator.fullname" . }}
+  name: {{ include "druid.coordinator.fullname" $ }}-{{ . }}
   labels:
-{{ include "druid.common-labels" . | indent 4 }}
-    app.kubernetes.io/component: {{ .Values.coordinator.name }}
+    {{- include "druid.common-labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $.Values.coordinator.name }}
+    statefulset.kubernetes.io/pod-name: {{ include "druid.coordinator.fullname" $ }}-{{ . }}
 spec:
-  type: {{ .Values.coordinator.serviceType }}
+  type: {{ $.Values.coordinator.serviceType }}
   ports:
-    - port: {{ .Values.coordinator.port }}
+    - port: {{ $.Values.coordinator.port }}
       targetPort: http
       protocol: TCP
       name: http
-      # TODO: enable?
-      # appProtocol: http
+    {{- with $.Values.coordinator.serviceExtraPorts }}
+    {{- . | toYaml | nindent 4 }}
+    {{- end }}
   selector:
-{{ include "druid.common-matchLabels" . | indent 4 }}
-    app.kubernetes.io/component: {{ .Values.coordinator.name }}
+    {{- include "druid.common-matchLabels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $.Values.coordinator.name }}
+    statefulset.kubernetes.io/pod-name: {{ include "druid.coordinator.fullname" $ }}-{{ . }}
+
+{{- end }}
 
 {{- end }}

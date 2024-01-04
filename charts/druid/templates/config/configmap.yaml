@@ -1,0 +1,22 @@
+{{- if .Values.configJobs.enabled }}
+
+{{- range $jobName, $jobDefinition := .Values.configJobs.dict }}
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "druid.configJobs.fullname" $ }}-{{ $jobName }}
+  labels:
+    {{- include "druid.common-labels" $ | nindent 4 }}
+    app.kubernetes.io/component: config-job-{{ $jobName }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+data:
+  config.json: {{- $jobDefinition.payload | toJson | quote | nindent 4 }}
+
+{{- end }}
+
+{{- end }}

@@ -2,30 +2,48 @@
 
 {{- range $jobName, $jobDefinition := .Values.configJobs.dict }}
 
+---
+
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ include "druid.configJobs.fullname" $ }}-{{ $jobName }}
   labels:
-{{ include "druid.common-labels" $ | indent 4 }}
+    {{- include "druid.common-labels" $ | nindent 4 }}
     app.kubernetes.io/component: config-job-{{ $jobName }}
   annotations:
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
-  backoffLimit: 7
-  ttlSecondsAfterFinished: 3600
+  backoffLimit: {{ $.Values.configJobs.backoffLimit }}
+  ttlSecondsAfterFinished: {{ $.Values.configJobs.ttlSecondsAfterFinished }}
   template:
     metadata:
       labels:
-{{ include "druid.common-labels" $ | indent 8 }}
+        {{- include "druid.common-labels" $ | nindent 8 }}
         app.kubernetes.io/component: config-job-{{ $jobName }}
     spec:
-      priorityClassName: {{ $.Values.configJobs.priorityClassName }}
-      restartPolicy: Never
+      {{- with $.Values.configJobs.affinity }}
+      affinity: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.configJobs.tolerations }}
+      tolerations: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.configJobs.podSecurityContext }}
+      securityContext: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.configJobs.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
+      {{- with $.Values.configJobs.restartPolicy }}
+      restartPolicy: {{ . }}
+      {{- end }}
       containers:
         - name: job
-          image: curlimages/curl:7.85.0
+          image: curlimages/curl:8.5.0
+          {{- if $.Values.configJobs.containerSecurityContext.enabled }}
+          securityContext: {{- omit $.Values.configJobs.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           command: ["curl"]
           args:
             - "-v"
@@ -52,13 +70,9 @@ spec:
             - "X-Druid-Comment: {{ $.Values.configJobs.changeComment | default "changed by config-job" }}"
             - "-d"
             - "@/config.json"
-          resources:
-            limits:
-              cpu: '1'
-              memory: 1Gi
-            requests:
-              cpu: '10m'
-              memory: 32Mi
+          {{- with $.Values.configJobs.resources }}
+          resources: {{- toYaml . | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: config
               mountPath: /config.json
@@ -68,31 +82,6 @@ spec:
           configMap:
             name: {{ include "druid.configJobs.fullname" $ }}-{{ $jobName }}
             defaultMode: 420
-      {{- with $.Values.configJobs.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
-      {{- end }}
-      {{- with $.Values.configJobs.tolerations }}
-      tolerations:
-{{ toYaml . | indent 8 }}
-      {{- end }}
-
----
-
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: {{ include "druid.configJobs.fullname" $ }}-{{ $jobName }}
-  labels:
-{{ include "druid.common-labels" $ | indent 4 }}
-    app.kubernetes.io/component: config-job-{{ $jobName }}
-  annotations:
-    "helm.sh/hook": post-install,post-upgrade
-    "helm.sh/hook-delete-policy": before-hook-creation
-data:
-  config.json: {{ $jobDefinition.payload | toJson | quote }}
-
----
 
 {{- end }}
 

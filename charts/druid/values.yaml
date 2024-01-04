@@ -11,10 +11,8 @@ metrics:
     enabled: true
 
 service:
-  # Creates dedicated services that targets each pod of statefulsets
-  dedicated: true
   # Override druid_host on statefulsets to resolve components IP with DNS
-  overrideDruidHost: true
+  resolveWithDNS: true
 
 extensions:
   loadList:
@@ -131,6 +129,15 @@ router:
   port: 8888
   serviceType: ClusterIP
   serviceExtraPorts: []
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
+  service: {}
+    # resolveWithDNS: false
+  podSecurityContext:
+    fsGroup: 1000
+  containerSecurityContext:
+    enabled: false
   livenessProbe:
     enabled: true
     initialDelaySeconds: 60
@@ -187,6 +194,15 @@ broker:
   name: broker
   port: 8082
   serviceType: ClusterIP
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
+  service: {}
+    # resolveWithDNS: false
+  podSecurityContext:
+    fsGroup: 1000
+  containerSecurityContext:
+    enabled: false
   livenessProbe:
     enabled: true
     initialDelaySeconds: 60
@@ -217,9 +233,6 @@ broker:
   podDisruptionBudget: {}
   envVars: {}
   secretEnvVars: {}
-  defaults:
-    updateStrategy:
-      type: RollingUpdate
   serviceAccount:
     # -- Create a service account for the broker
     create: true
@@ -235,9 +248,21 @@ broker:
 coordinator:
   enabled: true
   replicaCount: 1
+  # TODO: implement autoscaling
+  autoscaling:
+    enabled: false
   name: coordinator
   port: 8081
   serviceType: ClusterIP
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
+  service: {}
+    # resolveWithDNS: false
+  podSecurityContext:
+    fsGroup: 1000
+  containerSecurityContext:
+    enabled: false
   ingress:
     enabled: false
     annotations: {}
@@ -304,6 +329,10 @@ historical:
       druid_processing_numMergeBuffers: "2"
       druid_processing_numThreads: "1"
     secretEnvVars: {}
+    podSecurityContext:
+      fsGroup: 1000
+    containerSecurityContext:
+      enabled: false
     persistence:
       enabled: true
     priorityClassName: ""
@@ -357,10 +386,10 @@ historical:
 
         druid_server_tier: "tier_default"
         druid_segmentCache_locations: '[{"path":"/opt/druid/var/druid/segment-cache","maxSize":"1GiB"}]'
-      resources:
-        requests:
-          memory: 256Mi
-          cpu: 50m
+      resources: {}
+      #   requests:
+      #     memory: 256Mi
+      #     cpu: 50m
       persistence:
         size: 2Gi
       # autoscaling:
@@ -381,7 +410,14 @@ indexer:
     replicaCount: 1
     port: 8091
     podManagementPolicy: Parallel
-    priorityClassName: ""
+    updateStrategy:
+      type: RollingUpdate
+    service: {}
+      # resolveWithDNS: false
+    podSecurityContext:
+      fsGroup: 1000
+    containerSecurityContext:
+      enabled: false
     livenessProbe:
       enabled: true
       initialDelaySeconds: 60
@@ -396,6 +432,7 @@ indexer:
       timeoutSeconds: 1
       failureThreshold: 5
       successThreshold: 1
+    priorityClassName: ""
     affinity: {}
     nodeSelector: {}
     tolerations: []
@@ -416,16 +453,15 @@ indexer:
   categories:
     default:
       # enabled: false
-      mode: "StatefulSet"
       envVars:
         DRUID_XMX: 256m
         DRUID_XMS: 256m
         druid_worker_capacity: "1"
         druid_worker_category: "default"
-      resources:
-        requests:
-          memory: 256Mi
-          cpu: 50m
+      resources: {}
+      #   requests:
+      #     memory: 256Mi
+      #     cpu: 50m
       emptyDir:
         size: 1Gi
       autoscaling:
@@ -487,22 +523,27 @@ kube-hpa-scale-to-zero:
   enabled: false
   # args: ["--hpa-namespace", "{{ .Release.Namespace }}"]
   args: ["--hpa-namespace", "foo"]
-  resources:
-    requests:
-      memory: 100Mi
-      cpu: 10m
+  resources: {}
 
 configJobs:
   enabled: true
-  priorityClassName: ""
   affinity: {}
   tolerations: []
+  priorityClassName: ""
+  restartPolicy: Never
+  backoffLimit: 7
+  ttlSecondsAfterFinished: 3600
+  podSecurityContext:
+    fsGroup: 1000
+  containerSecurityContext:
+    enabled: false
+  resources: {}
   changeComment: ""
   dict:
     overlord-dyn-cfg:
       component:
         scheme: http
-        name: coordinator
+        name: coordinator-0
         port: 8081
         route: "/druid/indexer/v1/worker"
       payload:

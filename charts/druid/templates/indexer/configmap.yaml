@@ -1,5 +1,7 @@
 {{- if .Values.indexer.enabled }}
 
+{{- $indexerDefaults := .Values.indexer.defaults }}
+
 {{- range $categoryName, $categoryValue := .Values.indexer.categories }}
 
 {{- if hasKey $categoryValue "enabled" | ternary $categoryValue.enabled true }}
@@ -11,7 +13,7 @@ apiVersion: v1
 metadata:
   name: {{ include "druid.indexer.category.fullname" (dict "categoryName" $categoryName "context" $) }}-config
   labels:
-{{ include "druid.common-labels" $ | indent 4 }}
+    {{- include "druid.common-labels" $ | nindent 4 }}
     app.kubernetes.io/part-of: indexer
     app.kubernetes.io/component: indexer-{{ $categoryName }}
 data:
@@ -23,8 +25,6 @@ data:
 
 {{- end }}
 
-{{- $indexerDefaults := $.Values.indexer.defaults }}
-
 ---
 
 kind: ConfigMap
@@ -32,9 +32,8 @@ apiVersion: v1
 metadata:
   name: {{ include "druid.fullname" $ }}-indexer-config
   labels:
-{{ include "druid.common-labels" $ | indent 4 }}
+    {{- include "druid.common-labels" $ | nindent 4 }}
     app.kubernetes.io/part-of: indexer
-data:
-{{ toYaml $indexerDefaults.envVars | indent 2 }}
+data: {{- toYaml $indexerDefaults.envVars | nindent 2 }}
 
 {{- end }}

@@ -5,7 +5,7 @@ apiVersion: v1
 metadata:
   name: {{ include "druid.coordinator.fullname" . }}-config
   labels:
-{{ include "druid.common-labels" . | indent 4 }}
+    {{- include "druid.common-labels" . | nindent 4 }}
     app.kubernetes.io/component: {{ .Values.coordinator.name }}
 data:
   {{- with .Values.coordinator.envVars }}
