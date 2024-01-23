@@ -16,7 +16,7 @@ spec:
   scaleTargetRef:
     # Only apps/v1 resources are accepted
     apiVersion: apps/v1
-    kind: Deployment
+    kind: StatefulSet
     name: {{ include "druid.broker.fullname" . }}
   minReplicas: {{ .Values.broker.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.broker.autoscaling.maxReplicas }}
