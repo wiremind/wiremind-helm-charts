@@ -1,6 +1,9 @@
 apiVersion: v2
+type: application
 name: marge-bot
 description: Marge-bot is a merge-bot for GitLab
+version: 1.4.1
+appVersion: 0.13.0
 icon: https://upload.wikimedia.org/wikipedia/en/0/0b/Marge_Simpson.png
 keywords:
   - merge
@@ -11,15 +14,3 @@ home: https://github.com/smarkets/marge-bot
 maintainers:
   - name: Wiremind
     url: https://github.com/wiremind/wiremind-helm-charts
-
-
-type: application
-
-# This is the chart version. This  version number should be incremented each
-# time you make changes to the chart and its templates, including the app
-# version.
-version: 1.4.0
-
-# This is the version number of the application being deployed. This version
-# number should be incremented each time you make changes to the application.
-appVersion: 0.12.1

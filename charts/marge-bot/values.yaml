@@ -18,17 +18,16 @@ podSecurityContext: {}
   # fsGroup: 2000
 
 securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
   allowPrivilegeEscalation: false
-  readOnlyRootFilesystem: false
   privileged: false
+  readOnlyRootFilesystem: true
   capabilities:
     drop:
       - ALL
-  # TODO run as non-root. Make our own dockerfile ?
-  # runAsNonRoot: true
-  # runAsUser: 1000
-  # runAsGroup: 1000
-  # fsGroup: 1000
 
 priorityClassName: ""
 
@@ -62,3 +61,13 @@ secret:
   authToken: ""
   rebaseRemotely: "false"
   batch: "false"
+
+volumeMounts:
+  - name: tmp
+    mountPath: /tmp
+
+volumes:
+  - name: tmp
+    emptyDir:
+      medium: Memory
+      sizeLimit: 1Gi
