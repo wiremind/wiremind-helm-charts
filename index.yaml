@@ -9280,6 +9280,26 @@ entries:
     version: 0.3.1
   marge-bot:
   - apiVersion: v2
+    appVersion: 0.14.0
+    created: "2024-01-26T10:30:49.210727549Z"
+    description: Marge-bot is a merge-bot for GitLab
+    digest: 746a8bb2aed5a614f5dc89e96b4d74ad8e6f989bbd8b0c5b8c75f1a9fe593ae2
+    home: https://github.com/smarkets/marge-bot
+    icon: https://upload.wikimedia.org/wikipedia/en/0/0b/Marge_Simpson.png
+    keywords:
+    - merge
+    - marge
+    - bot
+    - gitlab
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: marge-bot
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/marge-bot-1.4.2/marge-bot-1.4.2.tgz
+    version: 1.4.2
+  - apiVersion: v2
     appVersion: 0.13.0
     created: "2024-01-25T11:04:28.520056476Z"
     description: Marge-bot is a merge-bot for GitLab
@@ -10836,4 +10856,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-01-26T10:26:55.343582469Z"
+generated: "2024-01-26T10:30:49.21112209Z"
