@@ -2,8 +2,8 @@ apiVersion: v2
 type: application
 name: marge-bot
 description: Marge-bot is a merge-bot for GitLab
-version: 1.4.1
-appVersion: 0.13.0
+version: 1.4.2
+appVersion: 0.14.0
 icon: https://upload.wikimedia.org/wikipedia/en/0/0b/Marge_Simpson.png
 keywords:
   - merge
