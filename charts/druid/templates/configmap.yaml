@@ -7,7 +7,7 @@ metadata:
   labels:
     {{- include "druid.common-labels" . | nindent 4 }}
 data:
-  {{- toYaml .Values.configVars | nindent 2 }}
+  {{- $configVars := .Values.configVars }}
   {{- if .Values.zookeeper.enabled }}
   druid_zk_service_host: {{ .Release.Name }}-zookeeper:{{ .Values.zookeeper.service.ports.client }}
   {{- else if .Values.zkHosts }}
@@ -27,8 +27,9 @@ data:
   GOOGLE_APPLICATION_CREDENTIALS: /var/secrets/google/key.json
   {{- end }}
   {{- if .Values.metrics.enabled }}
-  druid_emitter: "prometheus"
-  druid_emitter_prometheus_port: {{ .Values.metrics.service.port | quote }}
+  {{- $configVars = mergeOverwrite .Values.configVars (dict "druid_emitter" "prometheus") }}
+  {{- $configVars = mergeOverwrite .Values.configVars (dict "druid_emitter_prometheus_port" (.Values.metrics.service.port | quote)) }}
   {{- end }}
+  {{- toYaml $configVars | nindent 2 }}
 
 {{- end }}
