@@ -28,7 +28,7 @@ data:
   {{- end }}
   {{- if .Values.metrics.enabled }}
   {{- $configVars = mergeOverwrite .Values.configVars (dict "druid_emitter" "prometheus") }}
-  {{- $configVars = mergeOverwrite .Values.configVars (dict "druid_emitter_prometheus_port" (.Values.metrics.service.port | quote)) }}
+  {{- $configVars = mergeOverwrite .Values.configVars (dict "druid_emitter_prometheus_port" (.Values.metrics.service.port)) }}
   {{- end }}
   {{- toYaml $configVars | nindent 2 }}
 
