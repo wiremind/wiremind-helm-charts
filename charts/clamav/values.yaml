@@ -175,6 +175,7 @@ resources: {}
 
 # Additional pod labels
 podLabels: {}
+podAnnotations: {}
 
 nodeSelector: {}
 
