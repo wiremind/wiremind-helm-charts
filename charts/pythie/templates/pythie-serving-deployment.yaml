@@ -103,6 +103,10 @@ spec:
             {{- end }}
             - name: "VERBOSITY_LEVEL"
               value: "0"
+            {{- if $.Values.pythieServing.opentelemetryCollectorHost }}
+            - name: "OPENTELEMETRY_COLLECTOR_HOST"
+              value: {{ $.Values.pythieServing.opentelemetryCollectorHost }}
+            {{- end }}
 {{- with $.Values.tolerations }}
       tolerations:
 {{ toYaml . | indent 8 }}
