@@ -97,10 +97,8 @@ spec:
               value: "0"
             - name: "TREELITE_NTHREAD"
               value: "1"
-            {{- if $servingValue.grpcServerTimeoutSeconds }}
             - name: "GRPC_SERVER_TIMEOUT"
-              value: {{ $servingValue.grpcServerTimeoutSeconds }}
-            {{- end }}
+              value: {{ $servingValue.grpcServerTimeoutSeconds | default "10800" | quote }}
             - name: "VERBOSITY_LEVEL"
               value: "0"
             {{- if $.Values.pythieServing.opentelemetryCollectorHost }}
