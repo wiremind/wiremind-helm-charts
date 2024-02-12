@@ -2,7 +2,7 @@ apiVersion: v2
 description: Apache Druid is a high performance real-time analytics database.
 name: druid
 type: application
-version: 1.14.6
+version: 1.14.7
 appVersion: 26.0.0
 home: https://druid.apache.org/
 icon: https://druid.apache.org/img/favicon.png
@@ -30,7 +30,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     condition: mysql.enabled
   - name: kube-hpa-scale-to-zero
-    version: 0.3.0
+    version: 0.4.0
     repository: https://machine424.github.io/kube-hpa-scale-to-zero
     condition: kube-hpa-scale-to-zero.enabled
   - alias: extra-objects
