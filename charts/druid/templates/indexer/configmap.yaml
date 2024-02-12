@@ -34,6 +34,9 @@ metadata:
   labels:
     {{- include "druid.common-labels" $ | nindent 4 }}
     app.kubernetes.io/part-of: indexer
-data: {{- toYaml $indexerDefaults.envVars | nindent 2 }}
+data:
+  {{- range $key, $value := $indexerDefaults.envVars }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}
 
 {{- end }}
