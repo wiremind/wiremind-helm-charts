@@ -10,12 +10,12 @@ dependencies:
   version: 9.11.1
 - name: kube-hpa-scale-to-zero
   repository: https://machine424.github.io/kube-hpa-scale-to-zero
-  version: 0.3.0
+  version: 0.4.0
 - name: raw
   repository: https://wiremind.github.io/wiremind-helm-charts
   version: 0.1.0
 - name: druid-tasks-exporter
   repository: https://wiremind.github.io/wiremind-helm-charts
   version: 0.1.5
-digest: sha256:b0d3a0f0521504734d11f5ae5345ac71dcabf0945adeee80d836caddc681fa74
-generated: "2023-12-07T18:59:18.246074408+01:00"
+digest: sha256:42af3a7308d1996d9f2c4d0299e49e23eedb2f868353102e94be04e1f5339e37
+generated: "2024-02-12T11:29:38.696927649+01:00"
