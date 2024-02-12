@@ -8,8 +8,8 @@ metadata:
     {{- include "druid.common-labels" . | nindent 4 }}
     app.kubernetes.io/component: {{ .Values.broker.name }}
 data:
-  {{- with .Values.broker.envVars }}
-  {{- toYaml . | nindent 2 }}
+  {{- range $key, $value := .Values.broker.envVars }}
+  {{ $key }}: {{ $value | quote }}
   {{- end }}
 
 {{- end }}
