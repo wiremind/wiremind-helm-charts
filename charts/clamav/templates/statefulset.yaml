@@ -12,6 +12,10 @@ spec:
       {{- include "clamav.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      annotations:
+        {{- if .Values.podAnnotations }}
+        {{ toYaml .Values.podAnnotations | nindent 8 }}
+        {{- end }}
       labels:
         {{- include "clamav.selectorLabels" . | nindent 8 }}
         {{- if .Values.podLabels }}
