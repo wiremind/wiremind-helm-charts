@@ -285,13 +285,13 @@ kibana:
   imageTag: 7.17.14
   ## Change me
   elasticsearchHosts: http://my-elasticsearch-cluster-data-hot:9200
-  resources:
-    limits:
-      cpu: 2
-      memory: 2Gi
-    requests:
-      cpu: 100m
-      memory: 1000Mi
+  # resources:
+  #   limits:
+  #     cpu: 2
+  #     memory: 2Gi
+  #   requests:
+  #     cpu: 100m
+  #     memory: 1000Mi
   kibanaConfig:
     kibana.yml: |
       server.name: kibana
@@ -315,13 +315,13 @@ prometheus-elasticsearch-exporter:
   es:
     ## Change me
     uri: http://my-elasticsearch-master-url:9200
-  resources:
-    requests:
-      cpu: 10m
-      memory: 128Mi
-    limits:
-      cpu: 2
-      memory: 128Mi
+  # resources:
+  #   requests:
+  #     cpu: 10m
+  #     memory: 128Mi
+  #   limits:
+  #     cpu: 2
+  #     memory: 128Mi
   serviceMonitor:
     enabled: false
   prometheusRule:
