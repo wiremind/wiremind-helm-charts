@@ -1,12 +1,13 @@
+
+---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.4.1
-  creationTimestamp: null
-  name: middlewaretcps.traefik.containo.us
+    controller-gen.kubebuilder.io/version: v0.6.2
+  name: middlewaretcps.traefik.io
 spec:
-  group: traefik.containo.us
+  group: traefik.io
   names:
     kind: MiddlewareTCP
     listKind: MiddlewareTCPList
@@ -17,7 +18,8 @@ spec:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: MiddlewareTCP is a specification for a MiddlewareTCP resource.
+        description: 'MiddlewareTCP is the CRD implementation of a Traefik TCP middleware.
+          More info: https://doc.traefik.io/traefik/v2.10/middlewares/overview/'
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -32,19 +34,24 @@ spec:
           metadata:
             type: object
           spec:
-            description: MiddlewareTCPSpec holds the MiddlewareTCP configuration.
+            description: MiddlewareTCPSpec defines the desired state of a MiddlewareTCP.
             properties:
               inFlightConn:
-                description: TCPInFlightConn holds the TCP in flight connection configuration.
+                description: InFlightConn defines the InFlightConn middleware configuration.
                 properties:
                   amount:
+                    description: Amount defines the maximum amount of allowed simultaneous
+                      connections. The middleware closes the connection if there are
+                      already amount connections opened.
                     format: int64
                     type: integer
                 type: object
               ipWhiteList:
-                description: TCPIPWhiteList holds the TCP ip white list configuration.
+                description: IPWhiteList defines the IPWhiteList middleware configuration.
                 properties:
                   sourceRange:
+                    description: SourceRange defines the allowed IPs (or ranges of
+                      allowed IPs by using CIDR notation).
                     items:
                       type: string
                     type: array
