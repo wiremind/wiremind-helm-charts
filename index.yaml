@@ -10843,6 +10843,26 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: 2.10.5
+    created: "2024-02-22T10:16:44.768531224Z"
+    description: Manage traefik CRDs
+    digest: 5e754ad5185b58b0db568ab53d81e78f820cb0f5a3489499552e95c418b917d1
+    keywords:
+    - traefik
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: traefik-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/traefik-crds
+    - https://github.com/traefik/traefik-helm-chart/tree/master/traefik
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/traefik-crds-2.7.0/traefik-crds-2.7.0.tgz
+    version: 2.7.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: 2.6.3
     created: "2022-08-10T14:56:36.091536117Z"
     description: Manage traefik CRDs
@@ -11161,4 +11181,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-02-21T12:40:43.548731809Z"
+generated: "2024-02-22T10:16:44.7690017Z"
