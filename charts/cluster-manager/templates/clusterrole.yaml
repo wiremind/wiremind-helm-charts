@@ -16,6 +16,7 @@ rules:
       - deployments
       - jobs
       - pods
+      - pods/exec
       - persistentvolumes
       - persistentvolumeclaims
       - secrets
