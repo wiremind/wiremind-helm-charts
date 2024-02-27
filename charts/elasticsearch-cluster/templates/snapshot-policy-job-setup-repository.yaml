@@ -20,7 +20,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: elasticsearch-create-backup-repo
-          image: curlimages/curl:7.79.1
+          image: curlimages/curl:8.6.0
           imagePullPolicy: IfNotPresent
           env:
             - name: SERVER_URL

@@ -25,7 +25,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: elasticsearch-setup-ilm
-          image: curlimages/curl:7.79.1
+          image: curlimages/curl:8.6.0
           imagePullPolicy: IfNotPresent
           env:
             - name: SERVER_URL
@@ -112,6 +112,7 @@ spec:
                 }
               }';
               RESPONSE=$(curl -XPUT --silent --show-error -H 'Content-Type: application/json' "$SERVER_URL/_ilm/policy/{{ index .Values.indexLifecycleManagement.name }}" -d "$QUERY");
-              if echo "$RESPONSE" | grep -v '{"acknowledged":true}'; then exit 1; fi;
+              # Elasticsearch will answer at least {"acknowledged":true}, at most {"acknowledged":true, ...}
+              if echo "$RESPONSE" | grep -v '"acknowledged":true'; then exit 1; fi;
       terminationGracePeriodSeconds: 0
 {{- end }}

@@ -23,7 +23,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: setup
-          image: curlimages/curl:7.79.1
+          image: curlimages/curl:8.6.0
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: setup
@@ -103,7 +103,8 @@ spec:
 
                   RESPONSE=`eval $CURL_CMD`
 
-                  if echo "$RESPONSE" | grep -v '{"acknowledged":true}'; then
+                  # Elasticsearch will answer at least {"acknowledged":true}, at most {"acknowledged":true, ...}
+                  if echo "$RESPONSE" | grep -v '"acknowledged":true'; then
                     exit 1
                   else
                     echo $RESPONSE
