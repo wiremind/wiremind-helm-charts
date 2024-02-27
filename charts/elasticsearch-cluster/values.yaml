@@ -408,7 +408,7 @@ extraObjects: []
 
 ## List of queries that will be executed when kibana is up and running
 setup:
-  enabled: true
+  enabled: false
   terminationGracePeriodSeconds: 0
   ttlSecondsAfterFinished: 1800
   # priorityClassName: my-priority-class
@@ -416,14 +416,22 @@ setup:
   #   "helm.sh/hook": post-install, post-upgrade
   #   "helm.sh/hook-weight": "1"
   #   "helm.sh/hook-delete-policy": "before-hook-creation, hook-succeeded"
-  queries:
-    0AllSettings:
-      enabled: true
-      debug: false
-      endpoint: "_all/_settings"
-      method: "PUT"
-      headers:
-        - "Content-Type: application/json"
-      query:
-        settings:
-          index.unassigned.node_left.delayed_timeout: 15m
+  ## Some example:
+  # queries:
+  #   1ClusterSettings:
+  #     # Increase watermark compared to defaults
+  #     enabled: true
+  #     debug: false
+  #     endpoint: "_cluster/settings"
+  #     method: "PUT"
+  #     headers:
+  #       - "Content-Type: application/json"
+  #     query:
+  #       persistent:
+  #         cluster:
+  #           routing:
+  #             allocation:
+  #               disk:
+  #                 watermark:
+  #                   low: 90%
+  #                   high: 95%
