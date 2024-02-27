@@ -31,3 +31,24 @@ indexLifecycleManagement:
 prometheus-elasticsearch-exporter:
   serviceMonitor:
     enabled: true
+
+setup:
+  enabled: true
+  queries:
+    1ClusterSettings:
+      # Increase watermark compared to defaults
+      enabled: true
+      debug: false
+      endpoint: "_cluster/settings"
+      method: "PUT"
+      headers:
+        - "Content-Type: application/json"
+      query:
+        persistent:
+          cluster:
+            routing:
+              allocation:
+                disk:
+                  watermark:
+                    low: 90%
+                    high: 95%
