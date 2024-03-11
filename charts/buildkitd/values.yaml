@@ -41,7 +41,14 @@ affinity: {}
 
 config:
   debug: false
+  trace: false
+  logFormat: "text"
   port: 12345
+  otel:
+    metricsExporter: "none"
+    otlpEndpoint: ""
+    compression: "gzip"
+    timeout: 10
   gc:
     enabled: true
     keepstoragePercentage: 0.90
