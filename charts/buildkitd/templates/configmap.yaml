@@ -13,6 +13,15 @@ data:
     # See: https://github.com/moby/buildkit/blob/master/docs/buildkitd.toml.md
     rootless = true
     debug = {{ .Values.config.debug }}
+    trace = {{ .Values.config.trace }}
+
+    [log]
+      # log formatter: json or text
+      format = {{ .Values.config.logFormat | quote }}
+
+    [otel]
+      # OTEL collector trace socket path
+      socketPath = "/run/{{ .Values.user.name }}/{{ .Values.user.uid }}/buildkit/otel-grpc.sock"
 
     [grpc]
       address = [ "tcp://0.0.0.0:{{ .Values.config.port }}" ]
@@ -84,3 +93,8 @@ data:
   XDG_RUNTIME_DIR: "/run/{{ .Values.user.name }}/{{ .Values.user.uid }}"
   TMPDIR: "/home/{{ .Values.user.name }}/.local/tmp"
   BUILDKIT_HOST: "tcp://localhost:{{ .Values.config.port }}"
+  OTEL_SERVICE_NAME: {{ template "buildkitd.fullname" . }}
+  OTEL_METRICS_EXPORTER: {{ .Values.config.otel.metricsExporter | quote }}
+  OTEL_EXPORTER_OTLP_ENDPOINT: {{ .Values.config.otel.otlpEndpoint | quote }}
+  OTEL_EXPORTER_OTLP_COMPRESSION: {{ .Values.config.otel.compression | quote }}
+  OTEL_EXPORTER_OTLP_TIMEOUT: {{ .Values.config.otel.timeout | quote }}
