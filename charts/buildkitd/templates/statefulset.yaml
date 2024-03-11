@@ -61,6 +61,9 @@ spec:
             - name: tcp
               containerPort: {{ .Values.config.port }}
               protocol: TCP
+            - name: debug
+              containerPort: {{ .Values.config.debugPort }}
+              protocol: TCP
           env:
             - name: NO_COLOR
               value: "true"
