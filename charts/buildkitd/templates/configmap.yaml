@@ -12,6 +12,8 @@ data:
     # See: https://docs.docker.com/build/buildkit/toml-configuration/
     # See: https://github.com/moby/buildkit/blob/master/docs/buildkitd.toml.md
     rootless = true
+    # root is where all buildkit state is stored.
+    root = "/home/{{ .Values.user.name }}/.local/share/buildkit/"
     debug = {{ .Values.config.debug }}
     trace = {{ .Values.config.trace }}
 
@@ -25,6 +27,9 @@ data:
 
     [grpc]
       address = [ "tcp://0.0.0.0:{{ .Values.config.port }}" ]
+      debugAddress = "0.0.0.0:{{ .Values.config.debugPort }}"
+      uid = {{ .Values.user.uid }}
+      gid = {{ .Values.user.gid }}
 
     [worker.oci]
       enabled = true
@@ -91,10 +96,26 @@ metadata:
     heritage: "{{ .Release.Service }}"
 data:
   XDG_RUNTIME_DIR: "/run/{{ .Values.user.name }}/{{ .Values.user.uid }}"
-  TMPDIR: "/home/{{ .Values.user.name }}/.local/tmp"
+  TMPDIR: "/run/{{ .Values.user.name }}/{{ .Values.user.uid }}"
   BUILDKIT_HOST: "tcp://localhost:{{ .Values.config.port }}"
   OTEL_SERVICE_NAME: {{ template "buildkitd.fullname" . }}
-  OTEL_METRICS_EXPORTER: {{ .Values.config.otel.metricsExporter | quote }}
-  OTEL_EXPORTER_OTLP_ENDPOINT: {{ .Values.config.otel.otlpEndpoint | quote }}
-  OTEL_EXPORTER_OTLP_COMPRESSION: {{ .Values.config.otel.compression | quote }}
-  OTEL_EXPORTER_OTLP_TIMEOUT: {{ .Values.config.otel.timeout | quote }}
+  OTEL_METRIC_EXPORT_INTERVAL: {{ .Values.config.otel.metrics.export_interval | quote }}
+  OTEL_METRIC_EXPORT_TIMEOUT: {{ .Values.config.otel.metrics.export_timeout | quote }}
+  OTEL_METRICS_EXPORTER: {{ .Values.config.otel.metrics.exporter | quote }}
+  OTEL_EXPORTER_OTLP_PROTOCOL: {{ .Values.config.otel.common.protocol | quote }}
+  OTEL_RESOURCE_ATTRIBUTES: {{ .Values.config.otel.resourceAttr | quote }}
+  OTEL_EXPORTER_OTLP_ENDPOINT: {{ .Values.config.otel.common.endpoint | quote }}
+  OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: {{ .Values.config.otel.traces.endpoint | quote }}
+  OTEL_EXPORTER_OTLP_METRICS_ENDPOINT: {{ .Values.config.otel.metrics.endpoint | quote }}
+  OTEL_EXPORTER_OTLP_HEADERS: {{ .Values.config.otel.common.headers | quote }}
+  OTEL_EXPORTER_OTLP_TRACES_HEADERS: {{ .Values.config.otel.traces.headers | quote }}
+  OTEL_EXPORTER_OTLP_METRICS_HEADERS: {{ .Values.config.otel.metrics.headers | quote }}
+  OTEL_EXPORTER_OTLP_COMPRESSION: {{ .Values.config.otel.common.compression | quote }}
+  OTEL_EXPORTER_OTLP_TRACES_COMPRESSION: {{ .Values.config.otel.traces.compression | quote }}
+  OTEL_EXPORTER_OTLP_METRICS_COMPRESSION: {{ .Values.config.otel.metrics.compression | quote }}
+  OTEL_EXPORTER_OTLP_TIMEOUT: {{ .Values.config.otel.common.timeout | quote }}
+  OTEL_EXPORTER_OTLP_TRACES_TIMEOUT: {{ .Values.config.otel.traces.timeout | quote }}
+  OTEL_EXPORTER_OTLP_METRICS_TIMEOUT: {{ .Values.config.otel.metrics.timeout | quote }}
+  OTEL_EXPORTER_OTLP_INSECURE: {{ .Values.config.otel.common.insecure | quote }}
+  OTEL_EXPORTER_OTLP_TRACES_INSECURE: {{ .Values.config.otel.traces.insecure | quote }}
+  OTEL_EXPORTER_OTLP_METRICS_INSECURE: {{ .Values.config.otel.metrics.insecure | quote }}

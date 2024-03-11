@@ -8,8 +8,10 @@ spec:
   type: ClusterIP
   ports:
     - port: {{ .Values.config.port }}
-      targetPort: tcp
       protocol: TCP
       name: tcp
+    - port: {{ .Values.config.debugPort }}
+      protocol: TCP
+      name: debug
   selector:
     {{- include "buildkitd.selectorLabels" . | nindent 4 }}
