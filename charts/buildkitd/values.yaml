@@ -44,11 +44,31 @@ config:
   trace: false
   logFormat: "text"
   port: 12345
+  debugPort: 6060
   otel:
-    metricsExporter: "none"
-    otlpEndpoint: ""
-    compression: "gzip"
-    timeout: 10
+    resourceAttr: ""
+    common:
+      protocol: "grpc"
+      endpoint: ""
+      headers: ""
+      compression: "gzip"
+      timeout: 10000
+      insecure: false
+    metrics:
+      exporter: "none"
+      export_interval: 10000
+      export_timeout: 10000
+      endpoint: ""
+      headers: ""
+      compression: "gzip"
+      timeout: 10000
+      insecure: false
+    traces:
+      endpoint: ""
+      headers: ""
+      compression: "gzip"
+      timeout: 10000
+      insecure: false
   gc:
     enabled: true
     keepstoragePercentage: 0.90
