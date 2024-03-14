@@ -11,4 +11,4 @@ runs:
     - name: Install kubeconform
       shell: bash
       run: |
-        helm plugin install https://github.com/jtyr/kubeconform-helm --version v0.1.16
+        helm plugin install https://github.com/jtyr/kubeconform-helm --version v0.1.17

@@ -12,5 +12,4 @@ chart-repos:
   - kube-hpa-scale-to-zero=https://machine424.github.io/kube-hpa-scale-to-zero
 helm-extra-args: ""
 additional-commands:
-  - helm kubeconform {{ .Path }}
-  # - helm template {{ .Path }} | kubeconform
+  - helm kubeconform --verbose {{ .Path }}
