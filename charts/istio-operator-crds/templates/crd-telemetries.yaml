@@ -68,6 +68,7 @@ spec:
                           properties:
                             name:
                               description: Required.
+                              minLength: 1
                               type: string
                           required:
                             - name
@@ -88,7 +89,7 @@ spec:
                               nullable: true
                               type: boolean
                             match:
-                              description: Match allows provides the scope of the override.
+                              description: Match allows providing the scope of the override.
                               oneOf:
                                 - not:
                                     anyOf:
@@ -103,9 +104,10 @@ spec:
                               properties:
                                 customMetric:
                                   description: Allows free-form specification of a metric.
+                                  minLength: 1
                                   type: string
                                 metric:
-                                  description: One of the well-known Istio Standard Metrics.
+                                  description: One of the well-known [Istio Standard Metrics](https://istio.io/latest/docs/reference/config/metrics/).
                                   enum:
                                     - ALL_METRICS
                                     - REQUEST_COUNT
@@ -120,7 +122,7 @@ spec:
                                     - GRPC_RESPONSE_MESSAGES
                                   type: string
                                 mode:
-                                  description: 'Controls which mode of metrics generation is selected: CLIENT and/or SERVER.'
+                                  description: 'Controls which mode of metrics generation is selected: `CLIENT`, `SERVER`, or `CLIENT_AND_SERVER`.'
                                   enum:
                                     - CLIENT_AND_SERVER
                                     - CLIENT
@@ -140,6 +142,11 @@ spec:
                                     description: Value is only considered if the operation is `UPSERT`.
                                     type: string
                                 type: object
+                                x-kubernetes-validations:
+                                  - message: value must be set when operation is UPSERT
+                                    rule: '((has(self.operation) ? self.operation : '''') == ''UPSERT'') ? self.value != '''' : true'
+                                  - message: value must not be set when operation is REMOVE
+                                    rule: '((has(self.operation) ? self.operation : '''') == ''REMOVE'') ? !has(self.value) : true'
                               description: Optional.
                               type: object
                           type: object
@@ -150,6 +157,7 @@ spec:
                           properties:
                             name:
                               description: Required.
+                              minLength: 1
                               type: string
                           required:
                             - name
@@ -215,7 +223,10 @@ spec:
                                   type: string
                                 name:
                                   description: Name of the environment variable from which to extract the tag value.
+                                  minLength: 1
                                   type: string
+                              required:
+                                - name
                               type: object
                             header:
                               description: RequestHeader adds the value of an header from the request to each span.
@@ -225,14 +236,20 @@ spec:
                                   type: string
                                 name:
                                   description: Name of the header from which to extract the tag value.
+                                  minLength: 1
                                   type: string
+                              required:
+                                - name
                               type: object
                             literal:
                               description: Literal adds the same, hard-coded value to each span.
                               properties:
                                 value:
                                   description: The tag value to use.
+                                  minLength: 1
                                   type: string
+                              required:
+                                - value
                               type: object
                           type: object
                         description: Optional.
@@ -258,6 +275,7 @@ spec:
                           properties:
                             name:
                               description: Required.
+                              minLength: 1
                               type: string
                           required:
                             - name
@@ -265,6 +283,8 @@ spec:
                         type: array
                       randomSamplingPercentage:
                         description: Controls the rate at which traffic will be selected for tracing if no prior sampling decision has been made.
+                        maximum: 100
+                        minimum: 0
                         nullable: true
                         type: number
                       useRequestIdForTraceSampling:
