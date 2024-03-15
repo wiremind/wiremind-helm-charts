@@ -10,9 +10,14 @@ spec:
   type: ClusterIP
   ports:
     - name: grpc
+      protocol: TCP
       port: 10901
       targetPort: grpc
+    - name: http
+      protocol: TCP
+      port: 10902
+      targetPort: http
   selector:
-    app: prometheus
-    prometheus: {{ .Values.prometheus.name }}
+    app.kubernetes.io/name: prometheus
+    operator.prometheus.io/name: {{ .Values.prometheus.name }}
 {{- end }}
