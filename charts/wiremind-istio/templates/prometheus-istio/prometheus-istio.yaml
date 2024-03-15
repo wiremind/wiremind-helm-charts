@@ -66,8 +66,8 @@ spec:
         storageClassName: standard
 {{- if .Values.prometheus.thanos.enabled }}
   thanos:
-    image: thanosio/thanos:v0.20.0
-    listenLocal: true
+    grpcListenLocal: false
+    httpListenLocal: false
     {{- if .Values.prometheus.thanos.objectStorage.enabled }}
     objectStorageConfig: # blob storage configuration to upload metrics
       key: {{ .Values.prometheus.thanos.objectStorage.key }}
