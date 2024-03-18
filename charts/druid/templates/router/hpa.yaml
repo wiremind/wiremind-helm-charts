@@ -10,6 +10,9 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "druid.router.fullname" . }}
+  labels:
+    {{- include "druid.common-labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.router.name }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

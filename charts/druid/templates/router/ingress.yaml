@@ -4,7 +4,6 @@
 {{- $fullName := include "druid.router.fullname" . -}}
 {{- $ingressPath := .Values.router.ingress.path -}}
 
-
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
