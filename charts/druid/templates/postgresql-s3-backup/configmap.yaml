@@ -1,10 +1,11 @@
 {{- if and .Values.postgresql.enabled .Values.postgresql.backup.s3.enabled }}
+
 kind: ConfigMap
 apiVersion: v1
 metadata:
   name: {{ include "druid.postgresql-s3-backup.fullname" . }}
   labels:
-{{ include "druid.common-labels" . | indent 4 }}
+    {{- include "druid.common-labels" . | nindent 4 }}
     app.kubernetes.io/component: {{ .Values.postgresql.backup.s3.cronJob.name }}
 data:
   backup.sh: |
@@ -68,4 +69,5 @@ data:
     echo ""
     echo "...done!";
     echo ""
+
 {{- end }}

@@ -17,6 +17,10 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "druid.indexer.category.fullname" (dict "categoryName" $categoryName "context" $) }}
+  labels:
+    {{- include "druid.common-labels" $ | nindent 4 }}
+    app.kubernetes.io/part-of: indexer
+    app.kubernetes.io/component: indexer-{{ $categoryName }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

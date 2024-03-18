@@ -12,6 +12,9 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "druid.broker.fullname" . }}
+  labels:
+    {{- include "druid.common-labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Values.broker.name }}
 spec:
   scaleTargetRef:
     # Only apps/v1 resources are accepted
