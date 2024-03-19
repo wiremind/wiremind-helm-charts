@@ -1,7 +1,7 @@
 apiVersion: v2
 name: clair
 home: https://coreos.com/clair
-version: 0.2.10-dev0
+version: 0.2.11-dev0
 appVersion: 2.1.6
 dependencies:
   - name: postgresql
@@ -16,4 +16,4 @@ sources:
 maintainers:
   - name: Wiremind
     url: https://github.com/wiremind/wiremind-helm-charts
-kubeVersion: ">=1.14.0-0"
+kubeVersion: ">=1.22.0"
