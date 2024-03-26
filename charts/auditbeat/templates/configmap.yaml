@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "auditbeat.fullname" . }}-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "auditbeat.labels" . | nindent 4 }}
+data:
+  auditbeat.yml: |-
+    auditbeat.config.modules:
+      # Mounted `auditbeat-daemonset-modules` configmap:
+      path: /usr/share/auditbeat/modules.d/*.yml
+      # Reload module configs as they change:
+      reload.enabled: false
+
+    processors:
+      - include_fields:
+          fields: ["host.name", "agent.hostname", "auditd.summary.actor.secondary", "auditd.summary.how", "process.args"]
+      
+      #Remove last noises from auditbeat 
+      - drop_event:
+          when:
+            not:
+              equals:
+                auditd.summary.actor.secondary: "500"
+
+    output.elasticsearch:
+      hosts: ['{{ .Values.elasticsearch.host }}:{{ .Values.elasticsearch.port }}']
+      index: {{ .Values.config.index }}
+
+    setup.template.name: {{ .Values.config.template_name }}
+    setup.template.pattern: {{ .Values.config.template_pattern }}
+    setup.ilm.enabled: {{ .Values.config.ilm }}
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "auditbeat.fullname" . }}-daemonset-modules
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "auditbeat.labels" . | nindent 4 }}
+data:
+  system.yml: |-
+    - module: auditd
+      audit_rules: |
+        -a always,exit -F arch=b64 -S execve,execveat -F key=exec -F uid=500

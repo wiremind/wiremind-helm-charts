@@ -1,0 +1,9 @@
+elasticsearch:
+  host: "my-elasticsearch-cluster-master"
+  port: "9200"
+
+config:
+  index: "logstash-%{+yyyy.MM.dd}"
+  template_name: "logstash"
+  template_pattern: "logstash-*"
+  ilm: false
