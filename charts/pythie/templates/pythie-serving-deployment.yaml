@@ -102,7 +102,7 @@ spec:
               value: {{ $servingValue.grpcServerTimeoutSeconds }}
             {{- end }}
             - name: "VERBOSITY_LEVEL"
-              value: "0"
+              value: {{ $.Values.pythieServing.verbosityLevel | quote }}
             {{- if $.Values.pythieServing.opentelemetryCollectorHost }}
             - name: "OPENTELEMETRY_COLLECTOR_HOST"
               value: {{ $.Values.pythieServing.opentelemetryCollectorHost }}

@@ -5,6 +5,7 @@ pythieServing:
     pullPolicy: IfNotPresent
   istio:
     enabled: false
+  verbosityLevel: "0"
   models: {}
     # my-example-model:
     #   autoscaling:
