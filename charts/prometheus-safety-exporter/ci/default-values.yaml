@@ -1,0 +1,5 @@
+image:
+  # Used as example only
+  repository: wiremind/demo-paris.py-docker
+  tag: python3.10
+  pullPolicy: IfNotPresent

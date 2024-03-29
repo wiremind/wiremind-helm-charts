@@ -1,0 +1,38 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "prometheus-safety-exporter.fullname" . }}
+  labels:
+    {{- include "prometheus-safety-exporter.labels" $ | nindent 4 }}
+data:
+  generate-json.sh: |-
+    #!/bin/sh
+    set -e;
+    set -x;
+
+    readonly DIRNAME=$(dirname "$0");
+
+    mkdir /tmp/json-exporter
+    python3 -m http.server -b 127.0.0.1 8000 -d /tmp/json-exporter &
+
+    pip install safety # XXX move me to Containerfiles
+
+    while true; do
+      safety --disable-optional-telemetry check -r requirements.txt --continue-on-error --save-json /tmp/json-exporter/results.json
+      sleep 86400;
+    done
+
+  json-exporter-config.yml: |
+    ---
+    modules:
+      default:
+        metrics:
+        - name: safety_vulnerabilities
+          type: object
+          help: Python Safety Vulnerabilities
+          path: '{ .affected_packages.* }'
+          labels:
+            name: '{ .name }'
+            version: '{ .version }'
+          values:
+            found: "1"
