@@ -10237,6 +10237,28 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/postgresql-8.7.0/postgresql-8.7.0.tgz
     version: 8.7.0
+  prometheus-safety-exporter:
+  - apiVersion: v2
+    appVersion: 0.6.0
+    created: "2024-04-02T09:11:39.803720258Z"
+    description: A Helm chart for Kubernetes
+    digest: 94cca7dd10ff44a5b8fb74dbba299ac059bbef5d107db04c33b9efe7deaa12ef
+    keywords:
+    - safety
+    - python
+    - security
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: prometheus-safety-exporter
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/prometheus-safety-exporter
+    - https://github.com/pyupio/safety
+    - https://safetycli.com/product/safety-cli
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/prometheus-safety-exporter-0.1.0/prometheus-safety-exporter-0.1.0.tgz
+    version: 0.1.0
   pypi:
   - apiVersion: v2
     appVersion: "1.0"
@@ -11550,4 +11572,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-03-26T16:47:17.612068693Z"
+generated: "2024-04-02T09:11:39.804372499Z"
