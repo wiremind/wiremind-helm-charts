@@ -83,7 +83,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "name"
+              "options": "Vulnerability ID"
             },
             "properties": [
               {
@@ -96,7 +96,7 @@
                   {
                     "targetBlank": true,
                     "title": "",
-                    "url": "https://data.safetycli.com/p/pypi/${__data.fields.name}/97c/"
+                    "url": "https://data.safetycli.com/v/${__data.fields.vulnerability_id}/97c/"
                   }
                 ]
               }
@@ -105,24 +105,22 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "cluster"
+              "options": "CVSS"
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 171
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "namespace"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 147
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "NaN": {
+                        "index": 0,
+                        "text": "Unknown"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
               }
             ]
           }
@@ -198,6 +196,7 @@
               "vulnerability_id": 10
             },
             "renameByName": {
+              "Value": "CVSS",
               "analyzed_version": "Version",
               "cluster": "Cluster",
               "container": "",
@@ -318,6 +317,6 @@
   "timezone": "",
   "title": "Safety Dashboard",
   "uid": "adh49rh5ocu80a",
-  "version": 8,
+  "version": 9,
   "weekStart": ""
 }
