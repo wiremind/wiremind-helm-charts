@@ -1,0 +1,94 @@
+# This
+# - fetches the list of postgresql backups (basebackups) from wal-g on s3
+# - takes the last one
+# - turn it into prometheus metrics, to be used in alerts and grafana dashboards
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "prometheus-safety-exporter.fullname" . }}
+  labels:
+    {{- include "prometheus-safety-exporter.labels" $ | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "prometheus-safety-exporter.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "prometheus-safety-exporter.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "prometheus-safety-exporter.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: safety
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          command: ["/bin/sh"]
+          args: ["/generate-json.sh"]
+          resources:
+            {{- toYaml .Values.safety.resources | nindent 12 }}
+          volumeMounts:
+            - name: json
+              mountPath: /generate-json.sh
+              subPath: generate-json.sh
+          securityContext:
+            {{- toYaml .Values.safety.securityContext | nindent 12 }}
+        - name: prometheus-json-exporter
+          image: "{{ .Values.jsonExporter.image.repository }}:{{ .Values.jsonExporter.image.tag | default (printf "v%s" .Chart.AppVersion) }}"
+          imagePullPolicy: {{ .Values.jsonExporter.image.pullPolicy | quote }}
+          ports:
+            - name: http
+              containerPort: 7979
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.jsonExporter.resources | nindent 12 }}
+          volumeMounts:
+            - name: json
+              mountPath: /config.yml
+              subPath: json-exporter-config.yml
+          {{- with .Values.jsonExporter.startupProbe }}
+          startupProbe: {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.jsonExporter.livenessProbe }}
+          livenessProbe: {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.jsonExporter.readinessProbe }}
+          readinessProbe: {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.jsonExporter.securityContext }}
+          securityContext: {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: json
+          configMap:
+            name: {{ include "prometheus-safety-exporter.fullname" . }}
+            defaultMode: 420
+      {{- with .Values.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{ toYaml . | nindent 14 }}
+      {{- end }}
+      terminationGracePeriodSeconds: 1
