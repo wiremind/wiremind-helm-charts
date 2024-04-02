@@ -17,8 +17,10 @@ data:
 
     pip install safety # XXX move me to Containerfiles
 
+    OUTPUT="/tmp/json-exporter/results.json"
+
     while true; do
-      safety --disable-optional-telemetry check -r requirements.txt --continue-on-error --save-json /tmp/json-exporter/results.json
+      safety --disable-optional-telemetry check -r requirements.txt --continue-on-error --save-json $OUTPUT
       sleep 86400;
     done
 
@@ -30,9 +32,8 @@ data:
         - name: safety_vulnerabilities
           type: object
           help: Python Safety Vulnerabilities
-          path: '{ .affected_packages.* }'
+          path: '{ .vulnerabilities.* }'
           labels:
-            name: '{ .name }'
-            version: '{ .version }'
+            {{- .Values.jsonExporter.metricsLabels | nindent 12 }}
           values:
-            found: "1"
+            severity: '{ .severity }'
