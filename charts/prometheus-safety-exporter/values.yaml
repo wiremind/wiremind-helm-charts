@@ -45,6 +45,11 @@ jsonExporter:
     repository: quay.io/prometheuscommunity/json-exporter
     tag: ""
     pullPolicy: IfNotPresent
+  ## Labels to add to the metric
+  metricsLabels: |
+    package_name: '{ .package_name }'
+    analyzed_version: '{ .analyzed_version }'
+    vulnerability_id: '{ .vulnerability_id }'
   securityContext:
     capabilities:
       drop:

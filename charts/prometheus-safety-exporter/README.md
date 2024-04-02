@@ -12,7 +12,7 @@ It requires your python container image containing requirements.txt and safety >
 
 Note: it means that requirements.txt should not be ignored in `.dockerignore` file.
 
-It exposes a new metric named `safety_vulnerabilities_found`.
+It exposes a new metric named `safety_vulnerabilities_severity`.
 
 Internally, this is roughly a glue between:
 
