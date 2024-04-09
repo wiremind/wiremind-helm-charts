@@ -1025,6 +1025,29 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/cert-manager-crds-1.7.1/cert-manager-crds-1.7.1.tgz
     version: 1.7.1
+  chaos-mesh-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: v2.6.3
+    created: "2024-04-09T13:57:15.81830114Z"
+    description: Manage chaos-mesh CRDs
+    digest: 71ebe3a1294e5ee20516b7d51191aaf1529b7c9a1e4a310fd87da3b845b01639
+    icon: https://raw.githubusercontent.com/chaos-mesh/chaos-mesh/master/static/logo.svg
+    keywords:
+    - chaos
+    - mesh
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: chaos-mesh-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/chaos-mesh-crds
+    - https://github.com/chaos-mesh/chaos-mesh/
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/chaos-mesh-crds-2.6.3/chaos-mesh-crds-2.6.3.tgz
+    version: 2.6.3
   chartreuse:
   - apiVersion: v1
     appVersion: 4.3.3
@@ -11614,4 +11637,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-04-09T13:20:11.48755872Z"
+generated: "2024-04-09T13:57:16.00465145Z"
