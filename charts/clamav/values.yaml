@@ -46,6 +46,10 @@ service:
   # nodePort: 30100
   annotations: {}
 
+extraEnvVars: {}
+extraEnvVarsCM: ""
+extraEnvVarsSecret: ""
+
 ingress:
   enabled: false
 # ingressClassName: ""
