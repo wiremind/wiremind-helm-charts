@@ -2,8 +2,8 @@ annotations:
   category: DeveloperTools
 apiVersion: v2
 name: cluster-manager
-version: 0.17.0
-appVersion: v1.2.0
+version: 0.17.1
+appVersion: 1.7.5
 description: Helm chart to deploy cluster-manager
 icon: https://avatars.githubusercontent.com/u/9391624?s=200&v=4
 home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cluster-manager
