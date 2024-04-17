@@ -18,6 +18,8 @@ data:
     pip install safety # XXX move me to Containerfiles
 
     OUTPUT="/tmp/json-exporter/results.json"
+    # To circumvent https://github.com/pyupio/safety/blob/b56a4dc89b6364594d67386bedac0524df519327/safety/constants.py#L36C5-L36C19
+    export HOME=/tmp
 
     while true; do
       safety --disable-optional-telemetry check -r requirements.txt --continue-on-error --save-json $OUTPUT
