@@ -3,7 +3,7 @@ kind: CustomResourceDefinition
 metadata:
   name: postgresteams.acid.zalan.do
   labels:
-{{ include "postgres-operator-crds.labels" . | indent 4 }}
+    {{- include "postgres-operator-crds.labels" . | nindent 4 }}
 spec:
   group: acid.zalan.do
   names:

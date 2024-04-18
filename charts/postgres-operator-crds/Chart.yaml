@@ -2,8 +2,8 @@ annotations:
   category: DeveloperTools
 apiVersion: v2
 name: postgres-operator-crds
-version: 1.9.0
-appVersion: 1.9.0
+version: 1.10.1
+appVersion: 1.10.1
 description: Manage postgres-operator CRDs
 keywords:
   - postgres
@@ -12,7 +12,6 @@ keywords:
 sources:
   - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/postgres-operator-crds
   - https://github.com/zalando/postgres-operator/tree/master/charts/postgres-operator
-engine: gotpl
 icon: https://raw.githubusercontent.com/zalando/postgres-operator/master/docs/diagrams/logo.png
 maintainers:
   - name: Wiremind
