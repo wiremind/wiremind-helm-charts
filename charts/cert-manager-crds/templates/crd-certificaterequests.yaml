@@ -22,7 +22,7 @@ metadata:
     app.kubernetes.io/name: 'cert-manager'
     app.kubernetes.io/instance: 'cert-manager'
     # Generated labels
-    app.kubernetes.io/version: "v1.13.5"
+    app.kubernetes.io/version: "v1.14.4"
 spec:
   group: cert-manager.io
   names:
