@@ -894,6 +894,28 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: v1.13.5
+    created: "2024-04-18T11:50:31.611288388Z"
+    description: Manage cert-manager CRDs
+    digest: d610824f25cbc4ff2c267577101a3f925763622bb72310777be9331f6afee48b
+    icon: https://raw.githubusercontent.com/jetstack/cert-manager/master/logo/logo.png
+    keywords:
+    - cert
+    - manager
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: cert-manager-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cert-manager-crds
+    - https://github.com/cert-manager/cert-manager
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/cert-manager-crds-1.13.5/cert-manager-crds-1.13.5.tgz
+    version: 1.13.5
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: v1.12.9
     created: "2024-04-18T11:45:24.352074066Z"
     description: Manage cert-manager CRDs
@@ -11765,4 +11787,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-04-18T11:45:24.352524339Z"
+generated: "2024-04-18T11:50:31.611745209Z"
