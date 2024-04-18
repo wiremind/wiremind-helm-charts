@@ -3,3 +3,6 @@ image:
   repository: wiremind/demo-paris.py-docker
   tag: python3.10
   pullPolicy: IfNotPresent
+
+extraEnv:
+  foo: bar

@@ -26,7 +26,7 @@ data:
 
     while true; do
       safety --disable-optional-telemetry check -r requirements.txt --continue-on-error --save-json $OUTPUT
-      sleep 86400;
+      sleep $DELAY_BETWEEN_CHECKS;
     done
 
   json-exporter-config.yml: |
@@ -41,4 +41,5 @@ data:
           labels:
             {{- .Values.jsonExporter.metricsLabels | nindent 12 }}
           values:
-            severity: '{ .severity }'
+            severity: '{ .severity.cvssv3.base_score }'
+            detected: 1
