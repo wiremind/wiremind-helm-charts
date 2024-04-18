@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/name: 'cert-manager'
     app.kubernetes.io/instance: 'cert-manager'
     # Generated labels
-    app.kubernetes.io/version: "v1.11.5"
+    app.kubernetes.io/version: "v1.12.9"
 spec:
   group: acme.cert-manager.io
   names:
@@ -446,7 +446,10 @@ spec:
                           type: object
                           properties:
                             class:
-                              description: The ingress class to use when creating Ingress resources to solve ACME challenges that use this challenge solver. Only one of 'class' or 'name' may be specified.
+                              description: This field configures the annotation `kubernetes.io/ingress.class` when creating Ingress resources to solve ACME challenges that use this challenge solver. Only one of `class`, `name` or `ingressClassName` may be specified.
+                              type: string
+                            ingressClassName:
+                              description: This field configures the field `ingressClassName` on the created Ingress resources used to solve ACME challenges that use this challenge solver. This is the recommended way of configuring the ingress class. Only one of `class`, `name` or `ingressClassName` may be specified.
                               type: string
                             ingressTemplate:
                               description: Optional ingress template used to configure the ACME challenge solver ingress used for HTTP01 challenges.
@@ -467,7 +470,7 @@ spec:
                                       additionalProperties:
                                         type: string
                             name:
-                              description: The name of the ingress resource that should have ACME challenge solving routes inserted into it in order to solve HTTP01 challenges. This is typically used in conjunction with ingress controllers like ingress-gce, which maintains a 1:1 mapping between external IPs and ingress resources.
+                              description: The name of the ingress resource that should have ACME challenge solving routes inserted into it in order to solve HTTP01 challenges. This is typically used in conjunction with ingress controllers like ingress-gce, which maintains a 1:1 mapping between external IPs and ingress resources. Only one of `class`, `name` or `ingressClassName` may be specified.
                               type: string
                             podTemplate:
                               description: Optional pod template used to configure the ACME challenge solver pods used for HTTP01 challenges.
@@ -488,7 +491,7 @@ spec:
                                       additionalProperties:
                                         type: string
                                 spec:
-                                  description: PodSpec defines overrides for the HTTP01 challenge solver pod. Only the 'priorityClassName', 'nodeSelector', 'affinity', 'serviceAccountName' and 'tolerations' fields are supported currently. All other fields will be ignored.
+                                  description: PodSpec defines overrides for the HTTP01 challenge solver pod. Check ACMEChallengeSolverHTTP01IngressPodSpec to find out currently supported fields. All other fields will be ignored.
                                   type: object
                                   properties:
                                     affinity:
@@ -963,6 +966,17 @@ spec:
                                                   topologyKey:
                                                     description: This pod should be co-located (affinity) or not co-located (anti-affinity) with the pods matching the labelSelector in the specified namespaces, where co-located is defined as running on a node whose value of the label with key topologyKey matches that of any node on which any of the selected pods is running. Empty topologyKey is not allowed.
                                                     type: string
+                                    imagePullSecrets:
+                                      description: If specified, the pod's imagePullSecrets
+                                      type: array
+                                      items:
+                                        description: LocalObjectReference contains enough information to let you locate the referenced object inside the same namespace.
+                                        type: object
+                                        properties:
+                                          name:
+                                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?'
+                                            type: string
+                                        x-kubernetes-map-type: atomic
                                     nodeSelector:
                                       description: 'NodeSelector is a selector which must be true for the pod to fit on a node. Selector which must match a node''s labels for the pod to be scheduled on that node. More info: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/'
                                       type: object
