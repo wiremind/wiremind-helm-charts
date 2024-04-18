@@ -9,6 +9,12 @@ image:
   tag: setme
   pullPolicy: IfNotPresent
 
+# Extra environment variables inserted in a new secret
+extraEnv:
+  # SAFETY_API_KEY: xxx
+
+delayBetweenChecks: 604800
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -38,7 +44,7 @@ safety:
       memory: 100Mi
     limits:
       cpu: 2
-      memory: 150Mi
+      memory: 250Mi
 
 jsonExporter:
   image:

@@ -40,6 +40,14 @@ spec:
         - name: safety
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          env:
+            - name: DELAY_BETWEEN_CHECKS
+              value: {{ .Values.delayBetweenChecks | quote }}
+          {{- if .Values.extraEnv }}
+          envFrom:
+            - secretRef:
+                name: "{{ include "prometheus-safety-exporter.fullname" . }}"
+          {{- end }}
           command: ["/bin/sh"]
           args: ["/generate-json.sh"]
           resources:
