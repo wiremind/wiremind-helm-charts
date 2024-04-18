@@ -15,11 +15,14 @@ data:
     mkdir /tmp/json-exporter
     python3 -m http.server -b 127.0.0.1 8000 -d /tmp/json-exporter &
 
-    pip install safety # XXX move me to Containerfiles
-
-    OUTPUT="/tmp/json-exporter/results.json"
     # To circumvent https://github.com/pyupio/safety/blob/b56a4dc89b6364594d67386bedac0524df519327/safety/constants.py#L36C5-L36C19
     export HOME=/tmp
+
+    # install in user mode in case the container does not run as root
+    PATH=$PATH:/tmp/.local/bin
+    pip install safety --user --break-system-packages
+
+    OUTPUT="/tmp/json-exporter/results.json"
 
     while true; do
       safety --disable-optional-telemetry check -r requirements.txt --continue-on-error --save-json $OUTPUT
