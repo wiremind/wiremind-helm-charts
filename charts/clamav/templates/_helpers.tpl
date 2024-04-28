@@ -63,3 +63,12 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 {{- end -}}
 
+{{- define "clamav.entrypoint" -}}
+{{- if .Values.entrypoint -}}
+{{ .Values.entrypoint }}
+{{- else if eq (default 0 .Values.podSecurityContext.runAsUser | int) 0 -}}
+/init
+{{- else -}}
+/init-unprivileged
+{{- end -}}
+{{- end -}}
