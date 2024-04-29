@@ -24,6 +24,9 @@ data:
 
     OUTPUT="/tmp/json-exporter/results.json"
 
+    # Avoid spamming safety in case of reboot in a loop
+    sleep $((RANDOM % 3600))
+
     while true; do
       safety --disable-optional-telemetry check -r requirements.txt --continue-on-error --save-json $OUTPUT
       sleep $DELAY_BETWEEN_CHECKS;
