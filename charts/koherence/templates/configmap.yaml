@@ -15,3 +15,72 @@ data:
   {{- range $key, $value := .Values.env }}
   {{ $key }}: {{ $value | quote }}
   {{- end }}
+
+{{- if .Values.metrics.enable }}
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+data:
+  json-exporter-config.yml: |
+    ---
+    modules:
+      default:
+        metrics:
+          - name: inkoherence
+            type: object
+            path: '{ .diff }'
+            help: inkoherence
+            labels:
+              # data: '{ .data }'
+            values:
+              count: '{ .count }'
+          - name: koherence
+            type: object
+            path: '{ .merged }'
+            help: koherence
+            labels: {}
+            values:
+              count: '{ .count }'
+          - name: diff_bs
+            type: object
+            path: '{ .diff.data[*] }'
+            help: diff
+            labels:
+              fs_uuid: '{ .fs.uuid }'
+              fs_full_uuid: '{ .fs.full_uuid }'
+              fs_machine_id: '{ .fs.machine_id }'
+              fs_device: '{ .fs.device }'
+              fs_type: '{ .fs.type }'
+              fs_block_dev: '{ .fs.block_dev }'
+              fs_status: '{ .fs.status }'
+              fs_metadata: '{ .fs.metadata }'
+              provider_uuid: '{ .provider.uuid }'
+              provider_full_uuid: '{ .provider.full_uuid }'
+              provider_machine_id: '{ .provider.machine_id }'
+              provider_device: '{ .provider.device }'
+              provider_type: '{ .provider.type }'
+              provider_block_dev: '{ .provider.block_dev }'
+              provider_status: '{ .provider.status }'
+              provider_metadata: '{ .provider.metadata }'
+            values:
+              fs_size: '{ .provider.size }'
+              provider_size: '{ .provider.size }'
+          - name: merged_bs
+            type: object
+            path: '{ .merged.data[*] }'
+            help: merged
+            labels:
+              uuid: '{ .uuid }'
+              full_uuid: '{ .full_uuid }'
+              machine_id: '{ .machine_id }'
+              device: '{ .device }'
+              type: '{ .type }'
+              block_dev: '{ .block_dev }'
+              status: '{ .status }'
+              metadata: '{ .metadata }'
+            values:
+              size: '{ .size }'
+{{- end }}
