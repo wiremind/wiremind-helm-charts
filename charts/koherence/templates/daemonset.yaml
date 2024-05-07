@@ -23,6 +23,10 @@ spec:
           hostPath:
             path: /run/koherence
             type: DirectoryOrCreate
+        - name: {{ .Release.Name }}-config
+          configMap:
+            name: {{ .Release.Name }}-config
+            defaultMode: 420
       containers:
         - name: {{ include "koherence.name" . }}
           image: {{ .Values.image.repository }}:{{ .Values.image.tag | default (printf "v%s" .Chart.AppVersion) }}
@@ -56,6 +60,33 @@ spec:
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+        {{- if .Values.metrics.enable }}
+        - name: metrics
+          image: {{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          securityContext: {{ toYaml .Values.metrics.containerSecurityContext | nindent 12 }}
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.metrics.containerPorts.http }}
+          volumeMounts:
+            - name: {{ .Release.Name }}-config
+              mountPath: /config.yml
+              subPath: json-exporter-config.yml
+          {{- if .Values.metrics.livenessProbe.enabled }}
+          livenessProbe:
+            initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.metrics.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.metrics.livenessProbe.failureThreshold }}
+            httpGet:
+              path: /metrics
+              port: metrics
+          {{- end }}
+          {{- with .Values.metrics.resources }}
+          resources: {{- toYaml . | nindent 12 }}
+          {{- end }}
+        {{- end }}
       {{- with .Values.securityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
