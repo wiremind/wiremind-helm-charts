@@ -9672,6 +9672,27 @@ entries:
     version: 0.0.10
   koherence:
   - apiVersion: v2
+    appVersion: 0.1.5
+    created: "2024-05-15T09:34:28.484626574Z"
+    description: Daemonset to check coherence between provider & machine block-storage
+      db
+    digest: 2ef92fd8aedde889bcb05e1faa09cb2e9a0ca819622dd6f80e9c4f5464bb8a3d
+    home: https://github.com/wiremind/koherence/
+    keywords:
+    - wiremind
+    - openstack
+    kubeVersion: '>=1.19.0-0'
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: koherence
+    sources:
+    - https://github.com/wiremind/koherence/
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/koherence-0.2.0/koherence-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
     appVersion: 0.1.2
     created: "2023-10-18T09:32:09.438596016Z"
     description: Daemonset to check coherence between provider & machine block-storage
@@ -11948,4 +11969,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-04-29T15:57:52.607998734Z"
+generated: "2024-05-15T09:34:28.485216516Z"
