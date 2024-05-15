@@ -19,8 +19,9 @@ spec:
       scrapeTimeout: 55s
       port: metrics
       path: /
-      target:
-        - http://localhost:8080/check/bs
-      module:
-        - default
+      params:
+        target:
+          - http://localhost:8080/check/bs
+        module:
+          - default
 {{- end }}
