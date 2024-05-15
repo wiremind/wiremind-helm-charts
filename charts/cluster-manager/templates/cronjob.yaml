@@ -51,6 +51,10 @@ spec:
             - name: {{ $formattedCommandKey }}
               image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
               imagePullPolicy: {{ $.Values.image.pullPolicy }}
+              {{- with $commandDict.extraEnv }}
+              env:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
               {{- if $commandDict.secretEnvVars }}
               envFrom:
                 - secretRef:

@@ -30,8 +30,17 @@ deployments: {}
   #     requests:
   #       cpu: 1000m
   #       memory: 512Mi
+  #   extraEnv:
+  #     - name: GOMAXPROCS
+  #       valueFrom:
+  #         resourceFieldRef:
+  #           resource: limits.cpu
+  #     - name: GOMEMLIMIT
+  #       valueFrom:
+  #         resourceFieldRef:
+  #           resource: limits.memory
   #   secretEnvVars:
-  #     GOMAXPROCS: "1"
+  #     MYSECRETVALUE: "1"
 
 metrics:
   enabled: false
