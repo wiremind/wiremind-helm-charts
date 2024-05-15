@@ -51,6 +51,10 @@ spec:
       containers:
         - name: {{ $formattedCommandKey }}
           image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+          {{- with $commandDict.extraEnv }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- if $commandDict.secretEnvVars }}
           envFrom:
             - secretRef:
