@@ -29,22 +29,23 @@ data:
     modules:
       default:
         metrics:
-          - name: inkoherence
+          - name: koherence_diff
             type: object
             path: '{ .diff }'
-            help: inkoherence
+            help: koherence diff
             labels:
               # data: '{ .data }'
             values:
               count: '{ .count }'
-          - name: koherence
+          - name: koherence_merged
             type: object
             path: '{ .merged }'
-            help: koherence
-            labels: {}
+            help: koherence merged
+            labels:
+              # data: '{ .data }'
             values:
               count: '{ .count }'
-          - name: diff_bs
+          - name: koherence_diff_bs
             type: object
             path: '{ .diff.data[*] }'
             help: diff
@@ -68,7 +69,7 @@ data:
             values:
               fs_size: '{ .provider.size }'
               provider_size: '{ .provider.size }'
-          - name: merged_bs
+          - name: koherence_merged_bs
             type: object
             path: '{ .merged.data[*] }'
             help: merged
