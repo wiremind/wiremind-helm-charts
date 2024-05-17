@@ -29,9 +29,9 @@ spec:
         values:
           - {{ .Values.prometheus.name }}
   replicas: 1
-{{- if .Values.prometheus.resources }}
+  {{- if .Values.prometheus.resources }}
   resources: {{- toYaml .Values.prometheus.resources | nindent 4 }}
-{{- end }}
+  {{- end }}
   retention: {{ .Values.prometheus.retention }}
   routePrefix: /
   ruleNamespaceSelector: {}
@@ -63,8 +63,10 @@ spec:
         resources:
           requests:
             storage: {{ .Values.prometheus.persistence.size }}
-        storageClassName: standard
-{{- if .Values.prometheus.thanos.enabled }}
+        {{- with .Values.prometheus.persistence.storageClassName }}
+        storageClassName: {{ .}}
+        {{- end }}
+  {{- if .Values.prometheus.thanos.enabled }}
   thanos:
     grpcListenLocal: false
     httpListenLocal: false
@@ -73,5 +75,8 @@ spec:
       key: {{ .Values.prometheus.thanos.objectStorage.key }}
       name: {{ .Values.prometheus.thanos.objectStorage.name }}
     {{- end }}
-{{- end }}
+  {{- end }}
+  {{- with .Values.prometheus.tolerations }}
+  tolerations: {{- toYaml . | nindent 4 }}
+  {{- end }}
 {{- end }}
