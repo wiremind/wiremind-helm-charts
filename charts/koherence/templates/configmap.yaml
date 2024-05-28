@@ -84,4 +84,18 @@ data:
               metadata: '{ .metadata }'
             values:
               size: '{ .size }'
+      multiattach:
+        metrics:
+          - name: koherence_multiattach
+            type: object
+            path: '{ .multi-attach.data[*] }'
+            help: koherence multi-attach
+            labels:
+              attachment_id: '{ .attachment_id }'
+              device: '{ .device }'
+              host_name: '{ .host_name }'
+              server_id: '{ .server_id }'
+              volume_id: '{ .volume_id }'
+            values:
+              active: 1
 {{- end }}

@@ -23,4 +23,13 @@ spec:
           - http://localhost:8080/check/bs
         module:
           - default
+    - interval: 60s
+      scrapeTimeout: 55s
+      port: metrics
+      path: /probe
+      params:
+        target:
+          - http://localhost:8080/check/openstack/multiattach
+        module:
+          - multiattach
 {{- end }}
