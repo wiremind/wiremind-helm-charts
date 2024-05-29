@@ -11979,6 +11979,18 @@ entries:
     version: 0.1.0
   wiremind-istio:
   - apiVersion: v2
+    created: "2024-05-29T13:02:34.909574333Z"
+    description: wiremind-istio
+    digest: 3545da8473ba92fc012654a37c89592756f1624095d96fb97c7f5eaa97fce8d2
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: wiremind-istio
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-istio-2.5.0/wiremind-istio-2.5.0.tgz
+    version: 2.5.0
+  - apiVersion: v2
     created: "2024-05-17T10:43:23.228610305Z"
     description: wiremind-istio
     digest: 8f146a1131ac56eeee88c3db4f24f3db67521021c8943b30bd2a44823447e5f2
@@ -12107,4 +12119,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-05-28T15:28:48.650226608Z"
+generated: "2024-05-29T13:02:34.910158217Z"
