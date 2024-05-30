@@ -47,6 +47,10 @@ spec:
               value: {{ .cpu | quote }}
             {{- end }}
             {{- end }}
+            - name: KUBE_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-env
