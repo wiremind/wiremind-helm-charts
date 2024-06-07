@@ -108,3 +108,7 @@ startupProbe:
   retries: 60
 
 extraSecurityContext: {}
+
+lifecycle: {}
+
+terminationGracePeriodSeconds: 30

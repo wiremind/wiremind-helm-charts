@@ -139,6 +139,10 @@ spec:
             {{- with .Values.extraSecurityContext }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
+          {{- with .Values.lifecycle }}
+          lifecycle:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
@@ -154,6 +158,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
   volumeClaimTemplates:
     - kind: PersistentVolumeClaim
       apiVersion: v1
