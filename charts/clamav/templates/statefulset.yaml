@@ -35,8 +35,22 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default (printf "%s_base" .Chart.AppVersion) }}"
+          command:
+            - {{ include "clamav.entrypoint" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.extraEnvVars }}
+          env: {{- toYaml . | nindent 10 }}
+          {{- end }}
+          envFrom:
+          {{- with .Values.extraEnvVarsCM }}
+          - configMapRef:
+              name: {{ . }}
+          {{- end }}
+          {{- with .Values.extraEnvVarsSecret }}
+          - secretRef:
+              name: {{ . }}
+          {{- end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           volumeMounts:

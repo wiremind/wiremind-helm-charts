@@ -15,7 +15,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "10.4.0"
+      "version": "10.4.1"
     },
     {
       "type": "datasource",
@@ -27,6 +27,12 @@
       "type": "panel",
       "id": "table",
       "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
       "version": ""
     }
   ],
@@ -144,9 +150,14 @@
           "show": false
         },
         "showHeader": true,
-        "sortBy": []
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "CVSS"
+          }
+        ]
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "10.4.1",
       "targets": [
         {
           "datasource": {
@@ -155,7 +166,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "max without (instance, pod) (safety_vulnerabilities_severity{cluster=~\".*$cluster\", namespace=~\"$namespace\", name=~\"$vulnerability\"})",
+          "expr": "max without (instance, pod, container, endpoint, prometheus, prometheus_replica) (safety_vulnerabilities_severity{cluster=~\".*$cluster\", namespace=~\"$namespace\", package_name=~\".*$package_name\"})",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -205,9 +216,154 @@
               "vulnerability_id": "Vulnerability ID"
             }
           }
+        },
+        {
+          "id": "reduce",
+          "options": {
+            "includeTimeField": false,
+            "labelsToFields": false,
+            "mode": "reduceFields",
+            "reducers": []
+          }
         }
       ],
       "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Vulnerability ID"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "",
+                    "url": "https://data.safetycli.com/v/${__data.fields.vulnerability_id}/97c/"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CVSS"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "NaN": {
+                        "index": 0,
+                        "text": "Unknown"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 24,
+        "x": 0,
+        "y": 19
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "max without (instance, pod, container, endpoint, prometheus, prometheus_replica) (safety_vulnerabilities_severity{cluster=~\".*$cluster\", namespace=~\"$namespace\"}) > 0",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Found vulnerabilities",
+      "type": "timeseries"
     }
   ],
   "refresh": "",
@@ -217,7 +373,7 @@
     "list": [
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "default",
           "value": "default"
         },
@@ -264,16 +420,16 @@
           "type": "prometheus",
           "uid": "${datasource}"
         },
-        "definition": "label_values(up{job=\"kube-state-metrics\"},namespace)",
+        "definition": "label_values(safety_vulnerabilities_severity,namespace)",
         "hide": 0,
         "includeAll": true,
         "label": "Namespace",
-        "multi": false,
+        "multi": true,
         "name": "namespace",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(kube_namespace_status_phase{job=\"kube-state-metrics\", cluster=\"$cluster\"}, namespace)",
+          "query": "label_values(safety_vulnerabilities_severity,namespace)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -289,16 +445,17 @@
           "type": "prometheus",
           "uid": "${datasource}"
         },
-        "definition": "label_values(safety_vulnerabilities_found,name)",
+        "definition": "label_values(safety_vulnerabilities_severity,package_name)",
+        "description": "",
         "hide": 0,
         "includeAll": true,
-        "label": "Vulnerability",
-        "multi": false,
-        "name": "vulnerability",
+        "label": "Package Name",
+        "multi": true,
+        "name": "package_name",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(safety_vulnerabilities_found,name)",
+          "query": "label_values(safety_vulnerabilities_severity,package_name)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -317,6 +474,6 @@
   "timezone": "",
   "title": "Safety Dashboard",
   "uid": "adh49rh5ocu80a",
-  "version": 9,
+  "version": 27,
   "weekStart": ""
 }

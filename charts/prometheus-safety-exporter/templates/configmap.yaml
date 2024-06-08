@@ -15,13 +15,21 @@ data:
     mkdir /tmp/json-exporter
     python3 -m http.server -b 127.0.0.1 8000 -d /tmp/json-exporter &
 
-    pip install safety # XXX move me to Containerfiles
+    # To circumvent https://github.com/pyupio/safety/blob/b56a4dc89b6364594d67386bedac0524df519327/safety/constants.py#L36C5-L36C19
+    export HOME=/tmp
+
+    # install in user mode in case the container does not run as root
+    PATH=$PATH:/tmp/.local/bin
+    pip install safety --user --break-system-packages
 
     OUTPUT="/tmp/json-exporter/results.json"
 
+    # Avoid spamming safety in case of reboot in a loop
+    sleep $((RANDOM % 3600))
+
     while true; do
       safety --disable-optional-telemetry check -r requirements.txt --continue-on-error --save-json $OUTPUT
-      sleep 86400;
+      sleep $DELAY_BETWEEN_CHECKS;
     done
 
   json-exporter-config.yml: |
@@ -36,4 +44,5 @@ data:
           labels:
             {{- .Values.jsonExporter.metricsLabels | nindent 12 }}
           values:
-            severity: '{ .severity }'
+            severity: '{ .severity.cvssv3.base_score }'
+            detected: 1

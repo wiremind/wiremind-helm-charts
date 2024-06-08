@@ -214,3 +214,6 @@ spec:
 {{ with .Values.istio.additionalNeverInjectSelector }}
 {{ toYaml . | indent 8 }}
 {{ end }}
+{{- with .Values.istio.additionalValues }}
+{{ toYaml . | indent 2 }}
+{{- end }}

@@ -1,0 +1,35 @@
+{{- if .Values.metrics.enable }}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ .Release.Name }}-metrics
+  labels:
+    app.kubernetes.io/component: koherence
+    {{- include "koherence.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "koherence.selectorLabels" . | nindent 6 }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  podMetricsEndpoints:
+    - interval: 60s
+      scrapeTimeout: 55s
+      port: metrics
+      path: /probe
+      params:
+        target:
+          - http://localhost:8080/check/bs
+        module:
+          - default
+    - interval: 60s
+      scrapeTimeout: 55s
+      port: metrics
+      path: /probe
+      params:
+        target:
+          - http://localhost:8080/check/openstack/multiattach
+        module:
+          - multiattach
+{{- end }}

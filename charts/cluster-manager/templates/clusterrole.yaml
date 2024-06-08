@@ -49,8 +49,10 @@ rules:
   - apiGroups:
       - topolvm.io
       - topolvm.cybozu.com
+      - networking.istio.io
     resources:
       - logicalvolumes
+      - sidecars
     verbs:
       - create
       - delete

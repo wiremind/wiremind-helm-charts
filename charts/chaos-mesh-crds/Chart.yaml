@@ -1,0 +1,18 @@
+annotations:
+  category: DeveloperTools
+apiVersion: v2
+name: chaos-mesh-crds
+version: 2.6.3
+appVersion: "v2.6.3"
+description: Manage chaos-mesh CRDs
+keywords:
+  - chaos
+  - mesh
+  - crds
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/chaos-mesh-crds
+  - https://github.com/chaos-mesh/chaos-mesh/
+icon: https://raw.githubusercontent.com/chaos-mesh/chaos-mesh/master/static/logo.svg
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts

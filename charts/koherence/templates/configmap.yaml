@@ -15,3 +15,90 @@ data:
   {{- range $key, $value := .Values.env }}
   {{ $key }}: {{ $value | quote }}
   {{- end }}
+
+{{- if .Values.metrics.enable }}
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+data:
+  json-exporter-config.yml: |
+    ---
+    modules:
+      default:
+        metrics:
+          - name: koherence_diff
+            type: object
+            path: '{}'
+            help: koherence diff
+            labels:
+              node_name: '{ .node_name }'
+            values:
+              count: '{ .diff.count }'
+          - name: koherence_merged
+            type: object
+            path: '{}'
+            help: koherence merged
+            labels:
+              node_name: '{ .node_name }'
+            values:
+              count: '{ .merged.count }'
+          - name: koherence_diff_bs
+            type: object
+            path: '{ .diff.data[*] }'
+            help: diff
+            labels:
+              node_name: '{ .fs.node_name }'
+              fs_uuid: '{ .fs.uuid }'
+              fs_full_uuid: '{ .fs.full_uuid }'
+              fs_machine_id: '{ .fs.machine_id }'
+              fs_device: '{ .fs.device }'
+              fs_type: '{ .fs.type }'
+              fs_block_dev: '{ .fs.block_dev }'
+              fs_status: '{ .fs.status }'
+              fs_metadata: '{ .fs.metadata }'
+              provider_uuid: '{ .provider.uuid }'
+              provider_full_uuid: '{ .provider.full_uuid }'
+              provider_machine_id: '{ .provider.machine_id }'
+              provider_device: '{ .provider.device }'
+              provider_type: '{ .provider.type }'
+              provider_block_dev: '{ .provider.block_dev }'
+              provider_status: '{ .provider.status }'
+              provider_metadata: '{ .provider.metadata }'
+            values:
+              fs_size: '{ .provider.size }'
+              provider_size: '{ .provider.size }'
+          - name: koherence_merged_bs
+            type: object
+            path: '{ .merged.data[*] }'
+            help: merged
+            labels:
+              uuid: '{ .uuid }'
+              full_uuid: '{ .full_uuid }'
+              machine_id: '{ .machine_id }'
+              device: '{ .device }'
+              type: '{ .type }'
+              block_dev: '{ .block_dev }'
+              status: '{ .status }'
+              node_name: '{ .node_name }'
+              metadata: '{ .metadata }'
+            values:
+              size: '{ .size }'
+      multiattach:
+        metrics:
+          - name: koherence_multiattach
+            type: object
+            path: '{ .multi-attach.data[*] }'
+            help: koherence multi-attach
+            labels:
+              attachment_id: '{ .attachment_id }'
+              device: '{ .device }'
+              host_name: '{ .host_name }'
+              server_id: '{ .server_id }'
+              volume_id: '{ .volume_id }'
+              node_name: '{ .node_name }'
+            values:
+              active: 1
+{{- end }}
