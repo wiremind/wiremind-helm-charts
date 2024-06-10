@@ -1,5 +1,5 @@
 name: cerebro
-version: 2.0.4
+version: 2.0.5
 appVersion: 0.9.4
 apiVersion: v2
 description: A Helm chart for Cerebro - a web admin tool to manage ElasticSearch
