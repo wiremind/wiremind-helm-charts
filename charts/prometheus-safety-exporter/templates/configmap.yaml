@@ -46,3 +46,9 @@ data:
           values:
             severity: '{ .severity.cvssv3.base_score }'
             detected: 1
+        - name: safety_vulnerabilities
+          type: object
+          help: Python Safety Vulnerabilities found
+          path: '{ .report_meta }'
+          values:
+            found: '{ .vulnerabilities_found }'
