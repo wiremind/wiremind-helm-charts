@@ -72,14 +72,14 @@ jsonExporter:
       memory: 64Mi
   startupProbe:
     httpGet:
-      path: /probe?target=http://localhost:8000/results.json
+      path: /
       port: http
     failureThreshold: 50
   livenessProbe:
     timeoutSeconds: 3
     periodSeconds: 300
     httpGet:
-      path: /probe?target=http://localhost:8000/results.json
+      path: /
       port: http
     failureThreshold: 5
   readinessProbe:
@@ -87,7 +87,7 @@ jsonExporter:
     periodSeconds: 120
     failureThreshold: 2
     httpGet:
-      path: /probe?target=http://localhost:8000/results.json
+      path: /
       port: http
 
 ## Custom PrometheusRules to be defined
