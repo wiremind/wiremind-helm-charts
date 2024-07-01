@@ -15,7 +15,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "10.4.1"
+      "version": "11.0.0"
     },
     {
       "type": "datasource",
@@ -59,6 +59,19 @@
   "links": [],
   "liveNow": false,
   "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "panels": [],
+      "title": "Vulnerabilities",
+      "type": "row"
+    },
     {
       "datasource": {
         "type": "prometheus",
@@ -136,7 +149,7 @@
         "h": 19,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 1
       },
       "id": 2,
       "options": {
@@ -157,7 +170,7 @@
           }
         ]
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "11.0.0",
       "targets": [
         {
           "datasource": {
@@ -174,7 +187,7 @@
           "refId": "A"
         }
       ],
-      "title": "Found vulnerabilities",
+      "title": "Detected vulnerabilities",
       "transformations": [
         {
           "id": "organize",
@@ -330,7 +343,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 19
+        "y": 20
       },
       "id": 3,
       "options": {
@@ -341,6 +354,7 @@
           "showLegend": true
         },
         "tooltip": {
+          "maxHeight": 600,
           "mode": "single",
           "sort": "none"
         }
@@ -362,8 +376,163 @@
           "refId": "A"
         }
       ],
-      "title": "Found vulnerabilities",
+      "title": "Severity of vulnerabilities",
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Vulnerability ID"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "",
+                    "url": "https://data.safetycli.com/v/${__data.fields.vulnerability_id}/97c/"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CVSS"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "NaN": {
+                        "index": 0,
+                        "text": "Unknown"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "job"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 322
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cluster"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 233
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 24,
+        "x": 0,
+        "y": 31
+      },
+      "id": 5,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "namespace"
+          }
+        ]
+      },
+      "pluginVersion": "11.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "max without (instance, pod, container, endpoint, prometheus, prometheus_replica) (safety_vulnerabilities_found{cluster=~\".*$cluster\", namespace=~\"$namespace\"})",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Reported number of vulnerabilities per environment",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "cluster",
+                "Value",
+                "namespace"
+              ]
+            }
+          }
+        }
+      ],
+      "type": "table"
     }
   ],
   "refresh": "",
@@ -373,7 +542,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "default",
           "value": "default"
         },
@@ -470,10 +639,11 @@
     "from": "now-6h",
     "to": "now"
   },
+  "timeRangeUpdatedDuringEditOrView": false,
   "timepicker": {},
   "timezone": "",
   "title": "Safety Dashboard",
   "uid": "adh49rh5ocu80a",
-  "version": 27,
+  "version": 29,
   "weekStart": ""
 }
