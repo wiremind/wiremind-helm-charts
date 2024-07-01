@@ -24,6 +24,7 @@ fullnameOverride: ""
 service:
   type: ClusterIP
   port: 80
+  targetPort: http
   loadBalancerSourceRanges: []
   annotations:
     {}
@@ -40,6 +41,7 @@ serviceAccount:
   automountServiceAccountToken: false
   # ImagePullSecrets
   imagePullSecrets: []
+  annotations: {}
 
 ingress:
   enabled: false
@@ -225,3 +227,6 @@ kthxbyeSidecar:
     # interval: <duration> # Silence check interval (default 45s)
     # max-duration: <duration> # Maximum duration of a silence, it won't be extended anymore after reaching it
   logJson: false
+
+# additional sidecar containers array which will be added to the deployment
+sidecarContainers: []

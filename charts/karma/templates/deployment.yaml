@@ -99,6 +99,9 @@ spec:
             - --log-json
           {{- end }}
          {{- end }}
+        {{- with .Values.sidecarContainers }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
         {{- if .Values.containerSecurityContext }}
           securityContext:
 {{ toYaml .Values.containerSecurityContext | indent 12 }}
