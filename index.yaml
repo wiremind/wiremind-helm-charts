@@ -10730,6 +10730,27 @@ entries:
   prometheus-safety-exporter:
   - apiVersion: v2
     appVersion: 0.6.0
+    created: "2024-07-01T12:50:03.60855715Z"
+    description: A Helm chart for Kubernetes
+    digest: 00130e69147054b8c492d4bd63f618a9bcccc44614123123997ed3e483c2624a
+    keywords:
+    - safety
+    - python
+    - security
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: prometheus-safety-exporter
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/prometheus-safety-exporter
+    - https://github.com/pyupio/safety
+    - https://safetycli.com/product/safety-cli
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/prometheus-safety-exporter-0.3.2/prometheus-safety-exporter-0.3.2.tgz
+    version: 0.3.2
+  - apiVersion: v2
+    appVersion: 0.6.0
     created: "2024-06-11T09:54:50.570992599Z"
     description: A Helm chart for Kubernetes
     digest: b50bf666553375973481b8c831b1b9a260d5fe48d548b608b82a8f89072cfd3a
@@ -12309,4 +12330,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-07-01T11:14:44.982503228Z"
+generated: "2024-07-01T12:50:03.609237364Z"
