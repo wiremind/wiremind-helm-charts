@@ -32,7 +32,7 @@ spec:
           jsonPath: .metadata.creationTimestamp
           name: Age
           type: date
-      name: v1alpha3
+      name: v1
       schema:
         openAPIV3Schema:
           properties:
@@ -68,7 +68,10 @@ spec:
                                 description: HTTP connection pool settings.
                                 properties:
                                   h2UpgradePolicy:
-                                    description: Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+                                    description: |-
+                                      Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+
+                                      Valid Options: DEFAULT, DO_NOT_UPGRADE, UPGRADE
                                     enum:
                                       - DEFAULT
                                       - DO_NOT_UPGRADE
@@ -125,6 +128,8 @@ spec:
                                         type: string
                                       probes:
                                         description: Maximum number of keepalive probes to send without response before deciding the connection is dead.
+                                        maximum: 4294967295
+                                        minimum: 0
                                         type: integer
                                       time:
                                         description: The time duration a connection needs to be idle before keep-alive probes start being sent.
@@ -205,16 +210,19 @@ spec:
                                     properties:
                                       tableSize:
                                         description: The table size for Maglev hashing.
+                                        minimum: 0
                                         type: integer
                                     type: object
                                   minimumRingSize:
                                     description: Deprecated.
+                                    minimum: 0
                                     type: integer
                                   ringHash:
                                     description: The ring/modulo hash load balancer implements consistent hashing to backend hosts.
                                     properties:
                                       minimumRingSize:
                                         description: The minimum number of virtual nodes to use for the hash ring.
+                                        minimum: 0
                                         type: integer
                                     type: object
                                   useSourceIp:
@@ -232,6 +240,8 @@ spec:
                                           type: string
                                         to:
                                           additionalProperties:
+                                            maximum: 4294967295
+                                            minimum: 0
                                             type: integer
                                           description: Map of upstream localities to traffic distribution weights.
                                           type: object
@@ -260,6 +270,9 @@ spec:
                                     type: array
                                 type: object
                               simple:
+                                description: |2-
+
+                                  Valid Options: LEAST_CONN, RANDOM, PASSTHROUGH, ROUND_ROBIN, LEAST_REQUEST
                                 enum:
                                   - UNSPECIFIED
                                   - LEAST_CONN
@@ -279,6 +292,8 @@ spec:
                                 type: string
                               consecutive5xxErrors:
                                 description: Number of 5xx errors before a host is ejected from the connection pool.
+                                maximum: 4294967295
+                                minimum: 0
                                 nullable: true
                                 type: integer
                               consecutiveErrors:
@@ -286,10 +301,14 @@ spec:
                                 type: integer
                               consecutiveGatewayErrors:
                                 description: Number of gateway errors before a host is ejected from the connection pool.
+                                maximum: 4294967295
+                                minimum: 0
                                 nullable: true
                                 type: integer
                               consecutiveLocalOriginFailures:
                                 description: The number of consecutive locally originated failures before ejection occurs.
+                                maximum: 4294967295
+                                minimum: 0
                                 nullable: true
                                 type: integer
                               interval:
@@ -317,7 +336,10 @@ spec:
                                       description: HTTP connection pool settings.
                                       properties:
                                         h2UpgradePolicy:
-                                          description: Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+                                          description: |-
+                                            Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+
+                                            Valid Options: DEFAULT, DO_NOT_UPGRADE, UPGRADE
                                           enum:
                                             - DEFAULT
                                             - DO_NOT_UPGRADE
@@ -374,6 +396,8 @@ spec:
                                               type: string
                                             probes:
                                               description: Maximum number of keepalive probes to send without response before deciding the connection is dead.
+                                              maximum: 4294967295
+                                              minimum: 0
                                               type: integer
                                             time:
                                               description: The time duration a connection needs to be idle before keep-alive probes start being sent.
@@ -454,16 +478,19 @@ spec:
                                           properties:
                                             tableSize:
                                               description: The table size for Maglev hashing.
+                                              minimum: 0
                                               type: integer
                                           type: object
                                         minimumRingSize:
                                           description: Deprecated.
+                                          minimum: 0
                                           type: integer
                                         ringHash:
                                           description: The ring/modulo hash load balancer implements consistent hashing to backend hosts.
                                           properties:
                                             minimumRingSize:
                                               description: The minimum number of virtual nodes to use for the hash ring.
+                                              minimum: 0
                                               type: integer
                                           type: object
                                         useSourceIp:
@@ -481,6 +508,8 @@ spec:
                                                 type: string
                                               to:
                                                 additionalProperties:
+                                                  maximum: 4294967295
+                                                  minimum: 0
                                                   type: integer
                                                 description: Map of upstream localities to traffic distribution weights.
                                                 type: object
@@ -509,6 +538,9 @@ spec:
                                           type: array
                                       type: object
                                     simple:
+                                      description: |2-
+
+                                        Valid Options: LEAST_CONN, RANDOM, PASSTHROUGH, ROUND_ROBIN, LEAST_REQUEST
                                       enum:
                                         - UNSPECIFIED
                                         - LEAST_CONN
@@ -528,6 +560,8 @@ spec:
                                       type: string
                                     consecutive5xxErrors:
                                       description: Number of 5xx errors before a host is ejected from the connection pool.
+                                      maximum: 4294967295
+                                      minimum: 0
                                       nullable: true
                                       type: integer
                                     consecutiveErrors:
@@ -535,10 +569,14 @@ spec:
                                       type: integer
                                     consecutiveGatewayErrors:
                                       description: Number of gateway errors before a host is ejected from the connection pool.
+                                      maximum: 4294967295
+                                      minimum: 0
                                       nullable: true
                                       type: integer
                                     consecutiveLocalOriginFailures:
                                       description: The number of consecutive locally originated failures before ejection occurs.
+                                      maximum: 4294967295
+                                      minimum: 0
                                       nullable: true
                                       type: integer
                                     interval:
@@ -560,6 +598,8 @@ spec:
                                   description: Specifies the number of a port on the destination service on which this policy is being applied.
                                   properties:
                                     number:
+                                      maximum: 4294967295
+                                      minimum: 0
                                       type: integer
                                   type: object
                                 tls:
@@ -567,6 +607,9 @@ spec:
                                   properties:
                                     caCertificates:
                                       description: 'OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.'
+                                      type: string
+                                    caCrl:
+                                      description: 'OPTIONAL: The path to the file containing the certificate revocation list (CRL) to use in verifying a presented server certificate.'
                                       type: string
                                     clientCertificate:
                                       description: REQUIRED if mode is `MUTUAL`.
@@ -579,7 +622,10 @@ spec:
                                       nullable: true
                                       type: boolean
                                     mode:
-                                      description: Indicates whether connections to this port should be secured using TLS.
+                                      description: |-
+                                        Indicates whether connections to this port should be secured using TLS.
+
+                                        Valid Options: DISABLE, SIMPLE, MUTUAL, ISTIO_MUTUAL
                                       enum:
                                         - DISABLE
                                         - SIMPLE
@@ -604,7 +650,10 @@ spec:
                             description: The upstream PROXY protocol settings.
                             properties:
                               version:
-                                description: The PROXY protocol version to use.
+                                description: |-
+                                  The PROXY protocol version to use.
+
+                                  Valid Options: V1, V2
                                 enum:
                                   - V1
                                   - V2
@@ -615,6 +664,9 @@ spec:
                             properties:
                               caCertificates:
                                 description: 'OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.'
+                                type: string
+                              caCrl:
+                                description: 'OPTIONAL: The path to the file containing the certificate revocation list (CRL) to use in verifying a presented server certificate.'
                                 type: string
                               clientCertificate:
                                 description: REQUIRED if mode is `MUTUAL`.
@@ -627,7 +679,10 @@ spec:
                                 nullable: true
                                 type: boolean
                               mode:
-                                description: Indicates whether connections to this port should be secured using TLS.
+                                description: |-
+                                  Indicates whether connections to this port should be secured using TLS.
+
+                                  Valid Options: DISABLE, SIMPLE, MUTUAL, ISTIO_MUTUAL
                                 enum:
                                   - DISABLE
                                   - SIMPLE
@@ -657,6 +712,8 @@ spec:
                                 type: string
                               targetPort:
                                 description: Specifies a port to which the downstream connection is tunneled.
+                                maximum: 4294967295
+                                minimum: 0
                                 type: integer
                             required:
                               - targetHost
@@ -676,7 +733,10 @@ spec:
                           description: HTTP connection pool settings.
                           properties:
                             h2UpgradePolicy:
-                              description: Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+                              description: |-
+                                Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+
+                                Valid Options: DEFAULT, DO_NOT_UPGRADE, UPGRADE
                               enum:
                                 - DEFAULT
                                 - DO_NOT_UPGRADE
@@ -733,6 +793,8 @@ spec:
                                   type: string
                                 probes:
                                   description: Maximum number of keepalive probes to send without response before deciding the connection is dead.
+                                  maximum: 4294967295
+                                  minimum: 0
                                   type: integer
                                 time:
                                   description: The time duration a connection needs to be idle before keep-alive probes start being sent.
@@ -813,16 +875,19 @@ spec:
                               properties:
                                 tableSize:
                                   description: The table size for Maglev hashing.
+                                  minimum: 0
                                   type: integer
                               type: object
                             minimumRingSize:
                               description: Deprecated.
+                              minimum: 0
                               type: integer
                             ringHash:
                               description: The ring/modulo hash load balancer implements consistent hashing to backend hosts.
                               properties:
                                 minimumRingSize:
                                   description: The minimum number of virtual nodes to use for the hash ring.
+                                  minimum: 0
                                   type: integer
                               type: object
                             useSourceIp:
@@ -840,6 +905,8 @@ spec:
                                     type: string
                                   to:
                                     additionalProperties:
+                                      maximum: 4294967295
+                                      minimum: 0
                                       type: integer
                                     description: Map of upstream localities to traffic distribution weights.
                                     type: object
@@ -868,6 +935,9 @@ spec:
                               type: array
                           type: object
                         simple:
+                          description: |2-
+
+                            Valid Options: LEAST_CONN, RANDOM, PASSTHROUGH, ROUND_ROBIN, LEAST_REQUEST
                           enum:
                             - UNSPECIFIED
                             - LEAST_CONN
@@ -887,6 +957,8 @@ spec:
                           type: string
                         consecutive5xxErrors:
                           description: Number of 5xx errors before a host is ejected from the connection pool.
+                          maximum: 4294967295
+                          minimum: 0
                           nullable: true
                           type: integer
                         consecutiveErrors:
@@ -894,10 +966,14 @@ spec:
                           type: integer
                         consecutiveGatewayErrors:
                           description: Number of gateway errors before a host is ejected from the connection pool.
+                          maximum: 4294967295
+                          minimum: 0
                           nullable: true
                           type: integer
                         consecutiveLocalOriginFailures:
                           description: The number of consecutive locally originated failures before ejection occurs.
+                          maximum: 4294967295
+                          minimum: 0
                           nullable: true
                           type: integer
                         interval:
@@ -925,7 +1001,10 @@ spec:
                                 description: HTTP connection pool settings.
                                 properties:
                                   h2UpgradePolicy:
-                                    description: Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+                                    description: |-
+                                      Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+
+                                      Valid Options: DEFAULT, DO_NOT_UPGRADE, UPGRADE
                                     enum:
                                       - DEFAULT
                                       - DO_NOT_UPGRADE
@@ -982,6 +1061,8 @@ spec:
                                         type: string
                                       probes:
                                         description: Maximum number of keepalive probes to send without response before deciding the connection is dead.
+                                        maximum: 4294967295
+                                        minimum: 0
                                         type: integer
                                       time:
                                         description: The time duration a connection needs to be idle before keep-alive probes start being sent.
@@ -1062,16 +1143,19 @@ spec:
                                     properties:
                                       tableSize:
                                         description: The table size for Maglev hashing.
+                                        minimum: 0
                                         type: integer
                                     type: object
                                   minimumRingSize:
                                     description: Deprecated.
+                                    minimum: 0
                                     type: integer
                                   ringHash:
                                     description: The ring/modulo hash load balancer implements consistent hashing to backend hosts.
                                     properties:
                                       minimumRingSize:
                                         description: The minimum number of virtual nodes to use for the hash ring.
+                                        minimum: 0
                                         type: integer
                                     type: object
                                   useSourceIp:
@@ -1089,6 +1173,8 @@ spec:
                                           type: string
                                         to:
                                           additionalProperties:
+                                            maximum: 4294967295
+                                            minimum: 0
                                             type: integer
                                           description: Map of upstream localities to traffic distribution weights.
                                           type: object
@@ -1117,6 +1203,9 @@ spec:
                                     type: array
                                 type: object
                               simple:
+                                description: |2-
+
+                                  Valid Options: LEAST_CONN, RANDOM, PASSTHROUGH, ROUND_ROBIN, LEAST_REQUEST
                                 enum:
                                   - UNSPECIFIED
                                   - LEAST_CONN
@@ -1136,6 +1225,8 @@ spec:
                                 type: string
                               consecutive5xxErrors:
                                 description: Number of 5xx errors before a host is ejected from the connection pool.
+                                maximum: 4294967295
+                                minimum: 0
                                 nullable: true
                                 type: integer
                               consecutiveErrors:
@@ -1143,10 +1234,14 @@ spec:
                                 type: integer
                               consecutiveGatewayErrors:
                                 description: Number of gateway errors before a host is ejected from the connection pool.
+                                maximum: 4294967295
+                                minimum: 0
                                 nullable: true
                                 type: integer
                               consecutiveLocalOriginFailures:
                                 description: The number of consecutive locally originated failures before ejection occurs.
+                                maximum: 4294967295
+                                minimum: 0
                                 nullable: true
                                 type: integer
                               interval:
@@ -1168,6 +1263,8 @@ spec:
                             description: Specifies the number of a port on the destination service on which this policy is being applied.
                             properties:
                               number:
+                                maximum: 4294967295
+                                minimum: 0
                                 type: integer
                             type: object
                           tls:
@@ -1175,6 +1272,9 @@ spec:
                             properties:
                               caCertificates:
                                 description: 'OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.'
+                                type: string
+                              caCrl:
+                                description: 'OPTIONAL: The path to the file containing the certificate revocation list (CRL) to use in verifying a presented server certificate.'
                                 type: string
                               clientCertificate:
                                 description: REQUIRED if mode is `MUTUAL`.
@@ -1187,7 +1287,10 @@ spec:
                                 nullable: true
                                 type: boolean
                               mode:
-                                description: Indicates whether connections to this port should be secured using TLS.
+                                description: |-
+                                  Indicates whether connections to this port should be secured using TLS.
+
+                                  Valid Options: DISABLE, SIMPLE, MUTUAL, ISTIO_MUTUAL
                                 enum:
                                   - DISABLE
                                   - SIMPLE
@@ -1212,7 +1315,10 @@ spec:
                       description: The upstream PROXY protocol settings.
                       properties:
                         version:
-                          description: The PROXY protocol version to use.
+                          description: |-
+                            The PROXY protocol version to use.
+
+                            Valid Options: V1, V2
                           enum:
                             - V1
                             - V2
@@ -1223,6 +1329,9 @@ spec:
                       properties:
                         caCertificates:
                           description: 'OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.'
+                          type: string
+                        caCrl:
+                          description: 'OPTIONAL: The path to the file containing the certificate revocation list (CRL) to use in verifying a presented server certificate.'
                           type: string
                         clientCertificate:
                           description: REQUIRED if mode is `MUTUAL`.
@@ -1235,7 +1344,10 @@ spec:
                           nullable: true
                           type: boolean
                         mode:
-                          description: Indicates whether connections to this port should be secured using TLS.
+                          description: |-
+                            Indicates whether connections to this port should be secured using TLS.
+
+                            Valid Options: DISABLE, SIMPLE, MUTUAL, ISTIO_MUTUAL
                           enum:
                             - DISABLE
                             - SIMPLE
@@ -1265,6 +1377,8 @@ spec:
                           type: string
                         targetPort:
                           description: Specifies a port to which the downstream connection is tunneled.
+                          maximum: 4294967295
+                          minimum: 0
                           type: integer
                       required:
                         - targetHost
@@ -1288,7 +1402,1389 @@ spec:
               x-kubernetes-preserve-unknown-fields: true
           type: object
       served: true
-      storage: true
+      storage: false
+      subresources:
+        status: {}
+    - additionalPrinterColumns:
+        - description: The name of a service from the service registry
+          jsonPath: .spec.host
+          name: Host
+          type: string
+        - description: 'CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata'
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1alpha3
+      schema:
+        openAPIV3Schema:
+          properties:
+            spec:
+              description: 'Configuration affecting load balancing, outlier detection, etc. See more details at: https://istio.io/docs/reference/config/networking/destination-rule.html'
+              properties:
+                exportTo:
+                  description: A list of namespaces to which this destination rule is exported.
+                  items:
+                    type: string
+                  type: array
+                host:
+                  description: The name of a service from the service registry.
+                  type: string
+                subsets:
+                  description: One or more named sets that represent individual versions of a service.
+                  items:
+                    properties:
+                      labels:
+                        additionalProperties:
+                          type: string
+                        description: Labels apply a filter over the endpoints of a service in the service registry.
+                        type: object
+                      name:
+                        description: Name of the subset.
+                        type: string
+                      trafficPolicy:
+                        description: Traffic policies that apply to this subset.
+                        properties:
+                          connectionPool:
+                            properties:
+                              http:
+                                description: HTTP connection pool settings.
+                                properties:
+                                  h2UpgradePolicy:
+                                    description: |-
+                                      Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+
+                                      Valid Options: DEFAULT, DO_NOT_UPGRADE, UPGRADE
+                                    enum:
+                                      - DEFAULT
+                                      - DO_NOT_UPGRADE
+                                      - UPGRADE
+                                    type: string
+                                  http1MaxPendingRequests:
+                                    description: Maximum number of requests that will be queued while waiting for a ready connection pool connection.
+                                    format: int32
+                                    type: integer
+                                  http2MaxRequests:
+                                    description: Maximum number of active requests to a destination.
+                                    format: int32
+                                    type: integer
+                                  idleTimeout:
+                                    description: The idle timeout for upstream connection pool connections.
+                                    type: string
+                                  maxConcurrentStreams:
+                                    description: The maximum number of concurrent streams allowed for a peer on one HTTP/2 connection.
+                                    format: int32
+                                    type: integer
+                                  maxRequestsPerConnection:
+                                    description: Maximum number of requests per connection to a backend.
+                                    format: int32
+                                    type: integer
+                                  maxRetries:
+                                    description: Maximum number of retries that can be outstanding to all hosts in a cluster at a given time.
+                                    format: int32
+                                    type: integer
+                                  useClientProtocol:
+                                    description: If set to true, client protocol will be preserved while initiating connection to backend.
+                                    type: boolean
+                                type: object
+                              tcp:
+                                description: Settings common to both HTTP and TCP upstream connections.
+                                properties:
+                                  connectTimeout:
+                                    description: TCP connection timeout.
+                                    type: string
+                                  idleTimeout:
+                                    description: The idle timeout for TCP connections.
+                                    type: string
+                                  maxConnectionDuration:
+                                    description: The maximum duration of a connection.
+                                    type: string
+                                  maxConnections:
+                                    description: Maximum number of HTTP1 /TCP connections to a destination host.
+                                    format: int32
+                                    type: integer
+                                  tcpKeepalive:
+                                    description: If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
+                                    properties:
+                                      interval:
+                                        description: The time duration between keep-alive probes.
+                                        type: string
+                                      probes:
+                                        description: Maximum number of keepalive probes to send without response before deciding the connection is dead.
+                                        maximum: 4294967295
+                                        minimum: 0
+                                        type: integer
+                                      time:
+                                        description: The time duration a connection needs to be idle before keep-alive probes start being sent.
+                                        type: string
+                                    type: object
+                                type: object
+                            type: object
+                          loadBalancer:
+                            description: Settings controlling the load balancer algorithms.
+                            oneOf:
+                              - not:
+                                  anyOf:
+                                    - required:
+                                        - simple
+                                    - required:
+                                        - consistentHash
+                              - required:
+                                  - simple
+                              - required:
+                                  - consistentHash
+                            properties:
+                              consistentHash:
+                                allOf:
+                                  - oneOf:
+                                      - not:
+                                          anyOf:
+                                            - required:
+                                                - httpHeaderName
+                                            - required:
+                                                - httpCookie
+                                            - required:
+                                                - useSourceIp
+                                            - required:
+                                                - httpQueryParameterName
+                                      - required:
+                                          - httpHeaderName
+                                      - required:
+                                          - httpCookie
+                                      - required:
+                                          - useSourceIp
+                                      - required:
+                                          - httpQueryParameterName
+                                  - oneOf:
+                                      - not:
+                                          anyOf:
+                                            - required:
+                                                - ringHash
+                                            - required:
+                                                - maglev
+                                      - required:
+                                          - ringHash
+                                      - required:
+                                          - maglev
+                                properties:
+                                  httpCookie:
+                                    description: Hash based on HTTP cookie.
+                                    properties:
+                                      name:
+                                        description: Name of the cookie.
+                                        type: string
+                                      path:
+                                        description: Path to set for the cookie.
+                                        type: string
+                                      ttl:
+                                        description: Lifetime of the cookie.
+                                        type: string
+                                    required:
+                                      - name
+                                    type: object
+                                  httpHeaderName:
+                                    description: Hash based on a specific HTTP header.
+                                    type: string
+                                  httpQueryParameterName:
+                                    description: Hash based on a specific HTTP query parameter.
+                                    type: string
+                                  maglev:
+                                    description: The Maglev load balancer implements consistent hashing to backend hosts.
+                                    properties:
+                                      tableSize:
+                                        description: The table size for Maglev hashing.
+                                        minimum: 0
+                                        type: integer
+                                    type: object
+                                  minimumRingSize:
+                                    description: Deprecated.
+                                    minimum: 0
+                                    type: integer
+                                  ringHash:
+                                    description: The ring/modulo hash load balancer implements consistent hashing to backend hosts.
+                                    properties:
+                                      minimumRingSize:
+                                        description: The minimum number of virtual nodes to use for the hash ring.
+                                        minimum: 0
+                                        type: integer
+                                    type: object
+                                  useSourceIp:
+                                    description: Hash based on the source IP address.
+                                    type: boolean
+                                type: object
+                              localityLbSetting:
+                                properties:
+                                  distribute:
+                                    description: 'Optional: only one of distribute, failover or failoverPriority can be set.'
+                                    items:
+                                      properties:
+                                        from:
+                                          description: Originating locality, '/' separated, e.g.
+                                          type: string
+                                        to:
+                                          additionalProperties:
+                                            maximum: 4294967295
+                                            minimum: 0
+                                            type: integer
+                                          description: Map of upstream localities to traffic distribution weights.
+                                          type: object
+                                      type: object
+                                    type: array
+                                  enabled:
+                                    description: enable locality load balancing, this is DestinationRule-level and will override mesh wide settings in entirety.
+                                    nullable: true
+                                    type: boolean
+                                  failover:
+                                    description: 'Optional: only one of distribute, failover or failoverPriority can be set.'
+                                    items:
+                                      properties:
+                                        from:
+                                          description: Originating region.
+                                          type: string
+                                        to:
+                                          description: Destination region the traffic will fail over to when endpoints in the 'from' region becomes unhealthy.
+                                          type: string
+                                      type: object
+                                    type: array
+                                  failoverPriority:
+                                    description: failoverPriority is an ordered list of labels used to sort endpoints to do priority based load balancing.
+                                    items:
+                                      type: string
+                                    type: array
+                                type: object
+                              simple:
+                                description: |2-
+
+                                  Valid Options: LEAST_CONN, RANDOM, PASSTHROUGH, ROUND_ROBIN, LEAST_REQUEST
+                                enum:
+                                  - UNSPECIFIED
+                                  - LEAST_CONN
+                                  - RANDOM
+                                  - PASSTHROUGH
+                                  - ROUND_ROBIN
+                                  - LEAST_REQUEST
+                                type: string
+                              warmupDurationSecs:
+                                description: Represents the warmup duration of Service.
+                                type: string
+                            type: object
+                          outlierDetection:
+                            properties:
+                              baseEjectionTime:
+                                description: Minimum ejection duration.
+                                type: string
+                              consecutive5xxErrors:
+                                description: Number of 5xx errors before a host is ejected from the connection pool.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                              consecutiveErrors:
+                                format: int32
+                                type: integer
+                              consecutiveGatewayErrors:
+                                description: Number of gateway errors before a host is ejected from the connection pool.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                              consecutiveLocalOriginFailures:
+                                description: The number of consecutive locally originated failures before ejection occurs.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                              interval:
+                                description: Time interval between ejection sweep analysis.
+                                type: string
+                              maxEjectionPercent:
+                                description: Maximum % of hosts in the load balancing pool for the upstream service that can be ejected.
+                                format: int32
+                                type: integer
+                              minHealthPercent:
+                                description: Outlier detection will be enabled as long as the associated load balancing pool has at least min_health_percent hosts in healthy mode.
+                                format: int32
+                                type: integer
+                              splitExternalLocalOriginErrors:
+                                description: Determines whether to distinguish local origin failures from external errors.
+                                type: boolean
+                            type: object
+                          portLevelSettings:
+                            description: Traffic policies specific to individual ports.
+                            items:
+                              properties:
+                                connectionPool:
+                                  properties:
+                                    http:
+                                      description: HTTP connection pool settings.
+                                      properties:
+                                        h2UpgradePolicy:
+                                          description: |-
+                                            Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+
+                                            Valid Options: DEFAULT, DO_NOT_UPGRADE, UPGRADE
+                                          enum:
+                                            - DEFAULT
+                                            - DO_NOT_UPGRADE
+                                            - UPGRADE
+                                          type: string
+                                        http1MaxPendingRequests:
+                                          description: Maximum number of requests that will be queued while waiting for a ready connection pool connection.
+                                          format: int32
+                                          type: integer
+                                        http2MaxRequests:
+                                          description: Maximum number of active requests to a destination.
+                                          format: int32
+                                          type: integer
+                                        idleTimeout:
+                                          description: The idle timeout for upstream connection pool connections.
+                                          type: string
+                                        maxConcurrentStreams:
+                                          description: The maximum number of concurrent streams allowed for a peer on one HTTP/2 connection.
+                                          format: int32
+                                          type: integer
+                                        maxRequestsPerConnection:
+                                          description: Maximum number of requests per connection to a backend.
+                                          format: int32
+                                          type: integer
+                                        maxRetries:
+                                          description: Maximum number of retries that can be outstanding to all hosts in a cluster at a given time.
+                                          format: int32
+                                          type: integer
+                                        useClientProtocol:
+                                          description: If set to true, client protocol will be preserved while initiating connection to backend.
+                                          type: boolean
+                                      type: object
+                                    tcp:
+                                      description: Settings common to both HTTP and TCP upstream connections.
+                                      properties:
+                                        connectTimeout:
+                                          description: TCP connection timeout.
+                                          type: string
+                                        idleTimeout:
+                                          description: The idle timeout for TCP connections.
+                                          type: string
+                                        maxConnectionDuration:
+                                          description: The maximum duration of a connection.
+                                          type: string
+                                        maxConnections:
+                                          description: Maximum number of HTTP1 /TCP connections to a destination host.
+                                          format: int32
+                                          type: integer
+                                        tcpKeepalive:
+                                          description: If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
+                                          properties:
+                                            interval:
+                                              description: The time duration between keep-alive probes.
+                                              type: string
+                                            probes:
+                                              description: Maximum number of keepalive probes to send without response before deciding the connection is dead.
+                                              maximum: 4294967295
+                                              minimum: 0
+                                              type: integer
+                                            time:
+                                              description: The time duration a connection needs to be idle before keep-alive probes start being sent.
+                                              type: string
+                                          type: object
+                                      type: object
+                                  type: object
+                                loadBalancer:
+                                  description: Settings controlling the load balancer algorithms.
+                                  oneOf:
+                                    - not:
+                                        anyOf:
+                                          - required:
+                                              - simple
+                                          - required:
+                                              - consistentHash
+                                    - required:
+                                        - simple
+                                    - required:
+                                        - consistentHash
+                                  properties:
+                                    consistentHash:
+                                      allOf:
+                                        - oneOf:
+                                            - not:
+                                                anyOf:
+                                                  - required:
+                                                      - httpHeaderName
+                                                  - required:
+                                                      - httpCookie
+                                                  - required:
+                                                      - useSourceIp
+                                                  - required:
+                                                      - httpQueryParameterName
+                                            - required:
+                                                - httpHeaderName
+                                            - required:
+                                                - httpCookie
+                                            - required:
+                                                - useSourceIp
+                                            - required:
+                                                - httpQueryParameterName
+                                        - oneOf:
+                                            - not:
+                                                anyOf:
+                                                  - required:
+                                                      - ringHash
+                                                  - required:
+                                                      - maglev
+                                            - required:
+                                                - ringHash
+                                            - required:
+                                                - maglev
+                                      properties:
+                                        httpCookie:
+                                          description: Hash based on HTTP cookie.
+                                          properties:
+                                            name:
+                                              description: Name of the cookie.
+                                              type: string
+                                            path:
+                                              description: Path to set for the cookie.
+                                              type: string
+                                            ttl:
+                                              description: Lifetime of the cookie.
+                                              type: string
+                                          required:
+                                            - name
+                                          type: object
+                                        httpHeaderName:
+                                          description: Hash based on a specific HTTP header.
+                                          type: string
+                                        httpQueryParameterName:
+                                          description: Hash based on a specific HTTP query parameter.
+                                          type: string
+                                        maglev:
+                                          description: The Maglev load balancer implements consistent hashing to backend hosts.
+                                          properties:
+                                            tableSize:
+                                              description: The table size for Maglev hashing.
+                                              minimum: 0
+                                              type: integer
+                                          type: object
+                                        minimumRingSize:
+                                          description: Deprecated.
+                                          minimum: 0
+                                          type: integer
+                                        ringHash:
+                                          description: The ring/modulo hash load balancer implements consistent hashing to backend hosts.
+                                          properties:
+                                            minimumRingSize:
+                                              description: The minimum number of virtual nodes to use for the hash ring.
+                                              minimum: 0
+                                              type: integer
+                                          type: object
+                                        useSourceIp:
+                                          description: Hash based on the source IP address.
+                                          type: boolean
+                                      type: object
+                                    localityLbSetting:
+                                      properties:
+                                        distribute:
+                                          description: 'Optional: only one of distribute, failover or failoverPriority can be set.'
+                                          items:
+                                            properties:
+                                              from:
+                                                description: Originating locality, '/' separated, e.g.
+                                                type: string
+                                              to:
+                                                additionalProperties:
+                                                  maximum: 4294967295
+                                                  minimum: 0
+                                                  type: integer
+                                                description: Map of upstream localities to traffic distribution weights.
+                                                type: object
+                                            type: object
+                                          type: array
+                                        enabled:
+                                          description: enable locality load balancing, this is DestinationRule-level and will override mesh wide settings in entirety.
+                                          nullable: true
+                                          type: boolean
+                                        failover:
+                                          description: 'Optional: only one of distribute, failover or failoverPriority can be set.'
+                                          items:
+                                            properties:
+                                              from:
+                                                description: Originating region.
+                                                type: string
+                                              to:
+                                                description: Destination region the traffic will fail over to when endpoints in the 'from' region becomes unhealthy.
+                                                type: string
+                                            type: object
+                                          type: array
+                                        failoverPriority:
+                                          description: failoverPriority is an ordered list of labels used to sort endpoints to do priority based load balancing.
+                                          items:
+                                            type: string
+                                          type: array
+                                      type: object
+                                    simple:
+                                      description: |2-
+
+                                        Valid Options: LEAST_CONN, RANDOM, PASSTHROUGH, ROUND_ROBIN, LEAST_REQUEST
+                                      enum:
+                                        - UNSPECIFIED
+                                        - LEAST_CONN
+                                        - RANDOM
+                                        - PASSTHROUGH
+                                        - ROUND_ROBIN
+                                        - LEAST_REQUEST
+                                      type: string
+                                    warmupDurationSecs:
+                                      description: Represents the warmup duration of Service.
+                                      type: string
+                                  type: object
+                                outlierDetection:
+                                  properties:
+                                    baseEjectionTime:
+                                      description: Minimum ejection duration.
+                                      type: string
+                                    consecutive5xxErrors:
+                                      description: Number of 5xx errors before a host is ejected from the connection pool.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                    consecutiveErrors:
+                                      format: int32
+                                      type: integer
+                                    consecutiveGatewayErrors:
+                                      description: Number of gateway errors before a host is ejected from the connection pool.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                    consecutiveLocalOriginFailures:
+                                      description: The number of consecutive locally originated failures before ejection occurs.
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      nullable: true
+                                      type: integer
+                                    interval:
+                                      description: Time interval between ejection sweep analysis.
+                                      type: string
+                                    maxEjectionPercent:
+                                      description: Maximum % of hosts in the load balancing pool for the upstream service that can be ejected.
+                                      format: int32
+                                      type: integer
+                                    minHealthPercent:
+                                      description: Outlier detection will be enabled as long as the associated load balancing pool has at least min_health_percent hosts in healthy mode.
+                                      format: int32
+                                      type: integer
+                                    splitExternalLocalOriginErrors:
+                                      description: Determines whether to distinguish local origin failures from external errors.
+                                      type: boolean
+                                  type: object
+                                port:
+                                  description: Specifies the number of a port on the destination service on which this policy is being applied.
+                                  properties:
+                                    number:
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      type: integer
+                                  type: object
+                                tls:
+                                  description: TLS related settings for connections to the upstream service.
+                                  properties:
+                                    caCertificates:
+                                      description: 'OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.'
+                                      type: string
+                                    caCrl:
+                                      description: 'OPTIONAL: The path to the file containing the certificate revocation list (CRL) to use in verifying a presented server certificate.'
+                                      type: string
+                                    clientCertificate:
+                                      description: REQUIRED if mode is `MUTUAL`.
+                                      type: string
+                                    credentialName:
+                                      description: The name of the secret that holds the TLS certs for the client including the CA certificates.
+                                      type: string
+                                    insecureSkipVerify:
+                                      description: '`insecureSkipVerify` specifies whether the proxy should skip verifying the CA signature and SAN for the server certificate corresponding to the host.'
+                                      nullable: true
+                                      type: boolean
+                                    mode:
+                                      description: |-
+                                        Indicates whether connections to this port should be secured using TLS.
+
+                                        Valid Options: DISABLE, SIMPLE, MUTUAL, ISTIO_MUTUAL
+                                      enum:
+                                        - DISABLE
+                                        - SIMPLE
+                                        - MUTUAL
+                                        - ISTIO_MUTUAL
+                                      type: string
+                                    privateKey:
+                                      description: REQUIRED if mode is `MUTUAL`.
+                                      type: string
+                                    sni:
+                                      description: SNI string to present to the server during TLS handshake.
+                                      type: string
+                                    subjectAltNames:
+                                      description: A list of alternate names to verify the subject identity in the certificate.
+                                      items:
+                                        type: string
+                                      type: array
+                                  type: object
+                              type: object
+                            type: array
+                          proxyProtocol:
+                            description: The upstream PROXY protocol settings.
+                            properties:
+                              version:
+                                description: |-
+                                  The PROXY protocol version to use.
+
+                                  Valid Options: V1, V2
+                                enum:
+                                  - V1
+                                  - V2
+                                type: string
+                            type: object
+                          tls:
+                            description: TLS related settings for connections to the upstream service.
+                            properties:
+                              caCertificates:
+                                description: 'OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.'
+                                type: string
+                              caCrl:
+                                description: 'OPTIONAL: The path to the file containing the certificate revocation list (CRL) to use in verifying a presented server certificate.'
+                                type: string
+                              clientCertificate:
+                                description: REQUIRED if mode is `MUTUAL`.
+                                type: string
+                              credentialName:
+                                description: The name of the secret that holds the TLS certs for the client including the CA certificates.
+                                type: string
+                              insecureSkipVerify:
+                                description: '`insecureSkipVerify` specifies whether the proxy should skip verifying the CA signature and SAN for the server certificate corresponding to the host.'
+                                nullable: true
+                                type: boolean
+                              mode:
+                                description: |-
+                                  Indicates whether connections to this port should be secured using TLS.
+
+                                  Valid Options: DISABLE, SIMPLE, MUTUAL, ISTIO_MUTUAL
+                                enum:
+                                  - DISABLE
+                                  - SIMPLE
+                                  - MUTUAL
+                                  - ISTIO_MUTUAL
+                                type: string
+                              privateKey:
+                                description: REQUIRED if mode is `MUTUAL`.
+                                type: string
+                              sni:
+                                description: SNI string to present to the server during TLS handshake.
+                                type: string
+                              subjectAltNames:
+                                description: A list of alternate names to verify the subject identity in the certificate.
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          tunnel:
+                            description: Configuration of tunneling TCP over other transport or application layers for the host configured in the DestinationRule.
+                            properties:
+                              protocol:
+                                description: Specifies which protocol to use for tunneling the downstream connection.
+                                type: string
+                              targetHost:
+                                description: Specifies a host to which the downstream connection is tunneled.
+                                type: string
+                              targetPort:
+                                description: Specifies a port to which the downstream connection is tunneled.
+                                maximum: 4294967295
+                                minimum: 0
+                                type: integer
+                            required:
+                              - targetHost
+                              - targetPort
+                            type: object
+                        type: object
+                    required:
+                      - name
+                    type: object
+                  type: array
+                trafficPolicy:
+                  description: Traffic policies to apply (load balancing policy, connection pool sizes, outlier detection).
+                  properties:
+                    connectionPool:
+                      properties:
+                        http:
+                          description: HTTP connection pool settings.
+                          properties:
+                            h2UpgradePolicy:
+                              description: |-
+                                Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+
+                                Valid Options: DEFAULT, DO_NOT_UPGRADE, UPGRADE
+                              enum:
+                                - DEFAULT
+                                - DO_NOT_UPGRADE
+                                - UPGRADE
+                              type: string
+                            http1MaxPendingRequests:
+                              description: Maximum number of requests that will be queued while waiting for a ready connection pool connection.
+                              format: int32
+                              type: integer
+                            http2MaxRequests:
+                              description: Maximum number of active requests to a destination.
+                              format: int32
+                              type: integer
+                            idleTimeout:
+                              description: The idle timeout for upstream connection pool connections.
+                              type: string
+                            maxConcurrentStreams:
+                              description: The maximum number of concurrent streams allowed for a peer on one HTTP/2 connection.
+                              format: int32
+                              type: integer
+                            maxRequestsPerConnection:
+                              description: Maximum number of requests per connection to a backend.
+                              format: int32
+                              type: integer
+                            maxRetries:
+                              description: Maximum number of retries that can be outstanding to all hosts in a cluster at a given time.
+                              format: int32
+                              type: integer
+                            useClientProtocol:
+                              description: If set to true, client protocol will be preserved while initiating connection to backend.
+                              type: boolean
+                          type: object
+                        tcp:
+                          description: Settings common to both HTTP and TCP upstream connections.
+                          properties:
+                            connectTimeout:
+                              description: TCP connection timeout.
+                              type: string
+                            idleTimeout:
+                              description: The idle timeout for TCP connections.
+                              type: string
+                            maxConnectionDuration:
+                              description: The maximum duration of a connection.
+                              type: string
+                            maxConnections:
+                              description: Maximum number of HTTP1 /TCP connections to a destination host.
+                              format: int32
+                              type: integer
+                            tcpKeepalive:
+                              description: If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
+                              properties:
+                                interval:
+                                  description: The time duration between keep-alive probes.
+                                  type: string
+                                probes:
+                                  description: Maximum number of keepalive probes to send without response before deciding the connection is dead.
+                                  maximum: 4294967295
+                                  minimum: 0
+                                  type: integer
+                                time:
+                                  description: The time duration a connection needs to be idle before keep-alive probes start being sent.
+                                  type: string
+                              type: object
+                          type: object
+                      type: object
+                    loadBalancer:
+                      description: Settings controlling the load balancer algorithms.
+                      oneOf:
+                        - not:
+                            anyOf:
+                              - required:
+                                  - simple
+                              - required:
+                                  - consistentHash
+                        - required:
+                            - simple
+                        - required:
+                            - consistentHash
+                      properties:
+                        consistentHash:
+                          allOf:
+                            - oneOf:
+                                - not:
+                                    anyOf:
+                                      - required:
+                                          - httpHeaderName
+                                      - required:
+                                          - httpCookie
+                                      - required:
+                                          - useSourceIp
+                                      - required:
+                                          - httpQueryParameterName
+                                - required:
+                                    - httpHeaderName
+                                - required:
+                                    - httpCookie
+                                - required:
+                                    - useSourceIp
+                                - required:
+                                    - httpQueryParameterName
+                            - oneOf:
+                                - not:
+                                    anyOf:
+                                      - required:
+                                          - ringHash
+                                      - required:
+                                          - maglev
+                                - required:
+                                    - ringHash
+                                - required:
+                                    - maglev
+                          properties:
+                            httpCookie:
+                              description: Hash based on HTTP cookie.
+                              properties:
+                                name:
+                                  description: Name of the cookie.
+                                  type: string
+                                path:
+                                  description: Path to set for the cookie.
+                                  type: string
+                                ttl:
+                                  description: Lifetime of the cookie.
+                                  type: string
+                              required:
+                                - name
+                              type: object
+                            httpHeaderName:
+                              description: Hash based on a specific HTTP header.
+                              type: string
+                            httpQueryParameterName:
+                              description: Hash based on a specific HTTP query parameter.
+                              type: string
+                            maglev:
+                              description: The Maglev load balancer implements consistent hashing to backend hosts.
+                              properties:
+                                tableSize:
+                                  description: The table size for Maglev hashing.
+                                  minimum: 0
+                                  type: integer
+                              type: object
+                            minimumRingSize:
+                              description: Deprecated.
+                              minimum: 0
+                              type: integer
+                            ringHash:
+                              description: The ring/modulo hash load balancer implements consistent hashing to backend hosts.
+                              properties:
+                                minimumRingSize:
+                                  description: The minimum number of virtual nodes to use for the hash ring.
+                                  minimum: 0
+                                  type: integer
+                              type: object
+                            useSourceIp:
+                              description: Hash based on the source IP address.
+                              type: boolean
+                          type: object
+                        localityLbSetting:
+                          properties:
+                            distribute:
+                              description: 'Optional: only one of distribute, failover or failoverPriority can be set.'
+                              items:
+                                properties:
+                                  from:
+                                    description: Originating locality, '/' separated, e.g.
+                                    type: string
+                                  to:
+                                    additionalProperties:
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      type: integer
+                                    description: Map of upstream localities to traffic distribution weights.
+                                    type: object
+                                type: object
+                              type: array
+                            enabled:
+                              description: enable locality load balancing, this is DestinationRule-level and will override mesh wide settings in entirety.
+                              nullable: true
+                              type: boolean
+                            failover:
+                              description: 'Optional: only one of distribute, failover or failoverPriority can be set.'
+                              items:
+                                properties:
+                                  from:
+                                    description: Originating region.
+                                    type: string
+                                  to:
+                                    description: Destination region the traffic will fail over to when endpoints in the 'from' region becomes unhealthy.
+                                    type: string
+                                type: object
+                              type: array
+                            failoverPriority:
+                              description: failoverPriority is an ordered list of labels used to sort endpoints to do priority based load balancing.
+                              items:
+                                type: string
+                              type: array
+                          type: object
+                        simple:
+                          description: |2-
+
+                            Valid Options: LEAST_CONN, RANDOM, PASSTHROUGH, ROUND_ROBIN, LEAST_REQUEST
+                          enum:
+                            - UNSPECIFIED
+                            - LEAST_CONN
+                            - RANDOM
+                            - PASSTHROUGH
+                            - ROUND_ROBIN
+                            - LEAST_REQUEST
+                          type: string
+                        warmupDurationSecs:
+                          description: Represents the warmup duration of Service.
+                          type: string
+                      type: object
+                    outlierDetection:
+                      properties:
+                        baseEjectionTime:
+                          description: Minimum ejection duration.
+                          type: string
+                        consecutive5xxErrors:
+                          description: Number of 5xx errors before a host is ejected from the connection pool.
+                          maximum: 4294967295
+                          minimum: 0
+                          nullable: true
+                          type: integer
+                        consecutiveErrors:
+                          format: int32
+                          type: integer
+                        consecutiveGatewayErrors:
+                          description: Number of gateway errors before a host is ejected from the connection pool.
+                          maximum: 4294967295
+                          minimum: 0
+                          nullable: true
+                          type: integer
+                        consecutiveLocalOriginFailures:
+                          description: The number of consecutive locally originated failures before ejection occurs.
+                          maximum: 4294967295
+                          minimum: 0
+                          nullable: true
+                          type: integer
+                        interval:
+                          description: Time interval between ejection sweep analysis.
+                          type: string
+                        maxEjectionPercent:
+                          description: Maximum % of hosts in the load balancing pool for the upstream service that can be ejected.
+                          format: int32
+                          type: integer
+                        minHealthPercent:
+                          description: Outlier detection will be enabled as long as the associated load balancing pool has at least min_health_percent hosts in healthy mode.
+                          format: int32
+                          type: integer
+                        splitExternalLocalOriginErrors:
+                          description: Determines whether to distinguish local origin failures from external errors.
+                          type: boolean
+                      type: object
+                    portLevelSettings:
+                      description: Traffic policies specific to individual ports.
+                      items:
+                        properties:
+                          connectionPool:
+                            properties:
+                              http:
+                                description: HTTP connection pool settings.
+                                properties:
+                                  h2UpgradePolicy:
+                                    description: |-
+                                      Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+
+                                      Valid Options: DEFAULT, DO_NOT_UPGRADE, UPGRADE
+                                    enum:
+                                      - DEFAULT
+                                      - DO_NOT_UPGRADE
+                                      - UPGRADE
+                                    type: string
+                                  http1MaxPendingRequests:
+                                    description: Maximum number of requests that will be queued while waiting for a ready connection pool connection.
+                                    format: int32
+                                    type: integer
+                                  http2MaxRequests:
+                                    description: Maximum number of active requests to a destination.
+                                    format: int32
+                                    type: integer
+                                  idleTimeout:
+                                    description: The idle timeout for upstream connection pool connections.
+                                    type: string
+                                  maxConcurrentStreams:
+                                    description: The maximum number of concurrent streams allowed for a peer on one HTTP/2 connection.
+                                    format: int32
+                                    type: integer
+                                  maxRequestsPerConnection:
+                                    description: Maximum number of requests per connection to a backend.
+                                    format: int32
+                                    type: integer
+                                  maxRetries:
+                                    description: Maximum number of retries that can be outstanding to all hosts in a cluster at a given time.
+                                    format: int32
+                                    type: integer
+                                  useClientProtocol:
+                                    description: If set to true, client protocol will be preserved while initiating connection to backend.
+                                    type: boolean
+                                type: object
+                              tcp:
+                                description: Settings common to both HTTP and TCP upstream connections.
+                                properties:
+                                  connectTimeout:
+                                    description: TCP connection timeout.
+                                    type: string
+                                  idleTimeout:
+                                    description: The idle timeout for TCP connections.
+                                    type: string
+                                  maxConnectionDuration:
+                                    description: The maximum duration of a connection.
+                                    type: string
+                                  maxConnections:
+                                    description: Maximum number of HTTP1 /TCP connections to a destination host.
+                                    format: int32
+                                    type: integer
+                                  tcpKeepalive:
+                                    description: If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
+                                    properties:
+                                      interval:
+                                        description: The time duration between keep-alive probes.
+                                        type: string
+                                      probes:
+                                        description: Maximum number of keepalive probes to send without response before deciding the connection is dead.
+                                        maximum: 4294967295
+                                        minimum: 0
+                                        type: integer
+                                      time:
+                                        description: The time duration a connection needs to be idle before keep-alive probes start being sent.
+                                        type: string
+                                    type: object
+                                type: object
+                            type: object
+                          loadBalancer:
+                            description: Settings controlling the load balancer algorithms.
+                            oneOf:
+                              - not:
+                                  anyOf:
+                                    - required:
+                                        - simple
+                                    - required:
+                                        - consistentHash
+                              - required:
+                                  - simple
+                              - required:
+                                  - consistentHash
+                            properties:
+                              consistentHash:
+                                allOf:
+                                  - oneOf:
+                                      - not:
+                                          anyOf:
+                                            - required:
+                                                - httpHeaderName
+                                            - required:
+                                                - httpCookie
+                                            - required:
+                                                - useSourceIp
+                                            - required:
+                                                - httpQueryParameterName
+                                      - required:
+                                          - httpHeaderName
+                                      - required:
+                                          - httpCookie
+                                      - required:
+                                          - useSourceIp
+                                      - required:
+                                          - httpQueryParameterName
+                                  - oneOf:
+                                      - not:
+                                          anyOf:
+                                            - required:
+                                                - ringHash
+                                            - required:
+                                                - maglev
+                                      - required:
+                                          - ringHash
+                                      - required:
+                                          - maglev
+                                properties:
+                                  httpCookie:
+                                    description: Hash based on HTTP cookie.
+                                    properties:
+                                      name:
+                                        description: Name of the cookie.
+                                        type: string
+                                      path:
+                                        description: Path to set for the cookie.
+                                        type: string
+                                      ttl:
+                                        description: Lifetime of the cookie.
+                                        type: string
+                                    required:
+                                      - name
+                                    type: object
+                                  httpHeaderName:
+                                    description: Hash based on a specific HTTP header.
+                                    type: string
+                                  httpQueryParameterName:
+                                    description: Hash based on a specific HTTP query parameter.
+                                    type: string
+                                  maglev:
+                                    description: The Maglev load balancer implements consistent hashing to backend hosts.
+                                    properties:
+                                      tableSize:
+                                        description: The table size for Maglev hashing.
+                                        minimum: 0
+                                        type: integer
+                                    type: object
+                                  minimumRingSize:
+                                    description: Deprecated.
+                                    minimum: 0
+                                    type: integer
+                                  ringHash:
+                                    description: The ring/modulo hash load balancer implements consistent hashing to backend hosts.
+                                    properties:
+                                      minimumRingSize:
+                                        description: The minimum number of virtual nodes to use for the hash ring.
+                                        minimum: 0
+                                        type: integer
+                                    type: object
+                                  useSourceIp:
+                                    description: Hash based on the source IP address.
+                                    type: boolean
+                                type: object
+                              localityLbSetting:
+                                properties:
+                                  distribute:
+                                    description: 'Optional: only one of distribute, failover or failoverPriority can be set.'
+                                    items:
+                                      properties:
+                                        from:
+                                          description: Originating locality, '/' separated, e.g.
+                                          type: string
+                                        to:
+                                          additionalProperties:
+                                            maximum: 4294967295
+                                            minimum: 0
+                                            type: integer
+                                          description: Map of upstream localities to traffic distribution weights.
+                                          type: object
+                                      type: object
+                                    type: array
+                                  enabled:
+                                    description: enable locality load balancing, this is DestinationRule-level and will override mesh wide settings in entirety.
+                                    nullable: true
+                                    type: boolean
+                                  failover:
+                                    description: 'Optional: only one of distribute, failover or failoverPriority can be set.'
+                                    items:
+                                      properties:
+                                        from:
+                                          description: Originating region.
+                                          type: string
+                                        to:
+                                          description: Destination region the traffic will fail over to when endpoints in the 'from' region becomes unhealthy.
+                                          type: string
+                                      type: object
+                                    type: array
+                                  failoverPriority:
+                                    description: failoverPriority is an ordered list of labels used to sort endpoints to do priority based load balancing.
+                                    items:
+                                      type: string
+                                    type: array
+                                type: object
+                              simple:
+                                description: |2-
+
+                                  Valid Options: LEAST_CONN, RANDOM, PASSTHROUGH, ROUND_ROBIN, LEAST_REQUEST
+                                enum:
+                                  - UNSPECIFIED
+                                  - LEAST_CONN
+                                  - RANDOM
+                                  - PASSTHROUGH
+                                  - ROUND_ROBIN
+                                  - LEAST_REQUEST
+                                type: string
+                              warmupDurationSecs:
+                                description: Represents the warmup duration of Service.
+                                type: string
+                            type: object
+                          outlierDetection:
+                            properties:
+                              baseEjectionTime:
+                                description: Minimum ejection duration.
+                                type: string
+                              consecutive5xxErrors:
+                                description: Number of 5xx errors before a host is ejected from the connection pool.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                              consecutiveErrors:
+                                format: int32
+                                type: integer
+                              consecutiveGatewayErrors:
+                                description: Number of gateway errors before a host is ejected from the connection pool.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                              consecutiveLocalOriginFailures:
+                                description: The number of consecutive locally originated failures before ejection occurs.
+                                maximum: 4294967295
+                                minimum: 0
+                                nullable: true
+                                type: integer
+                              interval:
+                                description: Time interval between ejection sweep analysis.
+                                type: string
+                              maxEjectionPercent:
+                                description: Maximum % of hosts in the load balancing pool for the upstream service that can be ejected.
+                                format: int32
+                                type: integer
+                              minHealthPercent:
+                                description: Outlier detection will be enabled as long as the associated load balancing pool has at least min_health_percent hosts in healthy mode.
+                                format: int32
+                                type: integer
+                              splitExternalLocalOriginErrors:
+                                description: Determines whether to distinguish local origin failures from external errors.
+                                type: boolean
+                            type: object
+                          port:
+                            description: Specifies the number of a port on the destination service on which this policy is being applied.
+                            properties:
+                              number:
+                                maximum: 4294967295
+                                minimum: 0
+                                type: integer
+                            type: object
+                          tls:
+                            description: TLS related settings for connections to the upstream service.
+                            properties:
+                              caCertificates:
+                                description: 'OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.'
+                                type: string
+                              caCrl:
+                                description: 'OPTIONAL: The path to the file containing the certificate revocation list (CRL) to use in verifying a presented server certificate.'
+                                type: string
+                              clientCertificate:
+                                description: REQUIRED if mode is `MUTUAL`.
+                                type: string
+                              credentialName:
+                                description: The name of the secret that holds the TLS certs for the client including the CA certificates.
+                                type: string
+                              insecureSkipVerify:
+                                description: '`insecureSkipVerify` specifies whether the proxy should skip verifying the CA signature and SAN for the server certificate corresponding to the host.'
+                                nullable: true
+                                type: boolean
+                              mode:
+                                description: |-
+                                  Indicates whether connections to this port should be secured using TLS.
+
+                                  Valid Options: DISABLE, SIMPLE, MUTUAL, ISTIO_MUTUAL
+                                enum:
+                                  - DISABLE
+                                  - SIMPLE
+                                  - MUTUAL
+                                  - ISTIO_MUTUAL
+                                type: string
+                              privateKey:
+                                description: REQUIRED if mode is `MUTUAL`.
+                                type: string
+                              sni:
+                                description: SNI string to present to the server during TLS handshake.
+                                type: string
+                              subjectAltNames:
+                                description: A list of alternate names to verify the subject identity in the certificate.
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                        type: object
+                      type: array
+                    proxyProtocol:
+                      description: The upstream PROXY protocol settings.
+                      properties:
+                        version:
+                          description: |-
+                            The PROXY protocol version to use.
+
+                            Valid Options: V1, V2
+                          enum:
+                            - V1
+                            - V2
+                          type: string
+                      type: object
+                    tls:
+                      description: TLS related settings for connections to the upstream service.
+                      properties:
+                        caCertificates:
+                          description: 'OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.'
+                          type: string
+                        caCrl:
+                          description: 'OPTIONAL: The path to the file containing the certificate revocation list (CRL) to use in verifying a presented server certificate.'
+                          type: string
+                        clientCertificate:
+                          description: REQUIRED if mode is `MUTUAL`.
+                          type: string
+                        credentialName:
+                          description: The name of the secret that holds the TLS certs for the client including the CA certificates.
+                          type: string
+                        insecureSkipVerify:
+                          description: '`insecureSkipVerify` specifies whether the proxy should skip verifying the CA signature and SAN for the server certificate corresponding to the host.'
+                          nullable: true
+                          type: boolean
+                        mode:
+                          description: |-
+                            Indicates whether connections to this port should be secured using TLS.
+
+                            Valid Options: DISABLE, SIMPLE, MUTUAL, ISTIO_MUTUAL
+                          enum:
+                            - DISABLE
+                            - SIMPLE
+                            - MUTUAL
+                            - ISTIO_MUTUAL
+                          type: string
+                        privateKey:
+                          description: REQUIRED if mode is `MUTUAL`.
+                          type: string
+                        sni:
+                          description: SNI string to present to the server during TLS handshake.
+                          type: string
+                        subjectAltNames:
+                          description: A list of alternate names to verify the subject identity in the certificate.
+                          items:
+                            type: string
+                          type: array
+                      type: object
+                    tunnel:
+                      description: Configuration of tunneling TCP over other transport or application layers for the host configured in the DestinationRule.
+                      properties:
+                        protocol:
+                          description: Specifies which protocol to use for tunneling the downstream connection.
+                          type: string
+                        targetHost:
+                          description: Specifies a host to which the downstream connection is tunneled.
+                          type: string
+                        targetPort:
+                          description: Specifies a port to which the downstream connection is tunneled.
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                      required:
+                        - targetHost
+                        - targetPort
+                      type: object
+                  type: object
+                workloadSelector:
+                  description: Criteria used to select the specific set of pods/VMs on which this `DestinationRule` configuration should be applied.
+                  properties:
+                    matchLabels:
+                      additionalProperties:
+                        type: string
+                      description: One or more labels that indicate a specific set of pods/VMs on which a policy should be applied.
+                      type: object
+                  type: object
+              required:
+                - host
+              type: object
+            status:
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+          type: object
+      served: true
+      storage: false
       subresources:
         status: {}
     - additionalPrinterColumns:
@@ -1336,7 +2832,10 @@ spec:
                                 description: HTTP connection pool settings.
                                 properties:
                                   h2UpgradePolicy:
-                                    description: Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+                                    description: |-
+                                      Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+
+                                      Valid Options: DEFAULT, DO_NOT_UPGRADE, UPGRADE
                                     enum:
                                       - DEFAULT
                                       - DO_NOT_UPGRADE
@@ -1393,6 +2892,8 @@ spec:
                                         type: string
                                       probes:
                                         description: Maximum number of keepalive probes to send without response before deciding the connection is dead.
+                                        maximum: 4294967295
+                                        minimum: 0
                                         type: integer
                                       time:
                                         description: The time duration a connection needs to be idle before keep-alive probes start being sent.
@@ -1473,16 +2974,19 @@ spec:
                                     properties:
                                       tableSize:
                                         description: The table size for Maglev hashing.
+                                        minimum: 0
                                         type: integer
                                     type: object
                                   minimumRingSize:
                                     description: Deprecated.
+                                    minimum: 0
                                     type: integer
                                   ringHash:
                                     description: The ring/modulo hash load balancer implements consistent hashing to backend hosts.
                                     properties:
                                       minimumRingSize:
                                         description: The minimum number of virtual nodes to use for the hash ring.
+                                        minimum: 0
                                         type: integer
                                     type: object
                                   useSourceIp:
@@ -1500,6 +3004,8 @@ spec:
                                           type: string
                                         to:
                                           additionalProperties:
+                                            maximum: 4294967295
+                                            minimum: 0
                                             type: integer
                                           description: Map of upstream localities to traffic distribution weights.
                                           type: object
@@ -1528,6 +3034,9 @@ spec:
                                     type: array
                                 type: object
                               simple:
+                                description: |2-
+
+                                  Valid Options: LEAST_CONN, RANDOM, PASSTHROUGH, ROUND_ROBIN, LEAST_REQUEST
                                 enum:
                                   - UNSPECIFIED
                                   - LEAST_CONN
@@ -1547,6 +3056,8 @@ spec:
                                 type: string
                               consecutive5xxErrors:
                                 description: Number of 5xx errors before a host is ejected from the connection pool.
+                                maximum: 4294967295
+                                minimum: 0
                                 nullable: true
                                 type: integer
                               consecutiveErrors:
@@ -1554,10 +3065,14 @@ spec:
                                 type: integer
                               consecutiveGatewayErrors:
                                 description: Number of gateway errors before a host is ejected from the connection pool.
+                                maximum: 4294967295
+                                minimum: 0
                                 nullable: true
                                 type: integer
                               consecutiveLocalOriginFailures:
                                 description: The number of consecutive locally originated failures before ejection occurs.
+                                maximum: 4294967295
+                                minimum: 0
                                 nullable: true
                                 type: integer
                               interval:
@@ -1585,7 +3100,10 @@ spec:
                                       description: HTTP connection pool settings.
                                       properties:
                                         h2UpgradePolicy:
-                                          description: Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+                                          description: |-
+                                            Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+
+                                            Valid Options: DEFAULT, DO_NOT_UPGRADE, UPGRADE
                                           enum:
                                             - DEFAULT
                                             - DO_NOT_UPGRADE
@@ -1642,6 +3160,8 @@ spec:
                                               type: string
                                             probes:
                                               description: Maximum number of keepalive probes to send without response before deciding the connection is dead.
+                                              maximum: 4294967295
+                                              minimum: 0
                                               type: integer
                                             time:
                                               description: The time duration a connection needs to be idle before keep-alive probes start being sent.
@@ -1722,16 +3242,19 @@ spec:
                                           properties:
                                             tableSize:
                                               description: The table size for Maglev hashing.
+                                              minimum: 0
                                               type: integer
                                           type: object
                                         minimumRingSize:
                                           description: Deprecated.
+                                          minimum: 0
                                           type: integer
                                         ringHash:
                                           description: The ring/modulo hash load balancer implements consistent hashing to backend hosts.
                                           properties:
                                             minimumRingSize:
                                               description: The minimum number of virtual nodes to use for the hash ring.
+                                              minimum: 0
                                               type: integer
                                           type: object
                                         useSourceIp:
@@ -1749,6 +3272,8 @@ spec:
                                                 type: string
                                               to:
                                                 additionalProperties:
+                                                  maximum: 4294967295
+                                                  minimum: 0
                                                   type: integer
                                                 description: Map of upstream localities to traffic distribution weights.
                                                 type: object
@@ -1777,6 +3302,9 @@ spec:
                                           type: array
                                       type: object
                                     simple:
+                                      description: |2-
+
+                                        Valid Options: LEAST_CONN, RANDOM, PASSTHROUGH, ROUND_ROBIN, LEAST_REQUEST
                                       enum:
                                         - UNSPECIFIED
                                         - LEAST_CONN
@@ -1796,6 +3324,8 @@ spec:
                                       type: string
                                     consecutive5xxErrors:
                                       description: Number of 5xx errors before a host is ejected from the connection pool.
+                                      maximum: 4294967295
+                                      minimum: 0
                                       nullable: true
                                       type: integer
                                     consecutiveErrors:
@@ -1803,10 +3333,14 @@ spec:
                                       type: integer
                                     consecutiveGatewayErrors:
                                       description: Number of gateway errors before a host is ejected from the connection pool.
+                                      maximum: 4294967295
+                                      minimum: 0
                                       nullable: true
                                       type: integer
                                     consecutiveLocalOriginFailures:
                                       description: The number of consecutive locally originated failures before ejection occurs.
+                                      maximum: 4294967295
+                                      minimum: 0
                                       nullable: true
                                       type: integer
                                     interval:
@@ -1828,6 +3362,8 @@ spec:
                                   description: Specifies the number of a port on the destination service on which this policy is being applied.
                                   properties:
                                     number:
+                                      maximum: 4294967295
+                                      minimum: 0
                                       type: integer
                                   type: object
                                 tls:
@@ -1835,6 +3371,9 @@ spec:
                                   properties:
                                     caCertificates:
                                       description: 'OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.'
+                                      type: string
+                                    caCrl:
+                                      description: 'OPTIONAL: The path to the file containing the certificate revocation list (CRL) to use in verifying a presented server certificate.'
                                       type: string
                                     clientCertificate:
                                       description: REQUIRED if mode is `MUTUAL`.
@@ -1847,7 +3386,10 @@ spec:
                                       nullable: true
                                       type: boolean
                                     mode:
-                                      description: Indicates whether connections to this port should be secured using TLS.
+                                      description: |-
+                                        Indicates whether connections to this port should be secured using TLS.
+
+                                        Valid Options: DISABLE, SIMPLE, MUTUAL, ISTIO_MUTUAL
                                       enum:
                                         - DISABLE
                                         - SIMPLE
@@ -1872,7 +3414,10 @@ spec:
                             description: The upstream PROXY protocol settings.
                             properties:
                               version:
-                                description: The PROXY protocol version to use.
+                                description: |-
+                                  The PROXY protocol version to use.
+
+                                  Valid Options: V1, V2
                                 enum:
                                   - V1
                                   - V2
@@ -1883,6 +3428,9 @@ spec:
                             properties:
                               caCertificates:
                                 description: 'OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.'
+                                type: string
+                              caCrl:
+                                description: 'OPTIONAL: The path to the file containing the certificate revocation list (CRL) to use in verifying a presented server certificate.'
                                 type: string
                               clientCertificate:
                                 description: REQUIRED if mode is `MUTUAL`.
@@ -1895,7 +3443,10 @@ spec:
                                 nullable: true
                                 type: boolean
                               mode:
-                                description: Indicates whether connections to this port should be secured using TLS.
+                                description: |-
+                                  Indicates whether connections to this port should be secured using TLS.
+
+                                  Valid Options: DISABLE, SIMPLE, MUTUAL, ISTIO_MUTUAL
                                 enum:
                                   - DISABLE
                                   - SIMPLE
@@ -1925,6 +3476,8 @@ spec:
                                 type: string
                               targetPort:
                                 description: Specifies a port to which the downstream connection is tunneled.
+                                maximum: 4294967295
+                                minimum: 0
                                 type: integer
                             required:
                               - targetHost
@@ -1944,7 +3497,10 @@ spec:
                           description: HTTP connection pool settings.
                           properties:
                             h2UpgradePolicy:
-                              description: Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+                              description: |-
+                                Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+
+                                Valid Options: DEFAULT, DO_NOT_UPGRADE, UPGRADE
                               enum:
                                 - DEFAULT
                                 - DO_NOT_UPGRADE
@@ -2001,6 +3557,8 @@ spec:
                                   type: string
                                 probes:
                                   description: Maximum number of keepalive probes to send without response before deciding the connection is dead.
+                                  maximum: 4294967295
+                                  minimum: 0
                                   type: integer
                                 time:
                                   description: The time duration a connection needs to be idle before keep-alive probes start being sent.
@@ -2081,16 +3639,19 @@ spec:
                               properties:
                                 tableSize:
                                   description: The table size for Maglev hashing.
+                                  minimum: 0
                                   type: integer
                               type: object
                             minimumRingSize:
                               description: Deprecated.
+                              minimum: 0
                               type: integer
                             ringHash:
                               description: The ring/modulo hash load balancer implements consistent hashing to backend hosts.
                               properties:
                                 minimumRingSize:
                                   description: The minimum number of virtual nodes to use for the hash ring.
+                                  minimum: 0
                                   type: integer
                               type: object
                             useSourceIp:
@@ -2108,6 +3669,8 @@ spec:
                                     type: string
                                   to:
                                     additionalProperties:
+                                      maximum: 4294967295
+                                      minimum: 0
                                       type: integer
                                     description: Map of upstream localities to traffic distribution weights.
                                     type: object
@@ -2136,6 +3699,9 @@ spec:
                               type: array
                           type: object
                         simple:
+                          description: |2-
+
+                            Valid Options: LEAST_CONN, RANDOM, PASSTHROUGH, ROUND_ROBIN, LEAST_REQUEST
                           enum:
                             - UNSPECIFIED
                             - LEAST_CONN
@@ -2155,6 +3721,8 @@ spec:
                           type: string
                         consecutive5xxErrors:
                           description: Number of 5xx errors before a host is ejected from the connection pool.
+                          maximum: 4294967295
+                          minimum: 0
                           nullable: true
                           type: integer
                         consecutiveErrors:
@@ -2162,10 +3730,14 @@ spec:
                           type: integer
                         consecutiveGatewayErrors:
                           description: Number of gateway errors before a host is ejected from the connection pool.
+                          maximum: 4294967295
+                          minimum: 0
                           nullable: true
                           type: integer
                         consecutiveLocalOriginFailures:
                           description: The number of consecutive locally originated failures before ejection occurs.
+                          maximum: 4294967295
+                          minimum: 0
                           nullable: true
                           type: integer
                         interval:
@@ -2193,7 +3765,10 @@ spec:
                                 description: HTTP connection pool settings.
                                 properties:
                                   h2UpgradePolicy:
-                                    description: Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+                                    description: |-
+                                      Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+
+                                      Valid Options: DEFAULT, DO_NOT_UPGRADE, UPGRADE
                                     enum:
                                       - DEFAULT
                                       - DO_NOT_UPGRADE
@@ -2250,6 +3825,8 @@ spec:
                                         type: string
                                       probes:
                                         description: Maximum number of keepalive probes to send without response before deciding the connection is dead.
+                                        maximum: 4294967295
+                                        minimum: 0
                                         type: integer
                                       time:
                                         description: The time duration a connection needs to be idle before keep-alive probes start being sent.
@@ -2330,16 +3907,19 @@ spec:
                                     properties:
                                       tableSize:
                                         description: The table size for Maglev hashing.
+                                        minimum: 0
                                         type: integer
                                     type: object
                                   minimumRingSize:
                                     description: Deprecated.
+                                    minimum: 0
                                     type: integer
                                   ringHash:
                                     description: The ring/modulo hash load balancer implements consistent hashing to backend hosts.
                                     properties:
                                       minimumRingSize:
                                         description: The minimum number of virtual nodes to use for the hash ring.
+                                        minimum: 0
                                         type: integer
                                     type: object
                                   useSourceIp:
@@ -2357,6 +3937,8 @@ spec:
                                           type: string
                                         to:
                                           additionalProperties:
+                                            maximum: 4294967295
+                                            minimum: 0
                                             type: integer
                                           description: Map of upstream localities to traffic distribution weights.
                                           type: object
@@ -2385,6 +3967,9 @@ spec:
                                     type: array
                                 type: object
                               simple:
+                                description: |2-
+
+                                  Valid Options: LEAST_CONN, RANDOM, PASSTHROUGH, ROUND_ROBIN, LEAST_REQUEST
                                 enum:
                                   - UNSPECIFIED
                                   - LEAST_CONN
@@ -2404,6 +3989,8 @@ spec:
                                 type: string
                               consecutive5xxErrors:
                                 description: Number of 5xx errors before a host is ejected from the connection pool.
+                                maximum: 4294967295
+                                minimum: 0
                                 nullable: true
                                 type: integer
                               consecutiveErrors:
@@ -2411,10 +3998,14 @@ spec:
                                 type: integer
                               consecutiveGatewayErrors:
                                 description: Number of gateway errors before a host is ejected from the connection pool.
+                                maximum: 4294967295
+                                minimum: 0
                                 nullable: true
                                 type: integer
                               consecutiveLocalOriginFailures:
                                 description: The number of consecutive locally originated failures before ejection occurs.
+                                maximum: 4294967295
+                                minimum: 0
                                 nullable: true
                                 type: integer
                               interval:
@@ -2436,6 +4027,8 @@ spec:
                             description: Specifies the number of a port on the destination service on which this policy is being applied.
                             properties:
                               number:
+                                maximum: 4294967295
+                                minimum: 0
                                 type: integer
                             type: object
                           tls:
@@ -2443,6 +4036,9 @@ spec:
                             properties:
                               caCertificates:
                                 description: 'OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.'
+                                type: string
+                              caCrl:
+                                description: 'OPTIONAL: The path to the file containing the certificate revocation list (CRL) to use in verifying a presented server certificate.'
                                 type: string
                               clientCertificate:
                                 description: REQUIRED if mode is `MUTUAL`.
@@ -2455,7 +4051,10 @@ spec:
                                 nullable: true
                                 type: boolean
                               mode:
-                                description: Indicates whether connections to this port should be secured using TLS.
+                                description: |-
+                                  Indicates whether connections to this port should be secured using TLS.
+
+                                  Valid Options: DISABLE, SIMPLE, MUTUAL, ISTIO_MUTUAL
                                 enum:
                                   - DISABLE
                                   - SIMPLE
@@ -2480,7 +4079,10 @@ spec:
                       description: The upstream PROXY protocol settings.
                       properties:
                         version:
-                          description: The PROXY protocol version to use.
+                          description: |-
+                            The PROXY protocol version to use.
+
+                            Valid Options: V1, V2
                           enum:
                             - V1
                             - V2
@@ -2491,6 +4093,9 @@ spec:
                       properties:
                         caCertificates:
                           description: 'OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.'
+                          type: string
+                        caCrl:
+                          description: 'OPTIONAL: The path to the file containing the certificate revocation list (CRL) to use in verifying a presented server certificate.'
                           type: string
                         clientCertificate:
                           description: REQUIRED if mode is `MUTUAL`.
@@ -2503,7 +4108,10 @@ spec:
                           nullable: true
                           type: boolean
                         mode:
-                          description: Indicates whether connections to this port should be secured using TLS.
+                          description: |-
+                            Indicates whether connections to this port should be secured using TLS.
+
+                            Valid Options: DISABLE, SIMPLE, MUTUAL, ISTIO_MUTUAL
                           enum:
                             - DISABLE
                             - SIMPLE
@@ -2533,6 +4141,8 @@ spec:
                           type: string
                         targetPort:
                           description: Specifies a port to which the downstream connection is tunneled.
+                          maximum: 4294967295
+                          minimum: 0
                           type: integer
                       required:
                         - targetHost
@@ -2556,6 +4166,6 @@ spec:
               x-kubernetes-preserve-unknown-fields: true
           type: object
       served: true
-      storage: false
+      storage: true
       subresources:
         status: {}

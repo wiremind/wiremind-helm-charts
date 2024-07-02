@@ -19,10 +19,21 @@ spec:
     kind: AuthorizationPolicy
     listKind: AuthorizationPolicyList
     plural: authorizationpolicies
+    shortNames:
+      - ap
     singular: authorizationpolicy
   scope: Namespaced
   versions:
-    - name: v1
+    - additionalPrinterColumns:
+        - description: The operation to take.
+          jsonPath: .spec.action
+          name: Action
+          type: string
+        - description: 'CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata'
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1
       schema:
         openAPIV3Schema:
           properties:
@@ -37,7 +48,10 @@ spec:
                     - provider
               properties:
                 action:
-                  description: Optional.
+                  description: |-
+                    Optional.
+
+                    Valid Options: ALLOW, DENY, AUDIT, CUSTOM
                   enum:
                     - ALLOW
                     - DENY
@@ -198,7 +212,6 @@ spec:
                       type: object
                   type: object
                 targetRef:
-                  description: Optional.
                   properties:
                     group:
                       description: group is the group of the target resource.
@@ -213,6 +226,24 @@ spec:
                       description: namespace is the namespace of the referent.
                       type: string
                   type: object
+                targetRefs:
+                  description: Optional.
+                  items:
+                    properties:
+                      group:
+                        description: group is the group of the target resource.
+                        type: string
+                      kind:
+                        description: kind is kind of the target resource.
+                        type: string
+                      name:
+                        description: name is the name of the target resource.
+                        type: string
+                      namespace:
+                        description: namespace is the namespace of the referent.
+                        type: string
+                    type: object
+                  type: array
               type: object
             status:
               type: object
@@ -222,7 +253,16 @@ spec:
       storage: false
       subresources:
         status: {}
-    - name: v1beta1
+    - additionalPrinterColumns:
+        - description: The operation to take.
+          jsonPath: .spec.action
+          name: Action
+          type: string
+        - description: 'CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata'
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1beta1
       schema:
         openAPIV3Schema:
           properties:
@@ -237,7 +277,10 @@ spec:
                     - provider
               properties:
                 action:
-                  description: Optional.
+                  description: |-
+                    Optional.
+
+                    Valid Options: ALLOW, DENY, AUDIT, CUSTOM
                   enum:
                     - ALLOW
                     - DENY
@@ -398,7 +441,6 @@ spec:
                       type: object
                   type: object
                 targetRef:
-                  description: Optional.
                   properties:
                     group:
                       description: group is the group of the target resource.
@@ -413,6 +455,24 @@ spec:
                       description: namespace is the namespace of the referent.
                       type: string
                   type: object
+                targetRefs:
+                  description: Optional.
+                  items:
+                    properties:
+                      group:
+                        description: group is the group of the target resource.
+                        type: string
+                      kind:
+                        description: kind is kind of the target resource.
+                        type: string
+                      name:
+                        description: name is the name of the target resource.
+                        type: string
+                      namespace:
+                        description: namespace is the namespace of the referent.
+                        type: string
+                    type: object
+                  type: array
               type: object
             status:
               type: object
