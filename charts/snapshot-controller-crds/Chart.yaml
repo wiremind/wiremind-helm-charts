@@ -2,8 +2,8 @@ annotations:
   category: DeveloperTools
 apiVersion: v2
 name: snapshot-controller-crds
-version: 6.2.1
-appVersion: "v6.2.1"
+version: 8.0.1
+appVersion: "v8.0.1"
 description: Manage snapshot-controller CRDs
 keywords:
   - storage
