@@ -33,7 +33,10 @@ spec:
                   items:
                     properties:
                       applyTo:
-                        description: Specifies where in the Envoy configuration, the patch should be applied.
+                        description: |-
+                          Specifies where in the Envoy configuration, the patch should be applied.
+
+                          Valid Options: LISTENER, FILTER_CHAIN, NETWORK_FILTER, HTTP_FILTER, ROUTE_CONFIGURATION, VIRTUAL_HOST, HTTP_ROUTE, CLUSTER, EXTENSION_CONFIG, BOOTSTRAP, LISTENER_FILTER
                         enum:
                           - INVALID
                           - LISTENER
@@ -74,6 +77,8 @@ spec:
                                 type: string
                               portNumber:
                                 description: The service port for which this cluster was generated.
+                                maximum: 4294967295
+                                minimum: 0
                                 type: integer
                               service:
                                 description: The fully qualified service name for this cluster.
@@ -83,7 +88,10 @@ spec:
                                 type: string
                             type: object
                           context:
-                            description: The specific config generation context to match on.
+                            description: |-
+                              The specific config generation context to match on.
+
+                              Valid Options: ANY, SIDECAR_INBOUND, SIDECAR_OUTBOUND, GATEWAY
                             enum:
                               - ANY
                               - SIDECAR_INBOUND
@@ -101,6 +109,8 @@ spec:
                                     type: string
                                   destinationPort:
                                     description: The destination_port value used by a filter chain's match condition.
+                                    maximum: 4294967295
+                                    minimum: 0
                                     type: integer
                                   filter:
                                     description: The name of a specific filter to apply the patch to.
@@ -136,6 +146,8 @@ spec:
                                 type: string
                               portNumber:
                                 description: The service port/gateway port to which traffic is being sent/received.
+                                maximum: 4294967295
+                                minimum: 0
                                 type: integer
                             type: object
                           proxy:
@@ -164,6 +176,8 @@ spec:
                                 type: string
                               portNumber:
                                 description: The service port number or gateway server port number for which this route configuration was generated.
+                                maximum: 4294967295
+                                minimum: 0
                                 type: integer
                               vhost:
                                 description: Match a specific virtual host in a route configuration and apply the patch to the virtual host.
@@ -175,7 +189,10 @@ spec:
                                     description: Match a specific route within the virtual host.
                                     properties:
                                       action:
-                                        description: Match a route with specific action type.
+                                        description: |-
+                                          Match a route with specific action type.
+
+                                          Valid Options: ANY, ROUTE, REDIRECT, DIRECT_RESPONSE
                                         enum:
                                           - ANY
                                           - ROUTE
@@ -193,7 +210,10 @@ spec:
                         description: The patch to apply along with the operation.
                         properties:
                           filterClass:
-                            description: Determines the filter insertion order.
+                            description: |-
+                              Determines the filter insertion order.
+
+                              Valid Options: AUTHN, AUTHZ, STATS
                             enum:
                               - UNSPECIFIED
                               - AUTHN
@@ -201,7 +221,10 @@ spec:
                               - STATS
                             type: string
                           operation:
-                            description: Determines how the patch should be applied.
+                            description: |-
+                              Determines how the patch should be applied.
+
+                              Valid Options: MERGE, ADD, REMOVE, INSERT_BEFORE, INSERT_AFTER, INSERT_FIRST, REPLACE
                             enum:
                               - INVALID
                               - MERGE
@@ -223,6 +246,24 @@ spec:
                   description: Priority defines the order in which patch sets are applied within a context.
                   format: int32
                   type: integer
+                targetRefs:
+                  description: Optional.
+                  items:
+                    properties:
+                      group:
+                        description: group is the group of the target resource.
+                        type: string
+                      kind:
+                        description: kind is kind of the target resource.
+                        type: string
+                      name:
+                        description: name is the name of the target resource.
+                        type: string
+                      namespace:
+                        description: namespace is the namespace of the referent.
+                        type: string
+                    type: object
+                  type: array
                 workloadSelector:
                   description: Criteria used to select the specific set of pods/VMs on which this patch configuration should be applied.
                   properties:
