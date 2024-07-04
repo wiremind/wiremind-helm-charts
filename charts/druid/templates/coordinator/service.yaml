@@ -1,9 +1,6 @@
 {{- if .Values.coordinator.enabled }}
 
 {{- $replicaCount := .Values.coordinator.replicaCount }}
-{{- if .Values.coordinator.autoscaling.enabled }}
-{{- $replicaCount = .Values.coordinator.autoscaling.maxReplicas }}
-{{- end -}}
 
 {{- range untilStep 0 ($replicaCount | int) 1 }}
 
