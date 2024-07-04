@@ -249,9 +249,6 @@ broker:
 coordinator:
   enabled: true
   replicaCount: 1
-  # TODO: implement autoscaling
-  autoscaling:
-    enabled: false
   name: coordinator
   port: 8081
   serviceType: ClusterIP

@@ -11,9 +11,7 @@ metadata:
   annotations: {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if not .Values.coordinator.autoscaling.enabled }}
   replicas: {{ .Values.coordinator.replicaCount }}
-  {{- end }}
   podManagementPolicy: {{ .Values.coordinator.podManagementPolicy }}
   serviceName: {{ include "druid.coordinator.fullname" . }}
   updateStrategy: {{- toYaml .Values.coordinator.updateStrategy | nindent 4 }}
