@@ -4,9 +4,9 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.15.0
-  name: logicalvolumes.topolvm.io
+  name: logicalvolumes.topolvm.cybozu.com
 spec:
-  group: topolvm.io
+  group: topolvm.cybozu.com
   names:
     kind: LogicalVolume
     listKind: LogicalVolumeList
