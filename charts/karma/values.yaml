@@ -230,3 +230,6 @@ kthxbyeSidecar:
 
 # additional sidecar containers array which will be added to the deployment
 sidecarContainers: []
+
+# additional initContainers array which will be added to the deployment
+initContainers: []
