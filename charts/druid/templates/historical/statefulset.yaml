@@ -54,9 +54,8 @@ spec:
         {{- else }}
         {{- toYaml $historicalDefaults.nodeSelector | nindent 8 }}
         {{- end }}
-      {{- if $historicalDefaults.affinity }}
-      affinity:
-        {{- tpl (toYaml $historicalDefaults.affinity) (dict "tierName" $tierName) | toYaml | nindent 8 }}
+      {{- with $historicalDefaults.affinity }}
+      affinity: {{ tpl (toYaml .) (dict "tierName" $tierName) | nindent 8 }}
       {{- end }}
       {{- with $historicalDefaults.tolerations }}
       tolerations: {{- toYaml . | nindent 8 }}
