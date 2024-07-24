@@ -122,7 +122,7 @@ existingSecretConfig:
 ## configMap dictates if a configmap based configuration for Karma should be used
 ## to provide advanced configuration. NOTE, you must use port 8080!
 configMap:
-  enabled: true
+  enabled: false
   annotations: {}
   ## karma compatible YAML configuration
   # rawConfig:
