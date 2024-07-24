@@ -89,6 +89,9 @@ spec:
               mountPath: /etc/certs/{{ . }}
               readOnly: true
           {{- end }}
+          {{- if .Values.extraVolumeMounts }}
+          {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+          {{- end }}
         {{- if .Values.kthxbyeSidecar.enabled }}
         - name: kthxbye-sidecar
           image: "{{ .Values.kthxbyeSidecar.image.repository }}:{{ .Values.kthxbyeSidecar.image.tag }}"
@@ -144,4 +147,7 @@ spec:
         secret:
           defaultMode: 420
           secretName: {{ . }}
+      {{- end }}
+      {{- if .Values.extraVolumes }}
+      {{- toYaml .Values.extraVolumes | nindent 6 }}
       {{- end }}
