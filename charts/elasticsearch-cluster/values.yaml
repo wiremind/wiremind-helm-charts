@@ -4,15 +4,17 @@ fullnameOverride: ""
 ## To define common settings, it may be useful to use YAML anchors to use the same
 ## base settings for all node types (data + master) + ingest
 es-defaults: &defaults
-  imageTag: 7.17.18
+  imageTag: 7.17.22
   ## Change me, and change urls using elasticsearch below
   clusterName: "my-elasticsearch-cluster"
   ## Enable if you want backup (see below)
   # keystore:
   #   - secretName: $RELEASE-NAME-elasticsearch-s3
-  ## Installs by default repository-s3 plugin
+  ## Installs by default repository-s3 and mappersize plugin
+  elasticsearchPlugins: repository-s3 mapper-size
   extraInitContainers: |
-    - name: elasticsearch-plugin-install-repository-s3
+    {{- if .Values.elasticsearchPlugins }}
+    - name: elasticsearch-install-plugins
       image: {{ .Values.image }}:{{ .Values.imageTag }}
       command:
         - sh
@@ -20,19 +22,21 @@ es-defaults: &defaults
         - -c
         - |
           set -e; set -x;
-          PLUGIN_NAME="repository-s3"
-          echo "Installing $PLUGIN_NAME..."
-          PLUGIN_LIST=$(bin/elasticsearch-plugin list)
-          echo $PLUGIN_LIST
-          if echo $PLUGIN_LIST | grep "$PLUGIN_NAME"; then
-            echo "Plugin $PLUGIN_NAME already exists, skipping."
-          else
-            echo "$PLUGIN_NAME does not exist yet, installing..."
-            bin/elasticsearch-plugin install --batch $PLUGIN_NAME
-          fi
+          for PLUGIN_NAME in "{{ .Values.elasticsearchPlugins }}"; do
+            echo "Installing $PLUGIN_NAME..."
+            PLUGIN_LIST=$(bin/elasticsearch-plugin list)
+            echo $PLUGIN_LIST
+            if echo $PLUGIN_LIST | grep "$PLUGIN_NAME"; then
+              echo "Plugin $PLUGIN_NAME already exists, skipping."
+            else
+              echo "$PLUGIN_NAME does not exist yet, installing..."
+              bin/elasticsearch-plugin install --batch $PLUGIN_NAME
+            fi
+          done
       volumeMounts:
         - mountPath: /usr/share/elasticsearch/plugins/
           name: plugindir
+    {{- end }}
   extraVolumes: |
     - name: plugindir
       emptyDir: {}
