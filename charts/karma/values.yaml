@@ -233,3 +233,9 @@ sidecarContainers: []
 
 # additional initContainers array which will be added to the deployment
 initContainers: []
+
+# extra volumes for the deployment
+extraVolumes: []
+
+# extra volumeMounts for the deployment
+extraVolumeMounts: []
