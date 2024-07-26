@@ -286,7 +286,7 @@ backup:
 
 kibana:
   enabled: false
-  imageTag: 7.17.18
+  imageTag: 7.17.22
   ## Change me
   elasticsearchHosts: http://my-elasticsearch-cluster-data-hot:9200
   # resources:
