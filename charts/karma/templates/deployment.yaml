@@ -65,11 +65,9 @@ spec:
           {{- with .Values.env }}
 {{ toYaml . | indent 10 }}
           {{- end }}
-          {{- if gt (len .Values.configurations) 0 }}
-          command:
-            - /karma
+          {{- if gt (len .Values.args) 0 }}
           args:
-{{- range $item := .Values.configurations }}
+{{- range $item := .Values.args }}
             - {{ $item }}
 {{- end }}
           {{- end }}
