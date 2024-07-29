@@ -1,0 +1,4 @@
+elasticsearchHosts: ""
+elasticsearchCertificateSecret: ""
+
+createElasticsearchToken: false
