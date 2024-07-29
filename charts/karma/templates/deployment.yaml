@@ -65,6 +65,14 @@ spec:
           {{- with .Values.env }}
 {{ toYaml . | indent 10 }}
           {{- end }}
+          {{- if gt (len .Values.configurations) 0 }}
+          command:
+            - /karma
+          args:
+{{- range $item := .Values.configurations }}
+            - {{ $item }}
+{{- end }}
+          {{- end }}
           livenessProbe:
             httpGet:
               path: {{ .Values.livenessProbe.path }}
