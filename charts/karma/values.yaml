@@ -241,6 +241,4 @@ extraVolumes: []
 extraVolumeMounts: []
 
 # override command args of karma container
-args:
-  - config.file
-  - /etc/karma-copy/karma.yaml
+args: []
