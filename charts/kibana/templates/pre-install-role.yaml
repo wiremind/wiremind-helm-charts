@@ -1,0 +1,21 @@
+{{- if .Values.createElasticsearchToken }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pre-install-{{ template "kibana.fullname" . }}
+  labels: {{ include "kibana.labels" . | nindent 4 }}
+  annotations:
+    {{- if .Values.install.annotations }}
+    {{- range $key, $value := .Values.install.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - create
+      - update
+{{- end }}
