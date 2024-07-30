@@ -65,6 +65,12 @@ spec:
           {{- with .Values.env }}
 {{ toYaml . | indent 10 }}
           {{- end }}
+          {{- if gt (len .Values.args) 0 }}
+          args:
+{{- range $item := .Values.args }}
+            - {{ $item }}
+{{- end }}
+          {{- end }}
           livenessProbe:
             httpGet:
               path: {{ .Values.livenessProbe.path }}
