@@ -4,7 +4,7 @@ fullnameOverride: ""
 ## To define common settings, it may be useful to use YAML anchors to use the same
 ## base settings for all node types (data + master) + ingest
 es-defaults: &defaults
-  imageTag: 7.17.22
+  imageTag: 8.14.3
   ## Change me, and change urls using elasticsearch below
   clusterName: "my-elasticsearch-cluster"
   ## Enable if you want backup (see below)
@@ -46,6 +46,19 @@ es-defaults: &defaults
   securityContext:
     allowPrivilegeEscalation: false
     privileged: false
+  extraEnvs:
+    # override xpack settings from elasticsearch environment variables, disabling ssl verification and ssl for clients
+    - name: xpack.security.transport.ssl.verification_mode
+      value: "none"
+    - name: xpack.security.http.ssl.enabled
+      value: "false"
+  createCert: true
+  protocol: http
+  tests:
+    enabled: false
+  secret:
+    # Change me or else it will be auto-generated
+    password: ""
 
 ## The data nodes
 es-data-hot:
@@ -67,9 +80,9 @@ es-data-hot:
   #           ssl:
   #             enabled: false
   roles:
-    master: "false"
-    ingest: "true"
-    data: "true"
+    - ingest
+    - data_hot
+    - data_content
   replicas: 1
   # esJavaOpts: "-Xmx1g  -Xms1g"
   # resources:
@@ -112,9 +125,7 @@ es-data-warm:
   #           ssl:
   #             enabled: false
   roles:
-    master: "false"
-    ingest: "false"
-    data: "true"
+    - data_warm
   replicas: 1
   esJavaOpts: "-Xmx1g  -Xms1g"
   # resources:
@@ -148,9 +159,7 @@ es-data-cold:
   #           ssl:
   #             enabled: false
   roles:
-    master: "false"
-    ingest: "false"
-    data: "true"
+    - data_cold
   replicas: 1
   # esJavaOpts: "-Xmx1g  -Xms1g"
   # resources:
@@ -171,9 +180,7 @@ es-ingest:
   nodeGroup: "ingest"
   enabled: false
   roles:
-    master: "false"
-    ingest: "true"
-    data: "false"
+    - ingest
   replicas: 1
   # esJavaOpts: "-Xmx1g  -Xms1g"
   # resources:
@@ -205,9 +212,7 @@ es-master:
   #           ssl:
   #             enabled: false
   roles:
-    master: "true"
-    ingest: "false"
-    data: "false"
+    - master
   # esJavaOpts: "-Xms128m -Xmx128m"
   #  resources:
   #    requests:
@@ -286,9 +291,11 @@ backup:
 
 kibana:
   enabled: false
-  imageTag: 7.17.22
+  imageTag: 8.14.3
   ## Change me
   elasticsearchHosts: http://my-elasticsearch-cluster-data-hot:9200
+  elasticsearchCredentialSecret: my-elasticsearch-cluster-data-hot-credentials
+  elasticsearchCertificateSecret: ""
   # resources:
   #   limits:
   #     cpu: 2
@@ -301,6 +308,12 @@ kibana:
       server.name: kibana
       server.host: "0"
       elasticsearch.requestTimeout: 180000
+      xpack.security.authc.providers:
+        anonymous.anonymous1:
+          order: 0
+          credentials:
+            username: "kibana_user"
+            password: "kibana_user"
   ingress:
     enabled: false
     # hosts:
@@ -439,3 +452,21 @@ setup:
   #                 watermark:
   #                   low: 90%
   #                   high: 95%
+
+## Create users in Elasticsearch
+users:
+  enabled: true
+  # change me
+  elasticsearchHosts: http://my-elasticsearch-cluster-data-hot:9200
+  elasticsearchCredentialSecret: my-elasticsearch-cluster-data-hot-credentials
+  elasticsearchCertificateAuthoritiesFile: ca.crt
+  elasticsearchCertificateSecret: ""
+  values:
+    kibana_user:
+      password: kibana_user
+      roles:
+        - kibana_user
+  # vector:
+  #   password: vector_password
+  #   roles:
+  #     - logstash_system

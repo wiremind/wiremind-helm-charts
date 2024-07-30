@@ -28,6 +28,17 @@ spec:
           volumeMounts:
             - name: setup
               mountPath: /app/config
+          env:
+            - name: "ELASTICSEARCH_USERNAME"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.users.elasticsearchCredentialSecret }}
+                  key: username
+            - name: "ELASTICSEARCH_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.users.elasticsearchCredentialSecret }}
+                  key: password
           command:
             - /bin/sh
           args:
@@ -43,6 +54,7 @@ spec:
                 CONFIG_FILENAME="${FILENAME/-query/}"
                 CONFIG_FILENAME="${CONFIG_FILENAME%.*}"
                 CONFIG_ENV_PATH="/app/config/$CONFIG_FILENAME-config.env"
+                AUTH="$ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD"
 
                 source $CONFIG_ENV_PATH
 
@@ -60,10 +72,10 @@ spec:
                   echo "Waiting for elasticsearch..."
                   HEALTH_ENDPOINT="$ELASTICSEARCH_HOST/_cluster/health?wait_for_status=yellow&timeout=10s"
                   HTTP_CODE=""
-                  RESPONSE_HEALTH=`curl --max-time 5 --silent --show-error $HEALTH_ENDPOINT`
+                  RESPONSE_HEALTH=`curl -k --max-time 5 --silent --show-error -u $AUTH $HEALTH_ENDPOINT`
                   RESPONSE_HEALTH_CMD=\'$RESPONSE_HEALTH\'
                   if [[ "$?" == "0" ]]; then
-                    HTTP_CODE=`curl --max-time 5 -s -o /dev/null -w "%{http_code}" $HEALTH_ENDPOINT`
+                    HTTP_CODE=`curl -k --max-time 5 -s -o /dev/null -w "%{http_code}" -u $AUTH $HEALTH_ENDPOINT`
                     CLUSTER_READY=`echo $RESPONSE_HEALTH_CMD | grep -q '"status":"yellow"'`
                     if [[ "$?" != "0" ]]; then
                       CLUSTER_READY=`echo $RESPONSE_HEALTH_CMD | grep -q '"status":"green"'`
@@ -84,7 +96,7 @@ spec:
                 HEADERS_CMD=""
                 echo "$HEADERS" | tr ";" '\n' | \
                 {
-                  CURL_CMD="curl -X $METHOD --silent --show-error"
+                  CURL_CMD="curl -k -X $METHOD --silent --show-error -u $AUTH"
 
                   while read header;
                   do
