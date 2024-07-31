@@ -99,4 +99,7 @@ spec:
       affinity:
         {{ toYaml . | nindent 14 }}
       {{- end }}
+      {{- with .Values.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
       terminationGracePeriodSeconds: 1
