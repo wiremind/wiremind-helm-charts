@@ -5,11 +5,7 @@ metadata:
   name: pre-delete-{{ template "kibana.fullname" . }}
   labels: {{ include "kibana.labels" . | nindent 4 }}
   annotations:
-    {{- if .Values.delete.annotations }}
-    {{- range $key, $value := .Values.delete.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}
-    {{- end }}
+    {{ .Values.delete.annotations | toYaml | nindent 4 }}
 spec:
   backoffLimit: 3
   template:

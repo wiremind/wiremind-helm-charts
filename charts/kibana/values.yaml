@@ -50,13 +50,11 @@ podAnnotations: {}
 # iam.amazonaws.com/role: es-cluster
 
 install:
-  annotations:
-    "helm.sh/hook-delete-policy": before-hook-creation, hook-succeeded
+  annotations: {}
 
 delete:
   annotations:
     "helm.sh/hook": pre-delete
-    "helm.sh/hook-delete-policy": before-hook-creation, hook-succeeded
 
 resources:
   requests:

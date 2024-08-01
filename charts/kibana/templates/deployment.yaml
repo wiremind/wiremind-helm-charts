@@ -5,9 +5,7 @@ metadata:
   labels: {{ include "kibana.labels" . | nindent 4 }}
   {{- if .Values.annotations }}
   annotations:
-    {{- range $key, $value := .Values.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}
+    {{ .Values.annotations | toYaml | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.replicas }}
