@@ -36,12 +36,23 @@ spec:
               value: {{ index .Values.indexLifecycleManagement.cold.minAge | quote }}
             - name: DELETE_MIN_AGE
               value: {{ index .Values.indexLifecycleManagement.delete.minAge | quote }}
+            - name: "ELASTICSEARCH_USERNAME"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.users.elasticsearchCredentialSecret }}
+                  key: username
+            - name: "ELASTICSEARCH_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.users.elasticsearchCredentialSecret }}
+                  key: password
           command:
             - /bin/sh
           args:
             - -c
             - |
-              until curl --silent --show-error "$SERVER_URL/_cluster/health?wait_for_status=yellow&timeout=300s";
+              AUTH="$ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD"
+              until curl -k --silent --show-error -u $AUTH "$SERVER_URL/_cluster/health?wait_for_status=yellow&timeout=300s";
               do
                 echo "Waiting for elasticsearch";
                 sleep 2;
@@ -111,7 +122,7 @@ spec:
                   }
                 }
               }';
-              RESPONSE=$(curl -XPUT --silent --show-error -H 'Content-Type: application/json' "$SERVER_URL/_ilm/policy/{{ index .Values.indexLifecycleManagement.name }}" -d "$QUERY");
+              RESPONSE=$(curl -k -X PUT --silent --show-error -u $AUTH -H 'Content-Type: application/json' "$SERVER_URL/_ilm/policy/{{ index .Values.indexLifecycleManagement.name }}" -d "$QUERY");
               # Elasticsearch will answer at least {"acknowledged":true}, at most {"acknowledged":true, ...}
               if echo "$RESPONSE" | grep -v '"acknowledged":true'; then exit 1; fi;
       terminationGracePeriodSeconds: 0
