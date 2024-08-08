@@ -129,7 +129,7 @@
                     "type": "boolean"
                 },
                 "name": {
-                    "type": "null"
+                    "type": "string"
                 },
                 "imagePullSecrets": {
                     "type": "array"
