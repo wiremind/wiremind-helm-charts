@@ -46,13 +46,11 @@ es-defaults: &defaults
   securityContext:
     allowPrivilegeEscalation: false
     privileged: false
-  extraEnvs:
-    # override xpack settings from elasticsearch environment variables, disabling ssl verification and ssl for clients
-    - name: xpack.security.transport.ssl.verification_mode
-      value: "none"
-    - name: xpack.security.http.ssl.enabled
-      value: "false"
   createCert: true
+  transportTls:
+    verificationMode: none
+  httpTls:
+    enabled: false
   protocol: http
   tests:
     enabled: false
