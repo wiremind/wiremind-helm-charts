@@ -4,7 +4,6 @@ fullnameOverride: ""
 ## To define common settings, it may be useful to use YAML anchors to use the same
 ## base settings for all node types (data + master) + ingest
 es-defaults: &defaults
-  imageTag: 8.14.3
   ## Change me, and change urls using elasticsearch below
   clusterName: "my-elasticsearch-cluster"
   ## Enable if you want backup (see below)
@@ -46,13 +45,11 @@ es-defaults: &defaults
   securityContext:
     allowPrivilegeEscalation: false
     privileged: false
-  extraEnvs:
-    # override xpack settings from elasticsearch environment variables, disabling ssl verification and ssl for clients
-    - name: xpack.security.transport.ssl.verification_mode
-      value: "none"
-    - name: xpack.security.http.ssl.enabled
-      value: "false"
   createCert: true
+  transportTls:
+    verificationMode: none
+  httpTls:
+    enabled: false
   protocol: http
   tests:
     enabled: false
@@ -291,7 +288,7 @@ backup:
 
 kibana:
   enabled: false
-  imageTag: 8.14.3
+  imageTag: 8.15.0
   ## Change me
   elasticsearchHosts: http://my-elasticsearch-cluster-data-hot:9200
   elasticsearchCredentialSecret: my-elasticsearch-cluster-data-hot-credentials
