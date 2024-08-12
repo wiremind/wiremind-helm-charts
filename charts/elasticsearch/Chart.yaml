@@ -1,0 +1,13 @@
+apiVersion: v1
+description: A helm chart for Elasticsearch
+home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
+name: elasticsearch
+version: 8.15.0
+appVersion: 8.15.0
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch
+  - https://github.com/elastic/elasticsearch
+icon: https://helm.elastic.co/icons/elasticsearch.png
