@@ -5091,6 +5091,24 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/druid-tasks-exporter-0.1.0/druid-tasks-exporter-0.1.0.tgz
     version: 0.1.0
+  elasticsearch:
+  - apiVersion: v1
+    appVersion: 8.15.0
+    created: "2024-08-12T14:03:12.771322901Z"
+    description: A helm chart for Elasticsearch
+    digest: b1f6e5e2231ab3c7a863eca0fdaae34c2bd2f1818c800975eeb414cd7947644d
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch
+    icon: https://helm.elastic.co/icons/elasticsearch.png
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: elasticsearch
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch
+    - https://github.com/elastic/elasticsearch
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/elasticsearch-8.15.0/elasticsearch-8.15.0.tgz
+    version: 8.15.0
   elasticsearch-cluster:
   - apiVersion: v2
     appVersion: 8.14.3
@@ -12877,4 +12895,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-08-08T18:50:02.635649534Z"
+generated: "2024-08-12T14:03:12.771884969Z"
