@@ -134,7 +134,8 @@ spec:
     - metadata:
         name: clamav-data
         labels:
-          {{- include "clamav.labels" . | nindent 10 }}
+          app.kubernetes.io/name: {{ include "clamav.name" . }}
+          app.kubernetes.io/instance: {{ .Release.Name }}
         {{- with .Values.persistentVolume.annotations }}
         annotations:
           {{- toYaml . | nindent 10 }}
