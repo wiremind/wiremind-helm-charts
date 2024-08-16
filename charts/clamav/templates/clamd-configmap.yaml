@@ -10,5 +10,5 @@ metadata:
     heritage: {{ .Release.Service }}
 data:
   clamd.conf:
-    {{ toYaml .Values.clamdConfig | indent 4 }}
+    {{- toYaml .Values.clamdConfig | nindent 4 }}
 {{- end }}

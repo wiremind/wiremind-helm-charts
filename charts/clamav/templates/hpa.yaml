@@ -1,7 +1,7 @@
-{{- if .Values.hpa.enabled -}}
-{{- if semverCompare ">=1.23-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- if .Values.hpa.enabled }}
+{{- if semverCompare ">=1.23-0" .Capabilities.KubeVersion.GitVersion }}
 apiVersion: autoscaling/v2
-{{- else -}}
+{{- else }}
 apiVersion: autoscaling/v2beta2
 {{- end }}
 kind: HorizontalPodAutoscaler

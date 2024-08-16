@@ -5,7 +5,9 @@ metadata:
   labels:
     {{- include "clamav.labels" . | nindent 4 }}
 spec:
+  {{- if not .Values.hpa.enabled }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
   serviceName: {{ include "clamav.fullname" . }}
   selector:
     matchLabels:
@@ -14,16 +16,16 @@ spec:
     metadata:
       annotations:
         {{- if .Values.podAnnotations }}
-        {{ toYaml .Values.podAnnotations | nindent 8 }}
+        {{- toYaml .Values.podAnnotations | nindent 8 }}
         {{- end }}
       labels:
         {{- include "clamav.selectorLabels" . | nindent 8 }}
         {{- if .Values.podLabels }}
-        {{ toYaml .Values.podLabels | nindent 8 }}
+        {{- toYaml .Values.podLabels | nindent 8 }}
         {{- end }}
     spec:
-      {{- if .Values.priorityClassName }}
-      priorityClassName: "{{ .Values.priorityClassName }}"
+      {{- with .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -40,37 +42,38 @@ spec:
             - {{ include "clamav.entrypoint" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- with .Values.extraEnvVars }}
-          env: {{- toYaml . | nindent 10 }}
+          env:
+            {{- toYaml . | nindent 10 }}
           {{- end }}
           envFrom:
-          {{- with .Values.extraEnvVarsCM }}
-          - configMapRef:
-              name: {{ . }}
-          {{- end }}
-          {{- with .Values.extraEnvVarsSecret }}
-          - secretRef:
-              name: {{ . }}
-          {{- end }}
+            {{- with .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ . }}
+            {{- end }}
+            {{- with .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ . }}
+            {{- end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           volumeMounts:
-          {{- if .Values.freshclamConfig }}
-          - name: freshclam-config-volume
-            mountPath: /etc/clamav/freshclam.conf
-            subPath: freshclam.conf
-          {{- end }}
-          {{- if .Values.clamdConfig }}
-          - name: clamd-config-volume
-            mountPath: /etc/clamav/clamd.conf
-            subPath: clamd.conf
-          {{- end }}
-          {{- if .Values.extraVolumeMounts }}
-          {{- toYaml .Values.extraVolumeMounts | nindent 10 }}
-          {{- end }}
-          - name: clamav-data
-            mountPath: /data
+            - name: clamav-data
+              mountPath: /data
+            {{- if .Values.freshclamConfig }}
+            - name: freshclam-config-volume
+              mountPath: /etc/clamav/freshclam.conf
+              subPath: freshclam.conf
+            {{- end }}
+            {{- if .Values.clamdConfig }}
+            - name: clamd-config-volume
+              mountPath: /etc/clamav/clamd.conf
+              subPath: clamd.conf
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
           ports:
-            - name: clamavport
+            - name: tcp-clamav
               containerPort: 3310
               protocol: TCP
           startupProbe:
@@ -78,27 +81,27 @@ spec:
             failureThreshold: {{ .Values.startupProbe.failureThreshold }}
             periodSeconds: {{ .Values.startupProbe.periodSeconds }}
             tcpSocket:
-              port: clamavport
+              port: tcp-clamav
             timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             tcpSocket:
-              port: clamavport
+              port: tcp-clamav
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
           readinessProbe:
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             tcpSocket:
-              port: clamavport
+              port: tcp-clamav
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
-        {{ toYaml . | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.affinity }}
       affinity:
@@ -109,6 +112,10 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
+        {{- if not .Values.persistentVolume.enabled }}
+        - name: clamav-data
+          emptyDir: {}
+        {{- end }}
         {{- if .Values.freshclamConfig }}
         - name: freshclam-config-volume
           configMap:
@@ -122,29 +129,26 @@ spec:
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}
         {{- end }}
-  {{- if not .Values.persistentVolume.enabled }}
-        - name: clamav-data
-          emptyDir: {}
-  {{- else }}
+  {{- if .Values.persistentVolume.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: clamav-data
         labels:
           {{- include "clamav.labels" . | nindent 10 }}
-        {{- if .Values.persistentVolume.annotations }}
+        {{- with .Values.persistentVolume.annotations }}
         annotations:
-          {{- .Values.persistentVolume.annotations | toYaml | nindent 10 }}
+          {{- toYaml . | nindent 10 }}
         {{- end }}
       spec:
         accessModes:
-        {{- range .Values.persistentVolume.accessModes }}
+          {{- range .Values.persistentVolume.accessModes }}
           - {{ . | quote }}
-        {{- end }}
+          {{- end }}
         {{- if .Values.persistentVolume.storageClass }}
         {{- if (eq "-" .Values.persistentVolume.storageClass) }}
         storageClassName: ""
         {{- else }}
-        storageClassName: "{{ .Values.persistentVolume.storageClass }}"
+        storageClassName: {{ .Values.persistentVolume.storageClass | quote }}
         {{- end }}
         {{- end }}
         resources:

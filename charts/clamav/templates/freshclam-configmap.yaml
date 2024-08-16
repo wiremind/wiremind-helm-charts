@@ -10,5 +10,5 @@ metadata:
     heritage: {{ .Release.Service }}
 data:
   freshclam.conf:
-    {{ toYaml .Values.freshclamConfig | indent 4 }}
+    {{- toYaml .Values.freshclamConfig | nindent 4 }}
 {{- end }}
