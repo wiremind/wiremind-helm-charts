@@ -155,7 +155,9 @@ spec:
       spec:
         accessModes:
           - ReadWriteOnce
-        storageClassName: {{ default "standard" $historicalDefaults.persistence.storageClass }}
+        {{- with $historicalDefaults.persistence.storageClass }}
+        storageClassName: {{ . }}
+        {{- end }}
         resources:
           requests:
             storage: "{{ $tierValue.persistence.size }}"
