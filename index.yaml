@@ -1400,6 +1400,30 @@ entries:
     version: 4.0.0
   clair:
   - apiVersion: v2
+    appVersion: 2.1.8
+    created: "2024-08-16T10:58:11.599163387Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.4.4
+    description: Clair is an open source project for the static analysis of vulnerabilities
+      in application containers.
+    digest: f063bd01624bb0186ec6ed0989869cae1733d33954a18745fdababce220bda12
+    home: https://coreos.com/clair
+    icon: https://cloud.githubusercontent.com/assets/343539/21630811/c5081e5c-d202-11e6-92eb-919d5999c77a.png
+    kubeVersion: '>=1.22.0'
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: clair
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/clair
+    - https://github.com/quay/clair
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/clair-0.3.0/clair-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     appVersion: 2.1.6
     created: "2022-06-02T09:55:57.553547905Z"
     dependencies:
@@ -12951,4 +12975,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-08-12T15:07:10.23908202Z"
+generated: "2024-08-16T10:58:11.59968764Z"
