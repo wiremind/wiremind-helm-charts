@@ -3,45 +3,51 @@ kind: Deployment
 metadata:
   name: {{ template "fullname" . }}
   labels:
-{{ include "clair.labels" . | indent 4 }}
+    {{- include "clair.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-{{ include "clair.matchLabels" $ | indent 6 }}
+      {{- include "clair.matchLabels" $ | nindent 6 }}
   template:
     metadata:
       labels:
-{{ include "clair.labels" $ | indent 8 }}
+        {{- include "clair.labels" $ | nindent 8 }}
     spec:
       volumes:
-      - name: "{{ .Chart.Name }}-config"
-        configMap:
-          name: {{ template "fullname" . }}
-      containers:
-      - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        args:
-        - "-log-level={{ .Values.logLevel }}"
-        {{ if .Values.insecureTls }}- "--insecure-tls" {{end}}
-        ports:
-        - name: clair-api
-          containerPort: {{ .Values.service.internalApiPort }}
-          protocol: TCP
-        - name: clair-health
-          containerPort: {{ .Values.service.internalHealthPort }}
-          protocol: TCP
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: {{ .Values.service.internalHealthPort }}
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: {{ .Values.service.internalHealthPort }}
-        volumeMounts:
         - name: "{{ .Chart.Name }}-config"
-          mountPath: /etc/clair
-        resources:
-{{ toYaml .Values.resources | indent 10 }}
+          configMap:
+            name: {{ template "fullname" . }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - "-log-level={{ .Values.logLevel }}"
+            {{- if .Values.insecureTls }}
+            - "--insecure-tls"
+            {{- end }}
+          ports:
+            - name: api
+              containerPort: {{ .Values.service.internalApiPort }}
+              protocol: TCP
+            - name: health
+              containerPort: {{ .Values.service.internalHealthPort }}
+              protocol: TCP
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /health
+              port: {{ .Values.service.internalHealthPort }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /health
+              port: {{ .Values.service.internalHealthPort }}
+          {{- end }}
+          volumeMounts:
+            - name: "{{ .Chart.Name }}-config"
+              mountPath: /etc/clair
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

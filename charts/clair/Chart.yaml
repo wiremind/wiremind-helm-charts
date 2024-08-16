@@ -1,13 +1,13 @@
 apiVersion: v2
 name: clair
 home: https://coreos.com/clair
-version: 0.2.10-dev0
-appVersion: 2.1.6
+version: 0.3.0
+appVersion: 2.1.8
 dependencies:
   - name: postgresql
-    version: "10.16.2"
+    version: "13.4.4"
     condition: postgresql.enabled
-    repository: "https://charts.bitnami.com/bitnami"
+    repository: "oci://registry-1.docker.io/bitnamicharts"
 description: Clair is an open source project for the static analysis of vulnerabilities in application containers.
 icon: https://cloud.githubusercontent.com/assets/343539/21630811/c5081e5c-d202-11e6-92eb-919d5999c77a.png
 sources:
@@ -16,4 +16,4 @@ sources:
 maintainers:
   - name: Wiremind
     url: https://github.com/wiremind/wiremind-helm-charts
-kubeVersion: ">=1.14.0-0"
+kubeVersion: ">=1.22.0"

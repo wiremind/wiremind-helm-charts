@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: {{ template "fullname" . }}
   labels:
-{{ include "clair.labels" . | indent 4 }}
+    {{- include "clair.labels" . | nindent 4 }}
 data:
   config.yaml: |
     clair:
@@ -17,7 +17,7 @@ data:
           {{- if .Values.config.postgresURI }}
           source: "{{ .Values.config.postgresURI }}"
           {{ else }}
-          source: "postgres://{{ .Values.postgresql.postgresqlUsername }}:{{ .Values.postgresql.postgresqlPassword }}@{{ template "postgresql.fullname" . }}:5432/postgres?sslmode=disable"
+          source: "postgres://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.password }}@{{ template "postgresql.fullname" . }}:5432/{{ .Values.postgresql.auth.database }}?sslmode=disable"
           {{ end }}
 
           # Number of elements kept in the cache
