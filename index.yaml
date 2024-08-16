@@ -11898,6 +11898,40 @@ entries:
     version: 0.1.0
   remoulade:
   - apiVersion: v2
+    created: "2024-08-16T14:01:42.644760759Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ^11
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ^16
+    - condition: rabbimq.enabled
+      name: rabbitmq
+      repository: https://charts.bitnami.com/bitnami
+      version: ^10
+    - condition: prometheus-rabbitmq-exporter.enabled
+      name: prometheus-rabbitmq-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: ^1
+    description: A Helm chart to deploy Remoulade and its dependencies
+    digest: e0ff537523e4ac306bb7230b5223602a7a16971b44a4de5ef62fbcd5f9d4ddd6
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/remoulade
+    icon: https://raw.githubusercontent.com/wiremind/remoulade/master/artwork/logo.png
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: remoulade
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/remoulade
+    - https://github.com/wiremind/remoulade
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/remoulade-0.2.0/remoulade-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
     created: "2022-04-20T15:39:13.895688593Z"
     dependencies:
     - condition: postgresql.enabled
@@ -13036,4 +13070,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-08-16T13:46:13.574632367Z"
+generated: "2024-08-16T14:01:42.645427914Z"
