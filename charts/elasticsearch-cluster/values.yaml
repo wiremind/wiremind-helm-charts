@@ -67,15 +67,6 @@ es-data-hot:
   #     node:
   #       attr:
   #         data: hot
-  #     xpack:
-  #       security:
-  #         enabled: false
-  #         transport:
-  #           ssl:
-  #             enabled: false
-  #         http:
-  #           ssl:
-  #             enabled: false
   roles:
     - ingest
     - data_hot
@@ -112,15 +103,6 @@ es-data-warm:
   #     node:
   #       attr:
   #         data: warm
-  #     xpack:
-  #       security:
-  #         enabled: false
-  #         transport:
-  #           ssl:
-  #             enabled: false
-  #         http:
-  #           ssl:
-  #             enabled: false
   roles:
     - data_warm
   replicas: 1
@@ -146,15 +128,6 @@ es-data-cold:
   #     node:
   #       attr:
   #         data: cold
-  #     xpack:
-  #       security:
-  #         enabled: false
-  #         transport:
-  #           ssl:
-  #             enabled: false
-  #         http:
-  #           ssl:
-  #             enabled: false
   roles:
     - data_cold
   replicas: 1
@@ -197,17 +170,6 @@ es-master:
   <<: *defaults
   nodeGroup: "master"
   enabled: true
-  # esConfig:
-  #   elasticsearch.yml: |
-  #     xpack:
-  #       security:
-  #         enabled: false
-  #         transport:
-  #           ssl:
-  #             enabled: false
-  #         http:
-  #           ssl:
-  #             enabled: false
   roles:
     - master
   # esJavaOpts: "-Xms128m -Xmx128m"
@@ -311,6 +273,8 @@ kibana:
           credentials:
             username: "kibana_user"
             password: "kibana_user"
+        basic.basic1:
+          order: 1
   ingress:
     enabled: false
     # hosts:
@@ -426,44 +390,36 @@ setup:
   terminationGracePeriodSeconds: 0
   ttlSecondsAfterFinished: 1800
   # priorityClassName: my-priority-class
-  # annotations:
-  #   "helm.sh/hook": post-install, post-upgrade
-  #   "helm.sh/hook-weight": "1"
-  #   "helm.sh/hook-delete-policy": "before-hook-creation, hook-succeeded"
-  ## Some example:
-  # queries:
-  #   1ClusterSettings:
-  #     # Increase watermark compared to defaults
-  #     enabled: true
-  #     debug: false
-  #     endpoint: "_cluster/settings"
-  #     method: "PUT"
-  #     headers:
-  #       - "Content-Type: application/json"
-  #     query:
-  #       persistent:
-  #         cluster:
-  #           routing:
-  #             allocation:
-  #               disk:
-  #                 watermark:
-  #                   low: 90%
-  #                   high: 95%
-
-## Create users in Elasticsearch
-users:
-  enabled: true
-  # change me
-  elasticsearchHosts: http://my-elasticsearch-cluster-data-hot:9200
-  elasticsearchCredentialSecret: my-elasticsearch-cluster-data-hot-credentials
-  elasticsearchCertificateAuthoritiesFile: ca.crt
-  elasticsearchCertificateSecret: ""
-  values:
-    kibana_user:
-      password: kibana_user
-      roles:
-        - kibana_user
-  # vector:
-  #   password: vector_password
-  #   roles:
-  #     - logstash_system
+  annotations:
+    "helm.sh/hook": post-install, post-upgrade
+    # "helm.sh/hook-weight": "1"
+    # "helm.sh/hook-delete-policy": "before-hook-creation, hook-succeeded"
+  queries:
+    ## An example:
+    # 1ClusterSettings:
+    #   # Increase watermark compared to defaults
+    #   enabled: true
+    #   debug: false
+    #   endpoint: "_cluster/settings"
+    #   method: "PUT"
+    #   headers:
+    #     - "Content-Type: application/json"
+    #   query:
+    #     persistent:
+    #       cluster:
+    #         routing:
+    #           allocation:
+    #             disk:
+    #               watermark:
+    #                 low: 90%
+    #                 high: 95%
+    5CreateKibanaUser:
+      enabled: true
+      endpoint: "_security/user/kibana_user"
+      method: POST
+      headers:
+        - "Content-Type: application/json"
+      query:
+        password: "kibana_user"
+        roles:
+          - kibana_user

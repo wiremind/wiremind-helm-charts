@@ -32,12 +32,12 @@ spec:
             - name: "ELASTICSEARCH_USERNAME"
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.users.elasticsearchCredentialSecret }}
+                  name: {{ include "elasticsearch-cluster.elasticsearch-credentials" . }}
                   key: username
             - name: "ELASTICSEARCH_PASSWORD"
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.users.elasticsearchCredentialSecret }}
+                  name: {{ include "elasticsearch-cluster.elasticsearch-credentials" . }}
                   key: password
           command:
             - /bin/sh
@@ -69,7 +69,6 @@ spec:
 
                 while true;
                 do
-                  echo "Waiting for elasticsearch..."
                   HEALTH_ENDPOINT="$ELASTICSEARCH_HOST/_cluster/health?wait_for_status=yellow&timeout=10s"
                   HTTP_CODE=""
                   RESPONSE_HEALTH=`curl -k --max-time 5 --silent --show-error -u $AUTH $HEALTH_ENDPOINT`
@@ -87,6 +86,7 @@ spec:
                     break
                   else
                     echo $RESPONSE_HEALTH
+                    echo "Waiting for elasticsearch..."
                     sleep 10;
                   fi
                 done;
@@ -115,8 +115,8 @@ spec:
 
                   RESPONSE=`eval $CURL_CMD`
 
-                  # Elasticsearch will answer at least {"acknowledged":true}, at most {"acknowledged":true, ...}
-                  if echo "$RESPONSE" | grep -v '"acknowledged":true'; then
+                  # Elasticsearch will answer at least {"acknowledged":true}, at most {"acknowledged":true, ...}, except on security api
+                  if echo "$RESPONSE" | grep -v '"acknowledged":true' && [ "${ENDPOINT:0:9}" != _security ]; then
                     exit 1
                   else
                     echo $RESPONSE
