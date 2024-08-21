@@ -54,6 +54,10 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{ printf "http://%s-%s-headless:9200" (index .Values "es-data-hot" "clusterName") (index .Values "es-data-hot" "nodeGroup") }}
 {{- end }}
 
+{{- define "elasticsearch-cluster.elasticsearch-credentials" -}}
+{{ printf "%s-%s-credentials" (index .Values "es-data-hot" "clusterName") (index .Values "es-data-hot" "nodeGroup") }}
+{{- end }}
+
 {{- define "elasticsearch-cluster.setup.configmap" -}}
 {{- if .queryConfig.enabled }}
 {{- if .query }}

@@ -39,12 +39,12 @@ spec:
             - name: "ELASTICSEARCH_USERNAME"
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.users.elasticsearchCredentialSecret }}
+                  name: {{ include "elasticsearch-cluster.elasticsearch-credentials" . }}
                   key: username
             - name: "ELASTICSEARCH_PASSWORD"
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.users.elasticsearchCredentialSecret }}
+                  name: {{ include "elasticsearch-cluster.elasticsearch-credentials" . }}
                   key: password
           command:
             - /bin/sh
