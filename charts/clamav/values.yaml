@@ -133,7 +133,6 @@ freshclamConfig: |
   ###############
 
   DatabaseDirectory /data
-  UpdateLogFile /dev/stdout
   LogTime yes
   # CUSTOM: Use pid file in tmp
   PidFile /tmp/freshclam.pid
