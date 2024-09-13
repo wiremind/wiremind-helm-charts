@@ -1,4 +1,4 @@
-{{- if .Values.clamdConfig -}}
+{{- if or .Values.clamdConfig .Values.clamdConfigDict -}}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -9,6 +9,10 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
-  clamd.conf:
-    {{- toYaml .Values.clamdConfig | nindent 4 }}
+  clamd.conf: |
+    {{- if .Values.clamdConfig }}
+    {{- .Values.clamdConfig | nindent 4 }}
+    {{- else }}
+    {{- include "clamav.dictToConfig" .Values.clamdConfigDict | nindent 4 }}
+    {{- end }}
 {{- end }}
