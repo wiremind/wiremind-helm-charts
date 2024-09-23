@@ -29,6 +29,9 @@ spec:
       {{- with .Values.serviceMonitor.honorLabels }}
       honorLabels: {{ . }}
       {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
   selector:
     matchLabels:
       {{- include "ovh-exporter.selectorLabels" . | nindent 6 }}
