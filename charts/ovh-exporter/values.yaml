@@ -57,7 +57,7 @@ service:
 serviceMonitor:
   enabled: false
   jobLabel: app.kubernetes.io/name
-  port: 8080
+  port: http
   path: /metrics
   interval: ""
   scrapeTimeout: ""
