@@ -1,0 +1,15 @@
+{{- if .Values.prometheusRule.enabled }}
+
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "ovh-exporter.fullname" . }}
+  labels:
+    {{- include "ovh-exporter.labels" . | nindent 4 }}
+spec:
+  {{- with .Values.prometheusRule.groups }}
+  groups:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
+{{- end }}

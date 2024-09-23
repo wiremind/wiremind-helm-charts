@@ -1,0 +1,18 @@
+apiVersion: v2
+name: ovh-exporter
+description: Prometheus exporter for the OVH API
+home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/ovh-exporter
+sources:
+  - https://github.com/wiremind/ovh-exporter
+keywords:
+  - wiremind
+  - ovh
+  - api
+  - exporter
+type: application
+version: 0.1.0
+appVersion: "v1.1.1"
+kubeVersion: ">=1.19.0-0"
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
