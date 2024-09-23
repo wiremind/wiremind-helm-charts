@@ -1,0 +1,2 @@
+# By default it will crash loop if there is no valid ovh credentials
+replicaCount: 0
