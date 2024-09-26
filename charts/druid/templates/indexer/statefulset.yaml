@@ -131,10 +131,43 @@ spec:
           volumeMounts:
             - mountPath: /opt/druid/var
               name: data
+      {{- if not $categoryValue.persistence.enabled }}
       volumes:
         - name: data
           emptyDir:
-            sizeLimit: "{{ $categoryValue.emptyDir.size }}"
+            {{- with $categoryValue.emptyDir }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+      {{- end }}
+  {{- if $categoryValue.persistence.enabled }}
+  # alpha support in 1.23, beta & enabled by default in 1.27
+  # See:
+  #   - https://kubernetes.io/blog/2021/12/16/kubernetes-1-23-statefulset-pvc-auto-deletion/
+  #   - https://kubernetes.io/blog/2023/05/04/kubernetes-1-27-statefulset-pvc-auto-deletion-beta/
+  #   - https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  persistentVolumeClaimRetentionPolicy:
+    {{- with $categoryValue.persistence.persistentVolumeClaimRetentionPolicy }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  volumeClaimTemplates:
+    - kind: PersistentVolumeClaim
+      apiVersion: v1
+      metadata:
+        name: data
+        namespace: {{ .Release.Namespace }}
+        labels:
+          {{- include "druid.common-labels" $ | nindent 10 }}
+          app.kubernetes.io/part-of: indexer
+          app.kubernetes.io/component: indexer-{{ $categoryName }}
+      spec:
+        accessModes:
+          - {{ $categoryValue.persistence.accessModes | quote }}
+        resources:
+          requests:
+            storage: {{ $categoryValue.persistence.size }}
+        storageClassName: {{ $categoryValue.persistence.storageClass }}
+        volumeMode: Filesystem
+  {{- end }}
 
 {{- end }}
 
