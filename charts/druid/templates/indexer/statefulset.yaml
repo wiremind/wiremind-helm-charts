@@ -154,7 +154,7 @@ spec:
       apiVersion: v1
       metadata:
         name: data
-        namespace: {{ .Release.Namespace }}
+        namespace: {{ $.Release.Namespace }}
         labels:
           {{- include "druid.common-labels" $ | nindent 10 }}
           app.kubernetes.io/part-of: indexer
