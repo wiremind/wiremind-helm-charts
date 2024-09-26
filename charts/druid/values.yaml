@@ -463,6 +463,15 @@ indexer:
       #     cpu: 50m
       emptyDir:
         size: 1Gi
+      persistence:
+        enabled: false
+        size: "1Gi"
+        storageClass: ""
+        accessModes: "ReadWriteOnce"
+        persistentVolumeClaimRetentionPolicy:
+          whenDeleted: "Retain"
+          whenScaled: "Retain"
+
       autoscaling:
         enabled: false
         minReplicas: 1
