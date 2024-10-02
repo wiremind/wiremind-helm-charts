@@ -11469,6 +11469,28 @@ entries:
     version: 2.1.1
   ovh-exporter:
   - apiVersion: v2
+    appVersion: v1.1.2
+    created: "2024-10-02T11:56:54.253509079Z"
+    description: Prometheus exporter for the OVH API
+    digest: edfe4dd382f852b1c09cf573543a13f5609de958b14d56625cae09497122cdfb
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/ovh-exporter
+    keywords:
+    - wiremind
+    - ovh
+    - api
+    - exporter
+    kubeVersion: '>=1.19.0-0'
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: ovh-exporter
+    sources:
+    - https://github.com/wiremind/ovh-exporter
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/ovh-exporter-0.1.2/ovh-exporter-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
     appVersion: v1.1.1
     created: "2024-09-23T15:41:35.817232288Z"
     description: Prometheus exporter for the OVH API
@@ -13413,4 +13435,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-09-26T12:52:53.121051049Z"
+generated: "2024-10-02T11:56:54.254135192Z"
