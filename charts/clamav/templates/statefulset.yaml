@@ -59,12 +59,12 @@ spec:
           volumeMounts:
             - name: clamav-data
               mountPath: /data
-            {{- if .Values.freshclamConfig }}
+            {{- if or .Values.freshclamConfig .Values.freshclamConfigDict }}
             - name: freshclam-config-volume
               mountPath: /etc/clamav/freshclam.conf
               subPath: freshclam.conf
             {{- end }}
-            {{- if .Values.clamdConfig }}
+            {{- if or .Values.clamdConfig .Values.clamdConfigDict }}
             - name: clamd-config-volume
               mountPath: /etc/clamav/clamd.conf
               subPath: clamd.conf
@@ -116,12 +116,12 @@ spec:
         - name: clamav-data
           emptyDir: {}
         {{- end }}
-        {{- if .Values.freshclamConfig }}
+        {{- if or .Values.freshclamConfig .Values.freshclamConfigDict }}
         - name: freshclam-config-volume
           configMap:
             name: {{ include "clamav.fullname" . }}-freshclam
         {{- end }}
-        {{- if .Values.clamdConfig }}
+        {{- if or .Values.clamdConfig .Values.clamdConfigDict }}
         - name: clamd-config-volume
           configMap:
             name: {{ include "clamav.fullname" . }}-clamd
