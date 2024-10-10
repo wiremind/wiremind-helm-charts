@@ -42,6 +42,9 @@ spec:
       {{- if $.Values.priorityClassName }}
       priorityClassName: {{ $.Values.priorityClassName }}
       {{- end }}
+      {{- if $.Values.pythieServing.imagePullSecrets }}
+      imagePullSecrets: {{ $.Values.pythieServing.imagePullSecrets }}
+      {{- end }}
       initContainers:
         - name: model-download
           image: {{ $.Values.mc.image.repository }}:{{ $.Values.mc.image.tag }}
