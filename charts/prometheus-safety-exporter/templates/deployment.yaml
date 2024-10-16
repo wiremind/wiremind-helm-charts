@@ -43,6 +43,8 @@ spec:
           env:
             - name: DELAY_BETWEEN_CHECKS
               value: {{ .Values.delayBetweenChecks | quote }}
+            - name: MAX_RETRIES
+              value: {{ .Values.maxRetries | quote }}
           {{- if .Values.extraEnv }}
           envFrom:
             - secretRef:

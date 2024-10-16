@@ -25,11 +25,26 @@ data:
     OUTPUT="/tmp/json-exporter/results.json"
 
     # Avoid spamming safety in case of reboot in a loop
-    sleep $((RANDOM % 3600))
+    sleep $(($(date +%s%N) % 3600))
+
+    set +x;
+
+    retry_count=0
 
     while true; do
+
       safety --disable-optional-telemetry check -r requirements.txt --continue-on-error --save-json $OUTPUT
-      sleep $DELAY_BETWEEN_CHECKS;
+      exit_code=$?
+
+      if [ $exit_code -eq 0 ]; then
+          retry_count=0
+      elif [ $retry_count -le "$MAX_RETRIES" ]; then
+          retry_count=$((retry_count+1))
+      else
+          exit 1
+      fi
+
+      sleep "$DELAY_BETWEEN_CHECKS";
     done
 
   json-exporter-config.yml: |
