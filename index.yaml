@@ -9132,6 +9132,28 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: 1.23.0
+    created: "2024-10-17T09:27:58.411810955Z"
+    description: Manage istio-operator CRDs
+    digest: d4ba714598a78e1b4e6c81602f5484d44164a5cf260eae7f89314e6676a9aad5
+    icon: https://istio.io/latest/favicons/android-192x192.png
+    keywords:
+    - istio
+    - operator
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: istio-operator-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/istio-operator-crds
+    - https://github.com/istio/istio/tree/master/operator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/istio-operator-crds-1.23.0/istio-operator-crds-1.23.0.tgz
+    version: 1.23.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: 1.22.0
     created: "2024-07-02T07:54:43.152445675Z"
     description: Manage istio-operator CRDs
@@ -13501,4 +13523,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-10-17T08:56:17.438301653Z"
+generated: "2024-10-17T09:27:58.412439733Z"
