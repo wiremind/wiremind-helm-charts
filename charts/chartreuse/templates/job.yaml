@@ -58,7 +58,10 @@ spec:
               name: {{ template "chartreuse.fullname" . }}{{ template "chartreuse.hook.suffix" . }}
           - configMapRef:
               name: {{ template "chartreuse.fullname" . }}{{ template "chartreuse.hook.suffix" . }}
-          env:
+          volumeMounts:
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
       serviceAccountName: {{ template "chartreuse.serviceAccountName" . }}{{ template "chartreuse.hook.suffix" . }}
       terminationGracePeriodSeconds: 0
       {{- with .Values.nodeSelector }}
@@ -71,5 +74,9 @@ spec:
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.extraVolumes }}
+      volumes:
         {{- toYaml . | nindent 8 }}
       {{- end }}
