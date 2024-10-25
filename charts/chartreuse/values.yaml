@@ -21,6 +21,17 @@ stopPods: true
 ## Additional environment variables injected within chartreuse Pods
 additionalEnvironmentVariables: {}
 
+# Extra volumes
+extraVolumes: []
+# - name: thevolume
+#   emptyDir:
+#     medium: Memory
+
+## Extra volumes to mount
+extraVolumeMounts: []
+# - name: thevolume
+#   mountPath: /tmp/something
+
 ## In the case of having multiple upgradeJobs of multiple Chartreuses running, this will allow
 ## to control the order of their execution, they are executed in weighted order.
 ## Make sure the weights are > 0
