@@ -64,6 +64,14 @@ resources:
     cpu: "1000m"
     memory: "2Gi"
 
+preInstallJobResources:
+  requests:
+    cpu: "5m"
+    memory: "1Mi"
+  limits:
+    cpu: "25m"
+    memory: "5Mi"
+
 protocol: http
 
 serverHost: "0.0.0.0"
