@@ -80,6 +80,10 @@ spec:
               mountPath: /certs
               readOnly: true
             {{- end }}
+          {{- if .Values.preInstallJobResources }}
+          resources:
+            {{- toYaml .Values.preInstallJobResources | nindent 12 }}
+          {{- end }}
       serviceAccount: pre-install-{{ template "kibana.fullname" . }}
       volumes:
         {{- if .Values.elasticsearchCertificateSecret }}
