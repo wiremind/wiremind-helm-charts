@@ -2,3 +2,7 @@ elasticsearchHosts: ""
 elasticsearchCertificateSecret: ""
 
 createElasticsearchToken: false
+
+kibana:
+  install:
+    annotations: null
