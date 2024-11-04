@@ -250,7 +250,7 @@ backup:
 
 kibana:
   enabled: false
-  imageTag: 8.15.0
+  imageTag: 8.15.3
   ## Change me
   elasticsearchHosts: http://my-elasticsearch-cluster-data-hot:9200
   elasticsearchCredentialSecret: my-elasticsearch-cluster-data-hot-credentials
@@ -275,6 +275,9 @@ kibana:
             password: "kibana_user"
         basic.basic1:
           order: 1
+  install:
+    annotations:
+      "helm.sh/hook": "post-install,post-upgrade"
   ingress:
     enabled: false
     # hosts:
