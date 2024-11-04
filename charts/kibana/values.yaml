@@ -50,7 +50,8 @@ podAnnotations: {}
 # iam.amazonaws.com/role: es-cluster
 
 install:
-  annotations: {}
+  annotations:
+    "helm.sh/hook": "pre-install,pre-upgrade"
 
 delete:
   annotations:
