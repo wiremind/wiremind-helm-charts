@@ -66,11 +66,11 @@ resources:
 
 preInstallJobResources:
   requests:
-    cpu: "5m"
-    memory: "1Mi"
+    cpu: "200m"
+    memory: "512Mi"
   limits:
-    cpu: "25m"
-    memory: "5Mi"
+    cpu: "1000m"
+    memory: "2Gi"
 
 protocol: http
 
