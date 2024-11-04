@@ -10848,6 +10848,23 @@ entries:
   kibana:
   - apiVersion: v1
     appVersion: 8.5.1
+    created: "2024-11-04T12:49:55.861332684Z"
+    description: A Helm chart for Kibana
+    digest: 2fd9ff439e0e4a3662e1d6db79902b0e7213c353923e018434d1c5c6bfc20423
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/kibana
+    icon: https://helm.elastic.co/icons/kibana.png
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: kibana
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/kibana
+    - https://github.com/elastic/kibana
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/kibana-8.5.4/kibana-8.5.4.tgz
+    version: 8.5.4
+  - apiVersion: v1
+    appVersion: 8.5.1
     created: "2024-10-31T13:56:04.420551115Z"
     description: A Helm chart for Kibana
     digest: 2dc479b6997669847fccad1524a2299183750cee12140dde819931469e268fa6
@@ -13630,4 +13647,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-10-31T16:00:52.046592904Z"
+generated: "2024-11-04T12:49:55.86194205Z"
