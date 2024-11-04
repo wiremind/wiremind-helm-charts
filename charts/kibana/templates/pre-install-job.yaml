@@ -21,6 +21,7 @@ spec:
             - -c
             - |
               set -e;
+              apk add jq curl;
               K8S_CA='/run/secrets/kubernetes.io/serviceaccount/ca.crt';
               K8S_URL="https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_SERVICE_PORT_HTTPS";
               K8S_BEARER=$(cat /run/secrets/kubernetes.io/serviceaccount/token);
@@ -39,6 +40,8 @@ spec:
                 -H 'Accept: application/json' \
                 -H 'Content-Type: application/json' \
                 "$K8S_URL/api/v1/namespaces/$K8S_SECRET_NAMESPACE/secrets")
+
+              # Check if the specific secret is in the list
               if echo "$secrets_response" | jq -e ".items[] | select(.metadata.name == \"$K8S_SECRET_NAME\")" > /dev/null; then
                   echo "Secret '$K8S_SECRET_NAME' already exists in namespace '$K8S_SECRET_NAMESPACE': exiting."
                   exit 0
