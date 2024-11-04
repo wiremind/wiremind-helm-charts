@@ -7,60 +7,78 @@ metadata:
   annotations:
     {{ .Values.install.annotations | toYaml | nindent 4 }}
 spec:
+  backoffLimit: 0
   template:
     spec:
       restartPolicy: Never
       containers:
         - name: create-kibana-token
-          image: curlimages/curl:7.79.1
+          image: alpine:3.20.3
           imagePullPolicy: "{{ .Values.imagePullPolicy }}"
           command:
             - /bin/sh
           args:
             - -c
             - |
-              echo 'Creating a new Elasticsearch token for Kibana'
-              ES_AUTH="$ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD"
-              ES_CA="$ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES"
+              set -e;
+              K8S_CA='/run/secrets/kubernetes.io/serviceaccount/ca.crt';
+              K8S_URL="https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_SERVICE_PORT_HTTPS";
+              K8S_BEARER=$(cat /run/secrets/kubernetes.io/serviceaccount/token);
+              K8S_SECRET_NAMESPACE={{ .Release.Namespace }}
+              K8S_SECRET_NAME="{{ template "kibana.fullname" . }}-es-token";
 
-              ES_URL='{{ .Values.elasticsearchHosts }}/_cluster/health'
+              ES_AUTH="$ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD";
+              ES_CA="$ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES";
+              ES_URL_HEALTH='{{ .Values.elasticsearchHosts }}/_cluster/health';
+              ES_URL='{{ .Values.elasticsearchHosts }}/_security/service/elastic/kibana/credential/token/{{ template "kibana.fullname" . }}';
+
+              echo "Checking for Secret existence...";
+              secrets_response=$(curl -s \
+                --cacert "$K8S_CA" \
+                -H "Authorization: Bearer $K8S_BEARER" \
+                -H 'Accept: application/json' \
+                -H 'Content-Type: application/json' \
+                "$K8S_URL/api/v1/namespaces/$K8S_SECRET_NAMESPACE/secrets")
+              if echo "$secrets_response" | jq -e ".items[] | select(.metadata.name == \"$K8S_SECRET_NAME\")" > /dev/null; then
+                  echo "Secret '$K8S_SECRET_NAME' already exists in namespace '$K8S_SECRET_NAMESPACE': exiting."
+                  exit 0
+              fi;
+
               while true; do
-                echo "Waiting for elasticsearch..."
-                sleep 10
-                HEALTH=$(curl -s -m 5 -u "$ES_AUTH" --cacert "$ES_CA" "$ES_URL")
+                echo "Waiting for elasticsearch...";
+                HEALTH=$(curl -s -m 5 -u "$ES_AUTH" --cacert "$ES_CA" "$ES_URL_HEALTH");
                 if echo "$HEALTH" | grep -qE '"status":"(green|yellow)"'; then
-                  break
-                fi
-              done
+                  break;
+                sleep 10;
+                fi;
+              done;
 
-              ES_URL='{{ .Values.elasticsearchHosts }}/_security/service/elastic/kibana/credential/token/{{ template "kibana.fullname" . }}'
-              K8S_CA='/run/secrets/kubernetes.io/serviceaccount/ca.crt'
-              K8S_URL="https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_SERVICE_PORT_HTTPS"
-              K8S_BEARER=$(cat /run/secrets/kubernetes.io/serviceaccount/token)
-              echo 'Cleaning previous token'
-              curl -s -X DELETE -u "$ES_AUTH" --cacert "$ES_CA" "$ES_URL"
-              echo
-              echo 'Creating new token'
-              RESPONSE=$(curl -s -X POST -u "$ES_AUTH" --cacert "$ES_CA" "$ES_URL")
-              TOKEN=$(echo $RESPONSE | sed -n 's/.*"value":"\([^"]*\)".*/\1/p')
-              BASE64_TOKEN=$(echo $TOKEN | base64 -w 0)
-              K8S_SECRET='
+              echo 'Cleaning previous Elasticsearch token for Kibana';
+              curl -s -X DELETE -u "$ES_AUTH" --cacert "$ES_CA" "$ES_URL";
+              echo;
+              echo 'Creating new Elasticsearch token for Kibana';
+              RESPONSE=$(curl -s -X POST -u "$ES_AUTH" --cacert "$ES_CA" "$ES_URL");
+              TOKEN=$(echo $RESPONSE | sed -n 's/.*"value":"\([^"]*\)".*/\1/p');
+              BASE64_TOKEN=$(echo $TOKEN | base64 -w 0);
+              K8S_SECRET=$(cat <<EOF
               {
                 "apiVersion": "v1",
                 "kind": "Secret",
                 "metadata": {
-                  "namespace": "{{ .Release.Namespace }}",
-                  "name": "{{ template "kibana.fullname" . }}-es-token"
+                  "namespace": "${K8S_SECRET_NAMESPACE}",
+                  "name": "${K8S_SECRET_NAME}"
                 },
                 "type": "Opaque",
                 "data": {
-                  "token": "'$BASE64_TOKEN'"
+                  "token": "${BASE64_TOKEN}"
                 }
-              }'
-              echo 'Creating K8S secret'
-              curl -s -X POST --cacert "$K8S_CA" -H "Authorization: Bearer $K8S_BEARER" -H 'Accept: application/json' -H 'Content-Type: application/json' "$K8S_URL/api/v1/namespaces/{{ .Release.Namespace }}/secrets" -d "$K8S_SECRET"
-              echo
-              echo 'Done!'
+              }
+              EOF
+              )
+              echo 'Creating K8S secret';
+              curl -s -X POST --cacert "$K8S_CA" -H "Authorization: Bearer $K8S_BEARER" -H 'Accept: application/json' -H 'Content-Type: application/json' "$K8S_URL/api/v1/namespaces/$K8S_SECRET_NAMESPACE/secrets" -d "$K8S_SECRET";
+              echo;
+              echo 'Done!';
           env:
             - name: "ELASTICSEARCH_USERNAME"
               valueFrom:

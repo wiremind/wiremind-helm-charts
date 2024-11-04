@@ -12,6 +12,7 @@ rules:
     resources:
       - secrets
     verbs:
+      - list
       - create
       - update
 {{- end }}

@@ -38,7 +38,7 @@ hostAliases: []
 #     - "bar.local"
 
 image: "docker.elastic.co/kibana/kibana"
-imageTag: "8.5.1"
+imageTag: "8.15.3"
 imagePullPolicy: "IfNotPresent"
 
 # additionals labels
@@ -50,7 +50,8 @@ podAnnotations: {}
 # iam.amazonaws.com/role: es-cluster
 
 install:
-  annotations: {}
+  annotations:
+    "helm.sh/hook": "pre-install,pre-upgrade"
 
 delete:
   annotations:
