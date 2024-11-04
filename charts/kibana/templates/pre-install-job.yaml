@@ -13,7 +13,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: create-kibana-token
-          image: debian:stable
+          image: alpine:3.20.3
           imagePullPolicy: "{{ .Values.imagePullPolicy }}"
           command:
             - /bin/sh
