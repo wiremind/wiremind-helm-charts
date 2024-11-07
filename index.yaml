@@ -8916,6 +8916,19 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/external-monitoring-0.2.1/external-monitoring-0.2.1.tgz
     version: 0.2.1
+  external-secrets-crds:
+  - apiVersion: v2
+    appVersion: 0.10.5
+    created: "2024-11-07T10:12:27.579829237Z"
+    description: A Helm chart to manage external-secrets CRDs
+    digest: 1ce7d8e66c7cf6138641c8ee0947ad202123b3e4747578abfff626f5a0c4342f
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: external-secrets-crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/external-secrets-crds-0.10.5/external-secrets-crds-0.10.5.tgz
+    version: 0.10.5
   grafana-pdf-exporter:
   - apiVersion: v2
     appVersion: "1.7"
@@ -13945,4 +13958,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-11-06T10:55:37.865912585Z"
+generated: "2024-11-07T10:12:27.580420183Z"
