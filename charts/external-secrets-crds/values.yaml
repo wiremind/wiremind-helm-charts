@@ -1,0 +1,14 @@
+nameOverride: ""
+fullnameOverride: ""
+
+# Synchonize your values from external-secrets Helm Chart with the ones below
+
+crds:
+  annotations: {}
+  conversion:
+    enabled: true
+
+webhook:
+  certManager:
+    enable: false
+    addInjectorAnnotations: false
