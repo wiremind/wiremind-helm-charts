@@ -89,6 +89,15 @@ config:
   history:
     maxAge: 172800
     maxEntries: 50
+  registries:
+  # - host: my-registry.com:5000
+  #   insecure: false
+  #   http: false  # use https only
+  #   mirrors:
+  #   - mirror1.com
+  #   - mirror2.net
+  #   caCert: |-
+  #     ...CA cert goes here...
 
 livenessProbe:
   initialDelaySeconds: 5

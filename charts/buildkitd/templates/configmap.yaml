@@ -81,6 +81,24 @@ data:
       # maxEntries is the maximum number of history entries to keep.
       maxEntries = {{ .Values.config.history.maxEntries }}
 
+    {{- if eq "slice" (kindOf .Values.config.registries) }}
+      {{- range .Values.config.registries }}
+    [registry."{{ .host }}"]
+      {{- if eq "bool" (kindOf .http) }}
+      http = {{ .http }}
+      {{- end }}
+      {{- if eq "bool" (kindOf .insecure) }}
+      insecure = {{ .insecure }}
+      {{- end }}
+      {{- if eq "slice" (kindOf .mirrors) }}
+      mirrors = {{ toJson .mirrors }}
+      {{- end }}
+      ca = ["/etc/ssl/private/{{ .host }}.crt"]
+
+      {{- end }}
+    {{- end }}
+
+
 ---
 
 # See https://github.com/moby/buildkit/blob/master/Dockerfile
@@ -119,3 +137,20 @@ data:
   OTEL_EXPORTER_OTLP_INSECURE: {{ .Values.config.otel.common.insecure | quote }}
   OTEL_EXPORTER_OTLP_TRACES_INSECURE: {{ .Values.config.otel.traces.insecure | quote }}
   OTEL_EXPORTER_OTLP_METRICS_INSECURE: {{ .Values.config.otel.metrics.insecure | quote }}
+{{- if eq "slice" (kindOf .Values.config.registries) }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "buildkitd.fullname" . }}-registry-ca-certs
+  labels:
+    app: {{ template "buildkitd.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  {{- range .Values.config.registries }}
+  "{{ .host }}.crt":
+    {{ toYaml .caCert | nindent 4 }}
+  {{- end }}
+{{- end }}
