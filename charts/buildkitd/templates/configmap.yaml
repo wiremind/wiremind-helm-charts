@@ -93,7 +93,7 @@ data:
       {{- if eq "slice" (kindOf .mirrors) }}
       mirrors = {{ toJson .mirrors }}
       {{- end }}
-      ca = ["/etc/ssl/private/{{ .host }}.crt"]
+      ca = ["/etc/ssl/private/{{ replace ":" "-" .host }}.crt"]
 
       {{- end }}
     {{- end }}
@@ -150,7 +150,7 @@ metadata:
     heritage: "{{ .Release.Service }}"
 data:
   {{- range .Values.config.registries }}
-  "{{ .host }}.crt":
+  "{{ replace ":" "-" .host }}.crt":
     {{ toYaml .caCert | nindent 4 }}
   {{- end }}
 {{- end }}
