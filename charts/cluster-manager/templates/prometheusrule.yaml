@@ -12,14 +12,6 @@ spec:
   groups:
     - name: {{ template "cluster-manager.fullname" . }}.rules
       rules:
-        - alert: PVCIsTerminating
-          annotations:
-            summary: "A PVC was in the Terminating state for more than 10 minutes."
-            description: "The PVC {{`{{`}} $labels.persistentvolumeclaim {{`}}`}} on {{`{{`}} $labels.namespace {{`}}`}} was in the Terminating state for more than 10 minutes."
-          expr: (time() - label_replace(cluster_manager_terminating_persistentvolumeclaim_timestamp, "namespace", "$1", "persistentvolumeclaim_namespace", "(.*)")) / 60 > 10
-          for: 1s
-          labels:
-            severity: warning
         - alert: HighUnusedVolumeStorage
           annotations:
             summary: "High unused volume storage"
@@ -27,7 +19,7 @@ spec:
           expr: sum(cluster_manager_gc_volume_without_node_volume_bytes / 1000 / 1000 / 1000) by (cluster,storage_provider_name) > 20000
           for: 30m
           labels:
-            severity: warning  
+            severity: warning
         - alert: HighPVWithoutVolume
           annotations:
             summary: "High number of PV without volumes"
