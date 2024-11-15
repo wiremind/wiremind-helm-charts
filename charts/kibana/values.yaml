@@ -49,6 +49,12 @@ annotations: {}
 podAnnotations: {}
 # iam.amazonaws.com/role: es-cluster
 
+# If you don't want to query a token from Elasticsearch, you can set this to false
+createElasticsearchToken: true
+# Wether to delete the token at helm delete (or any other hook set by the delete value)
+# Note: always false if createElasticsearchToken is false
+deleteElasticsearchToken: true
+
 install:
   annotations:
     "helm.sh/hook": "pre-install,pre-upgrade"
@@ -98,9 +104,6 @@ securityContext:
   # readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 1000
-
-# If you don't want to query a token from Elasticsearch, you can set this to false
-createElasticsearchToken: true
 
 serviceAccount: ""
 
