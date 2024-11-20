@@ -3,8 +3,8 @@ pythieServing:
     repository: "ghcr.io/wiremind/pythie-serving"
     tag: "v3.4.2"
     pullPolicy: IfNotPresent
-    ## Specify image pull secret
-    # imagePullSecrets:
+  ## Specify image pull secret
+  # pullSecret: my-secret
   istio:
     enabled: false
   verbosityLevel: "0"
