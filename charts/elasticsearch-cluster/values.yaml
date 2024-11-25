@@ -72,6 +72,7 @@ es-data-hot:
     - ingest
     - data_hot
     - data_content
+    - transform
   replicas: 1
   # esJavaOpts: "-Xmx1g  -Xms1g"
   # resources:
