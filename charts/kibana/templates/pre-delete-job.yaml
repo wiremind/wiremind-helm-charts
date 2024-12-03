@@ -14,26 +14,38 @@ spec:
       restartPolicy: Never
       containers:
         - name: clean-kibana-token
-          image: "{{ .Values.image }}:{{ .Values.imageTag }}"
-          imagePullPolicy: "{{ .Values.imagePullPolicy }}"
+          image: curlimages/curl:8.11.0
+          imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
           args:
             - -c
             - |
-              set -e
-              echo 'Cleaning the Kibana Elasticsearch token'
-              ES_PATH='_security/service/elastic/kibana/credential/token/{{ template "kibana.fullname" . }}'
-              ES_URL='{{ .Values.elasticsearchHosts }}/'"$ES_PATH"
               ES_AUTH="$ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD"
               ES_CA="$ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES"
-              K8S_CA='/run/secrets/kubernetes.io/serviceaccount/ca.crt'
+              ES_PATH="_security/service/elastic/kibana/credential/token/{{ template "kibana.fullname" . }}"
+              ES_URL="{{ .Values.elasticsearchHosts }}/${ES_PATH}"
+
+              K8S_CA="/run/secrets/kubernetes.io/serviceaccount/ca.crt"
               K8S_URL="https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_SERVICE_PORT_HTTPS"
               K8S_BEARER=$(cat /run/secrets/kubernetes.io/serviceaccount/token)
-              echo 'Cleaning token'
-              curl -X DELETE -u "$ES_AUTH" --cacert "$ES_CA" "$ES_URL"
-              echo 'Delete K8S secret'
-              curl -X DELETE --cacert "$K8S_CA" -H "Authorization: Bearer $K8S_BEARER" -H 'Accept: application/json' -H 'Content-Type: application/json' "$K8S_URL/api/v1/namespaces/{{ .Release.Namespace }}/secrets/{{ template "kibana.fullname" . }}-es-token"
+
+              echo "Deleting the Kibana Elasticsearch token"
+              DELETE_TOKEN_CMD="curl -k --max-time 5 --silent --show-error -X DELETE -u $ES_AUTH $ES_URL"
+              if [[ "$ES_CA" != "" ]]; then
+                DELETE_TOKEN_CMD="${DELETE_TOKEN_CMD} --cacert ${ES_CA}"
+              fi
+              DELETE_TOKEN=$($DELETE_TOKEN_CMD)
+              echo $DELETE_TOKEN_CMD
+
+              echo "Deleting K8S secret"
+              secrets_response=$(curl -k --max-time 5 --silent --show-error \
+                -X DELETE \
+                --cacert "$K8S_CA" \
+                -H "Authorization: Bearer $K8S_BEARER" \
+                -H "Accept: application/json" \
+                -H "Content-Type: application/json" \
+                "$K8S_URL/api/v1/namespaces/{{ .Release.Namespace }}/secrets/{{ template "kibana.fullname" . }}-es-token")
           env:
             - name: "ELASTICSEARCH_USERNAME"
               valueFrom:
@@ -46,7 +58,7 @@ spec:
                   name: {{ .Values.elasticsearchCredentialSecret }}
                   key: password
             - name: ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES
-              value: /certs/{{ .Values.elasticsearchCertificateAuthoritiesFile }}"
+              value: "/certs/{{ .Values.elasticsearchCertificateAuthoritiesFile }}"
           volumeMounts:
             {{- if .Values.elasticsearchCertificateSecret }}
             - name: elasticsearch-certs
