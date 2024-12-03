@@ -34,3 +34,19 @@ heritage: {{ .Release.Service }}
 {{- define "kibana.home_dir" -}}
 /usr/share/kibana
 {{- end -}}
+
+{{- define "kibana.es-token" -}}
+{{- if .Values.token.name -}}
+{{ .Values.token.name }}
+{{- else -}}
+{{ template "kibana.fullname" . }}-es-token
+{{- end -}}
+{{- end -}}
+
+{{- define "kibana.service-account" -}}
+{{- if .Values.serviceAccount.name -}}
+{{ .Values.serviceAccount.name }}
+{{- else -}}
+{{ template "kibana.fullname" . }}
+{{- end -}}
+{{- end -}}
