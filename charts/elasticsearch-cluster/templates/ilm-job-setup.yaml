@@ -25,7 +25,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: elasticsearch-setup-ilm
-          image: curlimages/curl:8.6.0
+          image: curlimages/curl:8.11.0
           imagePullPolicy: IfNotPresent
           env:
             - name: SERVER_URL
