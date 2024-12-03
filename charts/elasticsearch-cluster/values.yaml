@@ -389,11 +389,13 @@ cerebro:
 ## Array of extra K8s manifests to deploy
 extraObjects: []
 
-## List of queries that will be executed when kibana is up and running
+## List of queries that will be executed when elasticsearch is up and running
 setup:
   enabled: false
   terminationGracePeriodSeconds: 0
   ttlSecondsAfterFinished: 1800
+  elasticsearchCertificateSecret: ""
+  elasticsearchCertificateAuthoritiesFile: ca.crt
   # priorityClassName: my-priority-class
   annotations:
     "helm.sh/hook": post-install, post-upgrade
