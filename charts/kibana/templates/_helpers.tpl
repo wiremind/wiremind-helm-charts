@@ -50,3 +50,12 @@ heritage: {{ .Release.Service }}
 {{ template "kibana.fullname" . }}
 {{- end -}}
 {{- end -}}
+
+{{- define "kibana.es-token-value" -}}
+{{- $existingSecret := lookup "v1" "Secret" .Release.Namespace (include "kibana.es-token" .) -}}
+{{- if $existingSecret -}}
+{{ .Values.token.value | default (index $existingSecret.data "token" | b64dec) }}
+{{- else -}}
+{{ .Values.token.value -}}
+{{- end -}}
+{{- end -}}

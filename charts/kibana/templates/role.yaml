@@ -18,6 +18,7 @@ rules:
     resources:
       - secrets
     verbs:
+      - get
       - update
       - patch
     resourceNames:
