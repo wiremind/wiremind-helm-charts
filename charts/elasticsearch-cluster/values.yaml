@@ -188,23 +188,6 @@ es-master:
       requests:
         storage: 1Gi
 
-## Creates a default indexLifecycleManagement policy
-## Note: you'll have to manage index templates so that your indices point to this ILM.
-indexLifecycleManagement:
-  enabled: false
-  ## Name of the policy to create
-  name: wiremind
-  ## Ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/_timing.html
-  warm:
-    minAge: 8d
-  cold:
-    minAge: 31d
-  delete:
-    enabled: false
-    minAge: 90d
-  ## priority class to use for the job setting up the ILM
-  # priorityClassName: my-priority-class
-
 ## Configure a backup repository and snapshot policy on it
 keystore:
   ## Create a secret containing credentials
@@ -213,42 +196,6 @@ keystore:
   enabled: false
   accessKey: setme  # change me
   secretKey: setme  # change me
-
-backup:
-  enabled: false
-  ## Ref:
-  ## https://www.elastic.co/guide/en/elasticsearch/reference/7.x/snapshots-register-repository.html
-  repository:
-    ## Will setup the repository if enabled and backup is enabled
-    ## Note that elasticseach repository name is stated in snapshotPolicy below
-    enabled: true
-    ## Note: currently, only s3 is supported
-    type: s3
-    settings:
-      bucket: setme  # change me
-      region: eu-west-3
-      endpoint: s3.eu-west-3.amazonaws.com
-  snapshotPolicyName: snapshot
-  ## Ref:
-  ## https://www.elastic.co/guide/en/elasticsearch/reference/7.x/getting-started-snapshot-lifecycle-management.html
-  ## https://www.elastic.co/guide/en/elasticsearch/reference/7.x/slm-api-put-policy.html
-  snapshotPolicy:
-    ## Will setup the snapshot policy if enabled and backup is enabled
-    enabled: true
-    schedule: "0 30 1 * * ?"
-    name: <snapshot-{now/d}>
-    repository: backup  ## Also sets repository name. Beware when changing name, you'll have duplicate registered repositories and you manually need to delete the old one
-    config:
-      indices:
-        - "*"
-      ignore_unavailable: false
-      include_global_state: true
-    retention:
-      expire_after: 30d
-      min_count: 5
-      max_count: 50
-  ## priority class to use for the job setting up the repository and snapshot policy
-  # priorityClassName:
 
 kibana:
   enabled: false
@@ -277,9 +224,6 @@ kibana:
             password: "kibana_user"
         basic.basic1:
           order: 1
-  install:
-    annotations:
-      "helm.sh/hook": "post-install,post-upgrade"
   ingress:
     enabled: false
     # hosts:
