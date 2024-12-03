@@ -38,9 +38,7 @@ spec:
 {{- end }}
       securityContext:
 {{ toYaml .Values.podSecurityContext | indent 8 }}
-      {{- if .Values.serviceAccount }}
-      serviceAccount: {{ .Values.serviceAccount }}
-      {{- end }}
+      serviceAccount: {{ template "kibana.service-account" . }}
       {{- if .Values.hostAliases }}
       hostAliases: {{ toYaml .Values.hostAliases | nindent 6 }}
       {{- end }}
@@ -62,6 +60,11 @@ spec:
           secret:
             secretName: {{ .secretName }}
         {{- end }}
+        {{- if .Values.elasticsearchCertificateSecret }}
+        - name: elasticsearch-certs
+          secret:
+            secretName: {{ .Values.elasticsearchCertificateSecret }}
+        {{- end }}
         {{- if .Values.extraVolumes }}
 {{ toYaml .Values.extraVolumes | indent 8 }}
         {{- end }}
@@ -82,6 +85,121 @@ spec:
 {{ toYaml .Values.imagePullSecrets | indent 8 }}
     {{- end }}
       initContainers:
+        {{- if .Values.token.create }}
+        - name: create-token
+          image: curlimages/curl:8.11.0
+          imagePullPolicy: "{{ .Values.imagePullPolicy }}"
+          command:
+            - /bin/sh
+          args:
+            - -c
+            - |
+              K8S_CA="/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+              K8S_URL="https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT_HTTPS}"
+              K8S_BEARER=$(cat /run/secrets/kubernetes.io/serviceaccount/token)
+              K8S_SECRET_NAMESPACE="{{ .Release.Namespace }}"
+              K8S_SECRET_NAME="{{ template "kibana.es-token" . }}"
+
+              ES_AUTH="${ELASTICSEARCH_USERNAME}:${ELASTICSEARCH_PASSWORD}"
+              ES_CA="$ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES"
+              ES_URL_HEALTH="{{ .Values.elasticsearchHosts }}/_cluster/health?wait_for_status=yellow&timeout=10s"
+              ES_URL="{{ .Values.elasticsearchHosts }}/_security/service/elastic/kibana/credential/token/{{ template "kibana.fullname" . }}"
+
+              while true;
+              do
+                echo "Waiting for elasticsearch..."
+
+                HTTP_CODE=""
+                RESPONSE_HEALTH_CMD="curl -k --max-time 5 --silent --show-error -u $ES_AUTH $ES_URL_HEALTH"
+                if [[ "$ES_CA" != "" ]]; then
+                  RESPONSE_HEALTH_CMD="${RESPONSE_HEALTH_CMD} --cacert ${ES_CA}"
+                fi
+                RESPONSE_HEALTH=$($RESPONSE_HEALTH_CMD)
+                if [[ "$?" == "0" ]]; then
+                  HTTP_CODE_CMD="curl -k --max-time 5 -s -o /dev/null -w "%{http_code}" -u $ES_AUTH $ES_URL_HEALTH"
+                  if [[ "$ES_CA" != "" ]]; then
+                    HTTP_CODE_CMD="${HTTP_CODE_CMD} --cacert ${ES_CA}"
+                  fi
+                  HTTP_CODE=$($HTTP_CODE_CMD)
+                  CLUSTER_READY=$(echo \'$RESPONSE_HEALTH\' | grep -q '"status":"yellow"')
+                  if [[ "$?" != "0" ]]; then
+                    CLUSTER_READY=$(echo \'$RESPONSE_HEALTH\' | grep -q '"status":"green"')
+                  fi
+                fi
+                # Status is yellow or green and http code is 200
+                if [[ "$?" == "0" && "$HTTP_CODE" == "200" ]]; then
+                  echo $RESPONSE_HEALTH
+                  break
+                else
+                  echo $RESPONSE_HEALTH
+                  sleep 10;
+                fi
+              done;
+
+              echo "Cluster is ready"
+
+              echo "Deleting previous elasticsearch token for kibana"
+              DELETE_TOKEN_CMD="curl -k --max-time 5 --silent --show-error -X DELETE -u $ES_AUTH $ES_URL"
+              if [[ "$ES_CA" != "" ]]; then
+                DELETE_TOKEN_CMD="${DELETE_TOKEN_CMD} --cacert ${ES_CA}"
+              fi
+              DELETE_TOKEN=$($DELETE_TOKEN_CMD)
+              echo $DELETE_TOKEN;
+
+              echo "Creating elasticsearch token for kibana"
+              CREATE_TOKEN_CMD="curl -k --max-time 5 --silent --show-error -X POST -u $ES_AUTH $ES_URL"
+              if [[ "$ES_CA" != "" ]]; then
+                CREATE_TOKEN_CMD="${CREATE_TOKEN_CMD} --cacert ${ES_CA}"
+              fi
+              CREATE_TOKEN=$($CREATE_TOKEN_CMD)
+
+              echo "Updating kubernetes secret token"
+              TOKEN=$(echo $CREATE_TOKEN | sed -n 's/.*"value":"\([^"]*\)".*/\1/p');
+              BASE64_TOKEN=$(echo $TOKEN | base64 -w 0);
+              K8S_SECRET=$(cat <<EOF
+              {
+                "metadata": {
+                  "name": "{{ template "kibana.es-token" . }}"
+                },
+                "data": {
+                  "token": "${BASE64_TOKEN}"
+                }
+              }
+              EOF
+              )
+              secrets_response=$(curl -k --max-time 5 --silent --show-error \
+                -X PUT \
+                --cacert "$K8S_CA" \
+                -H "Authorization: Bearer $K8S_BEARER" \
+                -H "Accept: application/json" \
+                -H "Content-Type: application/json" \
+                "$K8S_URL/api/v1/namespaces/$K8S_SECRET_NAMESPACE/secrets/{{ template "kibana.es-token" . }}" \
+                -d "$K8S_SECRET")
+          env:
+            - name: "ELASTICSEARCH_USERNAME"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.elasticsearchCredentialSecret }}
+                  key: username
+            - name: "ELASTICSEARCH_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.elasticsearchCredentialSecret }}
+                  key: password
+            - name: ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES
+              value: "/certs/{{ .Values.elasticsearchCertificateAuthoritiesFile }}"
+          volumeMounts:
+            {{- if .Values.elasticsearchCertificateSecret }}
+            - name: elasticsearch-certs
+              mountPath: /certs
+              readOnly: true
+            {{- end }}
+          {{- if .Values.preInstallJobResources }}
+          resources:
+            {{- toYaml .Values.preInstallJobResources | nindent 12 }}
+          {{- end }}
+        {{- end }}
+
       {{- if .Values.extraInitContainers }}
       # Currently some extra blocks accept strings
       # to continue with backwards compatibility this is being kept
@@ -112,11 +230,11 @@ spec:
           {{- end }}
           - name: SERVER_HOST
             value: "{{ .Values.serverHost }}"
-          {{- if .Values.createElasticsearchToken }}
+          {{- if .Values.token.create }}
           - name: ELASTICSEARCH_SERVICEACCOUNTTOKEN
             valueFrom:
               secretKeyRef:
-                name: {{ template "kibana.fullname" . }}-es-token
+                name: {{ template "kibana.es-token" . }}
                 key: token
                 optional: false
           {{- end }}

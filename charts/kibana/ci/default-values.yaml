@@ -1,4 +1,5 @@
 elasticsearchHosts: ""
 elasticsearchCertificateSecret: ""
 
-createElasticsearchToken: false
+token:
+  create: false
