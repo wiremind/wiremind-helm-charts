@@ -80,9 +80,9 @@ spec:
               mountPath: /certs
               readOnly: true
             {{- end }}
-          {{- if .Values.preInstallJobResources }}
+          {{- if .Values.token.resources }}
           resources:
-            {{- toYaml .Values.preInstallJobResources | nindent 16 }}
+            {{- toYaml .Values.token.resources | nindent 16 }}
           {{- end }}
 
 {{- end }}

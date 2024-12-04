@@ -58,6 +58,7 @@ token:
   value: ""
   # Check token validity every X seconds
   validitySchedule: "30"
+
   serviceAccount:
     # false to bring your own
     create: true
@@ -65,18 +66,18 @@ token:
     name: ""
     annotations: {}
 
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "64Mi"
+    limits:
+      cpu: "100m"
+      memory: "128Mi"
+
 resources:
   requests:
     cpu: "1000m"
     memory: "2Gi"
-  limits:
-    cpu: "1000m"
-    memory: "2Gi"
-
-preInstallJobResources:
-  requests:
-    cpu: "200m"
-    memory: "512Mi"
   limits:
     cpu: "1000m"
     memory: "2Gi"
