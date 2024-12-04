@@ -56,6 +56,14 @@ token:
   name: ""
   # empty means auto generated at kibana startup
   value: ""
+  # Check token validity every X seconds
+  validitySchedule: "30"
+  serviceAccount:
+    # false to bring your own
+    create: true
+    # customise resource name
+    name: ""
+    annotations: {}
 
 resources:
   requests:

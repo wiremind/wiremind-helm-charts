@@ -35,3 +35,5 @@ ingress:
   #     secretName: kibana.setme.org-tls
 readinessProbe:
   successThreshold: 1
+
+replicas: 3

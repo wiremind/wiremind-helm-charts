@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ template "kibana.fullname" . }}
+  name: {{ template "kibana.fullname" . }}-token
   labels: {{ include "kibana.labels" . | nindent 4 }}
   annotations:
     {{- .Values.annotations | toYaml | nindent 4 }}
@@ -23,4 +23,13 @@ rules:
       - patch
     resourceNames:
       - {{ template "kibana.es-token" . }}
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+    verbs:
+      - update
+      - patch
+    resourceNames:
+      - {{ template "kibana.fullname" . }}
 {{- end }}
