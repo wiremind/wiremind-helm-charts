@@ -8,7 +8,7 @@ metadata:
     {{- .Values.annotations | toYaml | nindent 4 }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "kibana.service-account" . }}
+    name: {{ template "kibana.token.service-account" . }}
     namespace: {{ .Release.Namespace | quote }}
 roleRef:
   kind: Role
