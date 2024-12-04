@@ -59,3 +59,11 @@ heritage: {{ .Release.Service }}
 {{ .Values.token.value -}}
 {{- end -}}
 {{- end -}}
+
+{{- define "kibana.token.service-account" -}}
+{{- if .Values.token.serviceAccount.name -}}
+{{ .Values.token.serviceAccount.name }}
+{{- else -}}
+{{ template "kibana.fullname" . }}-token
+{{- end -}}
+{{- end -}}
