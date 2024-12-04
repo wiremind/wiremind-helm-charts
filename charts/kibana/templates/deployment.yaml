@@ -24,6 +24,9 @@ spec:
         {{ $key }}: {{ $value | quote }}
         {{- end }}
       annotations:
+        {{- if .Values.token.create }}
+        checksum/token: {{ (include "kibana.es-token-value" .) | sha256sum }}
+        {{- end }}
         {{- range $key, $value := .Values.podAnnotations }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
@@ -105,6 +108,25 @@ spec:
               ES_URL_HEALTH="{{ .Values.elasticsearchHosts }}/_cluster/health?wait_for_status=yellow&timeout=10s"
               ES_URL="{{ .Values.elasticsearchHosts }}/_security/service/elastic/kibana/credential/token/{{ template "kibana.fullname" . }}"
 
+              echo "Retrieving elasticsearch token for kibana"
+
+              secret_response=$(curl -k --max-time 5 --silent --show-error \
+                -X GET \
+                --cacert "$K8S_CA" \
+                -H "Authorization: Bearer $K8S_BEARER" \
+                -H "Accept: application/json" \
+                -H "Content-Type: application/json" \
+                "$K8S_URL/api/v1/namespaces/$K8S_SECRET_NAMESPACE/secrets/$K8S_SECRET_NAME" \
+              )
+
+              token_base64=$(echo "$secret_response" | sed -n 's/.*"token": "\([^"]*\)".*/\1/p')
+
+              token=""
+              # Check if the token field is non-empty
+              if [[ -n "$token_base64" ]]; then
+                token=$(echo "$token_base64" | base64 -d 2>/dev/null)
+              fi
+
               while true;
               do
                 echo "Waiting for elasticsearch..."
@@ -136,7 +158,28 @@ spec:
                 fi
               done;
 
-              echo "Cluster is ready"
+              echo "Cluster is ready to accept requests"
+
+              if [[ -n "$token" ]]; then
+                echo "Token value in secret ${K8S_SECRET_NAME} is already set, checking its validity."
+
+                token_validity_response=$(curl -k --max-time 5 --silent --show-error \
+                  -X GET \
+                  -H "Authorization: Bearer $token" \
+                  -H "Accept: application/json" \
+                  -H "Content-Type: application/json" \
+                  "$ES_URL_HEALTH" \
+                )
+
+                echo $token_validity_response
+
+                if echo "$token_validity_response" | grep -q '"status":401'; then
+                  echo "Token is invalid, recreating a new one"
+                else
+                  echo "Token valid, nothing to be done"
+                  exit 0
+                fi
+              fi
 
               echo "Deleting previous elasticsearch token for kibana"
               DELETE_TOKEN_CMD="curl -k --max-time 5 --silent --show-error -X DELETE -u $ES_AUTH $ES_URL"
@@ -173,7 +216,7 @@ spec:
                 -H "Authorization: Bearer $K8S_BEARER" \
                 -H "Accept: application/json" \
                 -H "Content-Type: application/json" \
-                "$K8S_URL/api/v1/namespaces/$K8S_SECRET_NAMESPACE/secrets/{{ template "kibana.es-token" . }}" \
+                "$K8S_URL/api/v1/namespaces/$K8S_SECRET_NAMESPACE/secrets/$K8S_SECRET_NAME" \
                 -d "$K8S_SECRET")
           env:
             - name: "ELASTICSEARCH_USERNAME"
