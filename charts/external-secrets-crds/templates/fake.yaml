@@ -9,7 +9,7 @@ metadata:
     {{- if and .Values.crds.conversion.enabled .Values.webhook.certManager.enabled .Values.webhook.certManager.addInjectorAnnotations }}
     cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ include "external-secrets.fullname" . }}-webhook
     {{- end }}
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.16.5
   labels:
     external-secrets.io/component: controller
   name: fakes.generators.external-secrets.io
@@ -22,8 +22,6 @@ spec:
     kind: Fake
     listKind: FakeList
     plural: fakes
-    shortNames:
-      - fake
     singular: fake
   scope: Namespaced
   versions:
