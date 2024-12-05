@@ -24,8 +24,9 @@ Please refer to values.yaml for definition of possible values.
 
 ## Upgrade
 
-### v3.8.6 to v4.3.0+
+### v3.8.6 to v4.3.2+
 
 1. Scale down all statefulsets (elasticsearch and kibana)
-2. kubectl delete deploy -l app=prometheus-elasticsearch-exporter --namespace mytargetnamespace
-3. Upgrade
+2. kubectl delete deploy -l app=prometheus-elasticsearch-exporter --namespace $NAMESPACE
+3. kubectl delete secret $RELEASE_NAME-es-token --namespace $NAMESPACE
+4. Upgrade
