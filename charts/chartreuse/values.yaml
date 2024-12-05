@@ -39,6 +39,7 @@ upgradeJobWeight: "1"
 
 alembic:
   enabled: true
+  existingSecret: ""
   username: my-dummy-username
   password: my-dummy-password
   database: my-dummy-database
