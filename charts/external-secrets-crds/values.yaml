@@ -1,6 +1,8 @@
 nameOverride: ""
 fullnameOverride: ""
 
+installCRDs: true
+
 # Synchonize your values from external-secrets Helm Chart with the ones below
 
 crds:
