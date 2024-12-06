@@ -9,10 +9,6 @@ image:
   tag: setme
   pullPolicy: IfNotPresent
 
-# Extra environment variables inserted in a new secret
-extraEnv:
-  # SAFETY_API_KEY: xxx
-
 delayBetweenChecks: 604800
 maxRetries: 3
 
@@ -38,6 +34,10 @@ podSecurityContext: {}
   # fsGroup: 2000
 
 safety:
+  # If an existing secret is provided, the extraEnvVarsSecret is ignored.
+  existingSecret: ""
+  extraEnvVarsSecret: {}
+    # SAFETY_API_KEY: xxx
   securityContext: {}
   resources:
     requests:

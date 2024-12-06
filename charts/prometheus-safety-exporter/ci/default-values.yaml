@@ -4,5 +4,6 @@ image:
   tag: python3.10
   pullPolicy: IfNotPresent
 
-extraEnv:
-  foo: bar
+safety:
+  extraEnvVarsSecret:
+    foo: bar
