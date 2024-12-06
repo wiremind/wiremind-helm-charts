@@ -44,7 +44,7 @@ spec:
           envFrom:
           - secretRef:
             {{- if .Values.alembic.existingSecret }}
-              name: {{ .Values.alembic.existingSecret }}
+              name: {{ tpl .Values.alembic.existingSecret $ }}
             {{- else }}
               name: {{ template "chartreuse.fullname" . }}{{ template "chartreuse.hook.suffix" . }}
             {{- end }}
@@ -60,7 +60,7 @@ spec:
           envFrom:
           - secretRef:
             {{- if .Values.alembic.existingSecret }}
-              name: {{ .Values.alembic.existingSecret }}
+              name: {{ tpl .Values.alembic.existingSecret $ }}
             {{- else }}
               name: {{ template "chartreuse.fullname" . }}{{ template "chartreuse.hook.suffix" . }}
             {{- end }}
