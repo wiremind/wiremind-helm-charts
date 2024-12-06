@@ -45,9 +45,11 @@ spec:
               value: {{ .Values.delayBetweenChecks | quote }}
             - name: MAX_RETRIES
               value: {{ .Values.maxRetries | quote }}
-          {{- if .Values.extraEnv }}
           envFrom:
             - secretRef:
+          {{- if .Values.safety.existingSecret }}
+                name: {{ tpl .Values.safety.existingSecret . }}
+          {{- else if .Values.safety.extraEnvVarsSecret }}
                 name: "{{ include "prometheus-safety-exporter.fullname" . }}"
           {{- end }}
           command: ["/bin/sh"]
