@@ -28,6 +28,7 @@ rules:
     resources:
       - deployments
     verbs:
+      - get
       - update
       - patch
     resourceNames:

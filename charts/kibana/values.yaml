@@ -85,8 +85,8 @@ token:
     runAsUser: 1000
 
   image:
-    repository: curlimages/curl
-    tag: 8.11.0
+    repository: dwdraju/alpine-curl-jq
+    tag: latest@sha256:83bd9be2b14bcbb960bd6bc81cb2159808f97efec05ecdf51903234ede08f29d
     pullPolicy: IfNotPresent
 
   serviceAccount:
@@ -176,7 +176,10 @@ extraInitContainers: []
 #   command: ['echo', 'hey']
 
 updateStrategy:
-  type: "Recreate"
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 25%
+    maxSurge: 25%
 
 service:
   type: ClusterIP
