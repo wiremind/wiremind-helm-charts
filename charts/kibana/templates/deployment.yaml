@@ -25,7 +25,7 @@ spec:
         {{- end }}
       annotations:
         {{- if .Values.token.create }}
-        checksum/token: {{ (include "kibana.es-token-value" .) | sha256sum }}
+        checksum/token: {{ .Values.token.value | sha256sum }}
         {{- end }}
         {{- range $key, $value := .Values.podAnnotations }}
         {{ $key }}: {{ $value | quote }}

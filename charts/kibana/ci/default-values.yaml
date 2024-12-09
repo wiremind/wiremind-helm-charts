@@ -1,5 +1,10 @@
+# No elasticsearch
 elasticsearchHosts: ""
 elasticsearchCertificateSecret: ""
-
 token:
   create: false
+
+# Faster restart
+updateStrategy:
+  type: Recreate
+  rollingUpdate: null

@@ -57,8 +57,6 @@ spec:
             - |
               while true;
               do
-                echo -e "\nRunning token script\n"
-
                 sh /scripts/token.sh
 
                 sleep {{ .Values.token.validitySchedule }}

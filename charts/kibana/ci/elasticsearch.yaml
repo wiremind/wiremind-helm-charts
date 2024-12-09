@@ -36,4 +36,4 @@ ingress:
 readinessProbe:
   successThreshold: 1
 
-replicas: 3
+replicas: 2
