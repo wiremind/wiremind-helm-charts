@@ -21,7 +21,7 @@ data:
     ES_AUTH="${ELASTICSEARCH_USERNAME}:${ELASTICSEARCH_PASSWORD}"
     ES_CA="$ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES"
     ES_URL_HEALTH="{{ .Values.elasticsearchHosts }}/_cluster/health?wait_for_status=yellow&timeout=10s"
-    ES_URL="{{ .Values.elasticsearchHosts }}/_security/service/elastic/kibana/credential/token/{{ template "kibana.fullname" . }}"
+    ES_URL_CREDENTIALS="{{ .Values.elasticsearchHosts }}/_security/service/elastic/kibana/credential/token/{{ template "kibana.fullname" . }}"
 
     echo "Retrieving elasticsearch token for kibana"
 
@@ -97,7 +97,7 @@ data:
     fi
 
     echo "Deleting previous elasticsearch token for kibana"
-    DELETE_TOKEN_CMD="curl -k --max-time 5 --silent --show-error -X DELETE -u $ES_AUTH $ES_URL"
+    DELETE_TOKEN_CMD="curl -k --max-time 5 --silent --show-error -X DELETE -u $ES_AUTH $ES_URL_CREDENTIALS"
     if [[ "$ES_CA" != "" ]]; then
         DELETE_TOKEN_CMD="${DELETE_TOKEN_CMD} --cacert ${ES_CA}"
     fi
@@ -105,7 +105,7 @@ data:
     echo $DELETE_TOKEN;
 
     echo "Creating elasticsearch token for kibana"
-    CREATE_TOKEN_CMD="curl -k --max-time 5 --silent --show-error -X POST -u $ES_AUTH $ES_URL"
+    CREATE_TOKEN_CMD="curl -k --max-time 5 --silent --show-error -X POST -u $ES_AUTH $ES_URL_CREDENTIALS"
     if [[ "$ES_CA" != "" ]]; then
         CREATE_TOKEN_CMD="${CREATE_TOKEN_CMD} --cacert ${ES_CA}"
     fi
