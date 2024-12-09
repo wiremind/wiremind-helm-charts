@@ -29,6 +29,16 @@ kibana:
   enabled: true
   replicas: 2
 
+  # Faster deployment
+  token:
+    validitySchedule: "5"
+
+  # Faster restart
+  updateStrategy:
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 100%
+
 prometheus-elasticsearch-exporter:
   serviceMonitor:
     enabled: true
