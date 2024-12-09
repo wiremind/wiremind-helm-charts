@@ -130,7 +130,7 @@ data:
         http_code="${response: -3}"
         response_body="${response%???}"
 
-        if [ "$http_code" -ne 200 ]; then
+        if [ "$http_code" -ne 200 ] && [ "$http_code" -ne 404 ]; then
             echo "HTTP status code: $http_code"
             echo "Response body: $response_body"
             exit 1
