@@ -59,6 +59,36 @@ token:
   # Check token validity every X seconds
   validitySchedule: "30"
 
+  automountToken: true
+
+  terminationGracePeriodSeconds: 0
+
+  restartPolicy: "Always"
+
+  priorityClassName: ""
+
+  replicas: 1
+
+  labels: {}
+  annotations: {}
+  podAnnotations: {}
+
+  podSecurityContext:
+    fsGroup: 1000
+
+  securityContext:
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1000
+
+  image:
+    repository: curlimages/curl
+    tag: 8.11.0
+    pullPolicy: IfNotPresent
+
   serviceAccount:
     # false to bring your own
     create: true

@@ -5,12 +5,12 @@ kind: Deployment
 metadata:
   name: {{ template "kibana.fullname" . }}-token
   labels: {{ include "kibana.labels" . | nindent 4 }}
-  {{- if .Values.annotations }}
+  {{- if .Values.token.annotations }}
   annotations:
-    {{ .Values.annotations | toYaml | nindent 4 }}
+    {{ .Values.token.annotations | toYaml | nindent 4 }}
   {{- end }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.token.replicas }}
   selector:
     matchLabels:
       app: {{ template "kibana.fullname" . }}-token
@@ -19,19 +19,22 @@ spec:
       labels:
         app: {{ template "kibana.fullname" . }}-token
         release: {{ .Release.Name | quote }}
-        {{- range $key, $value := .Values.labels }}
+        {{- range $key, $value := .Values.token.labels }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
       annotations:
         checksum/configmap: {{ include (print .Template.BasePath "/token/configmap.yaml") . | sha256sum | trunc 63 }}
-        {{- range $key, $value := .Values.podAnnotations }}
+        {{- range $key, $value := .Values.token.podAnnotations }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
     spec:
-      automountServiceAccountToken: {{ .Values.automountToken }}
-      terminationGracePeriodSeconds: 0
-      restartPolicy: "Always"
+      automountServiceAccountToken: {{ .Values.token.automountToken }}
+      priorityClassName: {{ .Values.token.priorityClassName }}
+      terminationGracePeriodSeconds: {{ .Values.token.terminationGracePeriodSeconds }}
+      restartPolicy: {{ .Values.token.restartPolicy }}
       serviceAccount: {{ template "kibana.token.service-account" . }}
+      securityContext:
+        {{- toYaml .Values.token.podSecurityContext | nindent 8 }}
       volumes:
         - name: kibana-token
           configMap:
@@ -43,8 +46,10 @@ spec:
         {{- end }}
       containers:
         - name: token
-          image: curlimages/curl:8.11.0
-          imagePullPolicy: "{{ .Values.imagePullPolicy }}"
+          image: "{{ .Values.token.image.repository }}:{{ .Values.token.image.tag }}"
+          imagePullPolicy: "{{ .Values.token.image.pullPolicy }}"
+          securityContext:
+            {{- toYaml .Values.token.securityContext | nindent 12 }}
           command:
             - /bin/sh
           args:
@@ -82,7 +87,7 @@ spec:
             {{- end }}
           {{- if .Values.token.resources }}
           resources:
-            {{- toYaml .Values.token.resources | nindent 16 }}
+            {{- toYaml .Values.token.resources | nindent 12 }}
           {{- end }}
 
 {{- end }}
