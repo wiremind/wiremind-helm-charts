@@ -15,7 +15,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "11.0.0"
+      "version": "11.3.1"
     },
     {
       "type": "datasource",
@@ -27,6 +27,12 @@
       "type": "panel",
       "id": "table",
       "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "text",
+      "name": "Text",
       "version": ""
     },
     {
@@ -57,15 +63,34 @@
   "graphTooltip": 0,
   "id": null,
   "links": [],
-  "liveNow": false,
   "panels": [
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 6,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "Please refer to Vulnerability Scanning page of your organization regarding how to use.",
+        "mode": "markdown"
+      },
+      "pluginVersion": "11.3.1",
+      "type": "text"
+    },
     {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 2
       },
       "id": 4,
       "panels": [],
@@ -149,7 +174,7 @@
         "h": 19,
         "w": 24,
         "x": 0,
-        "y": 1
+        "y": 3
       },
       "id": 2,
       "options": {
@@ -170,7 +195,7 @@
           }
         ]
       },
-      "pluginVersion": "11.0.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -259,6 +284,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -343,7 +369,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 20
+        "y": 22
       },
       "id": 3,
       "options": {
@@ -359,7 +385,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -479,7 +505,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 31
+        "y": 33
       },
       "id": 5,
       "options": {
@@ -500,7 +526,7 @@
           }
         ]
       },
-      "pluginVersion": "11.0.0",
+      "pluginVersion": "11.3.1",
       "targets": [
         {
           "datasource": {
@@ -536,27 +562,19 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 39,
+  "schemaVersion": 40,
   "tags": [],
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "default",
-          "value": "default"
-        },
-        "hide": 0,
+        "current": {},
         "includeAll": false,
         "label": "Data Source",
-        "multi": false,
         "name": "datasource",
         "options": [],
         "query": "prometheus",
-        "queryValue": "",
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
         "type": "datasource"
       },
       {
@@ -567,9 +585,7 @@
           "uid": "${datasource}"
         },
         "definition": "label_values(up{job=\"kube-state-metrics\"}, cluster)",
-        "hide": 0,
         "includeAll": true,
-        "multi": false,
         "name": "cluster",
         "options": [],
         "query": {
@@ -578,7 +594,6 @@
         },
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
         "sort": 1,
         "type": "query"
       },
@@ -590,7 +605,6 @@
           "uid": "${datasource}"
         },
         "definition": "label_values(safety_vulnerabilities_severity,namespace)",
-        "hide": 0,
         "includeAll": true,
         "label": "Namespace",
         "multi": true,
@@ -603,7 +617,6 @@
         },
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
         "sort": 1,
         "type": "query"
       },
@@ -616,7 +629,6 @@
         },
         "definition": "label_values(safety_vulnerabilities_severity,package_name)",
         "description": "",
-        "hide": 0,
         "includeAll": true,
         "label": "Package Name",
         "multi": true,
@@ -629,7 +641,6 @@
         },
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
         "sort": 1,
         "type": "query"
       }
@@ -639,11 +650,10 @@
     "from": "now-6h",
     "to": "now"
   },
-  "timeRangeUpdatedDuringEditOrView": false,
   "timepicker": {},
   "timezone": "",
   "title": "Safety Dashboard",
   "uid": "adh49rh5ocu80a",
-  "version": 29,
+  "version": 31,
   "weekStart": ""
 }
