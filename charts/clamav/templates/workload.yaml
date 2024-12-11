@@ -1,5 +1,11 @@
+{{- if not (has .Values.kind (list "StatefulSet" "Deployment")) -}}
+{{- fail "Invalid value for .Values.kind, only StatefulSet and Deployment are supported" -}}
+{{- end -}}
+{{- if and .Values.persistentVolume.enabled (ne .Values.kind "StatefulSet")  -}}
+{{- fail "If .Values.persistentVolume.enabled is set to true, then .Values.kind has to be set to \"StatefulSet\"" -}}
+{{- end -}}
 apiVersion: apps/v1
-kind: StatefulSet
+kind: {{ .Values.kind }}
 metadata:
   name: {{ include "clamav.fullname" . }}
   labels:
@@ -8,10 +14,20 @@ spec:
   {{- if not .Values.hpa.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
+  {{- if eq .Values.kind "StatefulSet" }}
   serviceName: {{ include "clamav.fullname" . }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "clamav.selectorLabels" . | nindent 6 }}
+  {{- with .Values.updateStrategy }}
+  {{- if eq $.Values.kind "StatefulSet" }}
+  updateStrategy:
+  {{- else }}
+  strategy:
+  {{- end }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       annotations:
