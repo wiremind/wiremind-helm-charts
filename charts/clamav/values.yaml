@@ -20,6 +20,8 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+kind: StatefulSet
+
 podSecurityContext:
   runAsNonRoot: true
   runAsUser: 100
