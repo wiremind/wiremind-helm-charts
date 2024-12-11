@@ -72,3 +72,15 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 /init-unprivileged
 {{- end -}}
 {{- end -}}
+
+{{- define "clamav.dictToConfig" -}}
+{{- range $key, $value := . -}}
+{{- if kindIs "slice" $value -}}
+{{- range $value -}}
+{{ $key }} {{ . }}
+{{ end }}
+{{- else -}}
+{{ $key }} {{ $value }}
+{{ end }}
+{{- end }}
+{{- end -}}
