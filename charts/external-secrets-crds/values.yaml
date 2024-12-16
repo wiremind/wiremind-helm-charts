@@ -6,6 +6,10 @@ installCRDs: true
 # Synchonize your values from external-secrets Helm Chart with the ones below
 
 crds:
+  createClusterExternalSecret: true
+  createClusterSecretStore: true
+  createClusterGenerator: true
+  createPushSecret: true
   annotations: {}
   conversion:
     enabled: true
