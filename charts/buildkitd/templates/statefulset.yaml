@@ -15,10 +15,11 @@ spec:
       labels:
         {{- include "buildkitd.selectorLabels" . | nindent 8 }}
       annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: {{ .Values.config.debugPort | quote }}
         container.apparmor.security.beta.kubernetes.io/buildkitd: unconfined
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- if .Values.podAnnotations }}
+        {{- toYaml .Values.podAnnotations | nindent 8 }}
+        {{- end }}
     spec:
       securityContext:
         # To change UID/GID, you need to rebuild the image

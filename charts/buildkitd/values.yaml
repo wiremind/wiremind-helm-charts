@@ -112,3 +112,7 @@ extraSecurityContext: {}
 lifecycle: {}
 
 terminationGracePeriodSeconds: 30
+
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "6060"
