@@ -126,6 +126,20 @@ entries:
     version: 1.0.1
   buildkitd:
   - apiVersion: v2
+    appVersion: 0.18.2
+    created: "2024-12-17T13:52:46.312298574Z"
+    description: A Helm chart for https://github.com/moby/buildkit (rootless)
+    digest: edad1e7849c519b48fefd22c0d7ba91f5e9ecfab92ed2e44f94851c1c5f08ec5
+    kubeVersion: '>=1.19.0-0'
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: buildkitd
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/buildkitd-0.18.2/buildkitd-0.18.2.tgz
+    version: 0.18.2
+  - apiVersion: v2
     appVersion: 0.18.1
     created: "2024-12-05T08:48:52.935622204Z"
     description: A Helm chart for https://github.com/moby/buildkit (rootless)
@@ -14893,4 +14907,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-12-16T14:19:28.60460106Z"
+generated: "2024-12-17T13:52:46.313952354Z"
