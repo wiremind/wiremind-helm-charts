@@ -2,8 +2,8 @@ annotations:
   category: DeveloperTools
 apiVersion: v2
 name: traefik-crds
-version: 2.7.0
-appVersion: 2.10.5
+version: 33.0.0
+appVersion: 3.2.0
 description: Manage traefik CRDs
 keywords:
   - traefik
