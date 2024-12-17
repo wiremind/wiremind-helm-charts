@@ -48,6 +48,27 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: 3.6.0
+    created: "2024-12-17T16:36:52.328637625Z"
+    description: Manage argo CRDs
+    digest: 085650c88089bb9b2ce23f4e520d763f6d66c711dbcd203419bb365ec0218fc5
+    keywords:
+    - argo
+    - workflow
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: argo-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/argo-crds
+    - https://raw.githubusercontent.com/argoproj/argo-workflows/master/manifests/quick-start-postgres.yaml
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/argo-crds-1.2.0/argo-crds-1.2.0.tgz
+    version: 1.2.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: 3.5.0
     created: "2023-11-23T19:24:08.267017855Z"
     description: Manage argo CRDs
@@ -14907,4 +14928,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-12-17T13:52:46.313952354Z"
+generated: "2024-12-17T16:36:52.329464676Z"
