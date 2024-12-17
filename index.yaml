@@ -2799,6 +2799,27 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: 2024.1.0
+    created: "2024-12-17T16:37:29.329324648Z"
+    description: Manage dask CRDs
+    digest: 427bd3e16ac427e933eb7790728145454125b83c44187918b733d7057c0c1ad4
+    keywords:
+    - dask
+    - gateway
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: dask-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/dask-crds
+    - https://github.com/dask/dask-gateway/tree/main/resources/helm/dask-gateway
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/dask-crds-2024.1.0/dask-crds-2024.1.0.tgz
+    version: 2024.1.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: 2022.6.1
     created: "2022-08-10T14:53:41.309784725Z"
     description: Manage dask CRDs
@@ -14928,4 +14949,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-12-17T16:36:52.329464676Z"
+generated: "2024-12-17T16:37:29.330046316Z"
