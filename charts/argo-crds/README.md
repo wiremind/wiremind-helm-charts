@@ -14,7 +14,7 @@ CRDs are located [here](https://github.com/argoproj/argo-helm/tree/argo-workflow
 cd charts/argo-crds
 
 repo="argoproj/argo-helm"
-branch="argo-workflows-0.37.0"
+branch="argo-workflows-0.45.2"
 folder="charts/argo-workflows/templates/crds"
 
 files=$(curl -s "https://api.github.com/repos/$repo/contents/$folder?ref=$branch" | jq -r '.[].download_url')
