@@ -36,9 +36,22 @@ es-defaults: &defaults
       volumeMounts:
         - mountPath: /usr/share/elasticsearch/plugins/
           name: plugindir
+        - name: tmp
+          mountPath: /tmp
+      securityContext:
+        capabilities:
+          drop:
+            - ALL
+        privileged: false
+        runAsUser: 1000
+        runAsNonRoot: true
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
     {{- end }}
   extraVolumes: |
     - name: plugindir
+      emptyDir: {}
+    - name: tmp
       emptyDir: {}
   extraVolumeMounts: |
     - mountPath: /usr/share/elasticsearch/plugins/
