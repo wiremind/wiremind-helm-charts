@@ -83,6 +83,7 @@ token:
     readOnlyRootFilesystem: true
     runAsNonRoot: true
     runAsUser: 1000
+    allowPrivilegeEscalation: false
 
   image:
     repository: dwdraju/alpine-curl-jq
@@ -134,9 +135,10 @@ securityContext:
   capabilities:
     drop:
       - ALL
-  # readOnlyRootFilesystem: true
+  readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 1000
+  allowPrivilegeEscalation: false
 
 serviceAccount:
   # false to bring your own
