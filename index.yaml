@@ -12951,6 +12951,28 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: 1.11.0
+    created: "2024-12-18T09:08:54.25807591Z"
+    description: Manage postgres-operator CRDs
+    digest: 04985d27a9e18254ed2c2fcae69201fdb90c9df1903d66af0720e8d7d9eb729b
+    icon: https://raw.githubusercontent.com/zalando/postgres-operator/master/docs/diagrams/logo.png
+    keywords:
+    - postgres
+    - operator
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: postgres-operator-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/postgres-operator-crds
+    - https://github.com/zalando/postgres-operator/tree/master/charts/postgres-operator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/postgres-operator-crds-1.11.0/postgres-operator-crds-1.11.0.tgz
+    version: 1.11.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: 1.10.1
     created: "2024-04-19T12:15:05.797208558Z"
     description: Manage postgres-operator CRDs
@@ -14969,4 +14991,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-12-17T16:44:05.567533342Z"
+generated: "2024-12-18T09:08:54.258810861Z"
