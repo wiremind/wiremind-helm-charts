@@ -16,12 +16,12 @@ dependencies:
   version: 8.15.3
 - name: kibana
   repository: https://wiremind.github.io/wiremind-helm-charts
-  version: 8.5.16
+  version: 8.5.17
 - name: prometheus-elasticsearch-exporter
   repository: https://prometheus-community.github.io/helm-charts
   version: 6.5.1
 - name: cerebro
   repository: https://wiremind.github.io/wiremind-helm-charts
   version: 2.1.0
-digest: sha256:804157de6ca9f071f22508c3b8805abc7e93a5ebae6fa14b2f3a387e40c41bb2
-generated: "2024-12-09T17:05:15.285705945+01:00"
+digest: sha256:44b3946b442fcfe330e5d39fbc49c3fa917e4afd5beb2a2160264c8dfe008625
+generated: "2024-12-18T12:26:31.037702964+01:00"
