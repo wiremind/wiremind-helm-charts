@@ -14531,6 +14531,27 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: v8.2.0
+    created: "2024-12-19T10:15:43.033603115Z"
+    description: Manage snapshot-controller CRDs
+    digest: ee9f21df3399f693df69bd656a07614ffcac173f4021c66793fc48b7fccaffd2
+    keywords:
+    - storage
+    - snapshot
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: snapshot-controller-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/snapshot-controller-crds
+    - https://github.com/kubernetes-csi/external-snapshotter
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/snapshot-controller-crds-8.2.0/snapshot-controller-crds-8.2.0.tgz
+    version: 8.2.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: v8.0.1
     created: "2024-07-02T09:34:03.637608006Z"
     description: Manage snapshot-controller CRDs
@@ -15081,4 +15102,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2024-12-18T12:03:27.482538742Z"
+generated: "2024-12-19T10:15:43.03488453Z"
