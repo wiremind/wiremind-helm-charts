@@ -111,8 +111,40 @@
     "clamdConfig": {
       "type": ["string"]
     },
+    "clamdConfigDict": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "anyOf": [
+            { "type": ["string", "integer" ] },
+            {
+              "type": "array",
+              "items":[
+                { "type": ["string", "integer" ] }
+              ]
+            }
+          ]
+        }
+      }
+    },
     "freshclamConfig": {
       "type": ["string"]
+    },
+    "freshclamConfigDict": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "anyOf": [
+            { "type": ["string", "integer" ] },
+            {
+              "type": "array",
+              "items":[
+                { "type": ["string", "integer" ] }
+              ]
+            }
+          ]
+        }
+      }
     },
     "resources": {
       "type": "object",
@@ -285,8 +317,6 @@
     "fullnameOverride",
     "service",
     "ingress",
-    "clamdConfig",
-    "freshclamConfig",
     "resources",
     "podLabels",
     "nodeSelector",
@@ -299,5 +329,19 @@
     "extraVolumes",
     "extraVolumeMounts",
     "persistentVolume"
+  ],
+  "allOf":[
+    {
+      "anyOf":[
+        { "required": ["clamdConfig"] },
+        { "required": ["clamdConfigDict"] }
+      ]
+    },
+    {
+      "anyOf":[
+        { "required": ["freshclamConfig"] },
+        { "required": ["freshclamConfigDict"] }
+      ]
+    }
   ]
 }

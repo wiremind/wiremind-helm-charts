@@ -1,4 +1,4 @@
-{{- if .Values.freshclamConfig -}}
+{{- if or .Values.freshclamConfig .Values.clamdConfigDict -}}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -9,6 +9,10 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
-  freshclam.conf:
-    {{- toYaml .Values.freshclamConfig | nindent 4 }}
+  freshclam.conf: |
+    {{- if .Values.freshclamConfig }}
+    {{- .Values.freshclamConfig | nindent 4 }}
+    {{- else }}
+    {{- include "clamav.dictToConfig" .Values.freshclamConfigDict | nindent 4 }}
+    {{- end }}
 {{- end }}
