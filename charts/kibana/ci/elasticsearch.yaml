@@ -1,0 +1,39 @@
+imageTag: 8.16.1
+## Change me
+elasticsearchHosts: http://my-elasticsearch-cluster-data-hot:9200
+elasticsearchCredentialSecret: my-elasticsearch-cluster-data-hot-credentials
+elasticsearchCertificateSecret: ""
+# resources:
+#   limits:
+#     cpu: 2
+#     memory: 2Gi
+#   requests:
+#     cpu: 100m
+#     memory: 1000Mi
+kibanaConfig:
+  kibana.yml: |
+    server.name: kibana
+    server.host: "0"
+    elasticsearch.requestTimeout: 180000
+    xpack.security.authc.providers:
+      anonymous.anonymous1:
+        order: 0
+        credentials:
+          username: "kibana_user"
+          password: "kibana_user"
+      basic.basic1:
+        order: 1
+ingress:
+  enabled: false
+  # hosts:
+  #   - host: kibana.setme.org
+  #     paths:
+  #       - path: /
+  # tls:
+  #   - hosts:
+  #       - kibana.setme.org
+  #     secretName: kibana.setme.org-tls
+readinessProbe:
+  successThreshold: 1
+
+replicas: 2

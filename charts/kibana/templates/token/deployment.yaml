@@ -1,0 +1,91 @@
+{{- if .Values.token.create }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "kibana.fullname" . }}-token
+  labels: {{ include "kibana.labels" . | nindent 4 }}
+  {{- if .Values.token.annotations }}
+  annotations:
+    {{ .Values.token.annotations | toYaml | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.token.replicas }}
+  selector:
+    matchLabels:
+      app: {{ template "kibana.fullname" . }}-token
+  template:
+    metadata:
+      labels:
+        app: {{ template "kibana.fullname" . }}-token
+        release: {{ .Release.Name | quote }}
+        {{- range $key, $value := .Values.token.labels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+      annotations:
+        checksum/configmap: {{ include (print .Template.BasePath "/token/configmap.yaml") . | sha256sum | trunc 63 }}
+        {{- range $key, $value := .Values.token.podAnnotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+    spec:
+      automountServiceAccountToken: {{ .Values.token.automountToken }}
+      priorityClassName: {{ .Values.token.priorityClassName }}
+      terminationGracePeriodSeconds: {{ .Values.token.terminationGracePeriodSeconds }}
+      restartPolicy: {{ .Values.token.restartPolicy }}
+      serviceAccount: {{ template "kibana.token.service-account" . }}
+      securityContext:
+        {{- toYaml .Values.token.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: kibana-token
+          configMap:
+            name: {{ template "kibana.fullname" . }}-token
+        {{- if .Values.elasticsearchCertificateSecret }}
+        - name: elasticsearch-certs
+          secret:
+            secretName: {{ .Values.elasticsearchCertificateSecret }}
+        {{- end }}
+      containers:
+        - name: token
+          image: "{{ .Values.token.image.repository }}:{{ .Values.token.image.tag }}"
+          imagePullPolicy: "{{ .Values.token.image.pullPolicy }}"
+          securityContext:
+            {{- toYaml .Values.token.securityContext | nindent 12 }}
+          command:
+            - /bin/sh
+          args:
+            - -c
+            - |
+              while true;
+              do
+                sh /scripts/token.sh
+
+                sleep {{ .Values.token.validitySchedule }}
+              done
+          env:
+            - name: "ELASTICSEARCH_USERNAME"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.elasticsearchCredentialSecret }}
+                  key: username
+            - name: "ELASTICSEARCH_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.elasticsearchCredentialSecret }}
+                  key: password
+            - name: ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES
+              value: "/certs/{{ .Values.elasticsearchCertificateAuthoritiesFile }}"
+          volumeMounts:
+            - name: kibana-token
+              mountPath: /scripts
+              readOnly: true
+            {{- if .Values.elasticsearchCertificateSecret }}
+            - name: elasticsearch-certs
+              mountPath: /certs
+              readOnly: true
+            {{- end }}
+          {{- if .Values.token.resources }}
+          resources:
+            {{- toYaml .Values.token.resources | nindent 12 }}
+          {{- end }}
+
+{{- end }}

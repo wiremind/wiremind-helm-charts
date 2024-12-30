@@ -98,6 +98,10 @@ spec:
           {{- if .Values.extraVolumeMounts }}
           {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
           {{- end }}
+        {{- if .Values.containerSecurityContext }}
+          securityContext:
+{{ toYaml .Values.containerSecurityContext | indent 12 }}
+        {{- end }}
         {{- if .Values.kthxbyeSidecar.enabled }}
         - name: kthxbye-sidecar
           image: "{{ .Values.kthxbyeSidecar.image.repository }}:{{ .Values.kthxbyeSidecar.image.tag }}"
@@ -111,13 +115,13 @@ spec:
           {{- if .Values.kthxbyeSidecar.logJson }}
             - --log-json
           {{- end }}
-         {{- end }}
+          {{- if .Values.kthxbyeSidecar.securityContext }}
+          securityContext:
+{{ toYaml .Values.kthxbyeSidecar.securityContext | indent 12 }}
+          {{- end }}
+        {{- end }}
         {{- with .Values.sidecarContainers }}
         {{- toYaml . | nindent 8 }}
-        {{- end }}
-        {{- if .Values.containerSecurityContext }}
-          securityContext:
-{{ toYaml .Values.containerSecurityContext | indent 12 }}
         {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:

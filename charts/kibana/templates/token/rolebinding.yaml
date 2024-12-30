@@ -1,17 +1,17 @@
-{{- if .Values.createElasticsearchToken }}
+{{- if .Values.token.create }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pre-install-{{ template "kibana.fullname" . }}
+  name: {{ template "kibana.fullname" . }}-token
   labels: {{ include "kibana.labels" . | nindent 4 }}
   annotations:
-    {{ .Values.install.annotations | toYaml | nindent 4 }}
+    {{- .Values.annotations | toYaml | nindent 4 }}
 subjects:
   - kind: ServiceAccount
-    name: pre-install-{{ template "kibana.fullname" . }}
+    name: {{ template "kibana.token.service-account" . }}
     namespace: {{ .Release.Namespace | quote }}
 roleRef:
   kind: Role
-  name: pre-install-{{ template "kibana.fullname" . }}
+  name: {{ template "kibana.fullname" . }}-token
   apiGroup: rbac.authorization.k8s.io
 {{- end }}

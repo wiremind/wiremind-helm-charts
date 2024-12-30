@@ -2,8 +2,8 @@ annotations:
   category: DeveloperTools
 apiVersion: v2
 name: dask-crds
-version: 2022.6.2
-appVersion: 2022.6.1
+version: 2024.1.0
+appVersion: 2024.1.0
 description: Manage dask CRDs
 keywords:
   - dask

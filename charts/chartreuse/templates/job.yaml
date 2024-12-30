@@ -43,7 +43,11 @@ spec:
               done;
           envFrom:
           - secretRef:
+            {{- if .Values.alembic.existingSecret }}
+              name: {{ tpl .Values.alembic.existingSecret $ }}
+            {{- else }}
               name: {{ template "chartreuse.fullname" . }}{{ template "chartreuse.hook.suffix" . }}
+            {{- end }}
           - configMapRef:
               name: {{ template "chartreuse.fullname" . }}{{ template "chartreuse.hook.suffix" . }}
 {{- end }}
@@ -55,7 +59,11 @@ spec:
             - {{ .Values.entrypoint | quote }}
           envFrom:
           - secretRef:
+            {{- if .Values.alembic.existingSecret }}
+              name: {{ tpl .Values.alembic.existingSecret $ }}
+            {{- else }}
               name: {{ template "chartreuse.fullname" . }}{{ template "chartreuse.hook.suffix" . }}
+            {{- end }}
           - configMapRef:
               name: {{ template "chartreuse.fullname" . }}{{ template "chartreuse.hook.suffix" . }}
           volumeMounts:

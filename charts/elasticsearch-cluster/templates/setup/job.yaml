@@ -23,11 +23,16 @@ spec:
       restartPolicy: Never
       containers:
         - name: setup
-          image: curlimages/curl:8.6.0
+          image: curlimages/curl:8.11.0
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: setup
               mountPath: /app/config
+            {{- if .Values.setup.elasticsearchCertificateSecret }}
+            - name: elasticsearch-certs
+              mountPath: /certs
+              readOnly: true
+            {{- end }}
           env:
             - name: "ELASTICSEARCH_USERNAME"
               valueFrom:
@@ -39,6 +44,10 @@ spec:
                 secretKeyRef:
                   name: {{ include "elasticsearch-cluster.elasticsearch-credentials" . }}
                   key: password
+            {{- if .Values.setup.elasticsearchCertificateSecret }}
+            - name: ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES
+              value: "/certs/{{ .Values.setup.elasticsearchCertificateAuthoritiesFile }}"
+            {{- end }}
           command:
             - /bin/sh
           args:
@@ -46,6 +55,7 @@ spec:
             - |
               echo "Configuring Elasticsearch..."
               FILES="/app/config/*-query.json"
+              ES_CA="$ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES"
               for filequeryjson in $FILES
               do
                 echo "Processing $filequeryjson file..."
@@ -54,9 +64,11 @@ spec:
                 CONFIG_FILENAME="${FILENAME/-query/}"
                 CONFIG_FILENAME="${CONFIG_FILENAME%.*}"
                 CONFIG_ENV_PATH="/app/config/$CONFIG_FILENAME-config.env"
-                AUTH="$ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD"
+                ES_AUTH="$ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD"
 
                 source $CONFIG_ENV_PATH
+
+                ES_URL_HEALTH="${ELASTICSEARCH_HOST}/_cluster/health?wait_for_status=yellow&timeout=10s"
 
                 if [[ "$DEBUG" == "true" ]]; then
                   set -x
@@ -69,15 +81,23 @@ spec:
 
                 while true;
                 do
-                  HEALTH_ENDPOINT="$ELASTICSEARCH_HOST/_cluster/health?wait_for_status=yellow&timeout=10s"
+                  echo "Waiting for elasticsearch..."
+
                   HTTP_CODE=""
-                  RESPONSE_HEALTH=`curl -k --max-time 5 --silent --show-error -u $AUTH $HEALTH_ENDPOINT`
-                  RESPONSE_HEALTH_CMD=\'$RESPONSE_HEALTH\'
+                  RESPONSE_HEALTH_CMD="curl -k --max-time 5 --silent --show-error -u $ES_AUTH $ES_URL_HEALTH"
+                  if [[ "$ES_CA" != "" ]]; then
+                    RESPONSE_HEALTH_CMD="${RESPONSE_HEALTH_CMD} --cacert ${ES_CA}"
+                  fi
+                  RESPONSE_HEALTH=$($RESPONSE_HEALTH_CMD)
                   if [[ "$?" == "0" ]]; then
-                    HTTP_CODE=`curl -k --max-time 5 -s -o /dev/null -w "%{http_code}" -u $AUTH $HEALTH_ENDPOINT`
-                    CLUSTER_READY=`echo $RESPONSE_HEALTH_CMD | grep -q '"status":"yellow"'`
+                    HTTP_CODE_CMD="curl -k --max-time 5 -s -o /dev/null -w "%{http_code}" -u $ES_AUTH $ES_URL_HEALTH"
+                    if [[ "$ES_CA" != "" ]]; then
+                      HTTP_CODE_CMD="${HTTP_CODE_CMD} --cacert ${ES_CA}"
+                    fi
+                    HTTP_CODE=$($HTTP_CODE_CMD)
+                    CLUSTER_READY=$(echo \'$RESPONSE_HEALTH\' | grep -q '"status":"yellow"')
                     if [[ "$?" != "0" ]]; then
-                      CLUSTER_READY=`echo $RESPONSE_HEALTH_CMD | grep -q '"status":"green"'`
+                      CLUSTER_READY=$(echo \'$RESPONSE_HEALTH\' | grep -q '"status":"green"')
                     fi
                   fi
                   # Status is yellow or green and http code is 200
@@ -86,8 +106,7 @@ spec:
                     break
                   else
                     echo $RESPONSE_HEALTH
-                    echo "Waiting for elasticsearch..."
-                    sleep 10;
+                    sleep 10
                   fi
                 done;
 
@@ -96,7 +115,11 @@ spec:
                 HEADERS_CMD=""
                 echo "$HEADERS" | tr ";" '\n' | \
                 {
-                  CURL_CMD="curl -k -X $METHOD --silent --show-error -u $AUTH"
+                  CURL_CMD="curl -k --max-time 5 --silent --show-error -X ${METHOD} -u ${ES_AUTH}"
+
+                  if [[ "$ES_CA" != "" ]]; then
+                    CURL_CMD="${CURL_CMD} --cacert ${ES_CA}"
+                  fi
 
                   while read header;
                   do
@@ -105,15 +128,15 @@ spec:
                     fi
                   done
 
-                  CURL_CMD="${CURL_CMD} \"$ELASTICSEARCH_HOST/$ENDPOINT\""
+                  CURL_CMD="${CURL_CMD} \"${ELASTICSEARCH_HOST}/${ENDPOINT}\""
 
                   if [ ! -z '$QUERY' ]; then
-                    CURL_CMD="${CURL_CMD} --data-binary \"@$filequeryjson\""
+                    CURL_CMD="${CURL_CMD} --data-binary \"@${filequeryjson}\""
                   fi
 
                   echo "Sending request"
 
-                  RESPONSE=`eval $CURL_CMD`
+                  RESPONSE=$(eval $CURL_CMD)
 
                   # Elasticsearch will answer at least {"acknowledged":true}, at most {"acknowledged":true, ...}, except on security api
                   if echo "$RESPONSE" | grep -v '"acknowledged":true' && [ "${ENDPOINT:0:9}" != _security ]; then
@@ -130,4 +153,9 @@ spec:
             # Provide the name of the ConfigMap containing the files you want
             # to add to the container
             name: {{ include "elasticsearch-cluster.fullname" . }}-setup
+        {{- if .Values.setup.elasticsearchCertificateSecret }}
+        - name: elasticsearch-certs
+          secret:
+            secretName: {{ .Values.setup.elasticsearchCertificateSecret }}
+        {{- end }}
 {{- end }}

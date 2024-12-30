@@ -49,32 +49,66 @@ annotations: {}
 podAnnotations: {}
 # iam.amazonaws.com/role: es-cluster
 
-# If you don't want to query a token from Elasticsearch, you can set this to false
-createElasticsearchToken: true
-# Wether to delete the token at helm delete (or any other hook set by the delete value)
-# Note: always false if createElasticsearchToken is false
-deleteElasticsearchToken: true
+token:
+  # false to bring your own token secret
+  create: true
+  # customise secret name
+  name: ""
+  # empty means auto generated at kibana startup
+  value: ""
+  # Check token validity every X seconds
+  validitySchedule: "30"
 
-install:
-  annotations:
-    "helm.sh/hook": "pre-install,pre-upgrade"
+  automountToken: true
 
-delete:
-  annotations:
-    "helm.sh/hook": pre-delete
+  terminationGracePeriodSeconds: 0
+
+  restartPolicy: "Always"
+
+  priorityClassName: ""
+
+  replicas: 1
+
+  labels: {}
+  annotations: {}
+  podAnnotations: {}
+
+  podSecurityContext:
+    fsGroup: 1000
+
+  securityContext:
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1000
+    allowPrivilegeEscalation: false
+
+  image:
+    repository: dwdraju/alpine-curl-jq
+    tag: latest@sha256:83bd9be2b14bcbb960bd6bc81cb2159808f97efec05ecdf51903234ede08f29d
+    pullPolicy: IfNotPresent
+
+  serviceAccount:
+    # false to bring your own
+    create: true
+    # customise resource name
+    name: ""
+    annotations: {}
+
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "64Mi"
+    limits:
+      cpu: "100m"
+      memory: "128Mi"
 
 resources:
   requests:
     cpu: "1000m"
     memory: "2Gi"
-  limits:
-    cpu: "1000m"
-    memory: "2Gi"
-
-preInstallJobResources:
-  requests:
-    cpu: "200m"
-    memory: "512Mi"
   limits:
     cpu: "1000m"
     memory: "2Gi"
@@ -101,11 +135,17 @@ securityContext:
   capabilities:
     drop:
       - ALL
-  # readOnlyRootFilesystem: true
+  readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 1000
+  allowPrivilegeEscalation: false
 
-serviceAccount: ""
+serviceAccount:
+  # false to bring your own
+  create: true
+  # customise resource name
+  name: ""
+  annotations: {}
 
 # Whether or not to automount the service account token in the pod. Normally, Kibana does not need this
 automountToken: true
@@ -138,7 +178,10 @@ extraInitContainers: []
 #   command: ['echo', 'hey']
 
 updateStrategy:
-  type: "Recreate"
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 25%
+    maxSurge: 25%
 
 service:
   type: ClusterIP

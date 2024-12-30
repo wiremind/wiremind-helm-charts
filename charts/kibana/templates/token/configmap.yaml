@@ -1,0 +1,299 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "kibana.fullname" . }}-token
+  labels: {{ include "kibana.labels" . | nindent 4 }}
+  {{- if .Values.annotations }}
+  annotations:
+    {{ .Values.annotations | toYaml | nindent 4 }}
+  {{- end }}
+data:
+  token.sh: |
+    #!/bin/sh
+
+    set -e
+
+    K8S_CA="/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+    K8S_URL="https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT_HTTPS}"
+    K8S_BEARER=$(cat /run/secrets/kubernetes.io/serviceaccount/token)
+    K8S_NAMESPACE="{{ .Release.Namespace }}"
+    K8S_SECRET_NAME="{{ template "kibana.es-token" . }}"
+    K8S_DEPLOYMENT_NAME="{{ template "kibana.fullname" . }}"
+
+    ES_AUTH="${ELASTICSEARCH_USERNAME}:${ELASTICSEARCH_PASSWORD}"
+    ES_CA="$ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES"
+    ES_URL_HEALTH="{{ .Values.elasticsearchHosts }}/_cluster/health?wait_for_status=yellow"
+    ES_URL_CREDENTIALS="{{ .Values.elasticsearchHosts }}/_security/service/elastic/kibana/credential/token/{{ template "kibana.fullname" . }}"
+    ES_HEALTH_CHECK_INTERVAL="10"
+
+    echo "Retrieving elasticsearch token for kibana"
+
+    response=$(curl -k --max-time 5 --silent --show-error \
+        -w "%{http_code}" \
+        -X GET \
+        --cacert "$K8S_CA" \
+        -H "Authorization: Bearer $K8S_BEARER" \
+        -H "Accept: application/json" \
+        -H "Content-Type: application/json" \
+        "$K8S_URL/api/v1/namespaces/$K8S_NAMESPACE/secrets/$K8S_SECRET_NAME" \
+    )
+
+    http_code="${response: -3}"
+    response_body="${response%???}"
+
+    if [ "$http_code" -ne 200 ]; then
+        echo "HTTP status code: $http_code"
+        echo "Response body: $response_body"
+        exit 1
+    else
+        echo "HTTP status code: $http_code"
+    fi
+
+    token_base64=$(echo "$response_body" | jq -r '.data.token')
+
+    token=""
+    if [ -n "$token_base64" ]; then
+        token=$(echo "$token_base64" | base64 -d 2>/dev/null)
+    fi
+
+    while true;
+    do
+        set +e
+
+        echo "Checking if elasticsearch is ready"
+
+        response=$(curl -k --max-time 5 --silent --show-error -w "%{http_code}" \
+            -u "$ES_AUTH" \
+            ${ES_CA:+--cacert "$ES_CA"} \
+            "$ES_URL_HEALTH" \
+        )
+
+        if [ $? -eq 0 ]; then
+            http_code="${response: -3}"
+            response_body="${response%???}"
+
+            if [ "$http_code" == "200" ]; then
+                cluster_status=$(echo "$response_body" | jq -r '.status | select(. == "yellow" or . == "green")')
+                if [ -n "$cluster_status" ]; then
+                    set -e
+                    break
+                fi
+            fi
+            echo "HTTP status code: $http_code"
+            echo "Response body: $response_body"
+        fi
+
+        echo "Waiting ${ES_HEALTH_CHECK_INTERVAL} seconds to retry"
+        sleep $ES_HEALTH_CHECK_INTERVAL
+    done;
+
+    echo "Elasticsearch is ready to accept requests"
+
+    token_valid=0
+    if [ -n "$token" ]; then
+        echo "Checking validity of token since it is already set in secret ${K8S_SECRET_NAME}"
+
+        response=$(curl -k --max-time 5 --silent --show-error \
+            -w "%{http_code}" \
+            -X GET \
+            -H "Authorization: Bearer $token" \
+            -H "Accept: application/json" \
+            -H "Content-Type: application/json" \
+            "$ES_URL_HEALTH"
+        )
+
+        http_code="${response: -3}"
+        response_body="${response%???}"
+
+        if [ "$http_code" -ne 200 ]; then
+            if [ "$http_code" -eq 401 ]; then
+                echo "Recreating a token since it is invalid"
+            else
+                echo "HTTP status code: $http_code"
+                echo "Response body: $response_body"
+                exit 1
+            fi
+        else
+            echo "Token is valid"
+            token_valid=1
+        fi
+    fi
+
+    if [ "$token_valid" == "0" ]; then
+        echo "Deleting previous elasticsearch token for kibana"
+        delete_token_cmd="curl -k --max-time 5 --silent --show-error -w \"%{http_code}\" -X DELETE -u $ES_AUTH $ES_URL_CREDENTIALS"
+        if [ "$ES_CA" != "" ]; then
+            delete_token_cmd="${delete_token_cmd} --cacert ${ES_CA}"
+        fi
+
+        response=$(eval "$delete_token_cmd")
+        http_code="${response: -3}"
+        response_body="${response%???}"
+
+        if [ "$http_code" -ne 200 ] && [ "$http_code" -ne 404 ]; then
+            echo "HTTP status code: $http_code"
+            echo "Response body: $response_body"
+            exit 1
+        else
+            echo "HTTP status code: $http_code"
+        fi
+
+        echo "Creating elasticsearch token for kibana"
+        create_token_cmd="curl -k --max-time 5 --silent --show-error -w \"%{http_code}\" -X POST -u $ES_AUTH $ES_URL_CREDENTIALS"
+        if [ "$ES_CA" != "" ]; then
+            create_token_cmd="${create_token_cmd} --cacert ${ES_CA}"
+        fi
+
+        response=$(eval "$create_token_cmd")
+        http_code="${response: -3}"
+        response_body="${response%???}"
+
+        if [ "$http_code" -ne 200 ]; then
+            echo "HTTP status code: $http_code"
+            echo "Response body: $response_body"
+            exit 1
+        else
+            echo "HTTP status code: $http_code"
+        fi
+
+        echo "Updating kubernetes secret token"
+        token=$(echo "$response_body" | jq -r '.token.value')
+        token_base64=$(echo "$token" | base64 -w 0)
+        k8s_secret_put=$(printf \
+        '{
+            "metadata": {
+                "name": "%s"
+            },
+            "data": {
+                "token": "%s"
+            }
+        }' "$K8S_SECRET_NAME" "$token_base64" )
+        response=$(curl -k --max-time 5 --silent --show-error \
+            -w "%{http_code}" \
+            -X PUT \
+            --cacert "$K8S_CA" \
+            -H "Authorization: Bearer $K8S_BEARER" \
+            -H "Accept: application/json" \
+            -H "Content-Type: application/json" \
+            "$K8S_URL/api/v1/namespaces/$K8S_NAMESPACE/secrets/$K8S_SECRET_NAME" \
+            -d "$k8s_secret_put"
+        )
+
+        http_code="${response: -3}"
+        response_body="${response%???}"
+
+        if [ "$http_code" -ne 200 ]; then
+            echo "HTTP status code: $http_code"
+            echo "Response body: $response_body"
+            exit 1
+        else
+            echo "HTTP status code: $http_code"
+        fi
+    fi
+
+    echo "Checking if kibana needs to be restarted"
+
+    needs_restart=0
+
+    response=$(curl -k --max-time 5 --silent --show-error \
+        -w "%{http_code}" \
+        -X GET \
+        --cacert "$K8S_CA" \
+        -H "Authorization: Bearer $K8S_BEARER" \
+        -H "Accept: application/json" \
+        -H "Content-Type: application/json" \
+        "$K8S_URL/api/v1/namespaces/$K8S_NAMESPACE/secrets/$K8S_SECRET_NAME" \
+    )
+
+    http_code="${response: -3}"
+    response_body="${response%???}"
+
+    if [ "$http_code" -ne 200 ]; then
+        echo "HTTP status code: $http_code"
+        echo "Response body: $response_body"
+        exit 1
+    else
+        echo "HTTP status code: $http_code"
+    fi
+
+    secret_updated_at=$(echo "$response_body" | jq -r '.metadata.managedFields[] | select(.manager == "curl" and .operation == "Update") | .time')
+    if [ "$secret_updated_at" = "" ]; then
+        secret_updated_at=$(echo "$response_body" | jq -r '.metadata.creationTimestamp')
+    fi
+    echo "Secret updated at ${secret_updated_at}"
+
+    response=$(curl -k --max-time 5 --silent --show-error \
+        -w "%{http_code}" \
+        -X GET \
+        --cacert "$K8S_CA" \
+        -H "Authorization: Bearer $K8S_BEARER" \
+        -H "Accept: application/json" \
+        -H "Content-Type: application/json" \
+        "$K8S_URL/apis/apps/v1/namespaces/$K8S_NAMESPACE/deployments/$K8S_DEPLOYMENT_NAME" \
+    )
+
+    http_code="${response: -3}"
+    response_body="${response%???}"
+
+    if [ "$http_code" -ne 200 ]; then
+        echo "HTTP status code: $http_code"
+        echo "Response body: $response_body"
+        exit 1
+    else
+        echo "HTTP status code: $http_code"
+    fi
+
+    deployment_updated_at=$(echo "$response_body" | jq -r '.metadata.managedFields[] | select(.manager == "curl" and .operation == "Update") | .time')
+    if [ "$deployment_updated_at" = "" ]; then
+        deployment_updated_at=$(echo "$response_body" | jq -r '.metadata.creationTimestamp')
+    fi
+    echo "Deployment updated at ${deployment_updated_at}"
+
+    secret_timestamp=$(echo "$secret_updated_at" | awk -F'T|Z' '{print $1 " " $2}' | xargs -I {} date -d "{}" +%s)
+    deployment_timestamp=$(echo "$deployment_updated_at" | awk -F'T|Z' '{print $1 " " $2}' | xargs -I {} date -d "{}" +%s)
+
+    if [[ "$secret_timestamp" -gt "$deployment_timestamp" ]]; then
+        needs_restart=1
+    fi
+
+    if [ "$needs_restart" = "1" ]; then
+        echo "Restarting kibana deployments"
+
+        # Avoid having same secret and deployment last update timestamp
+        sleep 1
+
+        k8s_deployment_patch=$(printf \
+        '{
+            "spec": {
+                "template": {
+                    "metadata": {
+                        "annotations": {
+                            "kubectl.kubernetes.io/restartedAt": "%s"
+                        }
+                    }
+                }
+            }
+        }' $(date --utc +%FT%T.%3NZ) )
+        response=$(curl -k --max-time 5 --silent --show-error \
+            -w "%{http_code}" \
+            -X PATCH \
+            --cacert "$K8S_CA" \
+            -H "Authorization: Bearer $K8S_BEARER" \
+            -H "Accept: application/json" \
+            -H "Content-Type: application/strategic-merge-patch+json" \
+            "$K8S_URL/apis/apps/v1/namespaces/$K8S_NAMESPACE/deployments/$K8S_DEPLOYMENT_NAME?gracePeriodSeconds=0" \
+            -d "$k8s_deployment_patch"
+        )
+
+        http_code="${response: -3}"
+        response_body="${response%???}"
+
+        if [ "$http_code" -ne 200 ]; then
+            echo "HTTP status code: $http_code"
+            echo "Response body: $response_body"
+            exit 1
+        else
+            echo "HTTP status code: $http_code"
+        fi
+    fi
+    echo "Kibana deployment is up to date"

@@ -1,0 +1,17 @@
+annotations:
+  category: DeveloperTools
+apiVersion: v2
+name: cloudnative-pg-crds
+version: 0.22.2
+appVersion: "v0.22.1"
+description: Manage cloudnative-pg CRDs
+keywords:
+  - cloudnative-pg
+  - crds
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cloudnative-pg-crds
+  - https://github.com/cloudnative-pg/charts/
+engine: gotpl
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts

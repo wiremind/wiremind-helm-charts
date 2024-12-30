@@ -34,3 +34,36 @@ heritage: {{ .Release.Service }}
 {{- define "kibana.home_dir" -}}
 /usr/share/kibana
 {{- end -}}
+
+{{- define "kibana.es-token" -}}
+{{- if .Values.token.name -}}
+{{ .Values.token.name }}
+{{- else -}}
+{{ template "kibana.fullname" . }}-es-token
+{{- end -}}
+{{- end -}}
+
+{{- define "kibana.service-account" -}}
+{{- if .Values.serviceAccount.name -}}
+{{ .Values.serviceAccount.name }}
+{{- else -}}
+{{ template "kibana.fullname" . }}
+{{- end -}}
+{{- end -}}
+
+{{- define "kibana.es-token-value" -}}
+{{- $existingSecret := lookup "v1" "Secret" .Release.Namespace (include "kibana.es-token" .) -}}
+{{- if $existingSecret -}}
+{{ .Values.token.value | default (index $existingSecret.data "token" | b64dec) }}
+{{- else -}}
+{{ .Values.token.value -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "kibana.token.service-account" -}}
+{{- if .Values.token.serviceAccount.name -}}
+{{ .Values.token.serviceAccount.name }}
+{{- else -}}
+{{ template "kibana.fullname" . }}-token
+{{- end -}}
+{{- end -}}
