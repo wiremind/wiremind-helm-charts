@@ -227,6 +227,7 @@ kthxbyeSidecar:
     # interval: <duration> # Silence check interval (default 45s)
     # max-duration: <duration> # Maximum duration of a silence, it won't be extended anymore after reaching it
   logJson: false
+  securityContext: {}
 
 # additional sidecar containers array which will be added to the deployment
 sidecarContainers: []
