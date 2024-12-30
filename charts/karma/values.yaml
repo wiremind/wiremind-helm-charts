@@ -241,5 +241,8 @@ extraVolumes: []
 # extra volumeMounts for the deployment
 extraVolumeMounts: []
 
+# extra manifests
+extraManifests: []
+
 # override command args of karma container
 args: []

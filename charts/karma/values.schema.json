@@ -27,6 +27,9 @@
                 }
             }
         },
+        "extraManifests": {
+            "type": "array"
+        },
         "fullnameOverride": {
             "type": "string"
         },
