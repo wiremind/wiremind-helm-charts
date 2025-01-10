@@ -41,7 +41,10 @@
       "enum": ["Deployment", "StatefulSet"]
     },
     "updateStrategy": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "service": {
       "type": "object",
