@@ -42,9 +42,27 @@
     },
     "updateStrategy": {
       "type": [
-        "string",
+        "object",
         "null"
-      ]
+      ],
+      "properties": {
+        "type": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "rollingUpdate": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false
     },
     "service": {
       "type": "object",
