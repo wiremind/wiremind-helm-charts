@@ -21,6 +21,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 kind: StatefulSet
+updateStrategy: null
 
 podSecurityContext:
   runAsNonRoot: true

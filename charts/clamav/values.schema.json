@@ -36,6 +36,13 @@
     "fullnameOverride": {
       "type": "string"
     },
+    "kind": {
+      "type": "string",
+      "enum": ["Deployment", "StatefulSet"]
+    },
+    "updateStrategy": {
+      "type": "string"
+    },
     "service": {
       "type": "object",
       "properties": {
