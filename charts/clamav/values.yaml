@@ -65,7 +65,7 @@ ingress:
   #      - chart-example.local
 
 ## Ref: https://linux.die.net/man/5/clamd.conf
-## Note: will completely override default clamd.conf file at https://github.com/Mailu/Mailu/tree/master/optional/clamav/conf
+## Note: will completely override default clamd.conf file at https://github.com/Cisco-Talos/clamav/blob/main/etc/clamd.conf.sample
 clamdConfigDict:
   ###############
   # General
@@ -120,7 +120,7 @@ clamdConfigDict:
   PCRERecMatchLimit: 10000
 
 ## Ref: https://linux.die.net/man/5/freshclam.conf
-## Note: will completely override default clamd.conf file at https://github.com/Mailu/Mailu/tree/master/optional/clamav/conf
+## Note: will completely override default clamd.conf file at https://github.com/Cisco-Talos/clamav/blob/main/etc/freshclam.conf.sample
 freshclamConfigDict:
   ###############
   # General

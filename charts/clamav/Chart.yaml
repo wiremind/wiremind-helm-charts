@@ -1,15 +1,15 @@
 apiVersion: v2
-description: An Open-Source antivirus engine for detecting trojans, viruses, malware & other malicious threats. Using Mailu docker image.
+description: An Open-Source antivirus engine for detecting trojans, viruses, malware & other malicious threats. Using official docker image.
 name: clamav
-version: 3.3.0
+version: 3.4.0
 appVersion: "1.4.1"
 home: https://www.clamav.net
 icon: https://www.clamav.net/assets/clamav-trademark.png
 sources:
   - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/clamav
-  - https://github.com/Mailu/Mailu/tree/master/optional/clamav
-  - https://hub.docker.com/r/mailu/clamav
-  - https://github.com/Cisco-Talos/clamav-devel
+  - https://hub.docker.com/r/clamav/clamav
+  - https://github.com/Cisco-Talos/clamav-docker
+  - https://github.com/Cisco-Talos/clamav
 maintainers:
   - name: Wiremind
     url: https://github.com/wiremind/wiremind-helm-charts
