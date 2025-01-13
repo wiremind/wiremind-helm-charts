@@ -4,9 +4,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: {{ template "chartreuse.fullname" . }}-ephemeral
   labels:
-{{ include "chartreuse.labels" . | indent 4 }}
+    {{- include "chartreuse.labels" . | nindent 4 }}
   annotations:
-{{ include "chartreuse.annotations.ephemeral" . | indent 4 }}
+    {{- include "chartreuse.annotations.ephemeral" . | nindent 4 }}
 rules:
   - apiGroups: [""]
     resources: ["replicationcontrollers/scale"]
@@ -42,9 +42,9 @@ kind: RoleBinding
 metadata:
   name: {{ template "chartreuse.fullname" . }}-ephemeral
   labels:
-{{ include "chartreuse.labels" . | indent 4 }}
+    {{- include "chartreuse.labels" . | nindent 4 }}
   annotations:
-{{ include "chartreuse.annotations.ephemeral" . | indent 4 }}
+    {{- include "chartreuse.annotations.ephemeral" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role

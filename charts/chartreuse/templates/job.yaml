@@ -3,17 +3,17 @@ kind: Job
 metadata:
   name: {{ template "chartreuse.fullname" . }}{{ template "chartreuse.hook.suffix" . }}
   labels:
-{{ include "chartreuse.labels" . | indent 4 }}
+    {{- include "chartreuse.labels" . | nindent 4 }}
     app.kubernetes.io/component: "chartreuse-upgrade"
   annotations:
-{{ include "chartreuse.upgradeJobAnnotations" . | indent 4 }}
+    {{- include "chartreuse.upgradeJobAnnotations" . | nindent 4 }}
 spec:
   backoffLimit: 0
   ttlSecondsAfterFinished: 1800
   template:
     metadata:
       labels:
-{{ include "chartreuse.labels" . | indent 8 }}
+        {{- include "chartreuse.labels" . | nindent 8 }}
         app.kubernetes.io/component: chartreuse-upgrade{{ template "chartreuse.hook.suffix" . }}
         {{ .Release.Name }}-postgresql-client: "true"
       {{- with .Values.podAnnotations }}
