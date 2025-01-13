@@ -39,7 +39,12 @@ upgradeJobWeight: "1"
 
 alembic:
   enabled: true
-  existingSecret: ""
+  externalSecrets:
+    enabled: false
+    passwordRemoteRefKey: ""
+    storeRef:
+      name: ""
+      kind: ClusterSecretStore
   username: my-dummy-username
   password: my-dummy-password
   database: my-dummy-database
