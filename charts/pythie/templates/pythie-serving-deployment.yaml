@@ -80,6 +80,9 @@ spec:
             - containerPort: 9090
               protocol: TCP
               name: grpc
+            {{- if $.Values.pythieServing.customPorts }}
+            {{- toYaml $.Values.pythieServing.customPorts | nindent 12 }}
+            {{- end }}
           resources: {{- toYaml $servingValue.resources | nindent 12 }}
           volumeMounts:
             - mountPath: /mnt/models
