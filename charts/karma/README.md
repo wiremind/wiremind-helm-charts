@@ -1,6 +1,6 @@
 # Karma
 
-Karma is an ASL2 licensed alert dashboard for Prometheus Alertmanager.
+Karma is an Apache-2.0 licensed alert dashboard for Prometheus Alertmanager.
 
 ## Introduction
 
