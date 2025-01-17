@@ -13,12 +13,15 @@ metadata:
 spec:
   schedule: {{ hasKey $commandDict "schedule" | ternary $commandDict.schedule $.Values.schedule | quote }}
   startingDeadlineSeconds: 600
-  concurrencyPolicy: "Forbid"
-  failedJobsHistoryLimit: 1
-  successfulJobsHistoryLimit: 1
+  concurrencyPolicy: {{ default "Forbid" $commandDict.concurrencyPolicy }}
+  failedJobsHistoryLimit: {{ default 1 $commandDict.failedJobsHistoryLimit }}
+  successfulJobsHistoryLimit: {{ default 1 $commandDict.successfulJobsHistoryLimit }}
   jobTemplate:
     spec:
-      backoffLimit: 0
+      backoffLimit: {{ default 0 $commandDict.backoffLimit }}
+      {{- if $commandDict.activeDeadlineSeconds }}
+      activeDeadlineSeconds: : {{ $commandDict.activeDeadlineSeconds }}
+      {{- end }}
       template:
         metadata:
           labels:
