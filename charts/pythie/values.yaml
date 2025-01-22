@@ -3,7 +3,18 @@ pythieServing:
     repository: "ghcr.io/wiremind/pythie-serving"
     tag: "v3.4.2"
     pullPolicy: IfNotPresent
+  ## Add custom ports to expose
   customPorts: []
+    # - name: metrics
+    #   containerPort: 9191
+    #   protocol: TCP
+  ## Enable optional metrics scraping through prometheus operator
+  ## Note that you'll need to expose a new port in your code and in pythieServing.customPorts
+  metrics:
+    podMonitor:
+      enabled: false
+      port: metrics
+      interval: 30s
   ## Specify image pull secret
   # pullSecret: my-secret
   istio:

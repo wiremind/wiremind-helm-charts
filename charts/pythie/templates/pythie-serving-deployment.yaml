@@ -23,6 +23,7 @@ spec:
       labels:
 {{ include "pythie.labels" $ | indent 8 }}
 {{ include "pythie.modelLabels" $servingValue | indent 8 }}
+        serving-kind: pythie
         serving/hash: {{ $servingHash }}
       annotations:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
@@ -43,7 +44,7 @@ spec:
       priorityClassName: {{ $.Values.priorityClassName }}
       {{- end }}
       {{- if $.Values.pythieServing.pullSecret }}
-      imagePullSecrets: 
+      imagePullSecrets:
         - name: {{ $.Values.pythieServing.pullSecret }}
       {{- end }}
       initContainers:
