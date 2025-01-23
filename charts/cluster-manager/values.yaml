@@ -10,9 +10,18 @@ imagePullSecrets: []
 
 priorityClassName: ""
 
-schedule: "0 10 * * *"
-
 rootCommand: "cluster-manager"
+
+cronJob:
+  schedule: "0 10 * * *"
+  timeZone: ""
+  startingDeadlineSeconds: 600
+  concurrencyPolicy: Forbid
+  suspend: ""
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  backoffLimit: "0"
+  ttlSecondsAfterFinished: ""
 
 cronJobs: {}
   # GCInvalidPods:
