@@ -8,6 +8,7 @@
 
 {{- $tierAutoscaling := hasKey $tierValue "autoscaling" | ternary $tierValue.autoscaling dict }}
 {{- if hasKey $tierAutoscaling "enabled" | ternary $tierAutoscaling.enabled $historicalDefaults.autoscaling.enabled }}
+{{- if hasKey $tierAutoscaling "hpa" | ternary $tierAutoscaling.hpa $historicalDefaults.autoscaling.hpa }}
 
 {{- $tierAutoscalingTargetMetric := dict }}
 {{- if $tierAutoscaling }}
@@ -70,6 +71,8 @@ spec:
   behavior:
     scaleDown:
       stabilizationWindowSeconds: {{ $tierAutoscaling.scaleDownStabilizationWindowSeconds | default $historicalDefaults.autoscaling.scaleDownStabilizationWindowSeconds }}
+
+{{- end }}
 
 {{- end }}
 
