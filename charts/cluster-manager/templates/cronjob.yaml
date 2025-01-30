@@ -11,14 +11,36 @@ metadata:
     app.kubernetes.io/component: cluster-manager
     {{- include "cluster-manager.labels" $ | nindent 4 }}
 spec:
-  schedule: {{ hasKey $commandDict "schedule" | ternary $commandDict.schedule $.Values.schedule | quote }}
-  startingDeadlineSeconds: 600
-  concurrencyPolicy: "Forbid"
-  failedJobsHistoryLimit: 1
-  successfulJobsHistoryLimit: 1
+  schedule: {{ hasKey $commandDict "schedule" | ternary $commandDict.schedule $.Values.cronJob.schedule | quote }}
+  {{- with $.Values.cronJob.timeZone }}
+  timeZone: {{ . }}
+  {{- end }}
+  {{- with $.Values.cronJob.startingDeadlineSeconds }}
+  startingDeadlineSeconds: {{ . }}
+  {{- end }}
+  {{- with $.Values.cronJob.concurrencyPolicy }}
+  concurrencyPolicy: {{ . }}
+  {{- end }}
+  {{- with $.Values.cronJob.suspend }}
+  suspend: {{ . }}
+  {{- end }}
+  {{- with $.Values.cronJob.successfulJobsHistoryLimit }}
+  successfulJobsHistoryLimit: {{ . }}
+  {{- end }}
+  {{- with $.Values.cronJob.failedJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ . }}
+  {{- end }}
   jobTemplate:
     spec:
-      backoffLimit: 0
+      {{- with $.Values.cronJob.backoffLimit }}
+      backoffLimit: {{ . }}
+      {{- end }}
+      {{- with $.Values.cronJob.activeDeadlineSeconds }}
+      activeDeadlineSeconds: {{ . }}
+      {{- end }}
+      {{- with $.Values.cronJob.ttlSecondsAfterFinished }}
+      ttlSecondsAfterFinished: {{ . }}
+      {{- end }}
       template:
         metadata:
           labels:

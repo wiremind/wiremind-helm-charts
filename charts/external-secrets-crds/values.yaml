@@ -1,10 +1,8 @@
 nameOverride: ""
 fullnameOverride: ""
-
 installCRDs: true
 
 # Synchonize your values from external-secrets Helm Chart with the ones below
-
 crds:
   createClusterExternalSecret: true
   createClusterSecretStore: true
@@ -12,8 +10,7 @@ crds:
   createPushSecret: true
   annotations: {}
   conversion:
-    enabled: true
-
+    enabled: false
 webhook:
   certManager:
     enable: false

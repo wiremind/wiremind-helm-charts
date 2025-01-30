@@ -1,0 +1,21 @@
+{{- if .Values.pythieServing.metrics.podMonitor.enabled }}
+
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ include "pythie.fullname" . }}
+  labels:
+    {{- include "pythie.labels" . | nindent 4 }}
+spec:
+  podMetricsEndpoints:
+    - interval: {{ .Values.pythieServing.metrics.podMonitor.interval }}
+      port: {{ .Values.pythieServing.metrics.podMonitor.port }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      {{- include "pythie.matchLabels" . | nindent 6 }}
+      serving-kind: pythie
+
+{{- end }}

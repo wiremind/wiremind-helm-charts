@@ -9,7 +9,7 @@ metadata:
     {{- if and .Values.crds.conversion.enabled .Values.webhook.certManager.enabled .Values.webhook.certManager.addInjectorAnnotations }}
     cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ include "external-secrets.fullname" . }}-webhook
     {{- end }}
-    controller-gen.kubebuilder.io/version: v0.16.5
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     external-secrets.io/component: controller
   name: clustergenerators.generators.external-secrets.io
@@ -205,7 +205,7 @@ spec:
                         - auth
                         - registry
                       type: object
-                    ecrRAuthorizationTokenSpec:
+                    ecrAuthorizationTokenSpec:
                       properties:
                         auth:
                           description: Auth defines how to authenticate with AWS
@@ -337,6 +337,11 @@ spec:
                           description: |-
                             You can assume a role before making calls to the
                             desired AWS service.
+                          type: string
+                        scope:
+                          description: |-
+                            Scope specifies the ECR service scope.
+                            Valid options are private and public.
                           type: string
                       required:
                         - region
@@ -542,6 +547,46 @@ spec:
                         - length
                         - noUpper
                       type: object
+                    quayAccessTokenSpec:
+                      properties:
+                        robotAccount:
+                          description: Name of the robot account you are federating with
+                          type: string
+                        serviceAccountRef:
+                          description: Name of the service account you are federating with
+                          properties:
+                            audiences:
+                              description: |-
+                                Audience specifies the `aud` claim for the service account token
+                                If the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity
+                                then this audiences will be appended to the list
+                              items:
+                                type: string
+                              type: array
+                            name:
+                              description: The name of the ServiceAccount resource being referred to.
+                              maxLength: 253
+                              minLength: 1
+                              pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                              type: string
+                            namespace:
+                              description: |-
+                                Namespace of the resource being referred to.
+                                Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+                              maxLength: 63
+                              minLength: 1
+                              pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+                              type: string
+                          required:
+                            - name
+                          type: object
+                        url:
+                          description: URL configures the Quay instance URL. Defaults to quay.io.
+                          type: string
+                      required:
+                        - robotAccount
+                        - serviceAccountRef
+                      type: object
                     stsSessionTokenSpec:
                       properties:
                         auth:
@@ -704,6 +749,10 @@ spec:
                       type: object
                     vaultDynamicSecretSpec:
                       properties:
+                        allowEmptyResponse:
+                          default: false
+                          description: Do not fail if no secrets are found. Useful for requests where no data is expected.
+                          type: boolean
                         controller:
                           description: |-
                             Used to select the correct ESO controller (think: ingress.ingressClassName)
@@ -1613,6 +1662,7 @@ spec:
                     - Fake
                     - GCRAccessToken
                     - GithubAccessToken
+                    - QuayAccessToken
                     - Password
                     - STSSessionToken
                     - UUID

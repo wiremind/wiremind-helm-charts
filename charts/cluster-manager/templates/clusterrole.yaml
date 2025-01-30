@@ -63,6 +63,15 @@ rules:
       - watch
 
   - apiGroups:
+      - external-secrets.io
+    resources:
+      - clustersecretstores
+    verbs:
+      - get
+      - list
+      - watch
+
+  - apiGroups:
       - wiremind.io
     resources:
       - releaseinfo

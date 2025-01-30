@@ -19,7 +19,10 @@ metadata:
     app.kubernetes.io/part-of: historical
     app.kubernetes.io/component: historical-{{ $tierName }}
 spec:
-  {{- if not (hasKey $tierAutoscaling "enabled" | ternary $tierAutoscaling.enabled $historicalDefaults.autoscaling.enabled) }}
+  {{- if or
+        (not (hasKey $tierAutoscaling "enabled" | ternary $tierAutoscaling.enabled $historicalDefaults.autoscaling.enabled))
+        (not (hasKey $tierAutoscaling "hpa" | ternary $tierAutoscaling.hpa $historicalDefaults.autoscaling.hpa))
+  }}
   replicas: {{ if not (kindIs "invalid" $tierValue.replicaCount) }}{{ $tierValue.replicaCount }}{{ else }}{{ $historicalDefaults.replicaCount }}{{ end }}
   {{- end }}
   podManagementPolicy: {{ default $historicalDefaults.podManagementPolicy $tierValue.podManagementPolicy }}

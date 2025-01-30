@@ -8,4 +8,13 @@ The CRDs are retrieved/adjusted from [here](https://github.com/external-secrets/
 
 If the version of the CRDs changes, aka breaking changes (this doesn't happen every day) more actions will be required!
 
-The release must be named `external-secrets` in the namespace `external-secrets` to have the CRDs working. This is because of the conversion webhook which is hardcoded in the CRDs.
+**Do not forget to change APP_VERSION**
+
+```
+export APP_VERSION=0.13.0
+cd charts/external-secrets-crds
+helm pull external-secrets/external-secrets --version $APP_VERSION
+tar -xvf external-secrets-${APP_VERSION}.tgz
+cp -r external-secrets/templates/crds templates
+bash ../../scripts/cut_crds.sh crds.yaml
+```

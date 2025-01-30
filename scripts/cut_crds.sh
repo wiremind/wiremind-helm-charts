@@ -21,7 +21,7 @@ document_index=0
 for output_name in $output_names
 do
     if [ $output_name == "---" ]; then continue; fi
-    output_filename="crd-$output_name.yaml"
+    output_filename="$output_name.yaml"
     echo "Processing ${output_filename} at index ${document_index}"
     $YQBIN eval "select(di == ${document_index})" "${filename}" > "$output_dir/$output_filename"
     document_index=$((document_index+1))

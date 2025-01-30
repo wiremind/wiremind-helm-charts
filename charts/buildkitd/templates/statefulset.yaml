@@ -168,7 +168,7 @@ spec:
         namespace: {{ .Release.Namespace }}
         labels:
           app: {{ template "buildkitd.fullname" . }}
-          chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+          chart: {{ .Chart.Name }}
           release: {{ .Release.Name }}
           heritage: {{ .Release.Service }}
       spec:

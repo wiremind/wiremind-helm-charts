@@ -1,0 +1,4 @@
+pythieServing:
+  metrics:
+    podMonitor:
+      enabled: true

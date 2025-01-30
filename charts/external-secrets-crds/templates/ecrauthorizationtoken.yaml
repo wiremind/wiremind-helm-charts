@@ -9,7 +9,7 @@ metadata:
     {{- if and .Values.crds.conversion.enabled .Values.webhook.certManager.enabled .Values.webhook.certManager.addInjectorAnnotations }}
     cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ include "external-secrets.fullname" . }}-webhook
     {{- end }}
-    controller-gen.kubebuilder.io/version: v0.16.5
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     external-secrets.io/component: controller
   name: ecrauthorizationtokens.generators.external-secrets.io
@@ -185,6 +185,11 @@ spec:
                   description: |-
                     You can assume a role before making calls to the
                     desired AWS service.
+                  type: string
+                scope:
+                  description: |-
+                    Scope specifies the ECR service scope.
+                    Valid options are private and public.
                   type: string
               required:
                 - region

@@ -12,23 +12,23 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     external-secrets.io/component: controller
-  name: uuids.generators.external-secrets.io
+  name: quayaccesstokens.generators.external-secrets.io
 spec:
   group: generators.external-secrets.io
   names:
     categories:
       - external-secrets
       - external-secrets-generators
-    kind: UUID
-    listKind: UUIDList
-    plural: uuids
-    singular: uuid
+    kind: QuayAccessToken
+    listKind: QuayAccessTokenList
+    plural: quayaccesstokens
+    singular: quayaccesstoken
   scope: Namespaced
   versions:
     - name: v1alpha1
       schema:
         openAPIV3Schema:
-          description: UUID generates a version 1 UUID (e56657e3-764f-11ef-a397-65231a88c216).
+          description: QuayAccessToken generates Quay oauth token for pulling/pushing images
           properties:
             apiVersion:
               description: |-
@@ -48,7 +48,44 @@ spec:
             metadata:
               type: object
             spec:
-              description: UUIDSpec controls the behavior of the uuid generator.
+              properties:
+                robotAccount:
+                  description: Name of the robot account you are federating with
+                  type: string
+                serviceAccountRef:
+                  description: Name of the service account you are federating with
+                  properties:
+                    audiences:
+                      description: |-
+                        Audience specifies the `aud` claim for the service account token
+                        If the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity
+                        then this audiences will be appended to the list
+                      items:
+                        type: string
+                      type: array
+                    name:
+                      description: The name of the ServiceAccount resource being referred to.
+                      maxLength: 253
+                      minLength: 1
+                      pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                      type: string
+                    namespace:
+                      description: |-
+                        Namespace of the resource being referred to.
+                        Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+                      maxLength: 63
+                      minLength: 1
+                      pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+                      type: string
+                  required:
+                    - name
+                  type: object
+                url:
+                  description: URL configures the Quay instance URL. Defaults to quay.io.
+                  type: string
+              required:
+                - robotAccount
+                - serviceAccountRef
               type: object
           type: object
       served: true

@@ -23,6 +23,28 @@
                 "enabled": {
                     "type": "boolean"
                 },
+                "externalSecrets": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "passwordRemoteRefKey": {
+                            "type": "string"
+                        },
+                        "storeRef": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "kind": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
                 "password": {
                     "type": "string"
                 },

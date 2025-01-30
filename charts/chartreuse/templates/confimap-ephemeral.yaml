@@ -3,9 +3,9 @@ kind: ConfigMap
 metadata:
   name: {{ template "chartreuse.fullname" . }}-ephemeral
   labels:
-{{ include "chartreuse.labels" . | indent 4 }}
+    {{- include "chartreuse.labels" . | nindent 4 }}
   annotations:
-{{ include "chartreuse.annotations.ephemeral" . | indent 4 }}
+    {{- include "chartreuse.annotations.ephemeral" . | nindent 4 }}
 data:
   # Note: Chartreuse expects false values to be empty string (falsy value) and true values to be non-empty string.
 {{- if .Values.alembic.allowMigrationFromEmptyDatabase }}
@@ -44,6 +44,6 @@ data:
 
   HELM_CHART_VERSION: {{ .Chart.Version }}
 
-{{- with .Values.additionalEnvironmentVariables }}
-{{ toYaml . | indent 2 }}
-{{- end }}
+  {{- range $key, $value := .Values.additionalEnvironmentVariables }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}
