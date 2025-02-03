@@ -27,6 +27,9 @@ spec:
         {{- include "druid.common-labels" . | nindent 8 }}
         app.kubernetes.io/component: {{ .Values.router.name }}
         druid.k8s.enablePatching: "true"
+        {{- with .Values.router.podLabels }}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") $ | sha256sum }}

@@ -167,6 +167,7 @@ router:
   affinity: {}
   annotations: {}
   podAnnotations: {}
+  podLabels: {}
   podDisruptionBudget: {}
   envVars:
     druid_router_managementProxy_enabled: "true"
@@ -231,6 +232,7 @@ broker:
   affinity: {}
   annotations: {}
   podAnnotations: {}
+  podLabels: {}
   podDisruptionBudget: {}
   envVars: {}
   secretEnvVars: {}
@@ -288,6 +290,7 @@ coordinator:
   affinity: {}
   annotations: {}
   podAnnotations: {}
+  podLabels: {}
   podDisruptionBudget: {}
   envVars: {}
   secretEnvVars: {}
@@ -365,6 +368,8 @@ historical:
       timeoutSeconds: 10
       failureThreshold: 30
       successThreshold: 1
+    podAnnotations: {}
+    podLabels: {}
     serviceAccount:
       # -- Create a service account for the coordinator
       create: true
@@ -488,6 +493,7 @@ zookeeper:
   image:
     debug: true
   podAnnotations: {}
+  podLabels: {}
 
 gCloudStorage:
   enabled: false
