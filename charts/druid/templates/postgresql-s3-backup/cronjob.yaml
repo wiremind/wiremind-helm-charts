@@ -21,6 +21,9 @@ spec:
           labels:
             {{- include "druid.common-labels" . | nindent 12 }}
             app.kubernetes.io/component: {{ .Values.postgresql.backup.s3.cronJob.name }}
+            {{- with .Values.postgresql.backup.podLabels }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
           {{- with .Values.postgresql.backup.podAnnotations }}
           annotations:
             {{- toYaml . | nindent 12 }}

@@ -36,6 +36,9 @@ spec:
         {{- include "druid.common-labels" $ | nindent 8 }}
         app.kubernetes.io/part-of: indexer
         app.kubernetes.io/component: indexer-{{ $categoryName }}
+        {{- with $categoryValue.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       annotations:
         druid.k8s.enablePatching: "true"
         # This restarts all indexers for now as we use the same file

@@ -24,6 +24,9 @@ spec:
       labels:
         {{- include "druid.common-labels" . | nindent 8 }}
         app.kubernetes.io/component: {{ .Values.coordinator.name }}
+        {{- with .Values.coordinator.podLabels }}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
       annotations:
         druid.k8s.enablePatching: "true"
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
