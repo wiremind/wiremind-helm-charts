@@ -70,7 +70,8 @@ spec:
                 - all
       containers:
         - name: pythie-serving
-          image: {{ $.Values.pythieServing.image.repository }}:{{ default $.Values.pythieServing.image.tag $servingValue.image.tag }}
+          {{- $servingValueImage := default (dict) $servingValue.image }}
+          image: {{ $.Values.pythieServing.image.repository }}:{{ $servingValueImage.tag | default $.Values.pythieServing.image.tag }}
           imagePullPolicy: {{ $.Values.pythieServing.image.pullPolicy | quote }}
           args:
             - --port=9090
