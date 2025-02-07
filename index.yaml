@@ -14227,6 +14227,28 @@ entries:
     version: 0.2.1
   pythie:
   - apiVersion: v2
+    created: "2025-02-07T10:14:28.517210319Z"
+    description: Serve machine learning models with tensorflow and pythie
+    digest: 01e784c0bce038d8d307aba98629d7782bcd78a839d0e69ec256c95595898317
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/pythie
+    icon: https://avatars.githubusercontent.com/u/9391624?s=200&v=4
+    keywords:
+    - pythie
+    - serving
+    - machine
+    - learning
+    - model
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: pythie
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/pythie
+    - https://github.com/wiremind/pythie-serving
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/pythie-0.8.1/pythie-0.8.1.tgz
+    version: 0.8.1
+  - apiVersion: v2
     created: "2025-01-22T12:44:27.683694307Z"
     description: Serve machine learning models with tensorflow and pythie
     digest: 3639761dc1be82bf854f1ffe79361d9524b96fc485ee4d70fa991e3100e2f6ba
@@ -15819,4 +15841,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-02-03T12:57:18.193247142Z"
+generated: "2025-02-07T10:14:28.517967336Z"
