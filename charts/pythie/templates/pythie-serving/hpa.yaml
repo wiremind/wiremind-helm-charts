@@ -1,0 +1,66 @@
+{{- range $modelName, $modelValue := .Values.pythieServing.models }}
+
+{{- if $modelValue.autoscaling }}
+
+{{- if $modelValue.autoscaling.enabled }}
+
+{{- $autoscalingTargetMetric := hasKey $modelValue.autoscaling "targetMetric" | ternary $modelValue.autoscaling.targetMetric dict }}
+
+---
+
+{{- if $.Capabilities.APIVersions.Has "autoscaling/v2" }}
+apiVersion: autoscaling/v2
+{{- else }}
+apiVersion: autoscaling/v2beta2
+{{- end }}
+kind: HorizontalPodAutoscaler
+metadata:
+  name: model-{{ $modelName }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: model-{{ $modelName }}
+  minReplicas: {{ $modelValue.autoscaling.minReplicas }}
+  maxReplicas: {{ $modelValue.autoscaling.maxReplicas }}
+  metrics:
+    {{- if $modelValue.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ $modelValue.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if $modelValue.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ $modelValue.autoscaling.targetMemory }}
+    {{- end }}
+    {{- if $autoscalingTargetMetric }}
+    - type: Object
+      object:
+        metric:
+          name: {{ $autoscalingTargetMetric.name }}
+        describedObject:
+          apiVersion: "/v1"
+          kind: Service
+          name: {{ $autoscalingTargetMetric.service | default (printf "model-%s" $modelName) }}
+        target:
+          type: Value
+          value: {{ $autoscalingTargetMetric.value }}
+    {{- end }}
+  {{- with $modelValue.autoscaling.scaleDownStabilizationWindowSeconds }}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: {{ . }}
+  {{- end }}
+
+{{- end }}
+
+{{- end }}
+
+{{- end }}
