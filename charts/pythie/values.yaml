@@ -46,10 +46,11 @@ pythieServing:
     targetMetric:
       enabled: false
       name: pythie_models_pods_load
-      matchLabels:
-        deployment: model-dali-si-trs-big-v1
-      service: pythie-staging-pythie-api
       value: 20
+      # matchLabels:
+      #   deployment: model-my-example-model
+      # service: pythie-pythie-api
+      # deployment: model-my-example-model
 
   ## Specify image pull secret
   # pullSecret: my-secret
@@ -72,9 +73,10 @@ pythieServing:
     #     targetMetric:
     #       enabled: true
     #       name: pythie_models_pods_load
-    #       matchLabels:
-    #         deployment: model-dali-si-trs-big-v1
-    #       service: pythie-staging-pythie-api2
+    #       # matchLabels:
+    #       #   deployment: model-my-example-model
+    #       # service: pythie-pythie-api
+    #       deployment: model-my-example-model
     #       value: 23
     #   maximumConcurrentRpcs: 2
     #   image:

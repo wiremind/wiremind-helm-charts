@@ -58,10 +58,17 @@ spec:
             matchLabels:
               {{- toYaml ($autoscalingTargetMetric.matchLabels | default $autoscalingTargetMetricDefault.matchLabels) | nindent 14 }}
           {{- end }}
+        {{- if ($autoscalingTargetMetric.service | default $autoscalingTargetMetricDefault.service) }}
         describedObject:
           apiVersion: "/v1"
           kind: Service
-          name: {{ $autoscalingTargetMetric.service | default ($autoscalingTargetMetricDefault.service | default (printf "model-%s" $.Release.Name $modelName)) }}
+          name: {{ $autoscalingTargetMetric.service | default $autoscalingTargetMetricDefault.service }}
+        {{- else }}
+        describedObject:
+          apiVersion: "apps/v1"
+          kind: Deployment
+          name: {{ $autoscalingTargetMetric.deployment | default $autoscalingTargetMetricDefault.deployment }}
+        {{- end }}
         target:
           type: Value
           value: {{ $autoscalingTargetMetric.value | default $autoscalingTargetMetricDefault.value }}
