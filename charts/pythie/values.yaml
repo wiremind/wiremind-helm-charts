@@ -31,6 +31,8 @@ pythieServing:
     #     targetMemory: 80
     #     targetMetric:
     #       name: pythie_models_pods_load
+    #       matchLabels:
+    #         deployment: model-dali-si-trs-big-v1
     #       service: model-dali-si-trs-big-v1
     #       value: 20
     #   maximumConcurrentRpcs: 2
