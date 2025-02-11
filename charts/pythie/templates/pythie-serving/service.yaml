@@ -9,6 +9,7 @@ metadata:
   labels:
     {{- include "pythie.labels" $ | nindent 4 }}
     {{- include "pythie.modelLabels" $servingValue | nindent 4 }}
+    serving-kind: pythie
     serving/hash: {{ $servingHash }}
 spec:
   type: {{ $.Values.pythieServing.service.type }}
