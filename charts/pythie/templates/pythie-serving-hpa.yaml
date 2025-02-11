@@ -22,13 +22,32 @@ spec:
   minReplicas: {{ $modelValue.autoscaling.minReplicas }}
   maxReplicas: {{ $modelValue.autoscaling.maxReplicas }}
   metrics:
+    {{- if $modelValue.autoscaling.metricName }}
+    - type: Object
+      object:
+        metric:
+          name: {{ $modelValue.autoscaling.metricName }}
+        describedObject:
+          apiVersion: v1
+          kind: Service
+          name: {{ $modelValue.autoscaling.describedService }}
+          {{- with $modelValue.autoscaling.metricMatchLabels }}
+          selector:
+            matchLabels:
+              {{- toYaml . | nindent 14 }}
+          {{- end }}
+        target:
+          type: Value
+          value: {{ $modelValue.autoscaling.targetMetricValue | default 50 }}
+    {{- else }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
           averageUtilization: {{ $modelValue.autoscaling.targetMetricValue | default 100 }}
-
+    {{- end }}
+    
 ---
 
 {{- end }}
