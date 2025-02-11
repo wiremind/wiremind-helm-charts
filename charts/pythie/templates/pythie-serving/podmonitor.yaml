@@ -1,4 +1,4 @@
-{{- if .Values.pythieServing.metrics.podMonitor.enabled }}
+{{- if and .Values.pythieServing.metrics.enabled .Values.pythieServing.metrics.podMonitor.enabled }}
 
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor

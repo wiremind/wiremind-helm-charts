@@ -11,11 +11,16 @@ metadata:
     {{- include "pythie.modelLabels" $servingValue | nindent 4 }}
     serving/hash: {{ $servingHash }}
 spec:
-  type: ClusterIP
+  type: {{ $.Values.pythieServing.service.type }}
   ports:
     - name: grpc
-      port: 9090
+      port: {{ $.Values.pythieServing.service.ports.grpc }}
       targetPort: grpc
+    {{- if $.Values.pythieServing.metrics.enabled }}
+    - name: metrics
+      port: {{ $.Values.pythieServing.service.ports.metrics }}
+      targetPort: metrics
+    {{- end }}
   selector:
     {{- include "pythie.matchLabels" $ | nindent 4 }}
     serving/hash: {{ $servingHash }}
