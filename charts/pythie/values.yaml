@@ -48,7 +48,7 @@ pythieServing:
       name: pythie_models_pods_load
       matchLabels:
         deployment: model-dali-si-trs-big-v1
-      service: model-dali-si-trs-big-v1
+      service: pythie-staging-pythie-api
       value: 20
 
   ## Specify image pull secret
@@ -74,7 +74,7 @@ pythieServing:
     #       name: pythie_models_pods_load
     #       matchLabels:
     #         deployment: model-dali-si-trs-big-v1
-    #       service: model-dali-si-trs-big-v1
+    #       service: pythie-staging-pythie-api2
     #       value: 23
     #   maximumConcurrentRpcs: 2
     #   image:
