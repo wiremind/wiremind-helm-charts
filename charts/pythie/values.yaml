@@ -32,6 +32,24 @@ pythieServing:
       metricRelabelings: []
       honorLabels: false
       jobLabel: ""
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 3
+    # scaleDownStabilizationWindowSeconds: 300
+    targetCPU:
+      enabled: true
+      value: 100
+    targetMemory:
+      enabled: false
+      value: 100
+    targetMetric:
+      enabled: false
+      name: pythie_models_pods_load
+      matchLabels:
+        deployment: model-dali-si-trs-big-v1
+      service: model-dali-si-trs-big-v1
+      value: 20
 
   ## Specify image pull secret
   # pullSecret: my-secret
@@ -45,14 +63,19 @@ pythieServing:
     #     maxReplicas: 80
     #     minReplicas: 6
     #     scaleDownStabilizationWindowSeconds: 300
-    #     targetCPU: 80
-    #     targetMemory: 80
+    #     targetCPU:
+    #       enabled: true
+    #       value: 99
+    #     targetMemory:
+    #       enabled: true
+    #       value: 82
     #     targetMetric:
+    #       enabled: true
     #       name: pythie_models_pods_load
     #       matchLabels:
     #         deployment: model-dali-si-trs-big-v1
     #       service: model-dali-si-trs-big-v1
-    #       value: 20
+    #       value: 23
     #   maximumConcurrentRpcs: 2
     #   image:
     #     tag: v3.4.2

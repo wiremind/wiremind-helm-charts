@@ -1,10 +1,18 @@
 {{- range $modelName, $modelValue := .Values.pythieServing.models }}
 
-{{- if $modelValue.autoscaling }}
+{{- $autoscaling := hasKey $modelValue "autoscaling" | ternary $modelValue.autoscaling dict }}
+{{- $autoscalingDefault := $.Values.pythieServing.autoscaling }}
 
-{{- if $modelValue.autoscaling.enabled }}
+{{- if (hasKey $autoscaling "enabled" | ternary $autoscaling.enabled $autoscalingDefault.enabled) }}
 
 {{- $autoscalingTargetMetric := hasKey $modelValue.autoscaling "targetMetric" | ternary $modelValue.autoscaling.targetMetric dict }}
+{{- $autoscalingTargetMetricDefault := hasKey $autoscalingDefault "targetMetric" | ternary $autoscalingDefault.targetMetric dict }}
+
+{{- $autoscalingTargetCPU := hasKey $autoscaling "targetCPU" | ternary $autoscaling.targetCPU dict }}
+{{- $autoscalingTargetCPUDefault := hasKey $autoscalingDefault "targetCPU" | ternary $autoscalingDefault.targetCPU dict }}
+
+{{- $autoscalingTargetMemory := hasKey $autoscaling "targetMemory" | ternary $autoscaling.targetMemory dict }}
+{{- $autoscalingTargetMemoryDefault := hasKey $autoscalingDefault "targetMemory" | ternary $autoscalingDefault.targetMemory dict }}
 
 ---
 
@@ -21,50 +29,43 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: model-{{ $modelName }}
-  minReplicas: {{ $modelValue.autoscaling.minReplicas }}
-  maxReplicas: {{ $modelValue.autoscaling.maxReplicas }}
+  minReplicas: {{ $autoscaling.minReplicas | default $autoscalingDefault.minReplicas }}
+  maxReplicas: {{ $autoscaling.maxReplicas | default $autoscalingDefault.maxReplicas }}
   metrics:
-    {{- if $modelValue.autoscaling.targetCPU }}
+    {{- if (hasKey $autoscalingTargetCPU "enabled" | ternary $autoscalingTargetCPU.enabled $autoscalingTargetCPUDefault.enabled) }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ $modelValue.autoscaling.targetCPU }}
+          averageUtilization: {{ $autoscalingTargetCPU.value | default $autoscalingTargetCPUDefault.value }}
     {{- end }}
-    {{- if $modelValue.autoscaling.targetMemory }}
+    {{- if (hasKey $autoscalingTargetMemory "enabled" | ternary $autoscalingTargetMemory.enabled $autoscalingTargetMemoryDefault.enabled) }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ $modelValue.autoscaling.targetMemory }}
+          averageUtilization: {{ $autoscalingTargetMemory.value | default $autoscalingTargetMemoryDefault.value }}
     {{- end }}
-    {{- if $autoscalingTargetMetric }}
+    {{- if (hasKey $autoscalingTargetMetric "enabled" | ternary $autoscalingTargetMetric.enabled $autoscalingTargetMetricDefault.enabled) }}
     - type: Object
       object:
         metric:
-          name: {{ $autoscalingTargetMetric.name }}
-          {{- with $autoscalingTargetMetric.matchLabels }}
-          selector:
-            matchLabels:
-              {{- toYaml . | nindent 14 }}
-          {{- end }}
+          name: {{ $autoscalingTargetMetric.name | default $autoscalingTargetMetricDefault.name }}
         describedObject:
           apiVersion: "/v1"
           kind: Service
-          name: {{ $autoscalingTargetMetric.service | default (printf "model-%s" $modelName) }}
+          name: {{ $autoscalingTargetMetric.service | default ($autoscalingTargetMetricDefault.service | default (printf "model-%s" $.Release.Name $modelName)) }}
         target:
           type: Value
-          value: {{ $autoscalingTargetMetric.value }}
+          value: {{ $autoscalingTargetMetric.value | default $autoscalingTargetMetricDefault.value }}
     {{- end }}
-  {{- with $modelValue.autoscaling.scaleDownStabilizationWindowSeconds }}
+  {{- if or $autoscaling.scaleDownStabilizationWindowSeconds $autoscalingDefault.scaleDownStabilizationWindowSeconds }}
   behavior:
     scaleDown:
-      stabilizationWindowSeconds: {{ . }}
+      stabilizationWindowSeconds: {{ $autoscaling.scaleDownStabilizationWindowSeconds | default $autoscalingDefault.scaleDownStabilizationWindowSeconds }}
   {{- end }}
-
-{{- end }}
 
 {{- end }}
 
