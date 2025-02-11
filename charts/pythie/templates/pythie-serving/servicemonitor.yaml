@@ -1,0 +1,44 @@
+{{- if and .Values.pythieServing.metrics.enabled .Values.pythieServing.metrics.serviceMonitor.enabled }}
+
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "pythie.fullname" . }}
+  labels:
+    {{- include "pythie.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.pythieServing.metrics.serviceMonitor.jobLabel }}
+  jobLabel: {{ .Values.pythieServing.metrics.serviceMonitor.jobLabel }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "pythie.matchLabels" . | nindent 6 }}
+      serving-kind: pythie
+      {{- with .Values.pythieServing.metrics.serviceMonitor.selector }}
+      {{- toYaml . | nindent 6 -}}
+      {{- end }}
+  endpoints:
+    - port: metrics
+      path: "/metrics"
+      {{- if .Values.pythieServing.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.pythieServing.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.pythieServing.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.pythieServing.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- with .Values.pythieServing.metrics.serviceMonitor.relabelings }}
+      relabelings:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.pythieServing.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.pythieServing.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.pythieServing.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+
+{{- end }}

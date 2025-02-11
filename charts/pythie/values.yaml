@@ -5,16 +5,34 @@ pythieServing:
     pullPolicy: IfNotPresent
   ## Add custom ports to expose
   customPorts: []
-    # - name: metrics
-    #   containerPort: 9191
-    #   protocol: TCP
+    # - name: udp-port
+    #   containerPort: 9292
+    #   protocol: UDP
+  service:
+    type: ClusterIP
+    ports:
+      grpc: 9090
+      metrics: 9191
   ## Enable optional metrics scraping through prometheus operator
   ## Note that you'll need to expose a new port in your code and in pythieServing.customPorts
   metrics:
+    enabled: false
     podMonitor:
       enabled: false
       port: metrics
       interval: 30s
+    serviceMonitor:
+      enabled: true
+      namespace: ""
+      interval: ""
+      scrapeTimeout: ""
+      additionalLabels: {}
+      selector: {}
+      relabelings: []
+      metricRelabelings: []
+      honorLabels: false
+      jobLabel: ""
+
   ## Specify image pull secret
   # pullSecret: my-secret
   istio:

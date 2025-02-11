@@ -82,9 +82,14 @@ spec:
             - --maximum-concurrent-rpcs={{ $servingValue.maximumConcurrentRpcs }}
             - /etc/tensorflow/models.config
           ports:
-            - containerPort: 9090
+            - name: grpc
+              containerPort: {{ $.Values.pythieServing.service.ports.grpc }}
               protocol: TCP
-              name: grpc
+            {{- if $.Values.pythieServing.metrics.enabled }}
+            - name: metrics
+              containerPort: {{ $.Values.pythieServing.service.ports.metrics }}
+              protocol: TCP
+            {{- end }}
             {{- if $.Values.pythieServing.customPorts }}
             {{- toYaml $.Values.pythieServing.customPorts | nindent 12 }}
             {{- end }}
