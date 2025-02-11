@@ -26,16 +26,27 @@ pythieServing:
     #     enabled: true
     #     maxReplicas: 80
     #     minReplicas: 6
-    #     targetMetricValue: 80
+    #     scaleDownStabilizationWindowSeconds: 300
+    #     targetCPU: 80
+    #     targetMemory: 80
+    #     targetMetric:
+    #       name: pythie_models_pods_load
+    #       service: model-dali-si-trs-big-v1
+    #       value: 20
     #   maximumConcurrentRpcs: 2
     #   image:
     #     tag: v3.4.2
     #   models:
-    #   - etag: 123456789
-    #     name: my-model
-    #     path: s3/path/to/model
-    #     platform: treelite
-    #     version: 1
+    #     - etag: 123456
+    #       name: my-model
+    #       path: s3/path/to/model
+    #       platform: treelite
+    #       version: 1
+    #     - etag: 987654
+    #       name: my-model2
+    #       path: s3/path/to/model2
+    #       platform: treelite2
+    #       version: 2
     #   replicaCount: 2
     #   resources:
     #     limits:

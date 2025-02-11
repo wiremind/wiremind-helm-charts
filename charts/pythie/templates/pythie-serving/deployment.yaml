@@ -1,12 +1,16 @@
 {{- range $servingHash, $servingValue := .Values.pythieServing.models }}
 
+{{- $servingValueImage := default (dict) $servingValue.image }}
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: model-{{ $servingHash }}
   labels:
-{{ include "pythie.labels" $ | indent 4 }}
-{{ include "pythie.modelLabels" $servingValue | indent 4 }}
+    {{- include "pythie.labels" $ | nindent 4 }}
+    {{- include "pythie.modelLabels" $servingValue | nindent 4 }}
     serving/hash: {{ $servingHash }}
 spec:
   {{- with $servingValue.replicaCount }}
@@ -16,29 +20,29 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-{{ include "pythie.matchLabels" $ | indent 6 }}
+      {{- include "pythie.matchLabels" $ | nindent 6 }}
       serving/hash: {{ $servingHash }}
   template:
     metadata:
       labels:
-{{ include "pythie.labels" $ | indent 8 }}
-{{ include "pythie.modelLabels" $servingValue | indent 8 }}
+        {{- include "pythie.labels" $ | nindent 8 }}
+        {{- include "pythie.modelLabels" $servingValue | nindent 8 }}
         serving-kind: pythie
         serving/hash: {{ $servingHash }}
       annotations:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
-        checksum/configmap: {{ include (print $.Template.BasePath "/pythie-serving-configmap.yaml") $ | sha256sum }}
+        checksum/configmap: {{ include (print $.Template.BasePath "/pythie-serving/configmap.yaml") $ | sha256sum | quote }}
         {{- if $.Values.pythieServing.istio.enabled }}
         sidecar.istio.io/inject: 'true'
         {{- end }}
-# Adding the etags of the S3 buckets containing the models so the pods restart when a model does.
-# This may lead the pod to restart while upgrading the release if the order of the models changes inside a serving in values.yaml
-{{- range $index, $model := $servingValue.models }}
-        etag-{{ $index }}: {{ $model.etag }}
-{{- end }}
-{{- with $servingValue.version }}
-        checksum/version: {{ . }}
-{{- end }}
+        # Adding the etags of the S3 buckets containing the models so the pods restart when a model does.
+        # This may lead the pod to restart while upgrading the release if the order of the models changes inside a serving in values.yaml
+        {{- range $index, $model := $servingValue.models }}
+        etag-{{ $index }}: {{ $model.etag | quote }}
+        {{- end }}
+        {{- with $servingValue.version }}
+        checksum/version: {{ . | quote }}
+        {{- end }}
     spec:
       {{- if $.Values.priorityClassName }}
       priorityClassName: {{ $.Values.priorityClassName }}
@@ -56,7 +60,7 @@ spec:
           args:
             - -c
             - |
-{{ include "pythie.untar" $servingValue | indent 14 }}
+              {{- include "pythie.untar" $servingValue | nindent 14 }}
           envFrom:
             - secretRef:
                 name: {{ include "pythie.fullname" $ }}-s3
@@ -70,7 +74,6 @@ spec:
                 - all
       containers:
         - name: pythie-serving
-          {{- $servingValueImage := default (dict) $servingValue.image }}
           image: {{ $.Values.pythieServing.image.repository }}:{{ $servingValueImage.tag | default $.Values.pythieServing.image.tag }}
           imagePullPolicy: {{ $.Values.pythieServing.image.pullPolicy | quote }}
           args:
@@ -116,10 +119,10 @@ spec:
             - name: "OPENTELEMETRY_COLLECTOR_HOST"
               value: {{ $.Values.pythieServing.opentelemetryCollectorHost }}
             {{- end }}
-{{- with $.Values.tolerations }}
+      {{- with $.Values.tolerations }}
       tolerations:
-{{ toYaml . | indent 8 }}
-{{- end }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -128,18 +131,17 @@ spec:
               topologyKey: "kubernetes.io/hostname"
               labelSelector:
                 matchLabels:
-{{ include "pythie.labels" $ | indent 18 }}
-{{ include "pythie.modelLabels" $servingValue | indent 18 }}
+                  {{- include "pythie.labels" $ | nindent 18 }}
+                  {{- include "pythie.modelLabels" $servingValue | nindent 18 }}
                   serving/hash: {{ $servingHash }}
-{{- with $.Values.affinity }}
-{{ toYaml . | indent 8 }}
-{{- end }}
+        {{- with $.Values.affinity }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       volumes:
         - name: model-volume
           emptyDir: {}
         - name: model-config
           configMap:
             name: model-{{ $servingHash }}
----
 
 {{- end }}
