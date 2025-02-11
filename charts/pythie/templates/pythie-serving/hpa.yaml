@@ -45,6 +45,11 @@ spec:
       object:
         metric:
           name: {{ $autoscalingTargetMetric.name }}
+          {{- with $autoscalingTargetMetric.matchLabels }}
+          selector:
+            matchLabels:
+              {{- toYaml . | nindent 14 }}
+          {{- end }}
         describedObject:
           apiVersion: "/v1"
           kind: Service
