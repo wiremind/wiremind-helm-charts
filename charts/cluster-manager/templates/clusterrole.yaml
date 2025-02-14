@@ -31,6 +31,7 @@ rules:
 
   - apiGroups:
       - ""
+      - apps
       - networking.k8s.io
     resources:
       - clusterroles
@@ -40,6 +41,7 @@ rules:
       - ingressclasses
       - namespaces
       - nodes
+      - statefulsets
     verbs:
       - get
       - list
