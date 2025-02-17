@@ -7,8 +7,15 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "prometheus-safety-exporter.fullname" . }}
+  annotations:
+    {{- with .Values.deploymentAnnotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
   labels:
     {{- include "prometheus-safety-exporter.labels" $ | nindent 4 }}
+    {{- with .Values.deploymentLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
