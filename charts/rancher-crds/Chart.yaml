@@ -1,0 +1,17 @@
+annotations:
+  category: DeveloperTools
+apiVersion: v2
+name: rancher-crds
+version: 2.10.2
+appVersion: 2.10.2
+description: Manage rancher CRDs
+keywords:
+  - rancher
+  - crds
+sources:
+  - https://github.com/rancher/rancher/tree/v2.10.2/pkg/crds/yaml/generated
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/rancher-crds
+engine: gotpl
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
