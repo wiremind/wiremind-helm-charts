@@ -14811,6 +14811,27 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/pythie-0.2.0/pythie-0.2.0.tgz
     version: 0.2.0
+  rancher-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 2.10.2
+    created: "2025-02-19T17:29:14.329757108Z"
+    description: Manage rancher CRDs
+    digest: 268149d4cfcdf520f85378d9ef1323636e71f68bfb0163883d3786ee02123429
+    keywords:
+    - rancher
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: rancher-crds
+    sources:
+    - https://github.com/rancher/rancher/tree/v2.10.2/pkg/crds/yaml/generated
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/rancher-crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/rancher-crds-2.10.2/rancher-crds-2.10.2.tgz
+    version: 2.10.2
   raw:
   - annotations:
       category: DeveloperTools
@@ -16106,4 +16127,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-02-19T09:26:11.610237385Z"
+generated: "2025-02-19T17:29:14.330509367Z"
