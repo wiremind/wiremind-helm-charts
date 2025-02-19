@@ -11,7 +11,7 @@ If the version of the CRDs changes, aka breaking changes (this doesn't happen ev
 **Do not forget to change APP_VERSION**
 
 ```
-export APP_VERSION=0.13.0
+export APP_VERSION=0.14.2
 cd charts/external-secrets-crds
 helm pull external-secrets/external-secrets --version $APP_VERSION
 tar -xvf external-secrets-${APP_VERSION}.tgz
