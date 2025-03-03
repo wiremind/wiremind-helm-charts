@@ -35,7 +35,7 @@ spec:
           command: [{{ .Values.deployment.command | toJson }}]
           {{- end }}
           {{- if .Values.deployment.args }}
-          args: 
+          args:
             {{- toYaml .Values.deployment.args | nindent 12 }}
           {{- end }}
           ports:
@@ -50,6 +50,9 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.deployment.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
       {{- with .Values.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
