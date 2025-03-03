@@ -42,7 +42,6 @@ serviceMonitor:
   relabelings:
     []
 
-
 deployment:
   replicaCount: 1
   command: "/druid-tasks-exporter"
@@ -53,6 +52,7 @@ deployment:
   podSecurityContext: {}
   securityContext: {}
   resources: {}
+  priorityClassName: ""
   nodeSelector: {}
   tolerations: []
   affinity: {}
