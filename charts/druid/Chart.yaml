@@ -2,7 +2,7 @@ apiVersion: v2
 description: Apache Druid is a high performance real-time analytics database.
 name: druid
 type: application
-version: 1.20.0
+version: 1.20.1
 appVersion: 28.0.1
 home: https://druid.apache.org/
 icon: https://druid.apache.org/img/favicon.png
@@ -39,6 +39,6 @@ dependencies:
     repository: https://wiremind.github.io/wiremind-helm-charts
     condition: extra-objects.enabled
   - name: druid-tasks-exporter
-    version: 0.2.0
+    version: 0.3.0
     repository: https://wiremind.github.io/wiremind-helm-charts
     condition: druid-tasks-exporter.enabled
