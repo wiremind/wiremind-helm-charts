@@ -10,8 +10,8 @@ keywords:
   - api
   - exporter
 type: application
-version: 0.1.4
-appVersion: "v1.4.0"
+version: 0.1.5
+appVersion: "v1.4.1"
 kubeVersion: ">=1.19.0-0"
 maintainers:
   - name: Wiremind
