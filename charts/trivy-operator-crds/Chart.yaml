@@ -1,0 +1,16 @@
+apiVersion: v2
+annotations:
+  category: DeveloperTools
+name: trivy-operator-crds
+version: 0.25.0
+appVersion: "v0.25.0"
+description: Manage trivy-operator CRDs
+keywords:
+  - trivy-operator
+  - crds
+sources:
+  - https://github.com/aquasecurity/trivy-operator/tree/main/deploy/helm
+  - https://github.com/aquasecurity/trivy-operator/tree/main/deploy/helm/crds
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
