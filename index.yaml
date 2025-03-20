@@ -15939,6 +15939,27 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/traefik-crds-2.6.3/traefik-crds-2.6.3.tgz
     version: 2.6.3
+  trivy-operator-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: v0.25.0
+    created: "2025-03-20T12:36:59.295562747Z"
+    description: Manage trivy-operator CRDs
+    digest: a6a0c77955472e81fba4a8575e1dabaa5363a9a47d1d85fc90cf24ebe8ecf8d3
+    keywords:
+    - trivy-operator
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: trivy-operator-crds
+    sources:
+    - https://github.com/aquasecurity/trivy-operator/tree/main/deploy/helm
+    - https://github.com/aquasecurity/trivy-operator/tree/main/deploy/helm/crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/trivy-operator-crds-0.25.0/trivy-operator-crds-0.25.0.tgz
+    version: 0.25.0
   velero-crds:
   - apiVersion: v2
     appVersion: 1.15.0
@@ -16296,4 +16317,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-03-19T22:54:03.442272055Z"
+generated: "2025-03-20T12:36:59.296311466Z"
