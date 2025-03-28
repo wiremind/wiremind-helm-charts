@@ -12,6 +12,7 @@ metadata:
 {{ toYaml . | indent 4 }}
 {{- end }}
   name: "{{ .Release.Name }}-config"
+  namespace: {{ .Release.Namespace }}
 data:
 {{- with .Values.configMap.aclsConfig }}
   acls.yaml: |
