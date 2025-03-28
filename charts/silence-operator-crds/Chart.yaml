@@ -1,7 +1,7 @@
 apiVersion: v2
 name: silence-operator-crds
-version: 0.0.2
-appVersion: "v0.12.0"
+version: 0.0.3
+appVersion: "v0.13.0"
 description: Silence operator manages Alertmanager silences via custom resources.
 keywords:
   - silence
