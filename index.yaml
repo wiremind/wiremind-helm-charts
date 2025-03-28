@@ -15532,6 +15532,27 @@ entries:
     version: 0.3.1
   silence-operator:
   - apiVersion: v2
+    appVersion: 0.13.0
+    created: "2025-03-28T10:54:53.129192047Z"
+    description: Silence operator manages Alertmanager silences via custom resources.
+    digest: 327138e8a22e96c62062e0fcdbdb6d3f5ceeda8a4228759d704f96f7c785a993
+    icon: https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.png
+    keywords:
+    - silence
+    - operator
+    - prometheus
+    - alertmanager
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: silence-operator
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/silence-operator
+    - https://github.com/giantswarm/silence-operator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/silence-operator-0.0.8/silence-operator-0.0.8.tgz
+    version: 0.0.8
+  - apiVersion: v2
     appVersion: 0.12.0
     created: "2024-11-25T11:58:45.249510519Z"
     description: Silence operator manages Alertmanager silences via custom resources.
@@ -16357,4 +16378,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-03-26T12:44:10.200592476Z"
+generated: "2025-03-28T10:54:53.130826476Z"
