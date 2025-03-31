@@ -58,9 +58,9 @@ Create the name of the service account to use
 
 {{- define "chartreuse.alembic.url" -}}
 {{- if .Values.alembic.externalSecrets.enabled -}}
-{{ printf "postgresql://%s:{{ .password }}@%s%s:5432/%s?sslmode=prefer" .Values.alembic.username .Release.Name .Values.alembic.urlSuffix .Values.alembic.database }}
+{{ printf "%s://%s:{{ .password }}@%s%s:%s/%s?sslmode=prefer" .Values.alembic.dialect .Values.alembic.username .Release.Name .Values.alembic.urlSuffix .Values.alembic.port .Values.alembic.database }}
 {{- else -}}
-{{ printf "postgresql://%s:%s@%s%s:5432/%s?sslmode=prefer" .Values.alembic.username .Values.alembic.password .Release.Name .Values.alembic.urlSuffix .Values.alembic.database }}
+{{ printf "%s://%s:%s@%s%s:%s/%s?sslmode=prefer" .Values.alembic.dialect .Values.alembic.username .Values.alembic.password .Release.Name .Values.alembic.urlSuffix .Values.alembic.port .Values.alembic.database }}
 {{- end -}}
 {{- end -}}
 
