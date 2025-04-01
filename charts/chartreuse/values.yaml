@@ -48,6 +48,8 @@ alembic:
   username: my-dummy-username
   password: my-dummy-password
   database: my-dummy-database
+  port: "5432"
+  dialect: postgresql
   allowMigrationFromEmptyDatabase: true
   ## like "-x env_type=staging"
   additionalParameters: ""
