@@ -30,6 +30,7 @@ extensions:
     - druid-stats
     - postgresql-metadata-storage
     - prometheus-emitter
+    - druid-multi-stage-query
 
 secretEnvVars: {}
 
