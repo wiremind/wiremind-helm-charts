@@ -1,0 +1,16 @@
+apiVersion: v2
+annotations:
+  category: DeveloperTools
+name: gpu-operator-crds
+version: 25.3.0
+appVersion: "v25.3.0"
+description: Manage gpu-operator CRDs
+keywords:
+  - gpu-operator
+  - crds
+sources:
+  - https://github.com/NVIDIA/gpu-operator/tree/main/deployments/gpu-operator
+  - https://github.com/NVIDIA/gpu-operator/tree/main/deployments/gpu-operator/crds
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
