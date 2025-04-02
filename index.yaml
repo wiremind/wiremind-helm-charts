@@ -10500,6 +10500,27 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/external-secrets-crds-0.10.5/external-secrets-crds-0.10.5.tgz
     version: 0.10.5
+  gpu-operator-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: v25.3.0
+    created: "2025-04-02T13:33:36.207273321Z"
+    description: Manage gpu-operator CRDs
+    digest: 8d37dea6c41b9753cbd5e6d61e627ec59a47d90e45c61aca7e3cf056ba4e2e9d
+    keywords:
+    - gpu-operator
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: gpu-operator-crds
+    sources:
+    - https://github.com/NVIDIA/gpu-operator/tree/main/deployments/gpu-operator
+    - https://github.com/NVIDIA/gpu-operator/tree/main/deployments/gpu-operator/crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/gpu-operator-crds-25.3.0/gpu-operator-crds-25.3.0.tgz
+    version: 25.3.0
   grafana-pdf-exporter:
   - apiVersion: v2
     appVersion: "1.7"
@@ -16446,4 +16467,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-04-02T12:13:57.519234638Z"
+generated: "2025-04-02T13:33:36.208185441Z"
