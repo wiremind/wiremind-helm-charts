@@ -8,6 +8,7 @@ crds:
   createClusterSecretStore: true
   createClusterGenerator: true
   createPushSecret: true
+  createClusterPushSecret: true
   annotations: {}
   conversion:
     enabled: false
