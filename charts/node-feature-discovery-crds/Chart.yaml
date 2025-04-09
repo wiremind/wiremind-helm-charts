@@ -1,0 +1,16 @@
+apiVersion: v2
+annotations:
+  category: DeveloperTools
+name: node-feature-crds
+version: 0.17.2
+appVersion: "v0.17.2"
+description: Manage node-feature-discovery CRDs
+keywords:
+  - node-feature
+  - crds
+sources:
+  - https://github.com/kubernetes-sigs/node-feature-discovery
+  - https://github.com/kubernetes-sigs/node-feature-discovery/tree/master/deployment/helm/node-feature-discovery/crds
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
