@@ -1,12 +1,12 @@
 apiVersion: v2
 annotations:
   category: DeveloperTools
-name: node-feature-crds
-version: 0.17.2
-appVersion: "v0.17.2"
+name: node-feature-discovery-crds
+version: 0.17.3
+appVersion: "v0.17.3"
 description: Manage node-feature-discovery CRDs
 keywords:
-  - node-feature
+  - node-feature-discovery
   - crds
 sources:
   - https://github.com/kubernetes-sigs/node-feature-discovery
