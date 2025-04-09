@@ -13864,6 +13864,27 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/nginx-2.1.1/nginx-2.1.1.tgz
     version: 2.1.1
+  node-feature-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: v0.17.2
+    created: "2025-04-09T11:31:56.818755533Z"
+    description: Manage node-feature-discovery CRDs
+    digest: 7d807bf54705d6993f4be85a97ab65873d42a0f3568e934326daf1bdf1d6eea8
+    keywords:
+    - node-feature
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: node-feature-crds
+    sources:
+    - https://github.com/kubernetes-sigs/node-feature-discovery
+    - https://github.com/kubernetes-sigs/node-feature-discovery/tree/master/deployment/helm/node-feature-discovery/crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/node-feature-crds-0.17.2/node-feature-crds-0.17.2.tgz
+    version: 0.17.2
   ovh-exporter:
   - apiVersion: v2
     appVersion: v1.4.1
@@ -16497,4 +16518,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-04-04T08:25:20.609927697Z"
+generated: "2025-04-09T11:31:56.81950945Z"
