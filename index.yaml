@@ -13909,6 +13909,20 @@ entries:
   orc:
   - apiVersion: v2
     appVersion: 2.0.3
+    created: "2025-04-10T16:38:44.056310755Z"
+    description: A Helm chart for https://github.com/k-orc/openstack-resource-controller/
+    digest: a9e06b0df7adb515126e358ea28e403412568dcf2900e2240dfbdcb80a9c34ba
+    kubeVersion: '>=1.29.0-0'
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: orc
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/orc-0.1.1/orc-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 2.0.3
     created: "2025-04-10T13:29:39.261035945Z"
     description: A Helm chart for https://github.com/k-orc/openstack-resource-controller/
     digest: 8ca2c9b1f916918f974c89696768d2e09d0d3a75e22e41299a5fdcad081806ed
@@ -16575,4 +16589,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-04-10T13:29:39.376770102Z"
+generated: "2025-04-10T16:38:44.057082995Z"
