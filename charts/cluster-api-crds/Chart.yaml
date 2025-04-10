@@ -1,0 +1,16 @@
+annotations:
+  category: DeveloperTools
+apiVersion: v2
+name: cluster-api-crds
+version: 1.9.6
+appVersion: 1.9.6
+description: Manage cluster-api CRDs
+keywords:
+  - cluster-api
+  - crds
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cluster-api-crds
+  - https://github.com/kubernetes-sigs/cluster-api
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
