@@ -1,0 +1,17 @@
+annotations:
+  category: DeveloperTools
+apiVersion: v2
+name: orc-crds
+version: 2.0.3
+appVersion: 2.0.3
+description: Manage Openstack Resource Controller CRDs
+keywords:
+  - orc
+  - crds
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/orc-crds
+  - https://github.com/k-orc/openstack-resource-controller/
+engine: gotpl
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
