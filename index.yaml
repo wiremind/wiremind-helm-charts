@@ -2817,6 +2817,27 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/cloudnative-pg-crds-0.22.1/cloudnative-pg-crds-0.22.1.tgz
     version: 0.22.1
+  cluster-api-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 1.9.6
+    created: "2025-04-10T17:26:28.050097138Z"
+    description: Manage cluster-api CRDs
+    digest: 1c6c7311ef46b8ca752aba40820e82ad44bcebf4675533651fb848f36cf0fe70
+    keywords:
+    - cluster-api
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: cluster-api-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cluster-api-crds
+    - https://github.com/kubernetes-sigs/cluster-api
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/cluster-api-crds-1.9.6/cluster-api-crds-1.9.6.tgz
+    version: 1.9.6
   cluster-manager:
   - annotations:
       category: DeveloperTools
@@ -16589,4 +16610,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-04-10T16:38:44.057082995Z"
+generated: "2025-04-10T17:26:28.051018408Z"
