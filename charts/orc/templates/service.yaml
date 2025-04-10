@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "orc.fullname" . }}
+  labels:
+    control-plane: controller-manager
+    {{- include "orc.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - name: https
+    port: {{ .Values.service.port }}
+    protocol: {{ .Values.service.protocol }}
+    targetPort: {{ .Values.service.port }}
+  {{- if .Values.metrics.enable }}
+  - name: metrics
+    port: {{ .Values.metrics.port }}
+    protocol: TCP
+    targetPort: {{ .Values.metrics.port }}
+  {{- end }}
+  {{- if .Values.probes.enable }}
+  - name: health
+    port: {{ .Values.probes.port }}
+    protocol: TCP
+    targetPort: {{ .Values.probes.port }}
+  {{- end }}
+  selector:
+    control-plane: controller-manager
