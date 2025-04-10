@@ -5,27 +5,23 @@ metadata:
   name: {{ include "orc.fullname" . }}-controller-manager
   labels:
     {{- include "orc.labels" . | nindent 4 }}
-    control-plane: controller-manager
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       {{- include "orc.selectorLabels" . | nindent 6 }}
-      control-plane: controller-manager
   template:
     metadata:
       annotations:
         kubectl.kubernetes.io/default-container: manager
       labels:
         {{- include "orc.selectorLabels" . | nindent 8 }}
-        control-plane: controller-manager
     spec:
       containers:
       - name: manager
         image: {{ .Values.image.repository }}:{{ .Values.image.tag | default (printf "v%s" .Chart.AppVersion) }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         args:
-        - --metrics-bind-address=:{{ .Values.service.port }}
         - --leader-elect
         {{- if .Values.probes.enable }}
         - --health-probe-bind-address=:{{ .Values.probes.port }}
@@ -42,9 +38,6 @@ spec:
         command:
         - /manager
         ports:
-          - name: https
-            containerPort: {{ .Values.service.port }}
-            protocol: TCP
           {{- if .Values.metrics.enable }}
           - name: metrics
             containerPort: {{ .Values.metrics.port }}

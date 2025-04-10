@@ -2,11 +2,6 @@ serviceAccount:
   annotations: {}
   automount: true
 
-service:
-  type: ClusterIP
-  port: 8443
-  protocol: TCP
-
 replicaCount: 2
 
 updateStrategy:
@@ -71,8 +66,8 @@ containerSecurityContext:
 
 metrics:
   enable: true
-  port: 8080
-  secure: false
+  port: 8443
+  secure: true
 
 probes:
   enable: true
