@@ -212,7 +212,7 @@ keystore:
 
 kibana:
   enabled: false
-  imageTag: 8.17.2
+  imageTag: 8.18.0
   ## Change me
   elasticsearchHosts: http://my-elasticsearch-cluster-data-hot:9200
   elasticsearchCredentialSecret: my-elasticsearch-cluster-data-hot-credentials
