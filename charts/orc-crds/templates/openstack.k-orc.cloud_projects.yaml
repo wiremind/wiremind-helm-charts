@@ -4,16 +4,16 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.17.1
-  name: ports.openstack.k-orc.cloud
+  name: projects.openstack.k-orc.cloud
 spec:
   group: openstack.k-orc.cloud
   names:
     categories:
     - openstack
-    kind: Port
-    listKind: PortList
-    plural: ports
-    singular: port
+    kind: Project
+    listKind: ProjectList
+    plural: projects
+    singular: project
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -25,10 +25,6 @@ spec:
       jsonPath: .status.conditions[?(@.type=='Available')].status
       name: Available
       type: string
-    - description: Allocated IP addresses
-      jsonPath: .status.resource.fixedIPs[*].ip
-      name: Addresses
-      type: string
     - description: Message describing current progress status
       jsonPath: .status.conditions[?(@.type=='Progressing')].message
       name: Message
@@ -36,7 +32,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Port is the Schema for an ORC resource.
+        description: Project is the Schema for an ORC resource.
         properties:
           apiVersion:
             description: |-
@@ -95,21 +91,9 @@ spec:
                       error state and will not continue to retry.
                     minProperties: 1
                     properties:
-                      description:
-                        description: description of the existing resource
-                        maxLength: 255
-                        minLength: 1
-                        type: string
                       name:
                         description: name of the existing resource
-                        maxLength: 255
-                        minLength: 1
-                        pattern: ^[^,]+$
-                        type: string
-                      networkRef:
-                        description: networkRef is a reference to the ORC Network
-                          which this port is associated with.
-                        maxLength: 253
+                        maxLength: 64
                         minLength: 1
                         type: string
                       notTags:
@@ -117,13 +101,10 @@ spec:
                           notTags is a list of tags to filter by. If specified, resources which
                           contain all of the given tags will be excluded from the result.
                         items:
-                          description: |-
-                            NeutronTag represents a tag on a Neutron resource.
-                            It may not be empty and may not contain commas.
                           maxLength: 255
                           minLength: 1
                           type: string
-                        maxItems: 32
+                        maxItems: 80
                         type: array
                         x-kubernetes-list-type: set
                       notTagsAny:
@@ -131,13 +112,10 @@ spec:
                           notTagsAny is a list of tags to filter by. If specified, resources
                           which contain any of the given tags will be excluded from the result.
                         items:
-                          description: |-
-                            NeutronTag represents a tag on a Neutron resource.
-                            It may not be empty and may not contain commas.
                           maxLength: 255
                           minLength: 1
                           type: string
-                        maxItems: 32
+                        maxItems: 80
                         type: array
                         x-kubernetes-list-type: set
                       tags:
@@ -145,13 +123,10 @@ spec:
                           tags is a list of tags to filter by. If specified, the resource must
                           have all of the tags specified to be included in the result.
                         items:
-                          description: |-
-                            NeutronTag represents a tag on a Neutron resource.
-                            It may not be empty and may not contain commas.
                           maxLength: 255
                           minLength: 1
                           type: string
-                        maxItems: 32
+                        maxItems: 80
                         type: array
                         x-kubernetes-list-type: set
                       tagsAny:
@@ -160,13 +135,10 @@ spec:
                           must have at least one of the tags specified to be included in the
                           result.
                         items:
-                          description: |-
-                            NeutronTag represents a tag on a Neutron resource.
-                            It may not be empty and may not contain commas.
                           maxLength: 255
                           minLength: 1
                           type: string
-                        maxItems: 32
+                        maxItems: 80
                         type: array
                         x-kubernetes-list-type: set
                     type: object
@@ -216,139 +188,38 @@ spec:
 
                   resource must be specified if the management policy is `managed`.
                 properties:
-                  addresses:
-                    description: addresses are the IP addresses for the port.
-                    items:
-                      properties:
-                        ip:
-                          description: |-
-                            ip contains a fixed IP address assigned to the port. It must belong
-                            to the referenced subnet's CIDR. If not specified, OpenStack
-                            allocates an available IP from the referenced subnet.
-                          maxLength: 45
-                          minLength: 1
-                          type: string
-                        subnetRef:
-                          description: |-
-                            subnetRef references the subnet from which to allocate the IP
-                            address.
-                          maxLength: 253
-                          minLength: 1
-                          type: string
-                      required:
-                      - subnetRef
-                      type: object
-                    maxItems: 32
-                    type: array
-                    x-kubernetes-list-type: atomic
-                  allowedAddressPairs:
-                    description: allowedAddressPairs are allowed addresses associated
-                      with this port.
-                    items:
-                      properties:
-                        ip:
-                          description: |-
-                            ip contains an IP address which a server connected to the port can
-                            send packets with. It can be an IP Address or a CIDR (if supported
-                            by the underlying extension plugin).
-                          maxLength: 45
-                          minLength: 1
-                          type: string
-                        mac:
-                          description: |-
-                            mac contains a MAC address which a server connected to the port can
-                            send packets with. Defaults to the MAC address of the port.
-                          maxLength: 17
-                          minLength: 1
-                          type: string
-                      required:
-                      - ip
-                      type: object
-                    maxItems: 32
-                    type: array
-                    x-kubernetes-list-type: atomic
                   description:
-                    description: description is a human-readable description for the
-                      resource.
-                    maxLength: 255
+                    description: description contains a free form description of the
+                      project.
+                    maxLength: 65535
                     minLength: 1
                     type: string
+                  enabled:
+                    description: enabled defines whether a project is enabled or not.
+                      Default is true.
+                    type: boolean
                   name:
-                    description: name is a human-readable name of the port. If not
-                      set, the object's name will be used.
-                    maxLength: 255
-                    minLength: 1
-                    pattern: ^[^,]+$
-                    type: string
-                  networkRef:
-                    description: networkRef is a reference to the ORC Network which
-                      this port is associated with.
-                    maxLength: 253
-                    minLength: 1
-                    type: string
-                  portSecurity:
-                    default: Inherit
                     description: |-
-                      portSecurity controls port security for this port.
-                      When set to Enabled, port security is enabled.
-                      When set to Disabled, port security is disabled and SecurityGroupRefs must be empty.
-                      When set to Inherit (default), it takes the value from the network level.
-                    enum:
-                    - Enabled
-                    - Disabled
-                    - Inherit
-                    type: string
-                  securityGroupRefs:
-                    description: |-
-                      securityGroupRefs are the names of the security groups associated
-                      with this port.
-                    items:
-                      maxLength: 255
-                      minLength: 1
-                      pattern: ^[^,]+$
-                      type: string
-                    maxItems: 32
-                    type: array
-                    x-kubernetes-list-type: set
-                  tags:
-                    description: tags is a list of tags which will be applied to the
-                      port.
-                    items:
-                      description: |-
-                        NeutronTag represents a tag on a Neutron resource.
-                        It may not be empty and may not contain commas.
-                      maxLength: 255
-                      minLength: 1
-                      type: string
-                    maxItems: 32
-                    type: array
-                    x-kubernetes-list-type: set
-                  vnicType:
-                    description: |-
-                      vnicType specifies the type of vNIC which this port should be
-                      attached to. This is used to determine which mechanism driver(s) to
-                      be used to bind the port. The valid values are normal, macvtap,
-                      direct, baremetal, direct-physical, virtio-forwarder, smart-nic and
-                      remote-managed, although these values will not be validated in this
-                      API to ensure compatibility with future neutron changes or custom
-                      implementations. What type of vNIC is actually available depends on
-                      deployments. If not specified, the Neutron default value is used.
+                      name will be the name of the created resource. If not specified, the
+                      name of the ORC object will be used.
                     maxLength: 64
+                    minLength: 1
                     type: string
-                required:
-                - networkRef
+                  tags:
+                    description: |-
+                      tags is list of simple strings assigned to a project.
+                      Tags can be used to classify projects into groups.
+                    items:
+                      maxLength: 255
+                      minLength: 1
+                      type: string
+                    maxItems: 80
+                    type: array
+                    x-kubernetes-list-type: set
                 type: object
                 x-kubernetes-validations:
-                - message: PortResourceSpec is immutable
+                - message: ProjectResourceSpec is immutable
                   rule: self == oldSelf
-                - message: securityGroupRefs must be empty when portSecurity is set
-                    to Disabled
-                  rule: 'has(self.portSecurity) && self.portSecurity == ''Disabled''
-                    ? !has(self.securityGroupRefs) : true'
-                - message: allowedAddressPairs must be empty when portSecurity is
-                    set to Disabled
-                  rule: 'has(self.portSecurity) && self.portSecurity == ''Disabled''
-                    ? !has(self.allowedAddressPairs) : true'
             required:
             - cloudCredentialsRef
             type: object
@@ -451,114 +322,18 @@ spec:
                 description: resource contains the observed state of the OpenStack
                   resource.
                 properties:
-                  adminStateUp:
-                    description: |-
-                      adminStateUp is the administrative state of the port,
-                      which is up (true) or down (false).
-                    type: boolean
-                  allowedAddressPairs:
-                    description: |-
-                      allowedAddressPairs is a set of zero or more allowed address pair
-                      objects each where address pair object contains an IP address and
-                      MAC address.
-                    items:
-                      properties:
-                        ip:
-                          description: |-
-                            ip contains an IP address which a server connected to the port can
-                            send packets with.
-                          maxLength: 1024
-                          type: string
-                        mac:
-                          description: |-
-                            mac contains a MAC address which a server connected to the port can
-                            send packets with.
-                          maxLength: 1024
-                          type: string
-                      type: object
-                    maxItems: 32
-                    type: array
-                    x-kubernetes-list-type: atomic
-                  createdAt:
-                    description: createdAt shows the date and time when the resource
-                      was created. The date and time stamp format is ISO 8601
-                    format: date-time
-                    type: string
                   description:
                     description: description is a human-readable description for the
                       resource.
-                    maxLength: 1024
+                    maxLength: 65535
                     type: string
-                  deviceID:
-                    description: deviceID is the ID of the device that uses this port.
-                    maxLength: 1024
-                    type: string
-                  deviceOwner:
-                    description: deviceOwner is the entity type that uses this port.
-                    maxLength: 1024
-                    type: string
-                  fixedIPs:
-                    description: |-
-                      fixedIPs is a set of zero or more fixed IP objects each where fixed
-                      IP object contains an IP address and subnet ID from which the IP
-                      address is assigned.
-                    items:
-                      properties:
-                        ip:
-                          description: ip contains a fixed IP address assigned to
-                            the port.
-                          maxLength: 1024
-                          type: string
-                        subnetID:
-                          description: subnetID is the ID of the subnet this IP is
-                            allocated from.
-                          maxLength: 1024
-                          type: string
-                      type: object
-                    maxItems: 32
-                    type: array
-                    x-kubernetes-list-type: atomic
-                  macAddress:
-                    description: macAddress is the MAC address of the port.
-                    maxLength: 1024
-                    type: string
+                  enabled:
+                    description: enabled represents whether a project is enabled or
+                      not.
+                    type: boolean
                   name:
-                    description: name is the human-readable name of the resource.
-                      Might not be unique.
-                    maxLength: 1024
-                    type: string
-                  networkID:
-                    description: networkID is the ID of the attached network.
-                    maxLength: 1024
-                    type: string
-                  portSecurityEnabled:
-                    description: portSecurityEnabled indicates whether port security
-                      is enabled or not.
-                    type: boolean
-                  projectID:
-                    description: projectID is the project owner of the resource.
-                    maxLength: 1024
-                    type: string
-                  propagateUplinkStatus:
-                    description: |-
-                      propagateUplinkStatus represents the uplink status propagation of
-                      the port.
-                    type: boolean
-                  revisionNumber:
-                    description: revisionNumber optionally set via extensions/standard-attr-revisions
-                    format: int64
-                    type: integer
-                  securityGroups:
-                    description: securityGroups contains the IDs of security groups
-                      applied to the port.
-                    items:
-                      maxLength: 1024
-                      type: string
-                    maxItems: 32
-                    type: array
-                    x-kubernetes-list-type: atomic
-                  status:
-                    description: status indicates the current status of the resource.
+                    description: name is a Human-readable name for the project. Might
+                      not be unique.
                     maxLength: 1024
                     type: string
                   tags:
@@ -566,19 +341,9 @@ spec:
                     items:
                       maxLength: 1024
                       type: string
-                    maxItems: 32
+                    maxItems: 80
                     type: array
                     x-kubernetes-list-type: atomic
-                  updatedAt:
-                    description: updatedAt shows the date and time when the resource
-                      was updated. The date and time stamp format is ISO 8601
-                    format: date-time
-                    type: string
-                  vnicType:
-                    description: vnicType is the type of vNIC which this port is attached
-                      to.
-                    maxLength: 64
-                    type: string
                 type: object
             type: object
         type: object
