@@ -1,9 +1,17 @@
+debug: false
+
 image:
-  name: "alpine"
-  tag: ""
+  name: "debian"
+  tag: "bookworm"
+
+imagePullPolicy: Always
 
 secret:
-  password: "setthisvalue"
+  DECRYPTED_LUKS_DEVICE_NAME: "crypt"
+  DECRYPTED_LUKS_DEVICE: "/dev/mapper/crypt"
+  LVM_VOLUME_GROUP: "cryptlvm"
+  LUKS_PASSWORD: "..."
+  LVM_PARTITION_DEVICES: "/dev/cryptlvm/persistentvolume*"
 
 tolerations: []
 
@@ -11,7 +19,7 @@ affinity: {}
 
 nodeSelector: {}
 
-priorityClassName: ""
+priorityClassName: "system-node-critical"
 
 resources: {}
 
