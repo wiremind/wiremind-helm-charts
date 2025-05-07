@@ -64,6 +64,18 @@ Create the name of the service account to use
 {{- end -}}
 {{- end -}}
 
+{{- define "chartreuse.pg_isready.url" -}}
+{{- if .Values.alembic.alternative_pg_isready_chartreuse_alembic_url.enabled -}}
+{{- if .Values.alembic.externalSecrets.enabled -}}
+{{ printf "postgres://%s:{{ .password }}@%s%s:%s/%s?sslmode=prefer" .Values.alembic.username .Release.Name .Values.alembic.urlSuffix .Values.alembic.port .Values.alembic.database }}
+{{- else -}}
+{{ printf "postgres://%s:%s@%s%s:%s/%s?sslmode=prefer" .Values.alembic.username .Values.alembic.password .Release.Name .Values.alembic.urlSuffix .Values.alembic.port .Values.alembic.database }}
+{{- end -}}
+{{- else -}}
+{{ include "chartreuse.alembic.url" . }}
+{{- end -}}
+{{- end -}}
+
 
 {{- define "chartreuse.upgradeJobAnnotations" -}}
 {{- if .Values.upgradeBeforeDeployment -}}
