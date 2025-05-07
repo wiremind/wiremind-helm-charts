@@ -64,6 +64,18 @@ Create the name of the service account to use
 {{- end -}}
 {{- end -}}
 
+{{- define "chartreuse.pg_isready.url" -}}
+{{- if .Values.alembic.alternative_pg_isready_chartreuse_alembic_url.enabled -}}
+{{- if .Values.alembic.externalSecrets.enabled -}}
+{{ printf "postgres://%s:{{ .password }}@%s%s:%s/%s?sslmode=prefer" .Values.alembic.alternative_pg_isready_chartreuse_alembic_url.username .Release.Name .Values.alembic.alternative_pg_isready_chartreuse_alembic_url.urlSuffix .Values.alembic.alternative_pg_isready_chartreuse_alembic_url.port .Values.alembic.alternative_pg_isready_chartreuse_alembic_url.database }}
+{{- else -}}
+{{ printf "postgres://%s:%s@%s%s:%s/%s?sslmode=prefer" .Values.alembic.alternative_pg_isready_chartreuse_alembic_url.username .Values.alembic.alternative_pg_isready_chartreuse_alembic_url.password .Release.Name .Values.alembic.alternative_pg_isready_chartreuse_alembic_url.urlSuffix .Values.alembic.alternative_pg_isready_chartreuse_alembic_url.port .Values.alembic.alternative_pg_isready_chartreuse_alembic_url.database }}
+{{- end -}}
+{{- else -}}
+{{ include "chartreuse.alembic.url" . }}
+{{- end -}}
+{{- end -}}
+
 
 {{- define "chartreuse.upgradeJobAnnotations" -}}
 {{- if .Values.upgradeBeforeDeployment -}}
