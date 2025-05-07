@@ -1464,6 +1464,27 @@ entries:
   chartreuse:
   - apiVersion: v1
     appVersion: 5.0.0
+    created: "2025-05-07T16:45:43.328630862Z"
+    description: Automate Alembic SQL schema migrations.
+    digest: 25129398ff1b036fac0816ca9e6a194d749f8ddb4ed59cf79f37954cb3e36d14
+    keywords:
+    - alembic
+    - database
+    - migration
+    - postgresql
+    - clickhouse
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: chartreuse
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/chartreuse
+    - https://github.com/wiremind/chartreuse
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/chartreuse-5.0.1/chartreuse-5.0.1.tgz
+    version: 5.0.1
+  - apiVersion: v1
+    appVersion: 5.0.0
     created: "2025-05-06T14:55:50.723074221Z"
     description: Automate Alembic SQL schema migrations.
     digest: 787cc516e4ad0bb84bf7d6b03c826a5c54a90d948769cc9f933e2025b01c6f40
@@ -14118,6 +14139,20 @@ entries:
     version: 0.17.3
   orc:
   - apiVersion: v2
+    appVersion: 2.1.0
+    created: "2025-05-07T16:45:43.545031469Z"
+    description: A Helm chart for https://github.com/k-orc/openstack-resource-controller/
+    digest: 125ce7dc6990382c7473397dc540277da5d319b816919169e66c6f033f8bd286
+    kubeVersion: '>=1.29.0-0'
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: orc
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/orc-0.1.2/orc-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
     appVersion: 2.0.3
     created: "2025-04-10T16:38:44.056310755Z"
     description: A Helm chart for https://github.com/k-orc/openstack-resource-controller/
@@ -14146,6 +14181,26 @@ entries:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/orc-0.1.0/orc-0.1.0.tgz
     version: 0.1.0
   orc-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 2.1.0
+    created: "2025-05-07T16:45:43.818384972Z"
+    description: Manage Openstack Resource Controller CRDs
+    digest: 9a6ee87a6d84bfdf299cae22e581a06035a965823d8c8b761d8ccc5888fbcee7
+    keywords:
+    - orc
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: orc-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/orc-crds
+    - https://github.com/k-orc/openstack-resource-controller/
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/orc-crds-2.1.0/orc-crds-2.1.0.tgz
+    version: 2.1.0
   - annotations:
       category: DeveloperTools
     apiVersion: v2
@@ -16799,4 +16854,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-05-06T14:55:50.723923761Z"
+generated: "2025-05-07T16:45:43.819272204Z"
