@@ -50,6 +50,8 @@ alembic:
   database: my-dummy-database
   port: "5432"
   dialect: postgresql
+  alternative_pg_isready_chartreuse_alembic_url:
+    enabled: false
   allowMigrationFromEmptyDatabase: true
   ## like "-x env_type=staging"
   additionalParameters: ""
