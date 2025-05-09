@@ -5,8 +5,8 @@ maintainers:
   - name: Wiremind
     url: https://github.com/wiremind/wiremind-helm-charts
 name: kibana
-version: 8.5.18
-appVersion: 8.15.3
+version: 8.5.19
+appVersion: 8.18.0
 sources:
   - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/kibana
   - https://github.com/elastic/kibana
