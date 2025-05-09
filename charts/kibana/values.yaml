@@ -38,7 +38,7 @@ hostAliases: []
 #     - "bar.local"
 
 image: "docker.elastic.co/kibana/kibana"
-imageTag: "8.15.3"
+imageTag: "8.18.0"
 imagePullPolicy: "IfNotPresent"
 
 # additionals labels
@@ -102,7 +102,7 @@ token:
       cpu: "50m"
       memory: "64Mi"
     limits:
-      cpu: "100m"
+      cpu: "1"
       memory: "128Mi"
 
 resources:
