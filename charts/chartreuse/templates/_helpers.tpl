@@ -65,11 +65,11 @@ Create the name of the service account to use
 {{- end -}}
 
 {{- define "chartreuse.pg_isready.url" -}}
-{{- if .Values.alembic.alternative_pg_isready_chartreuse_alembic_url.enabled -}}
+{{- if .Values.alembic.alternativePgIsreadyChartreuseAlembicUrl.enabled -}}
 {{- if .Values.alembic.externalSecrets.enabled -}}
-{{ printf "postgres://%s:{{ .password }}@%s%s:%s/%s?sslmode=prefer" .Values.alembic.username .Release.Name .Values.alembic.urlSuffix .Values.alembic.port .Values.alembic.database }}
+{{ printf "postgres://%s:{{ .password }}@%s%s:%s/%s?sslmode=prefer" .Values.alembic.alternativePgIsreadyChartreuseAlembicUrl.username .Release.Name .Values.alembic.alternativePgIsreadyChartreuseAlembicUrl.urlSuffix .Values.alembic.alternativePgIsreadyChartreuseAlembicUrl.port .Values.alembic.alternativePgIsreadyChartreuseAlembicUrl.database }}
 {{- else -}}
-{{ printf "postgres://%s:%s@%s%s:%s/%s?sslmode=prefer" .Values.alembic.username .Values.alembic.password .Release.Name .Values.alembic.urlSuffix .Values.alembic.port .Values.alembic.database }}
+{{ printf "postgres://%s:%s@%s%s:%s/%s?sslmode=prefer" .Values.alembic.alternativePgIsreadyChartreuseAlembicUrl.username .Values.alembic.alternativePgIsreadyChartreuseAlembicUrl.password .Release.Name .Values.alembic.alternativePgIsreadyChartreuseAlembicUrl.urlSuffix .Values.alembic.alternativePgIsreadyChartreuseAlembicUrl.port .Values.alembic.alternativePgIsreadyChartreuseAlembicUrl.database }}
 {{- end -}}
 {{- else -}}
 {{ include "chartreuse.alembic.url" . }}
