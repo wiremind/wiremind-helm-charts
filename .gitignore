@@ -1,3 +1,4 @@
 charts/*/charts/
 .venv
 venv
+.idea/*
