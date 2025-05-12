@@ -1,13 +1,15 @@
-#!/bin/sh
-set -x
+#!/bin/bash
+
 set -e
 
 # Copy scripts to host
-cp /baremetal-config/decrypt-and-mount.sh /host-tmp/decrypt-and-mount.sh  # /host-tmp represents /tmp/bare-metal-daemonset for the host
+#cp /baremetal-config/decrypt-and-mount.sh /tmp/decrypt-and-mount.sh
 
 # This will execute the check / mount scripts in the root namespace
 while true; do
-    /usr/bin/nsenter -m/proc/1/ns/mnt /tmp/bare-metal-daemonset/decrypt-and-mount.sh
+    #nsenter -m/proc/1/ns/mnt /baremetal-config/decrypt-and-mount.sh
+    bash -c /baremetal-config/decrypt-and-mount.sh
+
     # Refresh liveness probe
     touch /tmp/raidLivenessFile
     sleep 30

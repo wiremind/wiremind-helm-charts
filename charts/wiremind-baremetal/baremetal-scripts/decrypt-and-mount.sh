@@ -1,39 +1,47 @@
-#!/bin/sh
-set -x
-set -e
+#!/bin/bash
 
-RAID_DEVICE="/dev/md/md0"
-DECRYPTED_LUKS_DEVICE_NAME="md0crypt"
-DECRYPTED_LUKS_DEVICE="/dev/mapper/md0crypt"
-LVM_PARTITION_DEVICES="/dev/md0cryptlvm/persistentvolume*"
+set -ex
 
-# Check if raid device exists
-set +e
+# XXX Talos uses this format for its raid data: /dev/md/<nodename>:<raid-name>
+RAID_NAME="data"
+# XXX this is the final name on talos once setup but we cannot create it
+# with it cause mdadm exit with this error: "mdadm: Value "metal-002:data"
+# cannot be set as devname. Reason: Not POSIX compatible."
+#
+# So create it with a temporary name like md0 but use the right one with
+# topolvm later.
+#
+# Cause of this error we have to reboot once setup to be sure everything is
+# working right.
+RAID_DEVICE="/dev/md/$NODENAME:$RAID_NAME"
+#RAID_DEVICE="/dev/md/md0"
+# XXX we use this as only some commands have to be run from host directly,
+# for example it does not contains bash and ls commands
+PREFIX="nsenter -m/proc/1/ns/mnt"
 
-device_details=$(mdadm -D "$RAID_DEVICE")
+# Avoid spam in our logs, just check
+$PREFIX mdadm -D "$RAID_DEVICE" &> /dev/null
 if [[ "$?" != "0" ]]; then
     echo "Raid device <${RAID_DEVICE}> not found, skipping"
-    exit 0
+    exit 1
 fi
 
-set -e
-
 wmb_decrypt_device() {
-  if ! cryptsetup status $DECRYPTED_LUKS_DEVICE_NAME; then
+  if ! $PREFIX cryptsetup status $DECRYPTED_LUKS_DEVICE_NAME; then
       echo "Decrypting the device $DECRYPTED_LUKS_DEVICE_NAME."
       set +x  # Do not log password, please.
       # XXX: this will actually hang (even if successfully opening) when run like this.
       # When run locally, even from a script, it works.
       # It will anyway get killed by the livenessprobe.
-      echo -n "$password" | cryptsetup luksOpen --verbose $RAID_DEVICE $DECRYPTED_LUKS_DEVICE_NAME --verbose --debug --allow-discards --key-file -
+      echo -n "$LUKS_PASSWORD" | $PREFIX cryptsetup luksOpen --verbose $RAID_DEVICE $DECRYPTED_LUKS_DEVICE_NAME --verbose --debug --allow-discards --key-file -
       echo "Done decrypting the device $DECRYPTED_LUKS_DEVICE_NAME."
       set -x
   fi
 
   # Check, will exit non-0 if failed
-  cryptsetup status $DECRYPTED_LUKS_DEVICE
-  pvscan
-  vgscan
+  $PREFIX cryptsetup status $DECRYPTED_LUKS_DEVICE
+  $PREFIX lvm pvscan
+  $PREFIX lvm vgscan
 }
 
 
