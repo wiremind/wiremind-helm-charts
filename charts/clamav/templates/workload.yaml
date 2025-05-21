@@ -1,8 +1,11 @@
-{{- if not (has .Values.kind (list "StatefulSet" "Deployment")) -}}
-{{- fail "Invalid value for .Values.kind, only StatefulSet and Deployment are supported" -}}
+{{- if not (has .Values.kind (list "StatefulSet" "Deployment" "DaemonSet")) -}}
+{{- fail "Invalid value for .Values.kind, only StatefulSet, Deployment and DaemonSet are supported" -}}
 {{- end -}}
 {{- if and .Values.persistentVolume.enabled (ne .Values.kind "StatefulSet")  -}}
 {{- fail "If .Values.persistentVolume.enabled is set to true, then .Values.kind has to be set to \"StatefulSet\"" -}}
+{{- end -}}
+{{- if and .Values.hpa.enabled (eq .Values.kind "DaemonSet")  -}}
+{{- fail "If .Values.hpa.enabled is set to true, then .Values.kind has to be set to \"StatefulSet\" or \"Deployment\"" -}}
 {{- end -}}
 apiVersion: apps/v1
 kind: {{ .Values.kind }}
@@ -11,7 +14,7 @@ metadata:
   labels:
     {{- include "clamav.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.hpa.enabled }}
+  {{- if and (ne .Values.kind "DaemonSet") (not .Values.hpa.enabled) }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   {{- if eq .Values.kind "StatefulSet" }}
@@ -21,10 +24,10 @@ spec:
     matchLabels:
       {{- include "clamav.selectorLabels" . | nindent 6 }}
   {{- with .Values.updateStrategy }}
-  {{- if eq $.Values.kind "StatefulSet" }}
-  updateStrategy:
-  {{- else }}
+  {{- if eq $.Values.kind "Deployment" }}
   strategy:
+  {{- else }}
+  updateStrategy:
   {{- end }}
     {{- toYaml . | nindent 4 }}
   {{- end }}

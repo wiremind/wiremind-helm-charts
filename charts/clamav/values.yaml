@@ -49,7 +49,12 @@ service:
   # nodePort: 30100
   annotations: {}
 
-extraEnvVars: {}
+## Extra environment variables to be set on the container
+## e.g:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
+extraEnvVars: []
 extraEnvVarsCM: ""
 extraEnvVarsSecret: ""
 
