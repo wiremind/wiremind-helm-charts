@@ -1,0 +1,16 @@
+apiVersion: v2
+annotations:
+  category: DeveloperTools
+name: vpa-crds
+version: 4.7.2
+appVersion: "v4.7.2"
+description: Manage Vpa CRDs
+keywords:
+  - vpa
+  - crds
+sources:
+  - https://github.com/FairwindsOps/charts/blob/master/stable/vpa/
+  - https://github.com/FairwindsOps/charts/tree/master/stable/vpa/crds
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
