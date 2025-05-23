@@ -10880,6 +10880,27 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/external-secrets-crds-0.10.5/external-secrets-crds-0.10.5.tgz
     version: 0.10.5
+  gateway-api-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 1.3.0
+    created: "2025-05-23T07:51:40.874380048Z"
+    description: Manage gateway-api (experimental) CRDs
+    digest: 775213a08193f6447fe6fe1d47cbadd038acb192e43e21c97a2943ab48f73ca1
+    keywords:
+    - gateway-api
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: gateway-api-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/gateway-api-crds
+    - https://github.com/kubernetes-sigs/gateway-api
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/gateway-api-crds-1.3.0/gateway-api-crds-1.3.0.tgz
+    version: 1.3.0
   gpu-operator-crds:
   - annotations:
       category: DeveloperTools
@@ -17008,4 +17029,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-05-22T08:57:36.097082423Z"
+generated: "2025-05-23T07:51:40.875476589Z"
