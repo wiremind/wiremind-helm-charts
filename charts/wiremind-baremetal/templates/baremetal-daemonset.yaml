@@ -18,17 +18,33 @@ spec:
       {{- end }}
       containers:
       - image: "{{ .Values.image.name }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
         command:
-        - /baremetal-config/main.sh
+          {{- if .Values.debug }}
+          - sleep
+          - infinity
+          {{- else }}
+          - /baremetal-config/main.sh
+          {{- end }}
         name: {{ .Release.Name }}-installer
+        env:
+          - name: NODENAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
         envFrom:
           - secretRef:
               name: {{ .Release.Name }}-installer
         volumeMounts:
-        - name: {{ .Release.Name }}-install-script
-          mountPath: /baremetal-config
-        - name: {{ .Release.Name }}-host-mount
-          mountPath: /host-tmp
+          - name: {{ .Release.Name }}-install-script
+            mountPath: /baremetal-config
+            readOnly: true
+          - name: {{ .Release.Name }}-host-dev
+            mountPath: /dev
+          - name: {{ .Release.Name }}-host-mnt
+            mountPath: /mnt
+          - name: {{ .Release.Name }}-host-tmp
+            mountPath: /tmp
         {{- with .Values.livenessProbe }}
         livenessProbe: {{- toYaml . | nindent 10 }}
         {{- end }}
@@ -42,13 +58,22 @@ spec:
         securityContext: {{- toYaml . | nindent 10 }}
         {{- end }}
       volumes:
-      - name: {{ .Release.Name }}-install-script
-        configMap:
-          name: {{ .Release.Name }}-installer
-          defaultMode: 0777
-      - name: {{ .Release.Name }}-host-mount
-        hostPath:
-          path: /tmp/bare-metal-daemonset
+        - name: {{ .Release.Name }}-install-script
+          configMap:
+            name: {{ .Release.Name }}-installer
+            defaultMode: 0777
+        - name: {{ .Release.Name }}-host-dev
+          hostPath:
+            path: /dev
+            type: Directory
+        - name: {{ .Release.Name }}-host-mnt
+          hostPath:
+            path: /mnt
+            type: Directory
+        - name: {{ .Release.Name }}-host-tmp
+          hostPath:
+            path: /tmp/bare-metal-daemonset
+            type: DirectoryOrCreate
       {{- with .Values.hostPID }}
       hostPID: {{ toYaml . }}
       {{- end }}
