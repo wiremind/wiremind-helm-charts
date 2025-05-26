@@ -6,3 +6,20 @@ updates:
       interval: "weekly"
     labels:
       - "dependencies"
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+  - package-ecosystem: "regex"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+    extractors:
+      - files: ["Containerfile"]
+        regex: "VTS_VERSION=(?<current_value>[0-9.]+)"
+        datasource: "github-releases"
+        url: "https://github.com/vozlt/nginx-module-vts"

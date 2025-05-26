@@ -1,4 +1,11 @@
 charts/*/charts/
 .venv
 venv
-.idea/*
+.idea/
+.vscode/
+*.tgz
+tmp/
+*.swp
+*.pyc
+__pycache__/
+dist/
