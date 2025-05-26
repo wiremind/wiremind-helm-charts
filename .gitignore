@@ -1,4 +1,16 @@
+# Helm dependencies and artifacts
 charts/*/charts/
-.venv
-venv
-.idea/*
+charts/*/tmp/
+charts/*/Chart.lock
+*.tgz
+
+# Development environments
+.venv/
+venv/
+.idea/
+.vscode/
+
+# Misc
+*.swp
+*.swo
+.DS_Store
