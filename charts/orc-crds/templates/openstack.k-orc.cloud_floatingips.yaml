@@ -4,16 +4,16 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.17.1
-  name: subnets.openstack.k-orc.cloud
+  name: floatingips.openstack.k-orc.cloud
 spec:
   group: openstack.k-orc.cloud
   names:
     categories:
     - openstack
-    kind: Subnet
-    listKind: SubnetList
-    plural: subnets
-    singular: subnet
+    kind: FloatingIP
+    listKind: FloatingIPList
+    plural: floatingips
+    singular: floatingip
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -25,6 +25,10 @@ spec:
       jsonPath: .status.conditions[?(@.type=='Available')].status
       name: Available
       type: string
+    - description: Allocated IP address
+      jsonPath: .status.resource.floatingIP
+      name: Address
+      type: string
     - description: Message describing current progress status
       jsonPath: .status.conditions[?(@.type=='Progressing')].message
       name: Message
@@ -32,7 +36,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Subnet is the Schema for an ORC resource.
+        description: FloatingIP is the Schema for an ORC resource.
         properties:
           apiVersion:
             description: |-
@@ -91,61 +95,19 @@ spec:
                       error state and will not continue to retry.
                     minProperties: 1
                     properties:
-                      cidr:
-                        description: cidr of the existing resource
-                        format: cidr
-                        maxLength: 49
-                        minLength: 1
-                        type: string
                       description:
                         description: description of the existing resource
                         maxLength: 255
                         minLength: 1
                         type: string
-                      gatewayIP:
-                        description: gatewayIP is the IP address of the gateway of
-                          the existing resource
+                      floatingIP:
+                        description: floatingIP is the floatingip address.
                         maxLength: 45
                         minLength: 1
                         type: string
-                      ipVersion:
-                        description: ipVersion of the existing resource
-                        enum:
-                        - 4
-                        - 6
-                        format: int32
-                        type: integer
-                      ipv6:
-                        description: ipv6 options of the existing resource
-                        minProperties: 1
-                        properties:
-                          addressMode:
-                            description: addressMode specifies mechanisms for assigning
-                              IPv6 IP addresses.
-                            enum:
-                            - slaac
-                            - dhcpv6-stateful
-                            - dhcpv6-stateless
-                            type: string
-                          raMode:
-                            description: |-
-                              raMode specifies the IPv6 router advertisement mode. It specifies whether
-                              the networking service should transmit ICMPv6 packets.
-                            enum:
-                            - slaac
-                            - dhcpv6-stateful
-                            - dhcpv6-stateless
-                            type: string
-                        type: object
-                      name:
-                        description: name of the existing resource
-                        maxLength: 255
-                        minLength: 1
-                        pattern: ^[^,]+$
-                        type: string
-                      networkRef:
-                        description: networkRef is a reference to the ORC Network
-                          which this subnet is associated with.
+                      floatingNetworkRef:
+                        description: floatingNetworkRef is a reference to the ORC
+                          Network which this resource is associated with.
                         maxLength: 253
                         minLength: 1
                         type: string
@@ -177,12 +139,22 @@ spec:
                         maxItems: 32
                         type: array
                         x-kubernetes-list-type: set
+                      portRef:
+                        description: portRef is a reference to the ORC Port which
+                          this resource is associated with.
+                        maxLength: 253
+                        minLength: 1
+                        type: string
                       projectRef:
                         description: |-
                           projectRef is a reference to the ORC Project this resource is associated with.
                           Typically, only used by admin.
                         maxLength: 253
                         minLength: 1
+                        type: string
+                      status:
+                        description: status is the status of the floatingip.
+                        maxLength: 1024
                         type: string
                       tags:
                         description: |-
@@ -260,174 +232,43 @@ spec:
 
                   resource must be specified if the management policy is `managed`.
                 properties:
-                  allocationPools:
-                    description: |-
-                      allocationPools are IP Address pools that will be available for DHCP. IP
-                      addresses must be in CIDR.
-                    items:
-                      properties:
-                        end:
-                          description: end is the last IP address in the allocation
-                            pool.
-                          maxLength: 45
-                          minLength: 1
-                          type: string
-                        start:
-                          description: start is the first IP address in the allocation
-                            pool.
-                          maxLength: 45
-                          minLength: 1
-                          type: string
-                      required:
-                      - end
-                      - start
-                      type: object
-                    maxItems: 32
-                    type: array
-                    x-kubernetes-list-type: atomic
-                  cidr:
-                    description: cidr is the address CIDR of the subnet. It must match
-                      the IP version specified in IPVersion.
-                    format: cidr
-                    maxLength: 49
-                    minLength: 1
-                    type: string
-                    x-kubernetes-validations:
-                    - message: cidr is immutable
-                      rule: self == oldSelf
                   description:
                     description: description is a human-readable description for the
                       resource.
                     maxLength: 255
                     minLength: 1
                     type: string
-                  dnsNameservers:
-                    description: dnsNameservers are the nameservers to be set via
-                      DHCP.
-                    items:
-                      maxLength: 45
-                      minLength: 1
-                      type: string
-                    maxItems: 16
-                    type: array
-                    x-kubernetes-list-type: set
-                  dnsPublishFixedIP:
-                    description: |-
-                      dnsPublishFixedIP will either enable or disable the publication of
-                      fixed IPs to the DNS. Defaults to false.
-                    type: boolean
-                    x-kubernetes-validations:
-                    - message: dnsPublishFixedIP is immutable
-                      rule: self == oldSelf
-                  enableDHCP:
-                    description: enableDHCP will either enable to disable the DHCP
-                      service.
-                    type: boolean
-                  gateway:
-                    description: |-
-                      gateway specifies the default gateway of the subnet. If not specified,
-                      neutron will add one automatically. To disable this behaviour, specify a
-                      gateway with a type of None.
-                    properties:
-                      ip:
-                        description: |-
-                          ip is the IP address of the default gateway, which must be specified if
-                          Type is `IP`. It must be a valid IP address, either IPv4 or IPv6,
-                          matching the IPVersion in SubnetResourceSpec.
-                        maxLength: 45
-                        minLength: 1
-                        type: string
-                      type:
-                        description: |-
-                          type specifies how the default gateway will be created. `Automatic`
-                          specifies that neutron will automatically add a default gateway. This is
-                          also the default if no Gateway is specified. `None` specifies that the
-                          subnet will not have a default gateway. `IP` specifies that the subnet
-                          will use a specific address as the default gateway, which must be
-                          specified in `IP`.
-                        enum:
-                        - None
-                        - Automatic
-                        - IP
-                        type: string
-                    required:
-                    - type
-                    type: object
-                  hostRoutes:
-                    description: hostRoutes are any static host routes to be set via
-                      DHCP.
-                    items:
-                      properties:
-                        destination:
-                          description: destination for the additional route.
-                          format: cidr
-                          maxLength: 49
-                          minLength: 1
-                          type: string
-                        nextHop:
-                          description: nextHop for the additional route.
-                          maxLength: 45
-                          minLength: 1
-                          type: string
-                      required:
-                      - destination
-                      - nextHop
-                      type: object
-                    maxItems: 256
-                    type: array
-                    x-kubernetes-list-type: atomic
-                  ipVersion:
-                    description: ipVersion is the IP version for the subnet.
-                    enum:
-                    - 4
-                    - 6
-                    format: int32
-                    type: integer
-                    x-kubernetes-validations:
-                    - message: ipVersion is immutable
-                      rule: self == oldSelf
-                  ipv6:
-                    description: ipv6 contains IPv6-specific options. It may only
-                      be set if IPVersion is 6.
-                    minProperties: 1
-                    properties:
-                      addressMode:
-                        description: addressMode specifies mechanisms for assigning
-                          IPv6 IP addresses.
-                        enum:
-                        - slaac
-                        - dhcpv6-stateful
-                        - dhcpv6-stateless
-                        type: string
-                      raMode:
-                        description: |-
-                          raMode specifies the IPv6 router advertisement mode. It specifies whether
-                          the networking service should transmit ICMPv6 packets.
-                        enum:
-                        - slaac
-                        - dhcpv6-stateful
-                        - dhcpv6-stateless
-                        type: string
-                    type: object
-                    x-kubernetes-validations:
-                    - message: ipv6 is immutable
-                      rule: self == oldSelf
-                  name:
-                    description: name is a human-readable name of the subnet. If not
-                      set, the object's name will be used.
-                    maxLength: 255
+                  fixedIP:
+                    description: fixedIP is the IP address of the port to which the
+                      floatingip is associated.
+                    maxLength: 45
                     minLength: 1
-                    pattern: ^[^,]+$
                     type: string
-                  networkRef:
-                    description: networkRef is a reference to the ORC Network which
-                      this subnet is associated with.
+                  floatingIP:
+                    description: |-
+                      floatingIP is the IP that will be assigned to the floatingip. If not set, it will
+                      be assigned automatically.
+                    maxLength: 45
+                    minLength: 1
+                    type: string
+                  floatingNetworkRef:
+                    description: floatingNetworkRef references the network to which
+                      the floatingip is associated.
                     maxLength: 253
                     minLength: 1
                     type: string
-                    x-kubernetes-validations:
-                    - message: networkRef is immutable
-                      rule: self == oldSelf
+                  floatingSubnetRef:
+                    description: floatingSubnetRef references the subnet to which
+                      the floatingip is associated.
+                    maxLength: 253
+                    minLength: 1
+                    type: string
+                  portRef:
+                    description: portRef is a reference to the ORC Port which this
+                      resource is associated with.
+                    maxLength: 253
+                    minLength: 1
+                    type: string
                   projectRef:
                     description: |-
                       projectRef is a reference to the ORC Project this resource is associated with.
@@ -435,21 +276,9 @@ spec:
                     maxLength: 253
                     minLength: 1
                     type: string
-                    x-kubernetes-validations:
-                    - message: projectRef is immutable
-                      rule: self == oldSelf
-                  routerRef:
-                    description: routerRef specifies a router to attach the subnet
-                      to
-                    maxLength: 253
-                    minLength: 1
-                    type: string
-                    x-kubernetes-validations:
-                    - message: routerRef is immutable
-                      rule: self == oldSelf
                   tags:
                     description: tags is a list of tags which will be applied to the
-                      subnet.
+                      floatingip.
                     items:
                       description: |-
                         NeutronTag represents a tag on a Neutron resource.
@@ -460,11 +289,13 @@ spec:
                     maxItems: 32
                     type: array
                     x-kubernetes-list-type: set
-                required:
-                - cidr
-                - ipVersion
-                - networkRef
                 type: object
+                x-kubernetes-validations:
+                - message: FloatingIPResourceSpec is immutable
+                  rule: self == oldSelf
+                - message: Exactly one of 'floatingNetworkRef' or 'floatingSubnetRef'
+                    must be set
+                  rule: has(self.floatingNetworkRef) != has(self.floatingSubnetRef)
             required:
             - cloudCredentialsRef
             type: object
@@ -567,31 +398,6 @@ spec:
                 description: resource contains the observed state of the OpenStack
                   resource.
                 properties:
-                  allocationPools:
-                    description: |-
-                      allocationPools is a list of sub-ranges within CIDR available for dynamic
-                      allocation to ports.
-                    items:
-                      properties:
-                        end:
-                          description: end is the last IP address in the allocation
-                            pool.
-                          maxLength: 1024
-                          type: string
-                        start:
-                          description: start is the first IP address in the allocation
-                            pool.
-                          maxLength: 1024
-                          type: string
-                      type: object
-                    maxItems: 32
-                    type: array
-                    x-kubernetes-list-type: atomic
-                  cidr:
-                    description: cidr representing IP range for this subnet, based
-                      on IP version.
-                    maxLength: 1024
-                    type: string
                   createdAt:
                     description: createdAt shows the date and time when the resource
                       was created. The date and time stamp format is ISO 8601
@@ -602,92 +408,54 @@ spec:
                       resource.
                     maxLength: 1024
                     type: string
-                  dnsNameservers:
-                    description: dnsNameservers is a list of name servers used by
-                      hosts in this subnet.
-                    items:
-                      maxLength: 1024
-                      type: string
-                    maxItems: 16
-                    type: array
-                    x-kubernetes-list-type: atomic
-                  dnsPublishFixedIP:
-                    description: dnsPublishFixedIP specifies whether the fixed IP
-                      addresses are published to the DNS.
-                    type: boolean
-                  enableDHCP:
-                    description: enableDHCP specifies whether DHCP is enabled for
-                      this subnet or not.
-                    type: boolean
-                  gatewayIP:
-                    description: gatewayIP is the default gateway used by devices
-                      in this subnet, if any.
+                  fixedIP:
+                    description: fixedIP is the IP address of the port to which the
+                      floatingip is associated.
                     maxLength: 1024
                     type: string
-                  hostRoutes:
-                    description: |-
-                      hostRoutes is a list of routes that should be used by devices with IPs
-                      from this subnet (not including local subnet route).
-                    items:
-                      properties:
-                        destination:
-                          description: destination for the additional route.
-                          maxLength: 1024
-                          type: string
-                        nextHop:
-                          description: nextHop for the additional route.
-                          maxLength: 1024
-                          type: string
-                      type: object
-                    maxItems: 256
-                    type: array
-                    x-kubernetes-list-type: atomic
-                  ipVersion:
-                    description: ipVersion specifies IP version, either `4' or `6'.
-                    format: int32
-                    type: integer
-                  ipv6AddressMode:
-                    description: ipv6AddressMode specifies mechanisms for assigning
-                      IPv6 IP addresses.
+                  floatingIP:
+                    description: floatingIP is the IP address of the floatingip.
                     maxLength: 1024
                     type: string
-                  ipv6RAMode:
-                    description: |-
-                      ipv6RAMode is the IPv6 router advertisement mode. It specifies
-                      whether the networking service should transmit ICMPv6 packets.
+                  floatingNetworkID:
+                    description: floatingNetworkID is the ID of the network to which
+                      the floatingip is associated.
                     maxLength: 1024
                     type: string
-                  name:
-                    description: name is the human-readable name of the subnet. Might
-                      not be unique.
-                    maxLength: 1024
-                    type: string
-                  networkID:
-                    description: networkID is the ID of the network to which the subnet
-                      belongs.
+                  portID:
+                    description: portID is the ID of the port to which the floatingip
+                      is associated.
                     maxLength: 1024
                     type: string
                   projectID:
-                    description: projectID is the project owner of the subnet.
+                    description: projectID is the project owner of the resource.
                     maxLength: 1024
                     type: string
                   revisionNumber:
                     description: revisionNumber optionally set via extensions/standard-attr-revisions
                     format: int64
                     type: integer
-                  subnetPoolID:
-                    description: subnetPoolID is the id of the subnet pool associated
-                      with the subnet.
+                  routerID:
+                    description: routerID is the ID of the router to which the floatingip
+                      is associated.
+                    maxLength: 1024
+                    type: string
+                  status:
+                    description: status indicates the current status of the resource.
                     maxLength: 1024
                     type: string
                   tags:
-                    description: tags optionally set via extensions/attributestags
+                    description: tags is the list of tags on the resource.
                     items:
                       maxLength: 1024
                       type: string
                     maxItems: 32
                     type: array
                     x-kubernetes-list-type: atomic
+                  tenantID:
+                    description: tenantID is the project owner of the resource.
+                    maxLength: 1024
+                    type: string
                   updatedAt:
                     description: updatedAt shows the date and time when the resource
                       was updated. The date and time stamp format is ISO 8601
