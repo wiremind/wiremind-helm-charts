@@ -4,16 +4,16 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.17.1
-  name: servers.openstack.k-orc.cloud
+  name: servergroups.openstack.k-orc.cloud
 spec:
   group: openstack.k-orc.cloud
   names:
     categories:
     - openstack
-    kind: Server
-    listKind: ServerList
-    plural: servers
-    singular: server
+    kind: ServerGroup
+    listKind: ServerGroupList
+    plural: servergroups
+    singular: servergroup
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -32,7 +32,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Server is the Schema for an ORC resource.
+        description: ServerGroup is the Schema for an ORC resource.
         properties:
           apiVersion:
             description: |-
@@ -97,51 +97,6 @@ spec:
                         minLength: 1
                         pattern: ^[^,]+$
                         type: string
-                      notTags:
-                        description: |-
-                          notTags is a list of tags to filter by. If specified, resources which
-                          contain all of the given tags will be excluded from the result.
-                        items:
-                          maxLength: 80
-                          minLength: 1
-                          type: string
-                        maxItems: 32
-                        type: array
-                        x-kubernetes-list-type: set
-                      notTagsAny:
-                        description: |-
-                          notTagsAny is a list of tags to filter by. If specified, resources
-                          which contain any of the given tags will be excluded from the result.
-                        items:
-                          maxLength: 80
-                          minLength: 1
-                          type: string
-                        maxItems: 32
-                        type: array
-                        x-kubernetes-list-type: set
-                      tags:
-                        description: |-
-                          tags is a list of tags to filter by. If specified, the resource must
-                          have all of the tags specified to be included in the result.
-                        items:
-                          maxLength: 80
-                          minLength: 1
-                          type: string
-                        maxItems: 32
-                        type: array
-                        x-kubernetes-list-type: set
-                      tagsAny:
-                        description: |-
-                          tagsAny is a list of tags to filter by. If specified, the resource
-                          must have at least one of the tags specified to be included in the
-                          result.
-                        items:
-                          maxLength: 80
-                          minLength: 1
-                          type: string
-                        maxItems: 32
-                        type: array
-                        x-kubernetes-list-type: set
                     type: object
                   id:
                     description: |-
@@ -189,19 +144,6 @@ spec:
 
                   resource must be specified if the management policy is `managed`.
                 properties:
-                  flavorRef:
-                    description: flavorRef references the flavor to use for the server
-                      instance.
-                    maxLength: 253
-                    minLength: 1
-                    type: string
-                  imageRef:
-                    description: |-
-                      imageRef references the image to use for the server instance.
-                      NOTE: This is not required in case of boot from volume.
-                    maxLength: 253
-                    minLength: 1
-                    type: string
                   name:
                     description: |-
                       name will be the name of the created resource. If not specified, the
@@ -210,64 +152,34 @@ spec:
                     minLength: 1
                     pattern: ^[^,]+$
                     type: string
-                  ports:
-                    description: ports defines a list of ports which will be attached
-                      to the server.
-                    items:
-                      maxProperties: 1
-                      minProperties: 1
-                      properties:
-                        portRef:
-                          description: |-
-                            portRef is a reference to a Port object. Server creation will wait for
-                            this port to be created and available.
-                          maxLength: 253
-                          minLength: 1
-                          type: string
-                      type: object
-                    maxItems: 32
-                    type: array
-                    x-kubernetes-list-type: atomic
-                  serverGroupRef:
-                    description: |-
-                      serverGroupRef is a reference to a ServerGroup object. The server
-                      will be created in the server group.
-                    maxLength: 253
-                    minLength: 1
+                  policy:
+                    description: policy is the policy to use for the server group.
+                    enum:
+                    - affinity
+                    - anti-affinity
+                    - soft-affinity
+                    - soft-anti-affinity
                     type: string
-                  tags:
-                    description: tags is a list of tags which will be applied to the
-                      server.
-                    items:
-                      maxLength: 80
-                      minLength: 1
-                      type: string
-                    maxItems: 32
-                    type: array
-                    x-kubernetes-list-type: set
-                  userData:
-                    description: |-
-                      userData specifies data which will be made available to the server at
-                      boot time, either via the metadata service or a config drive. It is
-                      typically read by a configuration service such as cloud-init or ignition.
-                    maxProperties: 1
-                    minProperties: 1
+                  rules:
+                    description: rules is the rules to use for the server group.
                     properties:
-                      secretRef:
-                        description: secretRef is a reference to a Secret containing
-                          the user data for this server.
-                        maxLength: 253
-                        minLength: 1
-                        type: string
+                      maxServerPerHost:
+                        description: |-
+                          maxServerPerHost specifies how many servers can reside on a single compute host.
+                          It can be used only with the "anti-affinity" policy.
+                        format: int32
+                        type: integer
                     type: object
                 required:
-                - flavorRef
-                - imageRef
-                - ports
+                - policy
                 type: object
                 x-kubernetes-validations:
-                - message: ServerResourceSpec is immutable
+                - message: ServerGroupResourceSpec is immutable
                   rule: self == oldSelf
+                - message: maxServerPerHost can only be used with the anti-affinity
+                    policy
+                  rule: 'has(self.rules) && self.rules.maxServerPerHost > 0 ? self.policy
+                    == ''anti-affinity'' : true'
             required:
             - cloudCredentialsRef
             type: object
@@ -370,46 +282,33 @@ spec:
                 description: resource contains the observed state of the OpenStack
                   resource.
                 properties:
-                  hostID:
-                    description: hostID is the host where the server is located in
-                      the cloud.
-                    maxLength: 1024
-                    type: string
-                  imageID:
-                    description: imageID indicates the OS image used to deploy the
-                      server.
-                    maxLength: 1024
-                    type: string
                   name:
-                    description: name is the human-readable name of the resource.
+                    description: name is a Human-readable name for the servergroup.
                       Might not be unique.
                     maxLength: 1024
                     type: string
-                  serverGroups:
-                    description: |-
-                      serverGroups is a slice of strings containing the UUIDs of the
-                      server groups to which the server belongs. Currently this can
-                      contain at most one entry.
-                    items:
-                      maxLength: 1024
-                      type: string
-                    maxItems: 32
-                    type: array
-                    x-kubernetes-list-type: atomic
-                  status:
-                    description: |-
-                      status contains the current operational status of the server,
-                      such as IN_PROGRESS or ACTIVE.
+                  policy:
+                    description: policy is the policy of the servergroup.
                     maxLength: 1024
                     type: string
-                  tags:
-                    description: tags is the list of tags on the resource.
-                    items:
-                      maxLength: 1024
-                      type: string
-                    maxItems: 32
-                    type: array
-                    x-kubernetes-list-type: atomic
+                  projectID:
+                    description: projectID is the project owner of the resource.
+                    maxLength: 1024
+                    type: string
+                  rules:
+                    description: rules is the rules of the server group.
+                    properties:
+                      maxServerPerHost:
+                        description: |-
+                          maxServerPerHost specifies how many servers can reside on a single compute host.
+                          It can be used only with the "anti-affinity" policy.
+                        format: int32
+                        type: integer
+                    type: object
+                  userID:
+                    description: userID of the server group.
+                    maxLength: 1024
+                    type: string
                 type: object
             type: object
         type: object
