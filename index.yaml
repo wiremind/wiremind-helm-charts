@@ -1181,6 +1181,28 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: v1.18.0
+    created: "2025-06-11T13:31:40.390645374Z"
+    description: Manage cert-manager CRDs
+    digest: d6f5a0c8d997dff83729107f5cc711548bd337a88a0baa8528a3a086e2baae41
+    icon: https://raw.githubusercontent.com/jetstack/cert-manager/master/logo/logo.png
+    keywords:
+    - cert
+    - manager
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: cert-manager-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cert-manager-crds
+    - https://github.com/cert-manager/cert-manager
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/cert-manager-crds-1.18.0/cert-manager-crds-1.18.0.tgz
+    version: 1.18.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: v1.16.1
     created: "2024-10-09T14:24:08.856053963Z"
     description: Manage cert-manager CRDs
@@ -16674,6 +16696,19 @@ entries:
     version: 0.25.0
   velero-crds:
   - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-06-11T13:31:40.507302446Z"
+    description: A Helm chart to manage velero CRDs
+    digest: dc4f9a036b1fb8297a54377ef48dcff055b1663541bbf40a879d9253c3e68fe0
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: velero-crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-10.0.4/velero-crds-10.0.4.tgz
+    version: 10.0.4
+  - apiVersion: v2
     appVersion: 1.15.0
     created: "2024-11-21T14:00:56.085321488Z"
     description: A Helm chart to manage velero CRDs
@@ -17029,4 +17064,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-05-23T07:51:40.875476589Z"
+generated: "2025-06-11T13:31:40.508074039Z"
