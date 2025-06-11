@@ -14336,6 +14336,20 @@ entries:
     version: 0.17.3
   orc:
   - apiVersion: v2
+    appVersion: 2.2.0
+    created: "2025-06-11T16:47:46.674820119Z"
+    description: A Helm chart for https://github.com/k-orc/openstack-resource-controller/
+    digest: 63920dc8bf8901e9c6944e6077e887559c02e58184c988b47fcbd51c34ada16a
+    kubeVersion: '>=1.29.0-0'
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: orc
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/orc-0.1.3/orc-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
     appVersion: 2.1.0
     created: "2025-05-07T16:45:43.545031469Z"
     description: A Helm chart for https://github.com/k-orc/openstack-resource-controller/
@@ -14378,6 +14392,26 @@ entries:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/orc-0.1.0/orc-0.1.0.tgz
     version: 0.1.0
   orc-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 2.2.0
+    created: "2025-06-11T16:47:46.810055154Z"
+    description: Manage Openstack Resource Controller CRDs
+    digest: 804d35a6a872afa29a6e0045c10f7194696a33911ac16dc21e32486bba7d6fa3
+    keywords:
+    - orc
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: orc-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/orc-crds
+    - https://github.com/k-orc/openstack-resource-controller/
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/orc-crds-2.2.0/orc-crds-2.2.0.tgz
+    version: 2.2.0
   - annotations:
       category: DeveloperTools
     apiVersion: v2
@@ -17064,4 +17098,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-06-11T13:31:40.508074039Z"
+generated: "2025-06-11T16:47:46.811160921Z"
