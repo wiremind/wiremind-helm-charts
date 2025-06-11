@@ -2,9 +2,9 @@ apiVersion: v2
 name: orc
 description: A Helm chart for https://github.com/k-orc/openstack-resource-controller/
 type: application
-appVersion: 2.1.0
+appVersion: 2.2.0
 kubeVersion: ">=1.29.0-0"
-version: 0.1.2
+version: 0.1.3
 maintainers:
   - name: Wiremind
     url: https://github.com/wiremind/wiremind-helm-charts
