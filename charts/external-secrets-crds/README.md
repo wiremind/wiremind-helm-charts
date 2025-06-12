@@ -13,8 +13,9 @@ If the version of the CRDs changes, aka breaking changes (this doesn't happen ev
 ``` bash
 export APP_VERSION=0.16.0
 cd charts/external-secrets-crds
-helm pull external-secrets/external-secrets --version $APP_VERSION
+helm repo add external-secrets-operator https://charts.external-secrets.io/
+helm pull external-secrets-operator/external-secrets --version $APP_VERSION
 tar -xvf external-secrets-${APP_VERSION}.tgz
-cp -r external-secrets/templates/crds templates
-bash ../../scripts/cut_crds.sh crds.yaml
+cp external-secrets/templates/crds/* templates/
+rm -rf external-secrets*
 ```
