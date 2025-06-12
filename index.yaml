@@ -2,6 +2,27 @@ apiVersion: v1
 entries:
   ack-iam-controller-crds:
   - apiVersion: v1
+    appVersion: v1.4.2
+    created: "2025-06-12T13:41:05.106731832Z"
+    description: Manage CRDs of the ACK service controller for AWS Identity & Access
+      Management (IAM)
+    digest: e3834cd0e438981273e295cd62e049291285bd75b93a8302c6c280c71c33cb93
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/ack-iam-controller-crds
+    icon: https://raw.githubusercontent.com/aws/eks-charts/master/docs/logo/aws.png
+    keywords:
+    - aws
+    - kubernetes
+    - iam
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: ack-iam-controller-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/ack-iam-controller-crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/ack-iam-controller-crds-1.4.2/ack-iam-controller-crds-1.4.2.tgz
+    version: 1.4.2
+  - apiVersion: v1
     appVersion: v0.1.1
     created: "2023-02-06T15:16:01.281625146Z"
     description: Manage CRDs of the ACK service controller for AWS Identity & Access
@@ -23,6 +44,27 @@ entries:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/ack-iam-controller-crds-0.1.1/ack-iam-controller-crds-0.1.1.tgz
     version: 0.1.1
   ack-s3-controller-crds:
+  - apiVersion: v1
+    appVersion: v1.0.33
+    created: "2025-06-12T13:41:05.37858422Z"
+    description: Manage CRDs of the ACK service controller for Amazon Simple Storage
+      Service (S3)
+    digest: 69e120854f4bcb9e0d89d290412daa95ecdc29574fc01ff6d22f96c0c6115ce2
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/ack-s3-controller-crds
+    icon: https://raw.githubusercontent.com/aws/eks-charts/master/docs/logo/aws.png
+    keywords:
+    - aws
+    - kubernetes
+    - s3
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: ack-s3-controller-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/ack-s3-controller-crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/ack-s3-controller-crds-1.0.33/ack-s3-controller-crds-1.0.33.tgz
+    version: 1.0.33
   - apiVersion: v1
     appVersion: v0.1.7
     created: "2023-02-06T15:16:01.474978643Z"
@@ -17110,4 +17152,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-06-12T08:42:06.230541958Z"
+generated: "2025-06-12T13:41:05.379577009Z"
