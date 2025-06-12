@@ -1,5 +1,25 @@
 apiVersion: v1
 entries:
+  ack-controllers-crds:
+  - apiVersion: v1
+    appVersion: v1.0.0
+    created: "2025-06-12T15:01:18.584722029Z"
+    description: Manage some CRDs of the ACK controllers
+    digest: c7cf634066b834bcb3f7b6bf5e359a413f038a786ecb7a2eb7938e37b7faefd0
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/ack-controllers-crdss
+    icon: https://raw.githubusercontent.com/aws/eks-charts/master/docs/logo/aws.png
+    keywords:
+    - aws
+    - kubernetes
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: ack-controllers-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/ack-controllers-crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/ack-controllers-crds-1.0.0/ack-controllers-crds-1.0.0.tgz
+    version: 1.0.0
   ack-iam-controller-crds:
   - apiVersion: v1
     appVersion: v1.4.2
@@ -17152,4 +17172,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-06-12T13:41:05.379577009Z"
+generated: "2025-06-12T15:01:18.585545655Z"
