@@ -2,7 +2,7 @@ serviceAccount:
   annotations: {}
   automount: true
 
-replicaCount: 2
+replicaCount: 1
 
 updateStrategy:
   type: RollingUpdate
@@ -67,8 +67,15 @@ containerSecurityContext:
 
 metrics:
   enable: true
-  port: 8443
-  secure: true
+  port: 8080
+  secure: false
+  serviceMonitor:
+    enable: false
+    interval: 10s
+    # scrapeTimeout:
+    # relabelings:
+    # metricRelabelings:
+    # honorLabels:
 
 probes:
   enable: true
