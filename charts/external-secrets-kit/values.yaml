@@ -1,0 +1,56 @@
+store:
+  name: "truc-common"
+
+  namespaceSelector: {}
+    # matchLabels:
+    #   environment-kind: coucou
+    #   project: bidule
+
+  provider: {}
+    # truc:
+    #   auth:
+    #     universalAuthCredentials:
+    #       clientId:
+    #         key: clientId
+    #         name: creds
+    #         namespace: default
+    #       clientSecret:
+    #         key: clientSecret
+    #         name: creds
+    #         namespace: default
+    #   hostAPI: https://truc.com
+    #   secretsScope:
+    #     environmentSlug: x
+    #     expandSecretReferences: true
+    #     projectSlug: x-xx-xxx
+    #     recursive: true
+    #     secretsPath: /common/
+
+secrets: {}
+  # secret1:
+  #   data:
+  #     - remoteRef:
+  #         conversionStrategy: Default
+  #         decodingStrategy: None
+  #         key: PASSWORD
+  #         metadataPolicy: None
+  #       secretKey: password
+  #       sourceRef:
+  #         storeRef:
+  #           kind: ClusterSecretStore
+  #           name: truc-common
+  #   refreshInterval: 1h
+  #   target:
+  #     creationPolicy: Owner
+  #     deletionPolicy: Retain
+  #     name: target-secret
+  #     template:
+  #       data:
+  #         MACHIN: >-
+  #           http://truc:{{ .password
+  #           }}@machin.default
+  #         CHOSE: >-
+  #           http://truc:{{ .password
+  #           }}@chose.default
+  #       engineVersion: v2
+  #       mergePolicy: Replace
