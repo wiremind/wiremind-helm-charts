@@ -10979,6 +10979,19 @@ entries:
   external-secrets-kit:
   - apiVersion: v2
     appVersion: 0.16.1
+    created: "2025-06-16T16:53:45.382906778Z"
+    description: A Helm chart to deploy a ClusterSecretStore and linked ExternalSecrets
+    digest: e72d4ea13820295a90154db048a7b686d444e5452d597dd474b9ecf0c321f446
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: external-secrets-kit
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/external-secrets-kit-0.0.2/external-secrets-kit-0.0.2.tgz
+    version: 0.0.2
+  - apiVersion: v2
+    appVersion: 0.16.1
     created: "2025-06-16T15:24:13.871847601Z"
     description: A Helm chart to deploy a ClusterSecretStore and linked ExternalSecrets
     digest: 649aaf946fe08d878d19b1c45fea56500fa98dce7ad3373f9f28d073fd2ca889
@@ -17214,4 +17227,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-06-16T15:24:13.872839549Z"
+generated: "2025-06-16T16:53:45.383779582Z"
