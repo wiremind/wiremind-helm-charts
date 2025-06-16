@@ -1,0 +1,10 @@
+apiVersion: v2
+name: external-secrets-kit
+description: A Helm chart to deploy a ClusterSecretStore and linked ExternalSecrets
+type: application
+# CRDs version
+appVersion: 0.16.1
+version: 0.0.1
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
