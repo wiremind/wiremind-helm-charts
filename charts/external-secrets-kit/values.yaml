@@ -1,10 +1,11 @@
 store:
   name: "truc-common"
 
-  namespaceSelector: {}
-    # matchLabels:
-    #   environment-kind: coucou
-    #   project: bidule
+  conditions: []
+    # - namespaceSelector:
+    #     matchLabels:
+    #       environment-kind: coucou
+    #       project: bidule
 
   provider: {}
     # truc:

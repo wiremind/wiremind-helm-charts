@@ -4,7 +4,7 @@ description: A Helm chart to deploy a ClusterSecretStore and linked ExternalSecr
 type: application
 # CRDs version
 appVersion: 0.16.1
-version: 0.0.1
+version: 0.0.2
 maintainers:
   - name: Wiremind
     url: https://github.com/wiremind/wiremind-helm-charts
