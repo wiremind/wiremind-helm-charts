@@ -10976,6 +10976,20 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/external-secrets-crds-0.10.5/external-secrets-crds-0.10.5.tgz
     version: 0.10.5
+  external-secrets-kit:
+  - apiVersion: v2
+    appVersion: 0.16.1
+    created: "2025-06-16T15:24:13.871847601Z"
+    description: A Helm chart to deploy a ClusterSecretStore and linked ExternalSecrets
+    digest: 649aaf946fe08d878d19b1c45fea56500fa98dce7ad3373f9f28d073fd2ca889
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: external-secrets-kit
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/external-secrets-kit-0.0.1/external-secrets-kit-0.0.1.tgz
+    version: 0.0.1
   gateway-api-crds:
   - annotations:
       category: DeveloperTools
@@ -17200,4 +17214,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-06-13T11:36:12.115205488Z"
+generated: "2025-06-16T15:24:13.872839549Z"
