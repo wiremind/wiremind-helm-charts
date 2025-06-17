@@ -23,7 +23,15 @@ spec:
         name: {{ .Release.Name }}-installer
         envFrom:
           - secretRef:
+              {{- if .Values.secret.existingSecret }}
+              name: {{ .Values.secret.existingSecret }}
+              {{- else }}
               name: {{ .Release.Name }}-installer
+              {{- end }}
+        {{- with .Values.extraEnv }}
+        env:
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
         volumeMounts:
         - name: {{ .Release.Name }}-install-script
           mountPath: /baremetal-config
