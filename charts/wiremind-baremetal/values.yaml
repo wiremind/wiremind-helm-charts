@@ -3,7 +3,12 @@ image:
   tag: ""
 
 secret:
-  password: "setthisvalue"
+  create: true
+  existingSecret: ""
+  content:
+    password: "setthisvalue"
+
+extraEnv: []
 
 tolerations: []
 
