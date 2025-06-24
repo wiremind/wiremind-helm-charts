@@ -16975,6 +16975,27 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
+  vpa-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: v4.7.2
+    created: "2025-06-24T10:43:31.363393102Z"
+    description: Manage Vpa CRDs
+    digest: 6cacef8e8b743f37b376d294af91aa963302ec40a02754c07764b4df34fa751e
+    keywords:
+    - vpa
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: vpa-crds
+    sources:
+    - https://github.com/FairwindsOps/charts/blob/master/stable/vpa/
+    - https://github.com/FairwindsOps/charts/tree/master/stable/vpa/crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/vpa-crds-4.7.2/vpa-crds-4.7.2.tgz
+    version: 4.7.2
   wiremind-baremetal:
   - apiVersion: v2
     appVersion: 3.18.0
@@ -17254,4 +17275,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-06-23T18:10:30.621034779Z"
+generated: "2025-06-24T10:43:31.364106058Z"
