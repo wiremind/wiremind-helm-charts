@@ -49,6 +49,12 @@ service:
   # nodePort: 30100
   annotations: {}
 
+## Extra arguments to be set on the clamav container
+## e.g:
+## extraArgs:
+##   - --debug
+extraArgs: []
+
 ## Extra environment variables to be set on the container
 ## e.g:
 ## extraEnvVars:
@@ -186,6 +192,24 @@ tolerations: []
 
 affinity: {}
 
+## Topology spread constraints for pod distribution
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+topologySpreadConstraints: []
+  # - maxSkew: 1
+  #   topologyKey: topology.kubernetes.io/zone
+  #   whenUnsatisfiable: ScheduleAnyway
+  #   labelSelector:
+  #     matchLabels:
+  #       app.kubernetes.io/name: clamav
+  #       app.kubernetes.io/instance: RELEASE-NAME
+  # - maxSkew: 1
+  #   topologyKey: kubernetes.io/hostname
+  #   whenUnsatisfiable: DoNotSchedule
+  #   labelSelector:
+  #     matchLabels:
+  #       app.kubernetes.io/name: clamav
+  #       app.kubernetes.io/instance: RELEASE-NAME
+
 startupProbe:
   initialDelaySeconds: 60
   periodSeconds: 30
@@ -225,6 +249,117 @@ extraVolumes: []
 ## extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Clam container(s)
 ##
 extraVolumeMounts: []
+
+## Metrics configuration for ClamAV exporter
+metrics:
+  ## Enable metrics collection
+  enabled: false
+
+  ## ClamAV exporter image configuration
+  image:
+    repository: sergeymakinen/clamav_exporter
+    tag: "v2.1.2"
+    pullPolicy: IfNotPresent
+
+  ## Port for metrics endpoint
+  port: 9906
+
+  ## Path for metrics endpoint
+  path: /metrics
+
+  ## Extra arguments for the exporter
+  extraArgs: []
+    # - --log.level=debug
+    # - --log.format=json
+    # - --clamav.timeout=10s
+    # - --clamav.retries=3
+
+  ## Extra environment variables for the exporter
+  extraEnvVars: []
+    # - name: LOG_LEVEL
+    #   value: "info"
+
+  ## Resource limits and requests for the exporter
+  resources: {}
+    # limits:
+    #   cpu: 100m
+    #   memory: 64Mi
+    # requests:
+    #   cpu: 50m
+    #   memory: 32Mi
+
+  ## Security context for the exporter container
+  securityContext:
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    privileged: false
+    capabilities:
+      drop:
+        - ALL
+
+  ## Liveness probe configuration for the exporter
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 3
+
+  ## Readiness probe configuration for the exporter
+  readinessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+
+  ## ServiceMonitor configuration for Prometheus monitoring
+  serviceMonitor:
+    ## Enable ServiceMonitor creation
+    enabled: false
+
+    ## Namespace where ServiceMonitor should be created
+    ## If not set, uses the same namespace as the chart
+    namespace: ""
+
+    ## Additional labels for ServiceMonitor
+    additionalLabels: {}
+      # prometheus: kube-prometheus
+      # release: prometheus
+
+    ## ServiceMonitor annotations
+    annotations: {}
+
+    ## Scrape interval for Prometheus
+    interval: 30s
+
+    ## Scrape timeout for Prometheus
+    scrapeTimeout: 10s
+
+    ## Path to scrape metrics from
+    path: /metrics
+
+    ## Port name to scrape metrics from
+    portName: http-metrics
+
+    ## Metric relabeling configurations
+    metricRelabelings: []
+      # - sourceLabels: [__name__]
+      #   regex: 'clamav_.*'
+      #   action: keep
+
+    ## Relabeling configurations
+    relabelings: []
+      # - sourceLabels: [__meta_kubernetes_pod_name]
+      #   separator: ;
+      #   regex: ^(.*)$
+      #   targetLabel: instance
+      #   replacement: $1
+      #   action: replace
+
+    ## HonorLabels chooses the metric's labels on collisions with target labels
+    honorLabels: false
+
+    ## HonorTimestamps controls whether Prometheus respects the timestamps present in scraped data
+    honorTimestamps: true
 
 ## Clamav data dir persistence
 persistentVolume:
