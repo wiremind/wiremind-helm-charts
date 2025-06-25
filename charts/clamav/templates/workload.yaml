@@ -59,6 +59,10 @@ spec:
           image: {{ .Values.image.repository }}:{{ .Values.image.tag | default (printf "%s_base" .Chart.AppVersion) }}
           command:
             - {{ include "clamav.entrypoint" . }}
+          {{- with .Values.extraArgs }}
+          args:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- with .Values.extraEnvVars }}
           env:
@@ -118,6 +122,52 @@ spec:
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      {{- if .Values.metrics.enabled }}
+      initContainers:
+        - name: clamav-exporter
+          image: {{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy }}
+          restartPolicy: Always
+          args:
+            - --clamav.address=tcp://localhost:3310
+            - --web.listen-address=0.0.0.0:{{ .Values.metrics.port }}
+            - --web.telemetry-path={{ .Values.metrics.path }}
+            {{- with .Values.metrics.extraArgs }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- with .Values.metrics.extraEnvVars }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http-metrics
+              containerPort: {{ .Values.metrics.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.metrics.path }}
+              port: http-metrics
+            initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.metrics.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.metrics.path }}
+              port: http-metrics
+            initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
+          {{- with .Values.metrics.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.metrics.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -128,6 +178,10 @@ spec:
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
