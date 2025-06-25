@@ -1,10 +1,8 @@
 apiVersion: v2
 description: An Open-Source antivirus engine for detecting trojans, viruses, malware & other malicious threats. Using official docker image.
 name: clamav
-version: 3.7.0
+version: 3.7.1
 appVersion: "1.4.3"
-# XXX if you want to use metrics, you need to use kubeVersion >=1.29.0
-# kubeVersion: ">=1.29.0"
 home: https://www.clamav.net
 icon: https://www.clamav.net/assets/clamav-trademark.png
 sources:
