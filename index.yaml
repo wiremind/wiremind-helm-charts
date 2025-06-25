@@ -2089,6 +2089,26 @@ entries:
     version: 0.2.2
   clamav:
   - apiVersion: v2
+    appVersion: 1.4.3
+    created: "2025-06-25T20:11:21.208694005Z"
+    description: An Open-Source antivirus engine for detecting trojans, viruses, malware
+      & other malicious threats. Using official docker image.
+    digest: 8811b23c2e8621f805d9eb4a1019c89e98b9ec53fee3b31f7cb39f5258f3ff53
+    home: https://www.clamav.net
+    icon: https://www.clamav.net/assets/clamav-trademark.png
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: clamav
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/clamav
+    - https://hub.docker.com/r/clamav/clamav
+    - https://github.com/Cisco-Talos/clamav-docker
+    - https://github.com/Cisco-Talos/clamav
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/clamav-3.7.0/clamav-3.7.0.tgz
+    version: 3.7.0
+  - apiVersion: v2
     appVersion: 1.4.1
     created: "2025-05-21T16:45:35.292646597Z"
     description: An Open-Source antivirus engine for detecting trojans, viruses, malware
@@ -17275,4 +17295,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-06-24T10:43:31.364106058Z"
+generated: "2025-06-25T20:11:21.209591396Z"
