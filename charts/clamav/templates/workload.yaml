@@ -122,12 +122,10 @@ spec:
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-      {{- if .Values.metrics.enabled }}
-      initContainers:
+        {{- if .Values.metrics.enabled }}
         - name: clamav-exporter
           image: {{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy }}
-          restartPolicy: Always
           args:
             - --clamav.address=tcp://localhost:3310
             - --web.listen-address=0.0.0.0:{{ .Values.metrics.port }}
@@ -167,7 +165,7 @@ spec:
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-      {{- end }}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
