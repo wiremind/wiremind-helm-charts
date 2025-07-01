@@ -1,0 +1,174 @@
+{{- if .Values.gitlabRunnersConfig.enabled }}
+
+{{- range $name, $def := .Values.gitlabRunnersConfig.definitions }}
+
+{{- if or (not (hasKey $def "enabled")) $def.enabled }}
+
+{{- $common := ternary $.Values.gitlabRunnersConfig.common.config.runner (dict) $.Values.gitlabRunnersConfig.common.enabled }}
+{{- $override := (get (get $def "config" | default dict) "runner" | default dict) }}
+{{- $cfg := mergeOverwrite $common $override }}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $name | trunc 63 | trimSuffix "-" }}
+  namespace: {{ $.Release.Name }}
+  labels:
+    {{- include "platform-namespace-core.labels" $ | nindent 4 }}
+data:
+  config.toml: |-
+    [[runners]]
+      executor = {{ $cfg.executor | quote }}
+      request_concurrency = {{ $cfg.request_concurrency }}
+      output_limit = {{ $cfg.output_limit }} # KB
+
+      {{- if $cfg.environment }}
+      environment = [{{- with $cfg.environment.auth_config -}}
+        {{ printf "%s=%s" "DOCKER_AUTH_CONFIG" (toJson .) | quote }}
+      {{- end }}]
+      {{- end }}
+
+      {{- if $cfg.feature_flags }}
+      [runners.feature_flags]
+      {{- range $key, $value := $cfg.feature_flags }}
+        {{ $key }} = {{ $value }}
+      {{- end }}
+      {{- end }}
+
+      [runners.kubernetes]
+        image = {{ $cfg.kubernetes.image | quote }}
+        privileged = {{ $cfg.kubernetes.privileged }}
+        allow_privilege_escalation = {{ $cfg.kubernetes.allow_privilege_escalation }}
+        service_account = {{ $cfg.kubernetes.service_account | quote }}
+        priority_class_name = {{ $cfg.kubernetes.priority_class_name | quote }}
+        poll_timeout = {{ $cfg.kubernetes.poll_timeout }}
+
+        cpu_request = {{ $cfg.kubernetes.cpu_request | quote }}
+        cpu_request_overwrite_max_allowed = {{ $cfg.kubernetes.cpu_request_overwrite_max_allowed | quote }}
+        cpu_limit = {{ $cfg.kubernetes.cpu_limit | quote }}
+        cpu_limit_overwrite_max_allowed = {{ $cfg.kubernetes.cpu_limit_overwrite_max_allowed | quote }}
+
+        memory_request = {{ $cfg.kubernetes.memory_request | quote }}
+        memory_request_overwrite_max_allowed = {{ $cfg.kubernetes.memory_request_overwrite_max_allowed | quote }}
+        memory_limit = {{ $cfg.kubernetes.memory_limit | quote }}
+        memory_limit_overwrite_max_allowed = {{ $cfg.kubernetes.memory_limit_overwrite_max_allowed | quote }}
+
+        service_cpu_request = {{ $cfg.kubernetes.service_cpu_request | quote }}
+        service_cpu_request_overwrite_max_allowed = {{ $cfg.kubernetes.service_cpu_request_overwrite_max_allowed | quote }}
+        service_cpu_limit = {{ $cfg.kubernetes.service_cpu_limit | quote }}
+        service_cpu_limit_overwrite_max_allowed = {{ $cfg.kubernetes.service_cpu_limit_overwrite_max_allowed | quote }}
+
+        service_memory_request = {{ $cfg.kubernetes.service_memory_request | quote }}
+        service_memory_request_overwrite_max_allowed = {{ $cfg.kubernetes.service_memory_request_overwrite_max_allowed | quote }}
+        service_memory_limit = {{ $cfg.kubernetes.service_memory_limit | quote }}
+        service_memory_limit_overwrite_max_allowed = {{ $cfg.kubernetes.service_memory_limit_overwrite_max_allowed | quote }}
+
+        helper_cpu_request = {{ $cfg.kubernetes.helper_cpu_request | quote }}
+        helper_cpu_request_overwrite_max_allowed = {{ $cfg.kubernetes.helper_cpu_request_overwrite_max_allowed | quote }}
+        helper_cpu_limit = {{ $cfg.kubernetes.helper_cpu_limit | quote }}
+        helper_cpu_limit_overwrite_max_allowed = {{ $cfg.kubernetes.helper_cpu_limit_overwrite_max_allowed | quote }}
+
+        helper_memory_request = {{ $cfg.kubernetes.helper_memory_request | quote }}
+        helper_memory_request_overwrite_max_allowed = {{ $cfg.kubernetes.helper_memory_request_overwrite_max_allowed | quote }}
+        helper_memory_limit = {{ $cfg.kubernetes.helper_memory_limit | quote }}
+        helper_memory_limit_overwrite_max_allowed = {{ $cfg.kubernetes.helper_memory_limit_overwrite_max_allowed | quote }}
+
+        {{- if $cfg.kubernetes.pod_labels }}
+        [runners.kubernetes.pod_labels]
+        {{- range $key, $value := $cfg.kubernetes.pod_labels }}
+          {{ $key | quote }} = {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+
+        {{- if $cfg.kubernetes.pod_annotations }}
+        [runners.kubernetes.pod_annotations]
+        {{- range $key, $value := $cfg.kubernetes.pod_annotations }}
+          {{ $key | quote }} = {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+
+        {{- range $tolName, $tol := $cfg.kubernetes.node_tolerations }}
+          {{- if or (not (hasKey $tol "enabled")) $tol.enabled }}
+        [[runners.kubernetes.node_tolerations]]
+          key = {{ $tol.key | quote }}
+          operator = {{ $tol.operator | quote }}
+          {{- if hasKey $tol "value" }}
+          value = {{ $tol.value | quote }}
+          {{- end }}
+          effect = {{ $tol.effect | quote }}
+          {{- end }}
+        {{- end }}
+
+        {{- if $cfg.kubernetes.node_selector }}
+        [runners.kubernetes.node_selector]
+        {{- range $key, $value := $cfg.kubernetes.node_selector }}
+          {{ $key | quote }} = {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+
+        {{- if $cfg.kubernetes.volumes }}
+          {{- range $host_path := $cfg.kubernetes.volumes.host_path }}
+        [[runners.kubernetes.volumes.host_path]]
+          name = {{ $host_path.name | quote }}
+          mount_path = {{ $host_path.mount_path | quote }}
+          host_path = {{ $host_path.host_path | quote }}
+          {{- if hasKey $host_path "read_only" }}
+          read_only = {{ $host_path.read_only }}
+          {{- end }}
+          {{- end }}
+        {{- end }}
+
+        {{- if $cfg.kubernetes.affinity }}
+        [runners.kubernetes.affinity]
+
+          {{- if $cfg.kubernetes.affinity.pod_anti_affinity }}
+          [runners.kubernetes.affinity.pod_anti_affinity]
+            [[runners.kubernetes.affinity.pod_anti_affinity.preferred_during_scheduling_ignored_during_execution]]
+              weight = {{ $cfg.kubernetes.affinity.pod_anti_affinity.preferred_during_scheduling_ignored_during_execution.weight }}
+              [runners.kubernetes.affinity.pod_anti_affinity.preferred_during_scheduling_ignored_during_execution.pod_affinity_term]
+                topology_key = {{ $cfg.kubernetes.affinity.pod_anti_affinity.preferred_during_scheduling_ignored_during_execution.pod_affinity_term.topology_key | quote }}
+                [runners.kubernetes.affinity.pod_anti_affinity.preferred_during_scheduling_ignored_during_execution.pod_affinity_term.label_selector]
+                  {{- range $match_expression := $cfg.kubernetes.affinity.pod_anti_affinity.preferred_during_scheduling_ignored_during_execution.pod_affinity_term.label_selector.match_expressions }}
+                  [[runners.kubernetes.affinity.pod_anti_affinity.preferred_during_scheduling_ignored_during_execution.pod_affinity_term.label_selector.match_expressions]]
+                    key = {{ $match_expression.key | quote }}
+                    operator = {{ $match_expression.operator | quote }}
+                    values = {{ $match_expression.values | toJson }}
+                  {{- end }}
+          {{- end }}
+
+          {{- if $cfg.kubernetes.affinity.node_affinity }}
+          [runners.kubernetes.affinity.node_affinity]
+            {{- if $cfg.kubernetes.affinity.node_affinity.preferred_during_scheduling_ignored_during_execution }}
+            [[runners.kubernetes.affinity.node_affinity.preferred_during_scheduling_ignored_during_execution]]
+              weight = {{ $cfg.kubernetes.affinity.node_affinity.preferred_during_scheduling_ignored_during_execution.weight }}
+              [runners.kubernetes.affinity.node_affinity.preferred_during_scheduling_ignored_during_execution.preference]
+                {{- range $match_expression := $cfg.kubernetes.affinity.node_affinity.preferred_during_scheduling_ignored_during_execution.preference.match_expressions }}
+                [[runners.kubernetes.affinity.node_affinity.preferred_during_scheduling_ignored_during_execution.preference.match_expressions]]
+                  key = {{ $match_expression.key | quote }}
+                  operator = {{ $match_expression.operator | quote }}
+                  values = {{ $match_expression.values | toJson }}
+                {{- end }}
+            {{- end }}
+            {{- if $cfg.kubernetes.affinity.node_affinity.required_during_scheduling_ignored_during_execution }}
+            [runners.kubernetes.affinity.node_affinity.required_during_scheduling_ignored_during_execution]
+              {{- range $term := $cfg.kubernetes.affinity.node_affinity.required_during_scheduling_ignored_during_execution.node_selector_terms }}
+              [[runners.kubernetes.affinity.node_affinity.required_during_scheduling_ignored_during_execution.node_selector_terms]]
+                {{- range $expr := $term.match_expressions }}
+                [[runners.kubernetes.affinity.node_affinity.required_during_scheduling_ignored_during_execution.node_selector_terms.match_expressions]]
+                  key = {{ $expr.key | quote }}
+                  operator = {{ $expr.operator | quote }}
+                  values = {{ $expr.values | toJson }}
+                {{- end }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+
+        {{- end }}
+
+---
+
+{{- end }}
+
+{{- end }}
+
+{{- end }}

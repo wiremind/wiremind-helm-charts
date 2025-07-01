@@ -1,0 +1,36 @@
+{{- range $defName, $def := .Values.rbac.definitions }}
+
+{{- if and (or (not (hasKey $def "enabled")) $def.enabled) $def.namespaced }}
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ printf "%s-%s" $.Release.Name $defName }}
+  namespace: {{ $.Release.Name }}
+  labels:
+    {{- include "platform-namespace-core.labels" $ | nindent 4 }}
+{{- if $def.namespaced.rules }}
+rules:
+  {{- range $rule := $def.namespaced.rules }}
+  - {{- if $rule.apiGroups }}
+    apiGroups:
+      {{- toYaml $rule.apiGroups | nindent 6 }}
+    {{- end }}
+    {{- if $rule.resources }}
+    resources:
+      {{- toYaml $rule.resources | nindent 6 }}
+    {{- end }}
+    {{- if $rule.nonResourceURLs }}
+    nonResourceURLs:
+      {{- toYaml $rule.nonResourceURLs | nindent 6 }}
+    {{- end }}
+    verbs:
+      {{- toYaml (or $rule.verbs $def.namespaced.verbs) | nindent 6 }}
+  {{- end }}
+{{- end }}
+
+---
+
+{{- end }}
+
+{{- end }}

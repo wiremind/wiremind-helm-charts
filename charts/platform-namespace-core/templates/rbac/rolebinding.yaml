@@ -1,0 +1,33 @@
+{{- range $defName, $def := .Values.rbac.definitions }}
+
+{{- if and (or (not (hasKey $def "enabled")) $def.enabled) $def.namespaced }}
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ printf "%s-%s" $.Release.Name $defName }}
+  namespace: {{ $.Release.Name }}
+  labels:
+    {{- include "platform-namespace-core.labels" $ | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ printf "%s-%s" $.Release.Name $defName }}
+subjects:
+  {{- if and
+    (or (not (hasKey $def "serviceAccount"))
+        (or (not (hasKey $def.serviceAccount "create")) $def.serviceAccount.create))
+  }}
+  - kind: ServiceAccount
+    name: {{ include "platform-namespace-core.serviceAccountName" (dict "def" $def "defName" $defName) }}
+    namespace: {{ $.Release.Name }}
+  {{- end }}
+  {{- with $def.namespaced.subjects }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+
+---
+
+{{- end }}
+
+{{- end }}
