@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/name: 'cert-manager'
     app.kubernetes.io/instance: 'cert-manager'
     # Generated labels
-    app.kubernetes.io/version: "v1.17.3"
+    app.kubernetes.io/version: "v1.18.1"
 spec:
   group: cert-manager.io
   names:
@@ -89,10 +89,6 @@ spec:
                   description: |-
                     Defines extra output formats of the private key and signed certificate chain
                     to be written to this Certificate's target Secret.
-
-                    This is a Beta Feature enabled by default. It can be disabled with the
-                    `--feature-gates=AdditionalCertificateOutputFormats=false` option set on both
-                    the controller and webhook components.
                   type: array
                   items:
                     description: |-
@@ -296,7 +292,7 @@ spec:
                             `LegacyRC2`: Deprecated. Not supported by default in OpenSSL 3 or Java 20.
                             `LegacyDES`: Less secure algorithm. Use this option for maximal compatibility.
                             `Modern2023`: Secure algorithm. Use this option in case you have to always use secure algorithms
-                            (eg. because of company policy). Please note that the security of the algorithm is not that important
+                            (e.g., because of company policy). Please note that the security of the algorithm is not that important
                             in reality, because the unencrypted certificate and private key are also stored in the Secret.
                           type: string
                           enum:
@@ -449,7 +445,11 @@ spec:
                         to await user intervention.
                         If set to `Always`, a private key matching the specified requirements
                         will be generated whenever a re-issuance occurs.
-                        Default is `Never` for backward compatibility.
+                        Default is `Always`.
+                        The default was changed from `Never` to `Always` in cert-manager >=v1.18.0.
+                        The new default can be disabled by setting the
+                        `--feature-gates=DefaultPrivateKeyRotationPolicyAlways=false` option on
+                        the controller component.
                       type: string
                       enum:
                         - Never
@@ -509,8 +509,7 @@ spec:
                     revisions exceeds this number.
 
                     If set, revisionHistoryLimit must be a value of `1` or greater.
-                    If unset (`nil`), revisions will not be garbage collected.
-                    Default value is `nil`.
+                    Default value is `1`.
                   type: integer
                   format: int32
                 secretName:
@@ -539,6 +538,21 @@ spec:
                       type: object
                       additionalProperties:
                         type: string
+                signatureAlgorithm:
+                  description: |-
+                    Signature algorithm to use.
+                    Allowed values for RSA keys: SHA256WithRSA, SHA384WithRSA, SHA512WithRSA.
+                    Allowed values for ECDSA keys: ECDSAWithSHA256, ECDSAWithSHA384, ECDSAWithSHA512.
+                    Allowed values for Ed25519 keys: PureEd25519.
+                  type: string
+                  enum:
+                    - SHA256WithRSA
+                    - SHA384WithRSA
+                    - SHA512WithRSA
+                    - ECDSAWithSHA256
+                    - ECDSAWithSHA384
+                    - ECDSAWithSHA512
+                    - PureEd25519
                 subject:
                   description: |-
                     Requested set of X509 certificate subject attributes.
