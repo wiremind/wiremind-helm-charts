@@ -1,0 +1,23 @@
+{{- if .Values.priorityClasses.create }}
+
+{{- range $name, $cfg := .Values.priorityClasses.definitions }}
+
+{{- if (hasKey $cfg "enabled" | ternary $cfg.enabled true) }}
+
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "platform-cluster-core.labels" $ | nindent 4 }}
+value: {{ printf "%d" (int $cfg.value) }}
+globalDefault: {{ $cfg.globalDefault | default false }}
+description: {{ $cfg.description | quote }}
+
+---
+
+{{- end }}
+
+{{- end }}
+
+{{- end }}

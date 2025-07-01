@@ -1,0 +1,11 @@
+namespaces:
+  create: false
+  definitions: {}
+
+priorityClasses:
+  create: false
+  definitions: {}
+
+rbac:
+  create: false
+  definitions: {}

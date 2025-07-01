@@ -1,0 +1,37 @@
+{{- if .Values.rbac.create }}
+
+{{- range $groupName, $groupConfig := .Values.rbac.definitions }}
+
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ template "platform-cluster-core.fullname" $ }}-{{ $groupName }}
+  labels:
+    {{- include "platform-cluster-core.labels" $ | nindent 4 }}
+rules:
+  {{- range $groupRule := $groupConfig.rules }}
+    {{- if hasKey $groupRule "apiGroups" }}
+  - apiGroups:
+      {{- toYaml $groupRule.apiGroups | nindent 6 }}
+    {{- end }}
+
+    {{- if hasKey $groupRule "resources" }}
+    resources:
+      {{- toYaml $groupRule.resources | nindent 6 }}
+    {{- end }}
+
+    {{- if hasKey $groupRule "nonResourceURLs" }}
+  - nonResourceURLs:
+      {{- toYaml $groupRule.nonResourceURLs | nindent 6 }}
+    {{- end }}
+
+    verbs:
+      {{- include "platform-cluster-core.verbs" (dict "groupRule" $groupRule "groupConfigVerbs" $groupConfig.verbs) | nindent 6 }}
+
+  {{- end }}
+
+---
+
+{{- end }}
+
+{{- end }}
