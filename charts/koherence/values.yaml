@@ -23,7 +23,9 @@ containerSecurityContext:
   allowPrivilegeEscalation: true
 
 provider:
-  secret: {}
+  secret:
+    create: true
+    data: {}
     # Exemple for Openstack
     # OS_AUTH_URL: "https://dunno.org/"
     # OS_DOMAIN_ID: "default"
