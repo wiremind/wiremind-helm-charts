@@ -1,6 +1,8 @@
 nameOverride: ""
 fullnameOverride: ""
 
+createSecrets: true
+
 image:
   repository: docker.wiremind.fr/wiremind/devops/cluster-manager
   pullPolicy: "IfNotPresent"
