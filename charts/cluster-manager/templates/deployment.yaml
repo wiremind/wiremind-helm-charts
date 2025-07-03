@@ -58,7 +58,7 @@ spec:
           {{- if $commandDict.secretEnvVars }}
           envFrom:
             - secretRef:
-                {{- if .Values.createSecrets }}
+                {{- if $.Values.createSecrets }}
                 name: {{ include "cluster-manager.fullname" $ }}-{{ $formattedCommandKey }}
                 {{- else }}
                 name: {{ $commandDict.secretEnvVars.name }}
