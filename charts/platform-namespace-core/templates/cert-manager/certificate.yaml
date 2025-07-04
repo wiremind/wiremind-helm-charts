@@ -1,0 +1,31 @@
+{{- if .Values.certManager.enabled }}
+
+{{- range $key, $cert := .Values.certManager.certificates }}
+
+{{- if $cert.enabled }}
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ printf "%s-%s.%s-tls" $key $.Release.Name $cert.domain }}
+  namespace: {{ $.Release.Name }}
+  labels:
+    {{- include "platform-namespace-core.labels" $ | nindent 4 }}
+spec:
+  secretName: {{ printf "%s-%s.%s-tls" $key $.Release.Name $cert.domain }}
+  dnsNames:
+    {{- range $dnsName := $cert.dnsNames }}
+    - {{ tpl $dnsName $ | quote }}
+    {{- end }}
+  issuerRef:
+    name: {{ $cert.issuerName }}
+    kind: ClusterIssuer
+    group: cert-manager.io
+
+---
+
+{{- end }}
+
+{{- end }}
+
+{{- end }}

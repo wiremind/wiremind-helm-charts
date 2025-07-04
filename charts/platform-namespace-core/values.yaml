@@ -1,0 +1,51 @@
+certManager:
+  enabled: false
+  certificates:
+    wildcard:
+      enabled: false
+      issuerName: example
+      domain: example.com
+      dnsNames:
+        - "*.{{ .Release.Name }}.{{ .Values.certManager.certificates.wildcard.domain }}"
+
+externalSecrets:
+  enabled: false
+  provider:
+    name: ""
+    secretName: "credentials"
+    secretNamespace: "default"
+    hostAPI: "https://example.com"
+  clusterSecretStore: {}
+  externalSecret: {}
+
+gitlabRunnersConfig:
+  enabled: false
+  common:
+    enabled: false
+    config: {}
+  definitions:
+    gitlab-runner-example:
+      enabled: false
+      config: {}
+
+gitlabRunnerCommon: &gitlabRunnerCommon
+  enabled: false
+
+  runners:
+    configPath: "gitlab-runner-example"
+
+gitlab-runner-deploy:
+  <<: *gitlabRunnerCommon
+
+gitlab-runner-readonly:
+  <<: *gitlabRunnerCommon
+
+namespace:
+  create: false
+  labels: {}
+  annotations: {}
+
+rbac:
+  create: false
+  group: example
+  definitions: {}
