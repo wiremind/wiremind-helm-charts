@@ -114,7 +114,11 @@ spec:
         {{- range $secretFileKey, $secretFile := default dict $commandDict.secretFiles }}
         - name: {{ $secretFileKey | kebabcase }}
           secret:
+            {{- if $.Values.createSecrets }}
             secretName: {{ (include "cluster-manager.fullname" $) }}-{{ $formattedCommandKey }}-{{ $secretFileKey | kebabcase }}
+            {{- else }}
+            secretName: {{ $secretFileKey }}
+            {{- end }}
             items:
               - key: {{ $secretFile.filename }}
                 path: {{ $secretFile.filename }}
