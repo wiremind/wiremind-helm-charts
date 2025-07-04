@@ -15019,6 +15019,39 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/pghoard-0.6.1/pghoard-0.6.1.tgz
     version: 0.6.1
+  platform-namespace-core:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2025-07-04T14:59:56.57179964Z"
+    dependencies:
+    - alias: gitlab-runner-deploy
+      condition: gitlab-runner-deploy.enabled
+      name: gitlab-runner
+      repository: https://charts.gitlab.io
+      version: '*'
+    - alias: gitlab-runner-readonly
+      condition: gitlab-runner-readonly.enabled
+      name: gitlab-runner
+      repository: https://charts.gitlab.io
+      version: '*'
+    description: A Helm chart that defines core Kubernetes platform namespaced resources
+    digest: 73b1a05c8da79ea789dc6488001a9c9f663decf3c20c327c4551e7ab114a32a5
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/platform-namespace-core
+    icon: https://avatars.githubusercontent.com/u/9391624?s=200&v=4
+    keywords:
+    - platform
+    - namespace
+    - core
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: platform-namespace-core
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/platform-namespace-core
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/platform-namespace-core-0.1.0/platform-namespace-core-0.1.0.tgz
+    version: 0.1.0
   postgres-operator-crds:
   - annotations:
       category: DeveloperTools
@@ -17501,4 +17534,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-07-04T14:28:03.066100112Z"
+generated: "2025-07-04T14:59:56.57259381Z"
