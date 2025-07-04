@@ -1,0 +1,27 @@
+{{- if .Values.namespaces.create }}
+
+{{- range $name, $config := .Values.namespaces.definitions }}
+
+{{- if $config.enabled }}
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "platform-cluster-core.labels" $ | nindent 4 }}
+    {{- with $config.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with $config.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
+---
+
+{{- end }}
+
+{{- end }}
+
+{{- end }}
