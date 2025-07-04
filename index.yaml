@@ -3172,6 +3172,27 @@ entries:
       category: DeveloperTools
     apiVersion: v2
     appVersion: 1.14.0
+    created: "2025-07-04T14:28:03.065235175Z"
+    description: Helm chart to deploy cluster-manager
+    digest: a2a9cc9d905ab7976626e8232956b9f19e80ad3e2c883784c19eecbadb65a2ff
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cluster-manager
+    icon: https://avatars.githubusercontent.com/u/9391624?s=200&v=4
+    keywords:
+    - cluster
+    - manager
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: cluster-manager
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cluster-manager
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/cluster-manager-0.20.2/cluster-manager-0.20.2.tgz
+    version: 0.20.2
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 1.14.0
     created: "2025-07-03T17:31:43.035493278Z"
     description: Helm chart to deploy cluster-manager
     digest: a359c6b210602281081ef0f5111e13478d1faf8603db834221a41648cad9f29f
@@ -17480,4 +17501,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-07-03T17:31:43.036389856Z"
+generated: "2025-07-04T14:28:03.066100112Z"
