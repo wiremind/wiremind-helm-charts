@@ -44,6 +44,30 @@ namespace:
   create: false
   labels: {}
   annotations: {}
+  podSecurityLabels:
+    profile: baseline
+    definitions:
+      baseline:
+        pod-security.kubernetes.io/enforce: baseline
+        pod-security.kubernetes.io/enforce-version: latest
+        pod-security.kubernetes.io/audit: baseline
+        pod-security.kubernetes.io/audit-version: latest
+        pod-security.kubernetes.io/warn: baseline
+        pod-security.kubernetes.io/warn-version: latest
+      privileged:
+        pod-security.kubernetes.io/enforce: privileged
+        pod-security.kubernetes.io/enforce-version: latest
+        pod-security.kubernetes.io/audit: privileged
+        pod-security.kubernetes.io/audit-version: latest
+        pod-security.kubernetes.io/warn: privileged
+        pod-security.kubernetes.io/warn-version: latest
+      restricted:
+        pod-security.kubernetes.io/enforce: restricted
+        pod-security.kubernetes.io/enforce-version: latest
+        pod-security.kubernetes.io/audit: restricted
+        pod-security.kubernetes.io/audit-version: latest
+        pod-security.kubernetes.io/warn: restricted
+        pod-security.kubernetes.io/warn-version: latest
 
 rbac:
   create: false
