@@ -146,7 +146,11 @@ spec:
       {{- if .Values.configMap.enabled }}
       - name: karma-config
         configMap:
-          name: {{ .Release.Name }}-config
+        {{ if .Values.configMap.useFullname }}
+          name: {{ include "karma.fullname" . }}-config
+        {{ else }}
+          name: "{{ .Release.Name }}-config"
+        {{- end}}
       {{- end }}
       {{- if .Values.existingSecretConfig.enabled }}
       - name: karma-config

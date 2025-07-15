@@ -123,6 +123,7 @@ existingSecretConfig:
 ## to provide advanced configuration. NOTE, you must use port 8080!
 configMap:
   enabled: false
+  useFullname: false
   annotations: {}
   ## karma compatible YAML configuration
   # rawConfig:

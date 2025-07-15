@@ -16,6 +16,9 @@
                 },
                 "enabled": {
                     "type": "boolean"
+                },
+                "useFullname": {
+                    "type": "boolean"
                 }
             }
         },
