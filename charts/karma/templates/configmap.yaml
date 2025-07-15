@@ -11,7 +11,11 @@ metadata:
   annotations:
 {{ toYaml . | indent 4 }}
 {{- end }}
+{{ if .Values.configMap.useFullname }}
+  name: {{ include "karma.fullname" . }}-config
+{{ else }}
   name: "{{ .Release.Name }}-config"
+{{- end}}
   namespace: {{ .Release.Namespace }}
 data:
 {{- with .Values.configMap.aclsConfig }}
