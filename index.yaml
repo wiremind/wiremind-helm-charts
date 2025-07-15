@@ -15303,6 +15303,26 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/postgresql-8.7.0/postgresql-8.7.0.tgz
     version: 8.7.0
+  priorityclass:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2025-07-15T13:53:09.77312069Z"
+    description: A Helm chart that deploys Kubernetes PriorityClass resources
+    digest: 987a33fa417ee6c6937e9894d2717807ee87944bbcf3aaadc4436d1f02141206
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/priorityclass
+    icon: https://avatars.githubusercontent.com/u/9391624?s=200&v=4
+    keywords:
+    - priorityclass
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: priorityclass
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/priorityclass
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/priorityclass-0.1.0/priorityclass-0.1.0.tgz
+    version: 0.1.0
   prometheus-safety-exporter:
   - apiVersion: v2
     appVersion: 0.6.0
@@ -17584,4 +17604,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-07-15T09:58:59.09708897Z"
+generated: "2025-07-15T13:53:09.77543272Z"
