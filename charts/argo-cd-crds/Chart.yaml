@@ -1,0 +1,21 @@
+apiVersion: v2
+name: argo-cd-crds
+description: A Helm chart that deploys Argo CD CRD resources
+type: application
+version: 8.1.3
+appVersion: "8.1.3"
+icon: https://argo-cd.readthedocs.io/en/stable/assets/logo.png
+home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/argo-cd-crds
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/argo-cd-crds
+  - https://github.com/argoproj/argo-helm/tree/main/charts/argo-cd
+  - https://github.com/argoproj/argo-cd
+keywords:
+  - argoproj
+  - argocd
+  - gitops
+  - argo
+  - crds
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
