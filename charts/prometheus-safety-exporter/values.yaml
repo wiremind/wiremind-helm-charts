@@ -44,10 +44,10 @@ safety:
   resources:
     requests:
       cpu: 1m
-      memory: 100Mi
+      memory: 50Mi
     limits:
       cpu: 2
-      memory: 300Mi
+      memory: 500Mi
 
 jsonExporter:
   image:

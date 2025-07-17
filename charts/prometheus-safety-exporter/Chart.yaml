@@ -2,8 +2,8 @@ apiVersion: v2
 name: prometheus-safety-exporter
 description: A Helm chart for Kubernetes
 type: application
-version: 0.5.2
-appVersion: "0.6.0"  # version of json_exporter
+version: 0.5.3
+appVersion: "0.7.0"  # version of json_exporter
 maintainers:
   - name: Wiremind
     url: https://github.com/wiremind/wiremind-helm-charts
