@@ -8,15 +8,20 @@ certManager:
       dnsNames:
         - "*.{{ .Release.Name }}.{{ .Values.certManager.certificates.wildcard.domain }}"
 
-externalSecrets:
+clusterSecretStore:
   enabled: false
   provider:
-    name: ""
-    secretName: "credentials"
-    secretNamespace: "default"
-    hostAPI: "https://example.com"
-  clusterSecretStore: {}
-  externalSecret: {}
+    # Currently only "infisical" is supported
+    name: "infisical"
+    # Infisical API endpoint
+    hostAPI: "https://eu.infisical.com"
+    # Kubernetes secret containing Infisical Universal Auth credentials
+    secretName: "infisical-credentials"
+    secretNamespace: "external-secrets"
+    # Infisical project configuration
+    projectSlug: "my-project"
+    environmentSlug: "prod"
+    secretsPath: "/"
 
 gitlabRunnersConfig:
   enabled: false
@@ -44,6 +49,8 @@ namespace:
   create: false
   labels: {}
   annotations: {}
+  reloader:
+    enabled: true
   podSecurityLabels:
     profile: baseline
     definitions:
