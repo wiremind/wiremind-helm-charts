@@ -6860,6 +6860,62 @@ entries:
   elasticsearch-cluster:
   - apiVersion: v2
     appVersion: 8.18.0
+    created: "2025-07-24T15:42:05.588955031Z"
+    dependencies:
+    - alias: es-data-hot
+      condition: es-data-hot.enabled
+      name: elasticsearch
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    - alias: es-data-warm
+      condition: es-data-warm.enabled
+      name: elasticsearch
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    - alias: es-data-cold
+      condition: es-data-cold.enabled
+      name: elasticsearch
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    - alias: es-master
+      condition: es-master.enabled
+      name: elasticsearch
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    - alias: es-ingest
+      condition: es-ingest.enabled
+      name: elasticsearch
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    - condition: kibana.enabled
+      name: kibana
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    - condition: prometheus-elasticsearch-exporter.enabled
+      name: prometheus-elasticsearch-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: '*'
+    - condition: cerebro.enabled
+      name: cerebro
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    description: Elasticsearch cluster - a hat chart for several elasticsearch charts
+    digest: 74d958be4ff9ead04cce37396fa6492135ff7916c4a9907581f2ec349b3af53a
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch-cluster
+    icon: https://static-www.elastic.co/v3/assets/bltefdd0b53724fa2ce/blt5ebe80fb665aef6b/5ea8c8f26b62d4563b6ecec2/brand-elasticsearch-220x130.svg
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: elasticsearch-cluster
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch-cluster
+    - https://github.com/elastic/helm-charts/tree/master/elasticsearch
+    - https://github.com/elastic/elasticsearch
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/elasticsearch-cluster-4.4.5/elasticsearch-cluster-4.4.5.tgz
+    version: 4.4.5
+  - apiVersion: v2
+    appVersion: 8.18.0
     created: "2025-05-09T11:37:21.27064802Z"
     dependencies:
     - alias: es-data-hot
@@ -17669,4 +17725,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-07-24T10:51:55.752945099Z"
+generated: "2025-07-24T15:42:05.589813976Z"
