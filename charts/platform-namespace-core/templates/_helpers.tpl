@@ -63,3 +63,33 @@ Usage: {{ include "platform-namespace-core.serviceAccountName" (dict "def" $def 
 {{ printf "%s" $defName }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Validate the platform-namespace-core chart.
+*/}}
+{{- define "platform-namespace-core.validate" -}}
+{{- $errors := list -}}
+{{ if .Values.namespace.create }}
+{{- if not (hasKey .Values.namespace.labels "project") }}
+{{- $errors = append $errors (printf "Namespace label 'project' must be defined for platform-namespace-core") -}}
+{{- end -}}
+{{- if not (hasKey .Values.namespace.labels "product") }}
+{{- $errors = append $errors (printf "Namespace label 'product' must be defined for platform-namespace-core") -}}
+{{- end -}}
+{{- end -}}
+
+{{- if gt (len $errors) 0 }}
+{{- fail (join "\n" $errors) }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+ClusterSecretStore name definition.
+*/}}
+{{- define "platform-namespace-core.cluster-secret-store.name" -}}
+{{- if eq .Values.namespace.labels.project "platform" -}}
+{{- printf "%s-platform-%s" .Values.clusterSecretStore.provider.name .Release.Name -}}
+{{- else -}}
+{{- printf "%s-%s" .Values.clusterSecretStore.provider.name .Release.Name -}}
+{{- end -}}
+{{- end -}}

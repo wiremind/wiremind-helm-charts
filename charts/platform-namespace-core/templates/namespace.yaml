@@ -9,6 +9,9 @@ metadata:
     {{- with .Values.namespace.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
+    {{- if .Values.namespace.reloader.enabled }}
+    reloader: enabled
+    {{- end }}
   {{- with .Values.namespace.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
