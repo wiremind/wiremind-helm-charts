@@ -4,13 +4,19 @@ installCRDs: true
 
 # Synchonize your values from external-secrets Helm Chart with the ones below
 crds:
+  # -- If true, create CRDs for Cluster External Secret.
   createClusterExternalSecret: true
+  # -- If true, create CRDs for Cluster Secret Store.
   createClusterSecretStore: true
+  # -- If true, create CRDs for Cluster Generator.
   createClusterGenerator: true
-  createPushSecret: true
+  # -- If true, create CRDs for Cluster Push Secret.
   createClusterPushSecret: true
+  # -- If true, create CRDs for Push Secret.
+  createPushSecret: true
   annotations: {}
   conversion:
+    # -- Conversion is disabled by default as we stopped supporting v1alpha1.
     enabled: false
 webhook:
   certManager:

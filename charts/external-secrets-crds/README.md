@@ -11,7 +11,7 @@ If the version of the CRDs changes, aka breaking changes (this doesn't happen ev
 **Do not forget to change APP_VERSION**
 
 ``` bash
-export APP_VERSION=0.16.0
+export APP_VERSION=0.17.0
 cd charts/external-secrets-crds
 helm repo add external-secrets-operator https://charts.external-secrets.io/
 helm pull external-secrets-operator/external-secrets --version $APP_VERSION
