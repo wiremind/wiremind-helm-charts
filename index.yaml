@@ -11153,6 +11153,18 @@ entries:
     version: 0.2.1
   external-secrets-crds:
   - apiVersion: v2
+    appVersion: 0.18.2
+    created: "2025-07-25T03:49:39.782475517Z"
+    description: A Helm chart to manage external-secrets CRDs
+    digest: 0b79ec3454451992d0ffef992f7156445a296e2df6cc73fb2a9e68bac5c8e1fd
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: external-secrets-crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/external-secrets-crds-0.18.2/external-secrets-crds-0.18.2.tgz
+    version: 0.18.2
+  - apiVersion: v2
     appVersion: 0.17.0
     created: "2025-07-25T03:37:42.621893397Z"
     description: A Helm chart to manage external-secrets CRDs
@@ -17737,4 +17749,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-07-25T03:37:42.623153738Z"
+generated: "2025-07-25T03:49:39.783354857Z"
