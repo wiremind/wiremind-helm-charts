@@ -159,7 +159,7 @@ data:
         echo "Updating kubernetes secret token"
         token=$(echo "$response_body" | jq -r '.token.value')
         token_base64=$(echo "$token" | base64 -w 0)
-        k8s_secret_put=$(printf \
+        k8s_secret_json=$(printf \
         '{
             "metadata": {
                 "name": "%s"
@@ -170,13 +170,13 @@ data:
         }' "$K8S_SECRET_NAME" "$token_base64" )
         response=$(curl -k --max-time 5 --silent --show-error \
             -w "%{http_code}" \
-            -X PUT \
+            -X PATCH \
             --cacert "$K8S_CA" \
             -H "Authorization: Bearer $K8S_BEARER" \
             -H "Accept: application/json" \
-            -H "Content-Type: application/json" \
+            -H "Content-Type: application/strategic-merge-patch+json" \
             "$K8S_URL/api/v1/namespaces/$K8S_NAMESPACE/secrets/$K8S_SECRET_NAME" \
-            -d "$k8s_secret_put"
+            -d "$k8s_secret_json"
         )
 
         http_code="${response: -3}"
@@ -262,7 +262,7 @@ data:
         # Avoid having same secret and deployment last update timestamp
         sleep 1
 
-        k8s_deployment_patch=$(printf \
+        k8s_deployment_json=$(printf \
         '{
             "spec": {
                 "template": {
@@ -282,7 +282,7 @@ data:
             -H "Accept: application/json" \
             -H "Content-Type: application/strategic-merge-patch+json" \
             "$K8S_URL/apis/apps/v1/namespaces/$K8S_NAMESPACE/deployments/$K8S_DEPLOYMENT_NAME?gracePeriodSeconds=0" \
-            -d "$k8s_deployment_patch"
+            -d "$k8s_deployment_json"
         )
 
         http_code="${response: -3}"
