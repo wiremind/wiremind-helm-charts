@@ -897,6 +897,27 @@ entries:
   cerebro:
   - apiVersion: v2
     appVersion: 0.9.4
+    created: "2025-07-25T11:15:14.981266108Z"
+    description: A Helm chart for Cerebro - a web admin tool to manage ElasticSearch
+    digest: 1199f8fc9cc15f59f544e8793f34a7673f049f9475375246be1ff3e0939a8046
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cerebro
+    icon: https://raw.githubusercontent.com/lmenezes/cerebro/main/public/img/logo.png
+    keywords:
+    - cerebro
+    - elasticsearch
+    - admin
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: cerebro
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cerebro
+    - https://github.com/lmenezes/cerebro-docker
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/cerebro-2.2.0/cerebro-2.2.0.tgz
+    version: 2.2.0
+  - apiVersion: v2
+    appVersion: 0.9.4
     created: "2024-08-16T11:16:57.246218673Z"
     description: A Helm chart for Cerebro - a web admin tool to manage ElasticSearch
     digest: 8be673a8b1598efedafe43cee1a696d302d5036b48d37bdd7ac342a774c2f1a7
@@ -17787,4 +17808,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-07-25T08:54:38.758548779Z"
+generated: "2025-07-25T11:15:14.982218305Z"
