@@ -8,15 +8,29 @@ certManager:
       dnsNames:
         - "*.{{ .Release.Name }}.{{ .Values.certManager.certificates.wildcard.domain }}"
 
-externalSecrets:
+clusterSecretStore:
   enabled: false
   provider:
-    name: ""
-    secretName: "credentials"
-    secretNamespace: "default"
-    hostAPI: "https://example.com"
-  clusterSecretStore: {}
-  externalSecret: {}
+    # Example configuration for AWS Provider
+    # Full documentation for all providers: https://external-secrets.io/latest/provider
+    aws:
+      service: SecretsManager
+      role: iam-role
+      region: eu-central-1
+      auth:
+        secretRef:
+          accessKeyIDSecretRef:
+            namespace: external-secrets
+            name: awssm-secret
+            key: access-key
+          secretAccessKeySecretRef:
+            namespace: external-secrets
+            name: awssm-secret
+            key: secret-access-key
+        jwt:
+          serviceAccountRef:
+            name: my-serviceaccount
+            namespace: sa-namespace
 
 gitlabRunnersConfig:
   enabled: false
@@ -44,6 +58,8 @@ namespace:
   create: false
   labels: {}
   annotations: {}
+  reloader:
+    enabled: true
   podSecurityLabels:
     profile: baseline
     definitions:
