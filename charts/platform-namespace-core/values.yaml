@@ -10,27 +10,8 @@ certManager:
 
 clusterSecretStore:
   enabled: false
-  provider:
-    # Example configuration for AWS Provider
-    # Full documentation for all providers: https://external-secrets.io/latest/provider
-    aws:
-      service: SecretsManager
-      role: iam-role
-      region: eu-central-1
-      auth:
-        secretRef:
-          accessKeyIDSecretRef:
-            namespace: external-secrets
-            name: awssm-secret
-            key: access-key
-          secretAccessKeySecretRef:
-            namespace: external-secrets
-            name: awssm-secret
-            key: secret-access-key
-        jwt:
-          serviceAccountRef:
-            name: my-serviceaccount
-            namespace: sa-namespace
+  # Full documentation for all providers: https://external-secrets.io/latest/provider
+  provider: {}
 
 gitlabRunnersConfig:
   enabled: false

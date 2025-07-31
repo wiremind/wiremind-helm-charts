@@ -2,7 +2,7 @@ apiVersion: v2
 name: platform-namespace-core
 description: A Helm chart that defines core Kubernetes platform namespaced resources
 type: application
-version: 0.3.1
+version: 0.3.2
 appVersion: "0.1.0"
 icon: https://avatars.githubusercontent.com/u/9391624?s=200&v=4
 home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/platform-namespace-core
