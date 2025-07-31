@@ -15278,6 +15278,38 @@ entries:
   platform-namespace-core:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2025-07-31T12:33:22.125365749Z"
+    dependencies:
+    - alias: gitlab-runner-deploy
+      condition: gitlab-runner-deploy.enabled
+      name: gitlab-runner
+      repository: https://charts.gitlab.io
+      version: '*'
+    - alias: gitlab-runner-readonly
+      condition: gitlab-runner-readonly.enabled
+      name: gitlab-runner
+      repository: https://charts.gitlab.io
+      version: '*'
+    description: A Helm chart that defines core Kubernetes platform namespaced resources
+    digest: 9d13909081bf2c650c03640f6b4396fc564b26310b957cd0f7346f2adb968b30
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/platform-namespace-core
+    icon: https://avatars.githubusercontent.com/u/9391624?s=200&v=4
+    keywords:
+    - platform
+    - namespace
+    - core
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: platform-namespace-core
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/platform-namespace-core
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/platform-namespace-core-0.3.2/platform-namespace-core-0.3.2.tgz
+    version: 0.3.2
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2025-07-31T12:05:00.75983994Z"
     dependencies:
     - alias: gitlab-runner-deploy
@@ -17928,4 +17960,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-07-31T12:05:00.760623389Z"
+generated: "2025-07-31T12:33:22.126198427Z"
