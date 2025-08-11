@@ -41,7 +41,7 @@ spec:
           {{- end }}
           containers:
             - name: job
-              image: {{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}
+              image: {{ include "druid.postgresql-s3-backup.image" . }}
               command: [ "/bin/bash" ]
               args: [ "/backup.sh" ]
               envFrom:
