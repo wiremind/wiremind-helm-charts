@@ -104,6 +104,17 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Create the image of the postgresql-s3-backup
+*/}}
+{{- define "druid.postgresql-s3-backup.image" -}}
+{{- if .Values.postgresql.image.registry }}
+{{- .Values.postgresql.image.registry }}/{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}
+{{- else }}
+{{- .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}
+{{- end }}
+{{- end -}}
+
+{{/*
 Create a default fully qualified configJobs component name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
@@ -238,14 +249,3 @@ Create the name of the router service account
   {{- end }}
 {{- end }}
 
-
-{{/*
-Create the name of the router service account
-*/}}
-{{- define "druid.postgresql-s3-backup.image" -}}
-{{- if .Values.postgresql.image.registry }}
-{{ .Values.postgresql.image.registry }}/{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}
-{{- else }}
-{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}
-{{- end }}
-{{- end -}}
