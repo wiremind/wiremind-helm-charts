@@ -3850,6 +3850,54 @@ entries:
   druid:
   - apiVersion: v2
     appVersion: 29.0.1
+    created: "2025-08-11T16:51:37.563177176Z"
+    dependencies:
+    - condition: zookeeper.enabled
+      name: zookeeper
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.0.0
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.6.14
+    - condition: mysql.enabled
+      name: mysql
+      repository: https://charts.bitnami.com/bitnami
+      version: 9.11.1
+    - condition: kube-hpa-scale-to-zero.enabled
+      name: kube-hpa-scale-to-zero
+      repository: https://machine424.github.io/kube-hpa-scale-to-zero
+      version: 0.4.0
+    - alias: extra-objects
+      condition: extra-objects.enabled
+      name: raw
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: 0.1.0
+    - condition: druid-tasks-exporter.enabled
+      name: druid-tasks-exporter
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: 0.3.0
+    description: Apache Druid is a high performance real-time analytics database.
+    digest: 4dbc83eb4bdbdbcc3b60fba5e5b9580c90c96a97d239e3be46b059b95184471c
+    home: https://druid.apache.org/
+    icon: https://druid.apache.org/img/favicon.png
+    keywords:
+    - olap
+    - database
+    - analytics
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: druid
+    sources:
+    - https://github.com/apache/druid
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/druid
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/druid-1.22.0/druid-1.22.0.tgz
+    version: 1.22.0
+  - apiVersion: v2
+    appVersion: 29.0.1
     created: "2025-04-02T12:13:57.51854524Z"
     dependencies:
     - condition: zookeeper.enabled
@@ -17981,4 +18029,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-08-07T08:38:32.869550415Z"
+generated: "2025-08-11T16:51:37.563942502Z"
