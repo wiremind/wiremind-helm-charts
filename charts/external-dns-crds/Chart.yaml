@@ -1,8 +1,8 @@
 apiVersion: v2
 name: external-dns-crds
 description: A Helm chart to manage external-dns CRDs
-version: 1.15.0
-appVersion: 0.15.0
+version: 1.17.0
+appVersion: 0.17.0
 maintainers:
   - name: Wiremind
     url: https://github.com/wiremind/wiremind-helm-charts
