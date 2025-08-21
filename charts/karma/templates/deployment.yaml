@@ -116,6 +116,8 @@ spec:
           {{- if .Values.kthxbyeSidecar.logJson }}
             - --log-json
           {{- end }}
+          resources:
+{{ toYaml .Values.kthxbyeSidecar.resources | indent 12 }}
           {{- if .Values.kthxbyeSidecar.securityContext }}
           securityContext:
 {{ toYaml .Values.kthxbyeSidecar.securityContext | indent 12 }}
