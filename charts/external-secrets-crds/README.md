@@ -11,8 +11,8 @@ If the version of the CRDs changes, aka breaking changes (this doesn't happen ev
 **Do not forget to change APP_VERSION**
 
 ``` bash
-export APP_VERSION=$(grep "appVersion:" Chart.yaml | cut -d' ' -f2)
 cd charts/external-secrets-crds
+export APP_VERSION=$(grep "appVersion:" Chart.yaml | cut -d' ' -f2)
 helm repo add external-secrets-operator https://charts.external-secrets.io/
 helm pull external-secrets-operator/external-secrets --version $APP_VERSION
 tar -xvf external-secrets-${APP_VERSION}.tgz
