@@ -50,6 +50,8 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  labels:
+{{ include "orc.labels" . | indent 4 }}
   name: {{ include "orc.name" . }}-manager-role
 rules:
 - apiGroups:
@@ -105,6 +107,8 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  labels:
+{{ include "orc.labels" . | indent 4 }}
   name: {{ include "orc.name" . }}-metrics-auth-role
 rules:
 - apiGroups:

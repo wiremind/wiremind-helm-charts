@@ -81,7 +81,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "orc.name" . }}-controller-manager
-      terminationGracePeriodSeconds: 10
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
   {{- with .Values.updateStrategy }}
   strategy:
     {{- toYaml . | nindent 4 }}

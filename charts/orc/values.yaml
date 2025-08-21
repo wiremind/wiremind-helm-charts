@@ -9,6 +9,8 @@ updateStrategy:
   rollingUpdate:
     maxUnavailable: 1
 
+terminationGracePeriodSeconds: 10
+
 priorityClassName: system-cluster-critical
 
 # nodeSelector: {}
