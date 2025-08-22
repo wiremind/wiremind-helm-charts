@@ -1,0 +1,16 @@
+apiVersion: v2
+annotations:
+  category: DeveloperTools
+name: clickhouse-operator-crds
+version: 0.25.3
+appVersion: "0.25.3"
+description: Manage clickhouse-operator CRDs
+keywords:
+  - clickhouse-operator
+  - crds
+sources:
+  - https://github.com/Altinity/clickhouse-operator/tree/master/deploy/helm
+  - https://github.com/Altinity/clickhouse-operator/tree/master/deploy/helm/clickhouse-operator/crds
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
