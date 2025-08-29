@@ -27,8 +27,12 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
+          {{- if .Values.configmap.enable }}
+          - configMapRef:
+              name: {{ .Values.configmap.name }}
+          {{- end }}
           - secretRef:
-              name: {{ include "marge.fullname" . }}-secret
+              name: {{ .Values.secret.name }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
           {{- end }}

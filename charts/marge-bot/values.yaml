@@ -53,7 +53,18 @@ tolerations: []
 
 affinity: {}
 
+configmap:
+  enable: false
+  name: marge-bot-env
+  content:
+    MARGE_GITLAB_URL: "gitlab.com"
+    MARGE_REBASE_REMOTELY: "false"
+    MARGE_GIT_TIMEOUT: "600s"
+    MARGE_BATCH: "false"
+
 secret:
+  create: true
+  name: marge-bot-secret
   gitlabUrl: "https://gitlab.com"
   # ssh private key must already be in base64 format, use this command on
   # yours: base64 -w0 <my_private_key>
