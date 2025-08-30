@@ -15110,6 +15110,20 @@ entries:
     version: 0.17.3
   orc:
   - apiVersion: v2
+    appVersion: v2.2.0
+    created: "2025-08-30T13:08:50.584283526Z"
+    description: A Helm chart for https://github.com/k-orc/openstack-resource-controller/
+    digest: 5c35967011f03b8ff19f5837caadb0bc17f0d33856568d6ebbaec03954393472
+    kubeVersion: '>=1.29.0-0'
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: orc
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/orc-0.1.8/orc-0.1.8.tgz
+    version: 0.1.8
+  - apiVersion: v2
     appVersion: 2.2.0
     created: "2025-08-21T13:54:14.922131266Z"
     description: A Helm chart for https://github.com/k-orc/openstack-resource-controller/
@@ -15208,6 +15222,26 @@ entries:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/orc-0.1.0/orc-0.1.0.tgz
     version: 0.1.0
   orc-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: v2.2.0
+    created: "2025-08-30T13:08:50.723228041Z"
+    description: Manage Openstack Resource Controller CRDs
+    digest: a0e00f54a273349abbbf801c847fa5c7bbd3f606948918e55636e8ffeaa60236
+    keywords:
+    - orc
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: orc-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/orc-crds
+    - https://github.com/k-orc/openstack-resource-controller/
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/orc-crds-2.2.1/orc-crds-2.2.1.tgz
+    version: 2.2.1
   - annotations:
       category: DeveloperTools
     apiVersion: v2
@@ -18194,4 +18228,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-08-29T16:39:45.712311193Z"
+generated: "2025-08-30T13:08:50.724242413Z"
