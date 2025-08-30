@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: manager
-        image: {{ .Values.image.repository }}:{{ .Values.image.tag | default (printf "v%s" .Chart.AppVersion) }}
+        image: {{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         args:
         - --leader-elect
@@ -80,7 +80,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "orc.name" . }}-controller-manager
+      serviceAccountName: {{ include "orc.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
   {{- with .Values.updateStrategy }}
   strategy:

@@ -3,7 +3,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
-{{ include "orc.labels" . | indent 4 }}
+    {{- include "orc.labels" . | nindent 4 }}
   name: {{ include "orc.name" . }}-image-editor-role
 rules:
 - apiGroups:
@@ -148,7 +148,7 @@ roleRef:
   name: {{ include "orc.name" . }}-manager-role
 subjects:
 - kind: ServiceAccount
-  name: {{ include "orc.name" . }}-controller-manager
+  name: {{ include "orc.serviceAccountName" . }}
   namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -163,5 +163,5 @@ roleRef:
   name: {{ include "orc.name" . }}-metrics-auth-role
 subjects:
 - kind: ServiceAccount
-  name: {{ include "orc.name" . }}-controller-manager
+  name: {{ include "orc.serviceAccountName" . }}
   namespace: {{ .Release.Namespace }}

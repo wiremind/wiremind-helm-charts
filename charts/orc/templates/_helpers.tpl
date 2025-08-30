@@ -50,3 +50,10 @@ app.kubernetes.io/name: {{ include "orc.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 control-plane: controller-manager
 {{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "orc.serviceAccountName" -}}
+{{- default (printf "%s-controller-manager" (include "orc.fullname" .)) .Values.serviceAccount.name }}
+{{- end }}
