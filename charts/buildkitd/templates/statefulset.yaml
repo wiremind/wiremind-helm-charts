@@ -15,7 +15,6 @@ spec:
       labels:
         {{- include "buildkitd.selectorLabels" . | nindent 8 }}
       annotations:
-        container.apparmor.security.beta.kubernetes.io/buildkitd: unconfined
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- if .Values.podAnnotations }}
         {{- toYaml .Values.podAnnotations | nindent 8 }}
@@ -26,6 +25,9 @@ spec:
         fsGroup: {{ .Values.user.uid }}
         # Set this to avoid massive cascading chown on restart
         fsGroupChangePolicy: "OnRootMismatch"
+        {{- with .Values.extraPodSecurityContext }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       volumes:
         - name: config
           configMap:

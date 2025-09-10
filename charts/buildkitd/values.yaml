@@ -109,6 +109,10 @@ startupProbe:
 
 extraSecurityContext: {}
 
+extraPodSecurityContext:
+  appArmorProfile:
+    type: Unconfined
+
 lifecycle: {}
 
 terminationGracePeriodSeconds: 30
