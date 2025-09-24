@@ -2117,6 +2117,27 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/chartreuse-4.0.0/chartreuse-4.0.0.tgz
     version: 4.0.0
+  cilium-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 1.18.2
+    created: "2025-09-24T14:48:26.460017125Z"
+    description: Manage cilium CRDs
+    digest: 4a5611566ef7c399695c15bfd3eeb39a8283ed488a7ec7c3aa8e89649da8adca
+    keywords:
+    - cilium
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: cilium-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cilium-crds
+    - https://github.com/cilium/cilium/tree/main/pkg/k8s/apis/cilium.io/client/crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/cilium-crds-1.18.2/cilium-crds-1.18.2.tgz
+    version: 1.18.2
   clair:
   - apiVersion: v2
     appVersion: 2.1.8
@@ -18278,4 +18299,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-09-18T08:03:07.549808117Z"
+generated: "2025-09-24T14:48:26.460714633Z"
