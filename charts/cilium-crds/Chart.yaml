@@ -1,0 +1,17 @@
+annotations:
+  category: DeveloperTools
+apiVersion: v2
+name: cilium-crds
+version: 1.18.2
+appVersion: 1.18.2
+description: Manage cilium CRDs
+keywords:
+  - cilium
+  - crds
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cilium-crds
+  - https://github.com/cilium/cilium/tree/main/pkg/k8s/apis/cilium.io/client/crds
+engine: gotpl
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
