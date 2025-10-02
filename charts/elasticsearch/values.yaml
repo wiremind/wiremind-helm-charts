@@ -259,6 +259,7 @@ tolerations: []
 # Only enable this if you have security enabled on your cluster
 ingress:
   enabled: false
+  labels: {}
   annotations: {}
   # kubernetes.io/ingress.class: nginx
   # kubernetes.io/tls-acme: "true"
