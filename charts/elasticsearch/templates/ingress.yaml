@@ -12,7 +12,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
     {{- with .Values.ingress.labels }}
-    {{ toYaml . | indent 4 }}
+    {{- toYaml . | nindent 4 }}
     {{- end }}
 {{- with .Values.ingress.annotations }}
   annotations:
