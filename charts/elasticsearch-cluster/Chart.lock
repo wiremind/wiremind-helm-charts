@@ -1,19 +1,19 @@
 dependencies:
 - name: elasticsearch
   repository: https://wiremind.github.io/wiremind-helm-charts
-  version: 8.15.5
+  version: 8.15.6
 - name: elasticsearch
   repository: https://wiremind.github.io/wiremind-helm-charts
-  version: 8.15.5
+  version: 8.15.6
 - name: elasticsearch
   repository: https://wiremind.github.io/wiremind-helm-charts
-  version: 8.15.5
+  version: 8.15.6
 - name: elasticsearch
   repository: https://wiremind.github.io/wiremind-helm-charts
-  version: 8.15.5
+  version: 8.15.6
 - name: elasticsearch
   repository: https://wiremind.github.io/wiremind-helm-charts
-  version: 8.15.5
+  version: 8.15.6
 - name: kibana
   repository: https://wiremind.github.io/wiremind-helm-charts
   version: 8.5.20
@@ -23,5 +23,5 @@ dependencies:
 - name: cerebro
   repository: https://wiremind.github.io/wiremind-helm-charts
   version: 2.2.0
-digest: sha256:218f3a11214d045327c1bb82b58bc6c39cfcb8662a1665d9f1e59bfee50557ad
-generated: "2025-10-02T12:29:00.441514521+02:00"
+digest: sha256:17d9f859b6675996e3ac3f6f2e63a19cd03bbb8dd3f03572d0eb37bd7fe5b557
+generated: "2025-10-03T10:35:41.255502789+02:00"
