@@ -4,6 +4,8 @@ target-branch: main
 validate-maintainers: false
 chart-dirs:
   - charts
+excluded-charts:
+  - chartreuse
 chart-repos:
   - bitnami=https://charts.bitnami.com/bitnami
   - elastic=https://helm.elastic.co

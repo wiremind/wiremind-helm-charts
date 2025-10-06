@@ -32,17 +32,17 @@ data:
   CHARTREUSE_UPGRADE_BEFORE_DEPLOYMENT: ""
 {{- end }}
 
-  CHARTREUSE_ALEMBIC_DIRECTORY_PATH: {{ .Values.alembic.directoryPath }}
-  CHARTREUSE_ALEMBIC_CONFIG_FILE_PATH: {{ .Values.alembic.configPath }}
+  CHARTREUSE_ALEMBIC_DIRECTORY_PATH: {{ .Values.alembic.directoryPath | quote }}
+  CHARTREUSE_ALEMBIC_CONFIG_FILE_PATH: {{ .Values.alembic.configPath | quote }}
 
-  CHARTREUSE_MIGRATE_CONTAINER_IMAGE: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-  CHARTREUSE_MIGRATE_IMAGE_PULL_SECRET: "{{ .Values.image.pullSecret }}"
-  CHARTREUSE_RELEASE_NAME: {{ .Release.Name }}
-  CHARTREUSE_ALEMBIC_ADDITIONAL_PARAMETERS: "{{ .Values.alembic.additionalParameters }}"
+  CHARTREUSE_MIGRATE_CONTAINER_IMAGE: {{ printf "%s:%s" .Values.image.repository .Values.image.tag | quote }}
+  CHARTREUSE_MIGRATE_IMAGE_PULL_SECRET: {{ .Values.image.pullSecret | quote }}
+  CHARTREUSE_RELEASE_NAME: {{ .Release.Name | quote }}
+  CHARTREUSE_ALEMBIC_ADDITIONAL_PARAMETERS: {{ .Values.alembic.additionalParameters | quote }}
 
-  CHARTREUSE_UPGRADE_PRIORITYCLASS_NAME: "{{ .Values.priorityClassName }}"
+  CHARTREUSE_UPGRADE_PRIORITYCLASS_NAME: {{ .Values.priorityClassName | quote }}
 
-  HELM_CHART_VERSION: {{ .Chart.Version }}
+  HELM_CHART_VERSION: {{ .Chart.Version | quote }}
 
   {{- range $key, $value := .Values.additionalEnvironmentVariables }}
   {{ $key }}: {{ $value | quote }}
