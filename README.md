@@ -6,6 +6,10 @@ This is a set of Helm Charts used and maintained by Wiremind. Do not hesitate to
 
 All charts are visible from the Artifact Hub: https://artifacthub.io/packages/search?repo=wiremind&sort=relevance&page=1
 
+## Dependency Management
+
+This repository uses automated dependency management tools to keep charts up to date. See [DEPENDENCY_MANAGEMENT.md](DEPENDENCY_MANAGEMENT.md) for details on how to activate and use Dependabot and Renovate.
+
 ## CRDs charts
 
 To update CRDs of a specific chart, please refer to its README.md, if there is none, just copy paste the upstream CRDs into ours.
