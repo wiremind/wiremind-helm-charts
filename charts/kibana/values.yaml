@@ -204,6 +204,7 @@ ingress:
   className: "nginx"
   pathtype: ImplementationSpecific
   annotations: {}
+  labels: {}
   # kubernetes.io/ingress.class: nginx
   # kubernetes.io/tls-acme: "true"
   hosts:
