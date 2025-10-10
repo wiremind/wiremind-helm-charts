@@ -1765,6 +1765,27 @@ entries:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/chaos-mesh-crds-2.6.3/chaos-mesh-crds-2.6.3.tgz
     version: 2.6.3
   chartreuse:
+  - apiVersion: v2
+    appVersion: 6.0.0
+    created: "2025-10-10T09:57:04.418303294Z"
+    description: Automate Alembic SQL schema migrations.
+    digest: 29dbaedbf4f1ac410051bba182fc41d21f6484ccad1180fcc4a01f9552ffd92e
+    keywords:
+    - alembic
+    - database
+    - migration
+    - postgresql
+    - clickhouse
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: chartreuse
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/chartreuse
+    - https://github.com/wiremind/chartreuse
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/chartreuse-6.0.0/chartreuse-6.0.0.tgz
+    version: 6.0.0
   - apiVersion: v1
     appVersion: 5.0.0
     created: "2025-07-25T05:20:25.551670596Z"
@@ -18538,4 +18559,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-10-08T14:04:21.258595488Z"
+generated: "2025-10-10T09:57:04.420487693Z"
