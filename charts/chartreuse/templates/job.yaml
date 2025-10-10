@@ -1,3 +1,5 @@
+{{- if .Values.alembic.enabled -}}
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -28,40 +30,98 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.image.pullSecret }}
       initContainers:
-{{- if .Values.alembic.enabled }}
-        - name: postgresql-wait
-          image: bitnami/postgresql:latest
+      {{- range $waitDbName, $waitDbConfig := .Values.alembic.database_list }}
+        - name: wait-for-{{ $waitDbName }}-database
+          {{- if eq $waitDbConfig.databaseType "postgresql" }}
+          image: alpine/psql:17.6
+          {{- else if eq $waitDbConfig.databaseType "clickhouse" }}
+          image: clickhouse/clickhouse-client:latest
+          {{- end }}
           imagePullPolicy: IfNotPresent
           command:
+            {{- if eq $waitDbConfig.databaseType "clickhouse" }}
+            - bash
+            {{- else }}
             - sh
+            {{- end }}
           args:
+            {{- if eq $waitDbConfig.databaseType "postgresql" }}
             - -c
             - |
-              until pg_isready "--dbname=$PG_ISREADY_CHARTREUSE_ALEMBIC_URL"; do
-                echo "Waiting for Postgresql to be ready...";
-                sleep 1;
-              done;
+              echo "Waiting for {{ $waitDbName }} database to be ready..."
+              {{- $passwordVar := printf "${%s}" $waitDbConfig.passwordRemoteRefKey }}
+              DB_URL="{{ $waitDbConfig.dialect }}://{{ $waitDbConfig.user }}:{{ $passwordVar }}@{{ $waitDbConfig.host }}:{{ $waitDbConfig.port }}/{{ $waitDbConfig.database }}"
+              echo "Checking {{ $waitDbName }} database connectivity..."
+              until psql "$DB_URL" -c "SELECT 1;" >/dev/null 2>&1; do
+                echo "Waiting for {{ $waitDbName }} database to be ready..."
+                sleep 1
+              done
+              echo "{{ $waitDbName }} database is ready!"
+            {{- else if eq $waitDbConfig.databaseType "clickhouse" }}
+            - -c
+            - |
+              set -euo pipefail
+              echo "Waiting for {{ $waitDbName }} (clickhouse-client) to be ready..."
+              {{- $passwordVar := printf "${%s}" $waitDbConfig.passwordRemoteRefKey }}
+              HOST="{{ $waitDbConfig.host }}"
+              # Use native_port if defined, otherwise default to 9000
+              PORT="{{ default 9000 $waitDbConfig.native_port }}"
+              USER="{{ $waitDbConfig.user }}"
+              PASS="{{ $passwordVar }}"
+              DB="{{ $waitDbConfig.database }}"
+              ARGS=(--host "$HOST" --port "$PORT" --user "$USER" --password "$PASS" --query)
+
+              until clickhouse-client "${ARGS[@]}" "SELECT 1" >/dev/null 2>&1; do
+                echo "Waiting for {{ $waitDbName }}..."
+                sleep 1
+              done
+              echo "{{ $waitDbName }} is reachable."
+
+              # Wait for specific DB to exist 
+              until clickhouse-client "${ARGS[@]}" "EXISTS DATABASE \"$DB\"" 2>/dev/null | grep -q '^1$'; do
+                echo "Waiting for database \"$DB\" to exist..."
+                sleep 1
+              done
+              echo "Database \"$DB\" is ready!"
+            {{- end }}
           envFrom:
           - secretRef:
-              name: {{ template "chartreuse.fullname" . }}{{ template "chartreuse.hook.suffix" . }}
+              name: {{ template "chartreuse.fullname" $ }}-config{{ template "chartreuse.hook.suffix" $ }}
           - configMapRef:
-              name: {{ template "chartreuse.fullname" . }}{{ template "chartreuse.hook.suffix" . }}
-{{- end }}
+              name: {{ template "chartreuse.fullname" $ }}{{ template "chartreuse.hook.suffix" $ }}
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
+      {{- end }}
       containers:
         - name: chartreuse
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
             - {{ .Values.entrypoint | quote }}
+          env:
+            - name: CHARTREUSE_MULTI_CONFIG_PATH
+              value: "/app/config/chartreuse-config.yaml"
           envFrom:
           - secretRef:
-              name: {{ template "chartreuse.fullname" . }}{{ template "chartreuse.hook.suffix" . }}
+              name: {{ template "chartreuse.fullname" . }}-config{{ template "chartreuse.hook.suffix" . }}
           - configMapRef:
               name: {{ template "chartreuse.fullname" . }}{{ template "chartreuse.hook.suffix" . }}
           volumeMounts:
             {{- with .Values.extraVolumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
+            - name: chartreuse-config
+              mountPath: /app/config
+              readOnly: true
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
       serviceAccountName: {{ template "chartreuse.serviceAccountName" . }}{{ template "chartreuse.hook.suffix" . }}
       terminationGracePeriodSeconds: 0
       {{- with .Values.nodeSelector }}
@@ -76,7 +136,11 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.extraVolumes }}
       volumes:
+        - name: chartreuse-config
+          secret:
+            secretName: {{ template "chartreuse.fullname" . }}-config{{ template "chartreuse.hook.suffix" . }}
+        {{- with .Values.extraVolumes }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
+{{- end }}

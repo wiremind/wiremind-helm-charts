@@ -39,31 +39,32 @@ upgradeJobWeight: "1"
 
 alembic:
   enabled: true
+  ## If you want to use External Secrets Operator to fetch the database credentials
   externalSecrets:
-    enabled: false
-    passwordRemoteRefKey: ""
+    refreshInterval: "99999h"   # effectively disables refreshes
     storeRef:
-      name: ""
+      name: "my-cluster-secret-store"
       kind: ClusterSecretStore
-  username: my-dummy-username
-  password: my-dummy-password
-  database: my-dummy-database
-  port: "5432"
-  dialect: postgresql
-  alternativePgIsreadyChartreuseAlembicUrl:
-    enabled: false
-    username: my-dummy-username
-    password: my-dummy-password
-    database: my-dummy-database
-    port: "5432"
-    urlSuffix: "-postgresql"
+  database_list:
+    # postgresql:
+    #   databaseType: postgresql
+    #   dialect: postgresql
+    #   port: 5432
+    #   user: cache_user
+    #   passwordRemoteRefKey: "my-dummy-postgresql-password-remote-ref-key"
+    #   host: localhost
+    #   database: cache_db
+    # clickhouse:
+    #   databaseType: clickhouse
+    #   dialect: clickhouse
+    #   user: user
+    #   port: 8123
+    #   passwordRemoteRefKey: "my-dummy-clickhouse-password-remote-ref-key"
+    #   host: localhost
+    #   database: db
   allowMigrationFromEmptyDatabase: true
   ## like "-x env_type=staging"
   additionalParameters: ""
-  ## Your chart should have this subchart and the postgresql chart.
-  ## This value is the suffix to append to the Release name to obtain postgresql URL
-  ## TODO add support for standalone URL
-  urlSuffix: "-postgresql"
   directoryPath: "/app/alembic"
   configPath: "alembic.ini"
 
