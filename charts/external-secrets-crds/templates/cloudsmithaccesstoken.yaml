@@ -12,23 +12,23 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.19.0
   labels:
     external-secrets.io/component: controller
-  name: quayaccesstokens.generators.external-secrets.io
+  name: cloudsmithaccesstokens.generators.external-secrets.io
 spec:
   group: generators.external-secrets.io
   names:
     categories:
       - external-secrets
       - external-secrets-generators
-    kind: QuayAccessToken
-    listKind: QuayAccessTokenList
-    plural: quayaccesstokens
-    singular: quayaccesstoken
+    kind: CloudsmithAccessToken
+    listKind: CloudsmithAccessTokenList
+    plural: cloudsmithaccesstokens
+    singular: cloudsmithaccesstoken
   scope: Namespaced
   versions:
     - name: v1alpha1
       schema:
         openAPIV3Schema:
-          description: QuayAccessToken generates Quay oauth token for pulling/pushing images
+          description: CloudsmithAccessToken generates Cloudsmith access token using OIDC authentication
           properties:
             apiVersion:
               description: |-
@@ -49,8 +49,11 @@ spec:
               type: object
             spec:
               properties:
-                robotAccount:
-                  description: Name of the robot account you are federating with
+                apiUrl:
+                  description: APIURL configures the Cloudsmith API URL. Defaults to https://api.cloudsmith.io.
+                  type: string
+                orgSlug:
+                  description: OrgSlug is the organization slug in Cloudsmith
                   type: string
                 serviceAccountRef:
                   description: Name of the service account you are federating with
@@ -80,12 +83,13 @@ spec:
                   required:
                     - name
                   type: object
-                url:
-                  description: URL configures the Quay instance URL. Defaults to quay.io.
+                serviceSlug:
+                  description: ServiceSlug is the service slug in Cloudsmith for OIDC authentication
                   type: string
               required:
-                - robotAccount
+                - orgSlug
                 - serviceAccountRef
+                - serviceSlug
               type: object
           type: object
       served: true
