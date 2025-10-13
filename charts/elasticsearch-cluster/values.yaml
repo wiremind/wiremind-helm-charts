@@ -352,6 +352,19 @@ extraObjects: []
 ## List of queries that will be executed when elasticsearch is up and running
 setup:
   enabled: false
+  containerSecurityContext:
+    capabilities:
+      drop:
+        - ALL
+    privileged: false
+    runAsUser: 1000
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
+    fsGroup: 1000
   terminationGracePeriodSeconds: 0
   ttlSecondsAfterFinished: 1800
   elasticsearchCertificateSecret: ""

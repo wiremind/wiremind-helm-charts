@@ -21,10 +21,18 @@ spec:
       priorityClassName: {{ . }}
       {{- end }}
       restartPolicy: Never
+      {{- with .Values.setup.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: setup
           image: curlimages/curl:8.11.0
           imagePullPolicy: IfNotPresent
+          {{- with .Values.setup.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: setup
               mountPath: /app/config
