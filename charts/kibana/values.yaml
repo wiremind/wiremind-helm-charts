@@ -75,6 +75,8 @@ token:
 
   podSecurityContext:
     fsGroup: 1000
+    seccompProfile:
+      type: RuntimeDefault
 
   securityContext:
     capabilities:
@@ -130,6 +132,8 @@ kibanaConfig: {}
 
 podSecurityContext:
   fsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
 
 securityContext:
   capabilities:
