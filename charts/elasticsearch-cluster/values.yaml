@@ -56,6 +56,9 @@ es-defaults: &defaults
   extraVolumeMounts: |
     - mountPath: /usr/share/elasticsearch/plugins/
       name: plugindir
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
   securityContext:
     allowPrivilegeEscalation: false
     privileged: false
