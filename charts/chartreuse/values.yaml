@@ -54,6 +54,7 @@ alembic:
     #   passwordRemoteRefKey: "my-dummy-postgresql-password-remote-ref-key"
     #   host: localhost
     #   database: cache_db
+    #   isPatroniPostgresql: true
     # clickhouse:
     #   databaseType: clickhouse
     #   dialect: clickhouse
@@ -62,6 +63,7 @@ alembic:
     #   passwordRemoteRefKey: "my-dummy-clickhouse-password-remote-ref-key"
     #   host: localhost
     #   database: db
+    #   isPatroniPostgresql: false
   allowMigrationFromEmptyDatabase: true
   ## like "-x env_type=staging"
   additionalParameters: ""
