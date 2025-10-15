@@ -12004,6 +12004,26 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: 1.4.0
+    created: "2025-10-15T10:09:53.013316954Z"
+    description: Manage gateway-api (experimental) CRDs
+    digest: cce68fa58f5e98d1ecb55a24c1d0c7ce703ceb91291a7baf78283d7941738851
+    keywords:
+    - gateway-api
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: gateway-api-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/gateway-api-crds
+    - https://github.com/kubernetes-sigs/gateway-api
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/gateway-api-crds-1.4.0/gateway-api-crds-1.4.0.tgz
+    version: 1.4.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: 1.3.0
     created: "2025-05-23T07:51:40.874380048Z"
     description: Manage gateway-api (experimental) CRDs
@@ -18700,4 +18720,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-10-13T17:24:03.789764322Z"
+generated: "2025-10-15T10:09:53.014050566Z"
