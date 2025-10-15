@@ -2,8 +2,8 @@ annotations:
   category: DeveloperTools
 apiVersion: v2
 name: gateway-api-crds
-version: 1.3.0
-appVersion: 1.3.0
+version: 1.4.0
+appVersion: 1.4.0
 description: Manage gateway-api (experimental) CRDs
 keywords:
   - gateway-api
