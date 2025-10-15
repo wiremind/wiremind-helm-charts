@@ -1,7 +1,7 @@
 apiVersion: v2
 name: chartreuse
-appVersion: 6.0.0
-version: 6.0.0
+appVersion: 6.1.0
+version: 6.1.0
 description: Automate Alembic SQL schema migrations.
 maintainers:
   - name: Wiremind
