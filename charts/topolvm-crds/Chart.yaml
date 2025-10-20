@@ -2,8 +2,8 @@ annotations:
   category: DeveloperTools
 apiVersion: v2
 name: topolvm-crds
-version: 15.6.0
-appVersion: 0.37.0
+version: 15.7.0
+appVersion: 0.38.0
 description: Manage topolvm CRDs
 keywords:
   - topolvm
