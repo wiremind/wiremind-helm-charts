@@ -18403,6 +18403,19 @@ entries:
     version: 0.25.0
   velero-crds:
   - apiVersion: v2
+    appVersion: 1.17.0
+    created: "2025-10-28T14:25:11.662008918Z"
+    description: A Helm chart to manage velero CRDs
+    digest: 020c9c52119a0921d59255bfa4c7379ff3c434d8339a16ea0c1fd0771687e051
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: velero-crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-11.1.1/velero-crds-11.1.1.tgz
+    version: 11.1.1
+  - apiVersion: v2
     appVersion: 1.16.0
     created: "2025-06-11T13:31:40.507302446Z"
     description: A Helm chart to manage velero CRDs
@@ -18805,4 +18818,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-10-28T11:42:03.984943001Z"
+generated: "2025-10-28T14:25:11.66295059Z"
