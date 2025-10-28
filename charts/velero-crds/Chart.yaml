@@ -2,9 +2,9 @@ apiVersion: v2
 name: velero-crds
 description: A Helm chart to manage velero CRDs
 # Set it velero's Chart version.
-appVersion: 1.16.0
+appVersion: 1.17.0
 kubeVersion: ">=1.16.0-0"
-version: 10.0.4
+version: 11.1.1
 maintainers:
   - name: Wiremind
     url: https://github.com/wiremind/wiremind-helm-charts
