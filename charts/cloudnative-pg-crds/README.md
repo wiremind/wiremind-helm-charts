@@ -10,9 +10,14 @@ CRDs are located [here](https://github.com/cloudnative-pg/charts/blob/main/chart
 
 **Do not forget to change APP_VERSION**
 
-```
-export CHART_VERSION=v0.26.0
+``` bash
+export CHART_VERSION=v0.26.1
 cd charts/cloudnative-pg-crds
-curl https://raw.githubusercontent.com/cloudnative-pg/charts/refs/heads/cloudnative-pg-$CHART_VERSION/charts/cloudnative-pg/templates/crds/crds.yaml -L -o crds.yaml
+curl https://raw.githubusercontent.com/cloudnative-pg/charts/refs/tags/cloudnative-pg-$CHART_VERSION/charts/cloudnative-pg/templates/crds/crds.yaml -L -o crds.yaml
+```
+
+After downloading, remove the Helm template conditionals `{{- if .Values.crds.create }}` and `{{- end }}`, then run:
+
+``` bash
 bash ../../scripts/cut_crds.sh crds.yaml
 ```
