@@ -117,6 +117,58 @@ lifecycle: {}
 
 terminationGracePeriodSeconds: 30
 
+## Metrics configuration for Prometheus monitoring
+metrics:
+  ## ServiceMonitor configuration for Prometheus Operator
+  serviceMonitor:
+    ## Enable ServiceMonitor creation
+    enabled: false
+
+    ## Namespace where ServiceMonitor should be created
+    ## If not set, uses the same namespace as the chart
+    namespace: ""
+
+    ## Additional labels for ServiceMonitor
+    additionalLabels: {}
+      # prometheus: kube-prometheus
+      # release: prometheus
+
+    ## ServiceMonitor annotations
+    annotations: {}
+
+    ## Scrape interval for Prometheus
+    interval: 30s
+
+    ## Scrape timeout for Prometheus
+    scrapeTimeout: 10s
+
+    ## Path to scrape metrics from (buildkitd debug endpoint)
+    path: /metrics
+
+    ## Port name to scrape metrics from (references service port name)
+    portName: debug
+
+    ## Metric relabeling configurations
+    metricRelabelings: []
+      # - sourceLabels: [__name__]
+      #   regex: 'buildkit_.*'
+      #   action: keep
+
+    ## Relabeling configurations
+    relabelings: []
+      # - sourceLabels: [__meta_kubernetes_pod_name]
+      #   separator: ;
+      #   regex: ^(.*)$
+      #   targetLabel: instance
+      #   replacement: $1
+      #   action: replace
+
+    ## HonorLabels chooses the metric's labels on collisions with target labels
+    honorLabels: false
+
+    ## HonorTimestamps controls whether Prometheus respects the timestamps present in scraped data
+    honorTimestamps: true
+
 podAnnotations:
   prometheus.io/scrape: "true"
   prometheus.io/port: "6060"
