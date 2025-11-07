@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "containerd-registry-config.fullname" . }}-cleanup
+  labels:
+    {{- include "containerd-registry-config.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-delete
+    "helm.sh/hook-weight": "10"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  selector:
+    matchLabels:
+      {{- include "containerd-registry-config.selectorLabels" . | nindent 6 }}
+      job: cleanup
+  template:
+    metadata:
+      labels:
+        {{- include "containerd-registry-config.selectorLabels" . | nindent 8 }}
+        job: cleanup
+    spec:
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: certs-dir
+          hostPath:
+            path: {{ .Values.certsPath }}
+            type: DirectoryOrCreate
+      initContainers:
+        - name: cleanup
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: certs-dir
+              mountPath: /etc/containerd/certs.d
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              echo "Starting cleanup of containerd registry configuration..."
+
+              # Wait for the main DaemonSet to be deleted first
+              echo "Waiting for main DaemonSet {{ include "containerd-registry-config.fullname" . }} to be deleted..."
+              TIMEOUT=120
+              ELAPSED=0
+              SLEEP_INTERVAL=5
+
+              while [ $ELAPSED -lt $TIMEOUT ]; do
+                # Simple wait to ensure other pods have time to terminate
+                if [ $ELAPSED -ge 30 ]; then
+                  echo "Main DaemonSet should be terminated, proceeding with cleanup"
+                  break
+                fi
+                echo "Waiting for main DaemonSet to terminate... ($ELAPSED/$TIMEOUT seconds)"
+                sleep $SLEEP_INTERVAL
+                ELAPSED=$((ELAPSED + SLEEP_INTERVAL))
+              done
+
+              # Additional wait to ensure filesystem operations to complete
+              echo "Waiting 5 seconds for filesystem operations to complete..."
+              sleep 5
+
+              CERTS_DIR="/etc/containerd/certs.d"
+
+              if [ ! -d "$CERTS_DIR" ]; then
+                echo "Directory $CERTS_DIR does not exist, nothing to clean"
+                exit 0
+              fi
+
+              echo "Removing registry configurations managed by {{ include "containerd-registry-config.fullname" . }}"
+
+              # List of registries to clean (based on current config)
+              {{- range .Values.registries }}
+              if [ -d "$CERTS_DIR/{{ .upstream }}" ]; then
+                echo "Removing $CERTS_DIR/{{ .upstream }}"
+                rm -rf "$CERTS_DIR/{{ .upstream }}"
+              fi
+              {{- end }}
+
+              echo "Cleanup complete!"
+              echo "Remaining registries in $CERTS_DIR:"
+              ls -la "$CERTS_DIR" || echo "Directory is empty or does not exist"
+
+              echo "Exiting cleanup container"
+              exit 0
+      containers:
+        - name: pause
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "============================================"
+              echo "Cleanup initContainer has finished running!"
+              echo "============================================"
+              echo ""
+              echo "View cleanup logs:"
+              echo "  kubectl logs -n {{ .Release.Namespace }} -l job=cleanup -c cleanup"
+              echo ""
+              echo "To delete this cleanup DaemonSet:"
+              echo "  kubectl delete daemonset {{ include "containerd-registry-config.fullname" . }}-cleanup -n {{ .Release.Namespace }}"
+              echo ""
+              echo "Logs available for 5 minutes, then pod will restart..."
+              sleep 300
+              echo "Pod will now exit and restart. Delete the DaemonSet to stop restarts."
+              exit 0
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      {{- if .Values.runtimeClassName }}
+      runtimeClassName: {{ .Values.runtimeClassName }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

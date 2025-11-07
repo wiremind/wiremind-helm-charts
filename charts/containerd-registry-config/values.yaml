@@ -1,0 +1,91 @@
+image:
+  repository: busybox
+  pullPolicy: IfNotPresent
+  tag: "1.36"
+
+nameOverride: ""
+fullnameOverride: ""
+
+# Path to containerd certs.d directory on the host
+certsPath: "/etc/containerd/certs.d"
+
+# Registry mirror configurations
+# Each registry can have multiple mirrors that will be tried in order
+registries:
+  # Example: Docker Hub with dedicated mirror and Spegel fallback
+  - upstream: "docker.io"
+    # Server URL for the upstream registry (used in hosts.toml)
+    server: "https://registry-1.docker.io"
+    mirrors:
+      # Dedicated persistent mirror (first priority)
+      - url: "https://registry-dockerhub.default.svc.cluster.local:5000"
+        capabilities: ["pull", "resolve"]
+        skipVerify: false
+        dialTimeout: "5s"
+      # Spegel P2P mirror (second priority)
+      - url: "http://spegel.kube-system.svc.cluster.local:5000"
+        capabilities: ["pull", "resolve"]
+        skipVerify: false
+        dialTimeout: "5s"
+
+  # Example: GitHub Container Registry with only Spegel
+  # - upstream: "ghcr.io"
+  #   server: "https://ghcr.io"
+  #   mirrors:
+  #     - url: "http://spegel.kube-system.svc.cluster.local:5000"
+  #       capabilities: ["pull", "resolve"]
+  #       skipVerify: false
+  #       dialTimeout: "5s"
+
+  # Example: Quay.io
+  # - upstream: "quay.io"
+  #   server: "https://quay.io"
+  #   mirrors:
+  #     - url: "http://spegel.kube-system.svc.cluster.local:5000"
+  #       capabilities: ["pull", "resolve"]
+  #       skipVerify: false
+  #       dialTimeout: "5s"
+
+  # Default configuration for registries not explicitly configured
+  - upstream: "_default"
+    server: "https://registry-1.docker.io"
+    mirrors:
+      - url: "http://spegel.kube-system.svc.cluster.local:5000"
+        capabilities: ["pull", "resolve"]
+        skipVerify: false
+        dialTimeout: "5s"
+
+priorityClassName: ""
+
+runtimeClassName: ""
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# DaemonSet update strategy
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+
+# Pod security context
+podSecurityContext:
+  runAsUser: 0
+  runAsNonRoot: false
+  fsGroup: 0
+
+# Container security context
+securityContext:
+  runAsUser: 0
+  runAsNonRoot: false
+
+resources: {}
+#  requests:
+#    cpu: "10m"
+#    memory: "16Mi"
+#  limits:
+#    cpu: "100m"
+#    memory: "64Mi"
