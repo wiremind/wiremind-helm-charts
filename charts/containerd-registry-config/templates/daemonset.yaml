@@ -1,0 +1,146 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "containerd-registry-config.fullname" . }}
+  labels:
+    {{- include "containerd-registry-config.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "containerd-registry-config.selectorLabels" . | nindent 6 }}
+  updateStrategy:
+    {{- toYaml .Values.updateStrategy | nindent 4 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      labels:
+        {{- include "containerd-registry-config.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: certs-dir
+          hostPath:
+            path: {{ .Values.certsPath }}
+            type: DirectoryOrCreate
+        - name: config
+          configMap:
+            name: {{ include "containerd-registry-config.fullname" . }}
+      initContainers:
+        - name: setup-registries
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: certs-dir
+              mountPath: /etc/containerd/certs.d
+            - name: config
+              mountPath: /config
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              echo "Starting containerd registry configuration..."
+
+              CERTS_DIR="/etc/containerd/certs.d"
+              CONFIG_DIR="/config"
+
+              # Build list of registries we want to configure
+              CONFIGURED_REGISTRIES=""
+              cd "$CONFIG_DIR"
+              for registry_file in *; do
+                CONFIGURED_REGISTRIES="$CONFIGURED_REGISTRIES $registry_file"
+              done
+
+              # Clean up registries that exist on node but not in config
+              if [ -d "$CERTS_DIR" ]; then
+                echo "Checking for registries to clean up..."
+                cd "$CERTS_DIR"
+                for existing_registry in */; do
+                  existing_registry="${existing_registry%/}"  # Remove trailing slash
+
+                  # Check if this registry is in our configured list
+                  SHOULD_KEEP=0
+                  for configured in $CONFIGURED_REGISTRIES; do
+                    if [ "$existing_registry" = "$configured" ]; then
+                      SHOULD_KEEP=1
+                      break
+                    fi
+                  done
+
+                  # Delete if not in configured list
+                  if [ $SHOULD_KEEP -eq 0 ]; then
+                    echo "  🗑️  Removing unconfigured registry: $existing_registry"
+                    rm -rf "$CERTS_DIR/$existing_registry"
+                  fi
+                done
+              fi
+
+              # Configure registries from config
+              cd "$CONFIG_DIR"
+              for registry_file in *; do
+                registry_name="$registry_file"
+                echo "Configuring registry: $registry_name"
+
+                # Create registry directory
+                mkdir -p "$CERTS_DIR/$registry_name"
+
+                # Copy hosts.toml file
+                cp "$CONFIG_DIR/$registry_name" "$CERTS_DIR/$registry_name/hosts.toml"
+
+                echo "  ✓ Created $CERTS_DIR/$registry_name/hosts.toml"
+              done
+
+              echo ""
+              echo "Registry configuration complete!"
+              echo "Current registries:"
+              ls -la "$CERTS_DIR"
+          {{- if .Values.resources }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+      containers:
+        - name: pause
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Containerd registry configuration is active"
+              echo "Sleeping indefinitely to keep configuration in place..."
+              while true; do sleep 3600; done
+          {{- if .Values.resources }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      {{- if .Values.runtimeClassName }}
+      runtimeClassName: {{ .Values.runtimeClassName }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+

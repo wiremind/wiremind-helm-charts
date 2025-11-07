@@ -1,0 +1,9 @@
+apiVersion: v2
+name: containerd-registry-config
+description: Manages containerd registry mirror configuration via DaemonSet
+type: application
+version: 0.1.0
+kubeVersion: ">=1.19.0-0"
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts

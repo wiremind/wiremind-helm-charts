@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "containerd-registry-config.fullname" . }}
+  labels:
+    {{- include "containerd-registry-config.labels" . | nindent 4 }}
+data:
+  {{- range .Values.registries }}
+  {{ .upstream }}: |
+    {{- if .server }}
+    server = {{ .server | quote }}
+    {{- end }}
+    {{- range .mirrors }}
+
+    [host.{{ .url | quote }}]
+      capabilities = {{ .capabilities | toJson }}
+      {{- if .skipVerify }}
+      skip_verify = {{ .skipVerify }}
+      {{- end }}
+      {{- if .dialTimeout }}
+      dial_timeout = {{ .dialTimeout | quote }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+
