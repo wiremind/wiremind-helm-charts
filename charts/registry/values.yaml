@@ -1,0 +1,215 @@
+image:
+  repository: ghcr.io/distribution/distribution
+  pullPolicy: IfNotPresent
+  tag: ""
+
+nameOverride: ""
+fullnameOverride: ""
+
+replicaCount: 1
+
+# StatefulSet update strategy
+updateStrategy:
+  type: RollingUpdate
+
+resources: {}
+#  requests:
+#    cpu: "100m"
+#    memory: 256Mi
+#  limits:
+#    cpu: "1"
+#    memory: 512Mi
+
+persistence:
+  size: "1Gi"
+  storageClass: ""
+  accessModes: "ReadWriteOnce"
+
+priorityClassName: ""
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+topologySpreadConstraints: []
+# - maxSkew: 1
+#   topologyKey: topology.kubernetes.io/zone
+#   whenUnsatisfiable: DoNotSchedule
+#   labelSelector:
+#     matchLabels:
+#       app.kubernetes.io/name: registry
+
+podAnnotations: {}
+
+# Registry configuration as a raw YAML string
+# This will be stored in a Secret and mounted as /etc/registry/config.yml
+# Reference: https://distribution.github.io/distribution/about/configuration/
+config: |
+  version: 0.1
+  log:
+    level: info
+    formatter: text
+    fields:
+      service: registry
+  storage:
+    filesystem:
+      rootdirectory: /var/lib/registry
+    delete:
+      enabled: true
+    cache:
+      blobdescriptor: inmemory
+  http:
+    addr: :5000
+    headers:
+      X-Content-Type-Options: [nosniff]
+    debug:
+      addr: :5001
+      prometheus:
+        enabled: true
+        path: /metrics
+  health:
+    storagedriver:
+      enabled: true
+      interval: 10s
+      threshold: 3
+
+  # Example auth configuration with htpasswd
+  # Generate htpasswd entries with: htpasswd -Bbn username password
+  # auth:
+  #   htpasswd:
+  #     realm: basic-realm
+  #     path: /etc/registry/htpasswd
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 5000
+  # Optional: specify a static ClusterIP (must be within service CIDR range)
+  # clusterIP: ""
+  # Set to "None" for headless service
+  # clusterIP: "None"
+  annotations: {}
+  # Debug/metrics port configuration
+  debug:
+    enabled: false
+    port: 5001
+
+# Ingress configuration
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+    # nginx.ingress.kubernetes.io/proxy-body-size: "0"
+  hosts:
+    - host: registry.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+  #  - secretName: registry-tls
+  #    hosts:
+  #      - registry.example.com
+
+## Metrics configuration for Prometheus monitoring
+metrics:
+  ## ServiceMonitor configuration for Prometheus Operator
+  serviceMonitor:
+    ## Enable ServiceMonitor creation
+    enabled: false
+
+    ## Namespace where ServiceMonitor should be created
+    ## If not set, uses the same namespace as the chart
+    namespace: ""
+
+    ## Additional labels for ServiceMonitor
+    additionalLabels: {}
+      # prometheus: kube-prometheus
+      # release: prometheus
+
+    ## ServiceMonitor annotations
+    annotations: {}
+
+    ## Scrape interval for Prometheus
+    interval: 30s
+
+    ## Scrape timeout for Prometheus
+    scrapeTimeout: 10s
+
+    ## Path to scrape metrics from (registry debug endpoint)
+    path: /metrics
+
+    ## Port name to scrape metrics from (references service port name)
+    portName: debug
+
+    ## Metric relabeling configurations
+    metricRelabelings: []
+      # - sourceLabels: [__name__]
+      #   regex: 'registry_.*'
+      #   action: keep
+
+    ## Relabeling configurations
+    relabelings: []
+      # - sourceLabels: [__meta_kubernetes_pod_name]
+      #   separator: ;
+      #   regex: ^(.*)$
+      #   targetLabel: instance
+      #   replacement: $1
+      #   action: replace
+
+    ## HonorLabels chooses the metric's labels on collisions with target labels
+    honorLabels: false
+
+    ## HonorTimestamps controls whether Prometheus respects the timestamps present in scraped data
+    honorTimestamps: true
+
+# Probes configuration
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 30
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 3
+
+startupProbe:
+  httpGet:
+    path: /
+    port: http
+  failureThreshold: 30
+  periodSeconds: 10
+
+# Security context for the container
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 65534
+  runAsGroup: 65534
+
+# Pod security context
+podSecurityContext:
+  fsGroup: 65534
+  fsGroupChangePolicy: "OnRootMismatch"
+  seccompProfile:
+    type: RuntimeDefault
+
+terminationGracePeriodSeconds: 30
