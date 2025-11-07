@@ -2,3 +2,4 @@ charts/*/charts/
 .venv
 venv
 .idea/*
+values-test.yaml
