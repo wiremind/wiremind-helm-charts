@@ -3719,6 +3719,20 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/cluster-manager-0.16.2/cluster-manager-0.16.2.tgz
     version: 0.16.2
+  containerd-registry-config:
+  - apiVersion: v2
+    created: "2025-11-10T09:44:57.029210942Z"
+    description: Manages containerd registry mirror configuration via DaemonSet
+    digest: 1cfd20471b34a6d601b2d0e163f9398c1ff5baaa996a865bcf5c48b09016d0c2
+    kubeVersion: '>=1.19.0-0'
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: containerd-registry-config
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/containerd-registry-config-0.1.0/containerd-registry-config-0.1.0.tgz
+    version: 0.1.0
   csi-driver-host-path:
   - apiVersion: v2
     appVersion: v1.11.0
@@ -17419,6 +17433,22 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/raw-0.1.0/raw-0.1.0.tgz
     version: 0.1.0
+  registry:
+  - apiVersion: v2
+    appVersion: 3.0.0
+    created: "2025-11-10T09:44:57.22660687Z"
+    description: A Helm chart for https://github.com/distribution/distribution (OCI
+      registry)
+    digest: 83832bf2cbad772f9514be31bb0d13c061a33859a2c795da78220c0d1dd4dc70
+    kubeVersion: '>=1.19.0-0'
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: registry
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/registry-0.1.0/registry-0.1.0.tgz
+    version: 0.1.0
   remoulade:
   - apiVersion: v2
     created: "2024-08-16T14:01:42.644760759Z"
@@ -18873,4 +18903,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-11-05T16:45:26.203609751Z"
+generated: "2025-11-10T09:44:57.22788462Z"
