@@ -1,8 +1,8 @@
 apiVersion: v2
 name: external-secrets-crds
 description: A Helm chart to manage external-secrets CRDs
-version: 0.20.2
-appVersion: 0.20.2
+version: 1.0.0
+appVersion: 1.0.0
 maintainers:
   - name: Wiremind
     url: https://github.com/wiremind/wiremind-helm-charts
