@@ -4,7 +4,7 @@ description: A Helm chart for https://github.com/distribution/distribution (OCI 
 type: application
 appVersion: 3.0.0
 kubeVersion: ">=1.19.0-0"
-version: 0.1.0
+version: 0.1.1
 maintainers:
   - name: Wiremind
     url: https://github.com/wiremind/wiremind-helm-charts
