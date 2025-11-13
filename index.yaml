@@ -17448,6 +17448,21 @@ entries:
   registry:
   - apiVersion: v2
     appVersion: 3.0.0
+    created: "2025-11-13T16:35:55.885993798Z"
+    description: A Helm chart for https://github.com/distribution/distribution (OCI
+      registry)
+    digest: bdf7b4cbf54f4c02f6e6febb45522545ba8749b122c6c92c1889166841db8a0f
+    kubeVersion: '>=1.19.0-0'
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: registry
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/registry-0.1.1/registry-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 3.0.0
     created: "2025-11-10T09:44:57.22660687Z"
     description: A Helm chart for https://github.com/distribution/distribution (OCI
       registry)
@@ -18915,4 +18930,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-11-12T15:22:17.346248045Z"
+generated: "2025-11-13T16:35:55.886866421Z"
