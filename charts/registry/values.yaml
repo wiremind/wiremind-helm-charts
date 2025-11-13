@@ -12,6 +12,8 @@ replicaCount: 1
 updateStrategy:
   type: RollingUpdate
 
+extraEnv: []
+
 resources: {}
 #  requests:
 #    cpu: "100m"

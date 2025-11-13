@@ -59,6 +59,9 @@ spec:
             # TODO
             - name: OTEL_TRACES_EXPORTER
               value: none
+            {{- with .Values.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           {{- if .Values.resources }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
@@ -118,4 +121,3 @@ spec:
         storageClassName: {{ .Values.persistence.storageClass }}
         {{- end }}
         volumeMode: Filesystem
-
