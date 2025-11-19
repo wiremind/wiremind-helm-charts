@@ -4,16 +4,16 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.17.1
-  name: servers.openstack.k-orc.cloud
+  name: volumes.openstack.k-orc.cloud
 spec:
   group: openstack.k-orc.cloud
   names:
     categories:
     - openstack
-    kind: Server
-    listKind: ServerList
-    plural: servers
-    singular: server
+    kind: Volume
+    listKind: VolumeList
+    plural: volumes
+    singular: volume
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -32,7 +32,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Server is the Schema for an ORC resource.
+        description: Volume is the Schema for an ORC resource.
         properties:
           apiVersion:
             description: |-
@@ -91,10 +91,10 @@ spec:
                       error state and will not continue to retry.
                     minProperties: 1
                     properties:
-                      availabilityZone:
-                        description: availabilityZone is the availability zone of
-                          the existing resource
+                      description:
+                        description: description of the existing resource
                         maxLength: 255
+                        minLength: 1
                         type: string
                       name:
                         description: name of the existing resource
@@ -102,51 +102,11 @@ spec:
                         minLength: 1
                         pattern: ^[^,]+$
                         type: string
-                      notTags:
-                        description: |-
-                          notTags is a list of tags to filter by. If specified, resources which
-                          contain all of the given tags will be excluded from the result.
-                        items:
-                          maxLength: 80
-                          minLength: 1
-                          type: string
-                        maxItems: 50
-                        type: array
-                        x-kubernetes-list-type: set
-                      notTagsAny:
-                        description: |-
-                          notTagsAny is a list of tags to filter by. If specified, resources
-                          which contain any of the given tags will be excluded from the result.
-                        items:
-                          maxLength: 80
-                          minLength: 1
-                          type: string
-                        maxItems: 50
-                        type: array
-                        x-kubernetes-list-type: set
-                      tags:
-                        description: |-
-                          tags is a list of tags to filter by. If specified, the resource must
-                          have all of the tags specified to be included in the result.
-                        items:
-                          maxLength: 80
-                          minLength: 1
-                          type: string
-                        maxItems: 50
-                        type: array
-                        x-kubernetes-list-type: set
-                      tagsAny:
-                        description: |-
-                          tagsAny is a list of tags to filter by. If specified, the resource
-                          must have at least one of the tags specified to be included in the
-                          result.
-                        items:
-                          maxLength: 80
-                          minLength: 1
-                          type: string
-                        maxItems: 50
-                        type: array
-                        x-kubernetes-list-type: set
+                      size:
+                        description: size is the size of the volume in GiB.
+                        format: int32
+                        minimum: 1
+                        type: integer
                     type: object
                   id:
                     description: |-
@@ -194,32 +154,36 @@ spec:
 
                   resource must be specified if the management policy is `managed`.
                 properties:
-                  availabilityZone:
-                    description: availabilityZone is the availability zone in which
-                      to create the server.
+                  description:
+                    description: description is a human-readable description for the
+                      resource.
                     maxLength: 255
-                    type: string
-                    x-kubernetes-validations:
-                    - message: availabilityZone is immutable
-                      rule: self == oldSelf
-                  flavorRef:
-                    description: flavorRef references the flavor to use for the server
-                      instance.
-                    maxLength: 253
                     minLength: 1
                     type: string
-                    x-kubernetes-validations:
-                    - message: flavorRef is immutable
-                      rule: self == oldSelf
-                  imageRef:
+                  metadata:
                     description: |-
-                      imageRef references the image to use for the server instance.
-                      NOTE: This is not required in case of boot from volume.
-                    maxLength: 253
-                    minLength: 1
-                    type: string
+                      metadata key and value pairs to be associated with the volume.
+                      NOTE(mandre): gophercloud can't clear all metadata at the moment, we thus can't allow
+                      mutability for metadata as we might end up in a state that is not reconciliable
+                    items:
+                      properties:
+                        name:
+                          description: name is the name of the metadata
+                          maxLength: 255
+                          type: string
+                        value:
+                          description: value is the value of the metadata
+                          maxLength: 255
+                          type: string
+                      required:
+                      - name
+                      - value
+                      type: object
+                    maxItems: 64
+                    type: array
+                    x-kubernetes-list-type: atomic
                     x-kubernetes-validations:
-                    - message: imageRef is immutable
+                    - message: metadata is immutable
                       rule: self == oldSelf
                   name:
                     description: |-
@@ -229,90 +193,25 @@ spec:
                     minLength: 1
                     pattern: ^[^,]+$
                     type: string
-                  ports:
-                    description: ports defines a list of ports which will be attached
-                      to the server.
-                    items:
-                      maxProperties: 1
-                      minProperties: 1
-                      properties:
-                        portRef:
-                          description: |-
-                            portRef is a reference to a Port object. Server creation will wait for
-                            this port to be created and available.
-                          maxLength: 253
-                          minLength: 1
-                          type: string
-                      type: object
-                    maxItems: 64
-                    type: array
-                    x-kubernetes-list-type: atomic
-                  serverGroupRef:
-                    description: |-
-                      serverGroupRef is a reference to a ServerGroup object. The server
-                      will be created in the server group.
+                  size:
+                    description: size is the size of the volume, in gibibytes (GiB).
+                    format: int32
+                    minimum: 1
+                    type: integer
+                    x-kubernetes-validations:
+                    - message: size is immutable
+                      rule: self == oldSelf
+                  volumeTypeRef:
+                    description: volumeTypeRef is a reference to the ORC VolumeType
+                      which this resource is associated with.
                     maxLength: 253
                     minLength: 1
                     type: string
                     x-kubernetes-validations:
-                    - message: serverGroupRef is immutable
+                    - message: volumeTypeRef is immutable
                       rule: self == oldSelf
-                  tags:
-                    description: tags is a list of tags which will be applied to the
-                      server.
-                    items:
-                      maxLength: 80
-                      minLength: 1
-                      type: string
-                    maxItems: 50
-                    type: array
-                    x-kubernetes-list-type: set
-                  userData:
-                    description: |-
-                      userData specifies data which will be made available to the server at
-                      boot time, either via the metadata service or a config drive. It is
-                      typically read by a configuration service such as cloud-init or ignition.
-                    maxProperties: 1
-                    minProperties: 1
-                    properties:
-                      secretRef:
-                        description: secretRef is a reference to a Secret containing
-                          the user data for this server.
-                        maxLength: 253
-                        minLength: 1
-                        type: string
-                    type: object
-                    x-kubernetes-validations:
-                    - message: userData is immutable
-                      rule: self == oldSelf
-                  volumes:
-                    description: volumes is a list of volumes attached to the server.
-                    items:
-                      minProperties: 1
-                      properties:
-                        device:
-                          description: |-
-                            device is the name of the device, such as `/dev/vdb`.
-                            Omit for auto-assignment
-                          maxLength: 255
-                          type: string
-                        volumeRef:
-                          description: |-
-                            volumeRef is a reference to a Volume object. Server creation will wait for
-                            this volume to be created and available.
-                          maxLength: 253
-                          minLength: 1
-                          type: string
-                      required:
-                      - volumeRef
-                      type: object
-                    maxItems: 64
-                    type: array
-                    x-kubernetes-list-type: atomic
                 required:
-                - flavorRef
-                - imageRef
-                - ports
+                - size
                 type: object
             required:
             - cloudCredentialsRef
@@ -416,110 +315,132 @@ spec:
                 description: resource contains the observed state of the OpenStack
                   resource.
                 properties:
-                  availabilityZone:
-                    description: availabilityZone is the availability zone where the
-                      server is located.
-                    maxLength: 1024
-                    type: string
-                  hostID:
-                    description: hostID is the host where the server is located in
-                      the cloud.
-                    maxLength: 1024
-                    type: string
-                  imageID:
-                    description: imageID indicates the OS image used to deploy the
-                      server.
-                    maxLength: 1024
-                    type: string
-                  interfaces:
-                    description: interfaces contains the list of interfaces attached
-                      to the server.
+                  attachments:
+                    description: attachments is a list of attachments for the volume.
                     items:
                       properties:
-                        fixedIPs:
-                          description: fixedIPs is the list of fixed IP addresses
-                            assigned to the interface.
-                          items:
-                            properties:
-                              ipAddress:
-                                description: ipAddress is the IP address assigned
-                                  to the port.
-                                maxLength: 1024
-                                type: string
-                              subnetID:
-                                description: subnetID is the ID of the subnet from
-                                  which the IP address is allocated.
-                                maxLength: 1024
-                                type: string
-                            type: object
-                          maxItems: 32
-                          type: array
-                          x-kubernetes-list-type: atomic
-                        macAddr:
-                          description: macAddr is the MAC address of the interface.
+                        attachedAt:
+                          description: attachedAt shows the date and time when the
+                            resource was attached. The date and time stamp format
+                            is ISO 8601.
+                          format: date-time
+                          type: string
+                        attachmentID:
+                          description: attachmentID represents the attachment UUID.
                           maxLength: 1024
                           type: string
-                        netID:
-                          description: netID is the ID of the network to which the
-                            interface is attached.
+                        device:
+                          description: device is the name of the device in the instance.
                           maxLength: 1024
                           type: string
-                        portID:
-                          description: portID is the ID of a port attached to the
-                            server.
-                          maxLength: 1024
-                          type: string
-                        portState:
-                          description: portState is the state of the port (e.g., ACTIVE,
-                            DOWN).
+                        serverID:
+                          description: serverID is the UUID of the server to which
+                            the volume is attached.
                           maxLength: 1024
                           type: string
                       type: object
-                    maxItems: 64
-                    type: array
-                    x-kubernetes-list-type: atomic
-                  name:
-                    description: name is the human-readable name of the resource.
-                      Might not be unique.
-                    maxLength: 1024
-                    type: string
-                  serverGroups:
-                    description: |-
-                      serverGroups is a slice of strings containing the UUIDs of the
-                      server groups to which the server belongs. Currently this can
-                      contain at most one entry.
-                    items:
-                      maxLength: 1024
-                      type: string
                     maxItems: 32
                     type: array
                     x-kubernetes-list-type: atomic
-                  status:
-                    description: |-
-                      status contains the current operational status of the server,
-                      such as IN_PROGRESS or ACTIVE.
+                  availabilityZone:
+                    description: availabilityZone is which availability zone the volume
+                      is in.
                     maxLength: 1024
                     type: string
-                  tags:
-                    description: tags is the list of tags on the resource.
-                    items:
-                      maxLength: 1024
-                      type: string
-                    maxItems: 50
-                    type: array
-                    x-kubernetes-list-type: atomic
-                  volumes:
-                    description: volumes contains the volumes attached to the server.
+                  backupID:
+                    description: backupID is the ID of the backup from which the volume
+                      was restored
+                    maxLength: 1024
+                    type: string
+                  bootable:
+                    description: bootable indicates whether this is a bootable volume.
+                    type: boolean
+                  consistencyGroupID:
+                    description: consistencyGroupID is the consistency group ID.
+                    maxLength: 1024
+                    type: string
+                  createdAt:
+                    description: createdAt shows the date and time when the resource
+                      was created. The date and time stamp format is ISO 8601
+                    format: date-time
+                    type: string
+                  description:
+                    description: description is a human-readable description for the
+                      resource.
+                    maxLength: 1024
+                    type: string
+                  encrypted:
+                    description: encrypted denotes if the volume is encrypted.
+                    type: boolean
+                  host:
+                    description: host is the identifier of the host holding the volume.
+                    maxLength: 1024
+                    type: string
+                  metadata:
+                    description: metadata key and value pairs to be associated with
+                      the volume.
                     items:
                       properties:
-                        id:
-                          description: id is the ID of a volume attached to the server.
-                          maxLength: 1024
+                        name:
+                          description: name is the name of the metadata
+                          maxLength: 255
+                          type: string
+                        value:
+                          description: value is the value of the metadata
+                          maxLength: 255
                           type: string
                       type: object
                     maxItems: 64
                     type: array
                     x-kubernetes-list-type: atomic
+                  multiattach:
+                    description: multiattach denotes if the volume is multi-attach
+                      capable.
+                    type: boolean
+                  name:
+                    description: name is a Human-readable name for the resource. Might
+                      not be unique.
+                    maxLength: 1024
+                    type: string
+                  replicationStatus:
+                    description: replicationStatus is the status of replication.
+                    maxLength: 1024
+                    type: string
+                  size:
+                    description: size is the size of the volume in GiB.
+                    format: int32
+                    type: integer
+                  snapshotID:
+                    description: snapshotID is the ID of the snapshot from which the
+                      volume was created
+                    maxLength: 1024
+                    type: string
+                  sourceVolID:
+                    description: sourceVolID is the ID of another block storage volume
+                      from which the current volume was created
+                    maxLength: 1024
+                    type: string
+                  status:
+                    description: status represents the current status of the volume.
+                    maxLength: 1024
+                    type: string
+                  tenantID:
+                    description: tenantID is the ID of the project that owns the volume.
+                    maxLength: 1024
+                    type: string
+                  updatedAt:
+                    description: updatedAt shows the date and time when the resource
+                      was updated. The date and time stamp format is ISO 8601
+                    format: date-time
+                    type: string
+                  userID:
+                    description: userID is the ID of the user who created the volume.
+                    maxLength: 1024
+                    type: string
+                  volumeType:
+                    description: volumeType is the name of associated the volume type.
+                    maxLength: 1024
+                    type: string
                 type: object
             type: object
         type: object

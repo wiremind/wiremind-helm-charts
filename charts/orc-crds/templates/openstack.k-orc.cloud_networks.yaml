@@ -118,7 +118,7 @@ spec:
                           maxLength: 255
                           minLength: 1
                           type: string
-                        maxItems: 32
+                        maxItems: 64
                         type: array
                         x-kubernetes-list-type: set
                       notTagsAny:
@@ -132,7 +132,7 @@ spec:
                           maxLength: 255
                           minLength: 1
                           type: string
-                        maxItems: 32
+                        maxItems: 64
                         type: array
                         x-kubernetes-list-type: set
                       projectRef:
@@ -153,7 +153,7 @@ spec:
                           maxLength: 255
                           minLength: 1
                           type: string
-                        maxItems: 32
+                        maxItems: 64
                         type: array
                         x-kubernetes-list-type: set
                       tagsAny:
@@ -168,7 +168,7 @@ spec:
                           maxLength: 255
                           minLength: 1
                           type: string
-                        maxItems: 32
+                        maxItems: 64
                         type: array
                         x-kubernetes-list-type: set
                     type: object
@@ -229,9 +229,12 @@ spec:
                       maxLength: 255
                       minLength: 1
                       type: string
-                    maxItems: 32
+                    maxItems: 64
                     type: array
                     x-kubernetes-list-type: set
+                    x-kubernetes-validations:
+                    - message: availabilityZoneHints is immutable
+                      rule: self == oldSelf
                   description:
                     description: description is a human-readable description for the
                       resource.
@@ -244,6 +247,9 @@ spec:
                     minLength: 1
                     pattern: ^[A-Za-z0-9]{1,63}(.[A-Za-z0-9-]{1,63})*(.[A-Za-z]{2,63})*.?$
                     type: string
+                    x-kubernetes-validations:
+                    - message: dnsDomain is immutable
+                      rule: self == oldSelf
                   external:
                     description: |-
                       external indicates whether the network has an external routing
@@ -280,6 +286,9 @@ spec:
                     maxLength: 253
                     minLength: 1
                     type: string
+                    x-kubernetes-validations:
+                    - message: projectRef is immutable
+                      rule: self == oldSelf
                   shared:
                     description: |-
                       shared indicates whether this resource is shared across all
@@ -300,9 +309,6 @@ spec:
                     type: array
                     x-kubernetes-list-type: set
                 type: object
-                x-kubernetes-validations:
-                - message: NetworkResourceSpec is immutable
-                  rule: self == oldSelf
             required:
             - cloudCredentialsRef
             type: object
@@ -417,7 +423,7 @@ spec:
                     items:
                       maxLength: 1024
                       type: string
-                    maxItems: 32
+                    maxItems: 64
                     type: array
                     x-kubernetes-list-type: atomic
                   createdAt:
@@ -516,7 +522,7 @@ spec:
                     items:
                       maxLength: 1024
                       type: string
-                    maxItems: 32
+                    maxItems: 256
                     type: array
                     x-kubernetes-list-type: atomic
                   tags:
@@ -524,7 +530,7 @@ spec:
                     items:
                       maxLength: 1024
                       type: string
-                    maxItems: 32
+                    maxItems: 64
                     type: array
                     x-kubernetes-list-type: atomic
                   updatedAt:

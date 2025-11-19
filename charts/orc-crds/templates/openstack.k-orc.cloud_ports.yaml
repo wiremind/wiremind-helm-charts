@@ -123,7 +123,7 @@ spec:
                           maxLength: 255
                           minLength: 1
                           type: string
-                        maxItems: 32
+                        maxItems: 64
                         type: array
                         x-kubernetes-list-type: set
                       notTagsAny:
@@ -137,7 +137,7 @@ spec:
                           maxLength: 255
                           minLength: 1
                           type: string
-                        maxItems: 32
+                        maxItems: 64
                         type: array
                         x-kubernetes-list-type: set
                       projectRef:
@@ -158,7 +158,7 @@ spec:
                           maxLength: 255
                           minLength: 1
                           type: string
-                        maxItems: 32
+                        maxItems: 64
                         type: array
                         x-kubernetes-list-type: set
                       tagsAny:
@@ -173,7 +173,7 @@ spec:
                           maxLength: 255
                           minLength: 1
                           type: string
-                        maxItems: 32
+                        maxItems: 64
                         type: array
                         x-kubernetes-list-type: set
                     type: object
@@ -245,9 +245,12 @@ spec:
                       required:
                       - subnetRef
                       type: object
-                    maxItems: 32
+                    maxItems: 128
                     type: array
                     x-kubernetes-list-type: atomic
+                    x-kubernetes-validations:
+                    - message: addresses is immutable
+                      rule: self == oldSelf
                   allowedAddressPairs:
                     description: allowedAddressPairs are allowed addresses associated
                       with this port.
@@ -271,7 +274,7 @@ spec:
                       required:
                       - ip
                       type: object
-                    maxItems: 32
+                    maxItems: 128
                     type: array
                     x-kubernetes-list-type: atomic
                   description:
@@ -293,6 +296,9 @@ spec:
                     maxLength: 253
                     minLength: 1
                     type: string
+                    x-kubernetes-validations:
+                    - message: networkRef is immutable
+                      rule: self == oldSelf
                   portSecurity:
                     default: Inherit
                     description: |-
@@ -305,6 +311,9 @@ spec:
                     - Disabled
                     - Inherit
                     type: string
+                    x-kubernetes-validations:
+                    - message: portSecurity cannot be changed to Inherit
+                      rule: '!(oldSelf != ''Inherit'' && self == ''Inherit'')'
                   projectRef:
                     description: |-
                       projectRef is a reference to the ORC Project this resource is associated with.
@@ -312,6 +321,9 @@ spec:
                     maxLength: 253
                     minLength: 1
                     type: string
+                    x-kubernetes-validations:
+                    - message: projectRef is immutable
+                      rule: self == oldSelf
                   securityGroupRefs:
                     description: |-
                       securityGroupRefs are the names of the security groups associated
@@ -321,7 +333,7 @@ spec:
                       minLength: 1
                       pattern: ^[^,]+$
                       type: string
-                    maxItems: 32
+                    maxItems: 64
                     type: array
                     x-kubernetes-list-type: set
                   tags:
@@ -334,7 +346,7 @@ spec:
                       maxLength: 255
                       minLength: 1
                       type: string
-                    maxItems: 32
+                    maxItems: 64
                     type: array
                     x-kubernetes-list-type: set
                   vnicType:
@@ -353,8 +365,6 @@ spec:
                 - networkRef
                 type: object
                 x-kubernetes-validations:
-                - message: PortResourceSpec is immutable
-                  rule: self == oldSelf
                 - message: securityGroupRefs must be empty when portSecurity is set
                     to Disabled
                   rule: 'has(self.portSecurity) && self.portSecurity == ''Disabled''
@@ -490,7 +500,7 @@ spec:
                           maxLength: 1024
                           type: string
                       type: object
-                    maxItems: 32
+                    maxItems: 128
                     type: array
                     x-kubernetes-list-type: atomic
                   createdAt:
@@ -529,7 +539,7 @@ spec:
                           maxLength: 1024
                           type: string
                       type: object
-                    maxItems: 32
+                    maxItems: 128
                     type: array
                     x-kubernetes-list-type: atomic
                   macAddress:
@@ -568,7 +578,7 @@ spec:
                     items:
                       maxLength: 1024
                       type: string
-                    maxItems: 32
+                    maxItems: 64
                     type: array
                     x-kubernetes-list-type: atomic
                   status:
@@ -580,7 +590,7 @@ spec:
                     items:
                       maxLength: 1024
                       type: string
-                    maxItems: 32
+                    maxItems: 64
                     type: array
                     x-kubernetes-list-type: atomic
                   updatedAt:
