@@ -67,18 +67,7 @@ rules:
 - apiGroups:
   - openstack.k-orc.cloud
   resources:
-  - flavors
-  - floatingips
-  - images
-  - networks
-  - ports
-  - projects
-  - routerinterfaces
-  - routers
-  - securitygroups
-  - servergroups
-  - servers
-  - subnets
+    - "*"
   verbs:
   - create
   - delete

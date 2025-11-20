@@ -4,7 +4,7 @@ description: A Helm chart for https://github.com/k-orc/openstack-resource-contro
 type: application
 appVersion: v2.3.0
 kubeVersion: ">=1.29.0-0"
-version: 0.2.0
+version: 0.2.1
 maintainers:
   - name: Wiremind
     url: https://github.com/wiremind/wiremind-helm-charts
