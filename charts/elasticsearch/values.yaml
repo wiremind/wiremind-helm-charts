@@ -80,7 +80,7 @@ hostAliases: []
 #     - "foo.local"
 #     - "bar.local"
 
-image: "docker.elastic.co/elasticsearch/elasticsearch"
+image: "docker.io/library/elasticsearch"
 imageTag: "8.15.3"
 imagePullPolicy: "IfNotPresent"
 
