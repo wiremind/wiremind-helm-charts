@@ -18483,6 +18483,29 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/sshd-0.1.1/sshd-0.1.1.tgz
     version: 0.1.1
+  syslog-ng:
+  - apiVersion: v2
+    appVersion: 4.8.3
+    created: "2025-12-05T14:57:46.419022172Z"
+    description: A Helm chart for syslog-ng, an enhanced log daemon that supports
+      a wide range of input and output methods
+    digest: 3f1ea60b0a706ec4c70e6f817b5c5ea7b9dcb9d2937d0da6a89864d6d10c8015
+    home: https://www.syslog-ng.com/
+    keywords:
+    - syslog
+    - logging
+    - syslog-ng
+    - log-collection
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: syslog-ng
+    sources:
+    - https://github.com/linuxserver/docker-syslog-ng
+    - https://hub.docker.com/r/linuxserver/syslog-ng
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/syslog-ng-0.1.0/syslog-ng-0.1.0.tgz
+    version: 0.1.0
   topolvm-crds:
   - annotations:
       category: DeveloperTools
@@ -19100,4 +19123,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-11-26T11:16:08.504155262Z"
+generated: "2025-12-05T14:57:46.420523963Z"
