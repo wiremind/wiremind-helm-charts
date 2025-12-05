@@ -1,0 +1,17 @@
+apiVersion: v2
+name: syslog-ng
+description: A Helm chart for syslog-ng, an enhanced log daemon that supports a wide range of input and output methods
+version: 0.1.0
+appVersion: "4.8.3"
+keywords:
+  - syslog
+  - logging
+  - syslog-ng
+  - log-collection
+home: https://www.syslog-ng.com/
+sources:
+  - https://github.com/linuxserver/docker-syslog-ng
+  - https://hub.docker.com/r/linuxserver/syslog-ng
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
