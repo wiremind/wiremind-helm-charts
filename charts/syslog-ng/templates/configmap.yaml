@@ -1,0 +1,11 @@
+{{- if include "syslog-ng.createConfigMap" . }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "syslog-ng.configMapName" . }}
+  labels:
+    {{- include "syslog-ng.labels" . | nindent 4 }}
+data:
+  syslog-ng.conf: |
+{{ .Values.config.syslogNgConf | indent 4 }}
+{{- end }}
