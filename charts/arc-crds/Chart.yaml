@@ -1,0 +1,16 @@
+annotations:
+  category: DeveloperTools
+apiVersion: v2
+name: arc-crds
+version: 0.23.7
+appVersion: 0.27.6
+description: Manage actions-runner-controller CRDs
+keywords:
+  - actions-runner-controller
+  - crds
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/arc-crds
+  - https://github.com/actions/actions-runner-controller/
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
