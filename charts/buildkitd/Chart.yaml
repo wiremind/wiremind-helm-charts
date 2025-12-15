@@ -2,9 +2,9 @@ apiVersion: v2
 name: buildkitd
 description: A Helm chart for https://github.com/moby/buildkit (rootless)
 type: application
-appVersion: 0.25.2
+appVersion: 0.26.2  # renovate: datasource=docker depName=moby/buildkit
 kubeVersion: ">=1.19.0-0"
-version: 0.25.2
+version: 0.26.2  # renovate: datasource=docker depName=moby/buildkit
 maintainers:
   - name: Wiremind
     url: https://github.com/wiremind/wiremind-helm-charts
