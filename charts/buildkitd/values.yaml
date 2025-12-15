@@ -3,6 +3,9 @@ image:
   pullPolicy: IfNotPresent
   tag: ""
 
+imagePullSecrets: []
+# - name: "image-pull-secret"
+
 # User 1000 is used in official images
 user:
   name: "user"
@@ -24,6 +27,13 @@ extraArgs: []
 
 replicaCount: 1
 
+# StatefulSet update strategy
+updateStrategy:
+  type: RollingUpdate
+  # rollingUpdate:
+  #   partition: 0
+  #   maxUnavailable: 1
+
 env: {}
 
 persistence:
@@ -38,6 +48,30 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+## Topology spread constraints for pod distribution
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+topologySpreadConstraints: []
+# Example topology spread constraints:
+# - maxSkew: 1
+#   topologyKey: topology.kubernetes.io/zone
+#   whenUnsatisfiable: ScheduleAnyway
+#   labelSelector:
+#     matchLabels:
+#       app.kubernetes.io/name: buildkitd
+#       app.kubernetes.io/instance: RELEASE-NAME
+# - maxSkew: 1
+#   topologyKey: kubernetes.io/hostname
+#   whenUnsatisfiable: DoNotSchedule
+#   labelSelector:
+#     matchLabels:
+#       app.kubernetes.io/name: buildkitd
+#       app.kubernetes.io/instance: RELEASE-NAME
+
+podDisruptionBudget:
+  enabled: false
+  # minAvailable: 1
+  # maxUnavailable: 1
 
 config:
   debug: false
@@ -89,6 +123,21 @@ config:
   history:
     maxAge: 172800
     maxEntries: 50
+  # Registry mirror configuration
+  # See: https://docs.docker.com/build/buildkit/toml-configuration/
+  registries: []
+  # Example:
+  # registries:
+  #   - registry: "docker.io"
+  #     mirrors:
+  #       - "yourmirror.local:5000"
+  #       - "core.harbor.domain/proxy.docker.io"
+  #     http: false
+  #     insecure: false
+  #     ca: []
+  #     keypairs: []
+  #       # - key: "/etc/config/key.pem"
+  #       #   cert: "/etc/config/cert.pem"
 
 livenessProbe:
   initialDelaySeconds: 5
@@ -168,6 +217,8 @@ metrics:
 
     ## HonorTimestamps controls whether Prometheus respects the timestamps present in scraped data
     honorTimestamps: true
+
+podLabels: {}
 
 podAnnotations:
   prometheus.io/scrape: "true"

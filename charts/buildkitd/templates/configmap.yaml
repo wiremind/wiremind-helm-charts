@@ -81,6 +81,39 @@ data:
       # maxEntries is the maximum number of history entries to keep.
       maxEntries = {{ .Values.config.history.maxEntries }}
 
+    {{- if .Values.config.registries }}
+    {{- range $registry := .Values.config.registries }}
+    # registry configures a new Docker register used for cache import or output.
+    [registry."{{ $registry.registry }}"]
+      {{- if $registry.mirrors }}
+      # mirror configuration to handle path in case a mirror registry requires a /project path rather than just a host:port
+      mirrors = [{{ range $i, $mirror := $registry.mirrors }}{{ if $i }}, {{ end }}{{ $mirror | quote }}{{ end }}]
+      {{- end }}
+      {{- if $registry.http }}
+      # Use plain HTTP to connect to the mirrors.
+      http = {{ $registry.http }}
+      {{- end }}
+      {{- if $registry.insecure }}
+      # Use HTTPS with self-signed certificates. Do not enable this together with `http`.
+      insecure = {{ $registry.insecure }}
+      {{- end }}
+      {{- if $registry.ca }}
+      # If you use token auth with self-signed certificates,
+      # then buildctl also needs to trust the token provider CA (for example, certificates that are configured for registry)
+      # because buildctl pulls tokens directly without daemon process
+      ca = [{{ range $i, $ca := $registry.ca }}{{ if $i }}, {{ end }}{{ $ca | quote }}{{ end }}]
+      {{- end }}
+      {{- if $registry.keypairs }}
+      {{- range $keypair := $registry.keypairs }}
+      [[registry."{{ $registry.registry }}".keypair]]
+        key = {{ $keypair.key | quote }}
+        cert = {{ $keypair.cert | quote }}
+      {{- end }}
+      {{- end }}
+
+    {{- end }}
+    {{- end }}
+
 ---
 
 # See https://github.com/moby/buildkit/blob/master/Dockerfile
