@@ -15897,6 +15897,20 @@ entries:
     version: 0.17.3
   orc:
   - apiVersion: v2
+    appVersion: v2.4.0
+    created: "2025-12-17T15:26:11.518683665Z"
+    description: A Helm chart for https://github.com/k-orc/openstack-resource-controller/
+    digest: f2066ababb001ca9fbcf2c2cae80051fe2c39088eb36457f5554de792c863916
+    kubeVersion: '>=1.29.0-0'
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: orc
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/orc-0.2.2/orc-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
     appVersion: v2.3.0
     created: "2025-11-20T08:51:20.538069761Z"
     description: A Helm chart for https://github.com/k-orc/openstack-resource-controller/
@@ -16037,6 +16051,26 @@ entries:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/orc-0.1.0/orc-0.1.0.tgz
     version: 0.1.0
   orc-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: v2.4.0
+    created: "2025-12-17T15:26:11.658785219Z"
+    description: Manage Openstack Resource Controller CRDs
+    digest: 25c85544d8a16f375cc7176b15b46f538bbb35a77e7268df257f09dad67d9969
+    keywords:
+    - orc
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: orc-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/orc-crds
+    - https://github.com/k-orc/openstack-resource-controller/
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/orc-crds-2.4.0/orc-crds-2.4.0.tgz
+    version: 2.4.0
   - annotations:
       category: DeveloperTools
     apiVersion: v2
@@ -19172,4 +19206,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-12-16T08:42:43.841045728Z"
+generated: "2025-12-17T15:26:11.659847954Z"
