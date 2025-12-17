@@ -2,8 +2,8 @@ annotations:
   category: DeveloperTools
 apiVersion: v2
 name: orc-crds
-version: 2.3.0
-appVersion: v2.3.0
+version: 2.4.0
+appVersion: v2.4.0
 description: Manage Openstack Resource Controller CRDs
 keywords:
   - orc
