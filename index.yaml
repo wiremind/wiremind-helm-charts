@@ -3417,6 +3417,26 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: v1.28.0
+    created: "2025-12-19T10:23:33.631133672Z"
+    description: Manage cloudnative-pg CRDs
+    digest: 7e914aa74b7bc4ec657a95cc3b42b05d1801b478bb24d975759f282cfa16dad2
+    keywords:
+    - cloudnative-pg
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: cloudnative-pg-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cloudnative-pg-crds
+    - https://github.com/cloudnative-pg/charts/
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/cloudnative-pg-crds-1.28.0/cloudnative-pg-crds-1.28.0.tgz
+    version: 1.28.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: v1.27.1
     created: "2025-11-04T13:53:08.023111455Z"
     description: Manage cloudnative-pg CRDs
@@ -19206,4 +19226,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-12-17T15:26:11.659847954Z"
+generated: "2025-12-19T10:23:33.631916552Z"
