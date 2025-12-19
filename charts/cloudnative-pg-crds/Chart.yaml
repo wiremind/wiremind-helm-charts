@@ -2,8 +2,8 @@ apiVersion: v2
 annotations:
   category: DeveloperTools
 name: cloudnative-pg-crds
-version: 1.27.1
-appVersion: "v1.27.1"
+version: 1.28.0
+appVersion: "v1.28.0"
 description: Manage cloudnative-pg CRDs
 keywords:
   - cloudnative-pg
