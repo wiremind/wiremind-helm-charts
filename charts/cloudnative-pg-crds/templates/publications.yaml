@@ -151,7 +151,7 @@ spec:
                       type: array
                       x-kubernetes-validations:
                         - message: specifying a column list when the publication also publishes tablesInSchema is not supported
-                          rule: "!(self.exists(o, has(o.table) && has(o.table.columns)) && self.exists(o, has(o.tablesInSchema)))"
+                          rule: '!(self.exists(o, has(o.table) && has(o.table.columns)) && self.exists(o, has(o.tablesInSchema)))'
                   type: object
                   x-kubernetes-validations:
                     - message: allTables and objects are mutually exclusive
