@@ -16572,6 +16572,28 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/platform-namespace-core-0.1.0/platform-namespace-core-0.1.0.tgz
     version: 0.1.0
+  plugin-barman-cloud-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: v0.9.0
+    created: "2025-12-19T10:50:36.988492492Z"
+    description: Manage plugin-barman-cloud CRDs
+    digest: abc7e3bfa01ffcf38720608865e49f05ee69a87524708063d37faf61c002a98c
+    keywords:
+    - cloudnative-pg
+    - barman-cloud
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: plugin-barman-cloud-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/plugin-barman-cloud-crds
+    - https://github.com/cloudnative-pg/charts/
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/plugin-barman-cloud-crds-0.9.0/plugin-barman-cloud-crds-0.9.0.tgz
+    version: 0.9.0
   postgres-operator-crds:
   - annotations:
       category: DeveloperTools
@@ -19226,4 +19248,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-12-19T10:23:33.631916552Z"
+generated: "2025-12-19T10:50:36.989367187Z"
