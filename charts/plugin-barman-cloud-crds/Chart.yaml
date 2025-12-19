@@ -1,0 +1,17 @@
+apiVersion: v2
+annotations:
+  category: DeveloperTools
+name: plugin-barman-cloud-crds
+version: 0.9.0
+appVersion: "v0.9.0"
+description: Manage plugin-barman-cloud CRDs
+keywords:
+  - cloudnative-pg
+  - barman-cloud
+  - crds
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/plugin-barman-cloud-crds
+  - https://github.com/cloudnative-pg/charts/
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
