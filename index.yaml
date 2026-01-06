@@ -18647,6 +18647,27 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: 0.39.0
+    created: "2026-01-06T11:15:00.819126992Z"
+    description: Manage topolvm CRDs
+    digest: aa7d826d62908a3150b5783e03c290d9684f062f11f8efc20933586f1b35e948
+    icon: https://i.imgur.com/iqSQEf7.png
+    keywords:
+    - topolvm
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: topolvm-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/topolvm-crds
+    - https://github.com/topolvm/topolvm/tree/main/charts/topolvm
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/topolvm-crds-15.9.0/topolvm-crds-15.9.0.tgz
+    version: 15.9.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: 0.38.0
     created: "2025-10-20T15:06:44.431152572Z"
     description: Manage topolvm CRDs
@@ -19260,4 +19281,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2025-12-23T09:51:39.880207229Z"
+generated: "2026-01-06T11:15:00.820152102Z"
