@@ -90,6 +90,9 @@ podAnnotations: {}
 # additionals labels
 labels: {}
 
+# additionals annotations
+annotations: {}
+
 esJavaOpts: ""  # example: "-Xmx1g -Xms1g"
 
 resources:
