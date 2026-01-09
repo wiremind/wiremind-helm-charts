@@ -76,6 +76,7 @@ jobs:
   test:
     name: "Test"
     needs: [prepare, filter]
+    if: needs.filter.outputs.skip_test != 'true'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
