@@ -195,7 +195,7 @@ proxyHeaders: ""
 hostnameStrict: false
 ## @param httpEnabled Force enabling HTTP endpoint (by default is only enabled if TLS is disabled)
 ##
-httpEnabled: false
+httpEnabled: true
 ## @param httpRelativePath Set the path relative to '/' for serving resources
 ##
 httpRelativePath: "/"

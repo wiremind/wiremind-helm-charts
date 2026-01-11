@@ -35,19 +35,6 @@ jobs:
           fi
           echo "charts=${json_charts}" >> "$GITHUB_OUTPUT"
 
-  filter:
-    runs-on: ubuntu-latest
-    outputs:
-      skip_test: ${{ steps.filter.outputs.skip_test }}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: dorny/paths-filter@v2
-        id: filter
-        with:
-          filters: |
-            skip_test:
-              - 'charts/keycloak/**'
-
   lint:
     name: "Lint"
     needs: prepare
@@ -75,8 +62,7 @@ jobs:
 
   test:
     name: "Test"
-    needs: [prepare, filter]
-    if: needs.filter.outputs.skip_test != 'true'
+    needs: prepare
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
