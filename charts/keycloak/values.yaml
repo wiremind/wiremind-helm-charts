@@ -93,7 +93,7 @@ usePasswordFiles: true
 image:
   registry: ghcr.io
   repository: wiremind/bitnami/keycloak
-  tag: 26.5.0-debian-12-r1
+  tag: 26.5.0-debian-12-r3
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
@@ -544,7 +544,7 @@ service:
   ## @param service.http.enabled Enable http port on service
   ##
   http:
-    enabled: true
+    enabled: false
   ## @param service.ports.http Keycloak service HTTP port
   ## @param service.ports.https Keycloak service HTTPS port
   ##
