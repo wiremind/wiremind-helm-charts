@@ -61,14 +61,13 @@ for APP in "${APP_ARRAY[@]}"; do
 		cp -r "$REPO_DIR/$CUSTOM_PATH/$APP" "./charts/"
 		echo "✅ Chart for '$APP' successfully added in './charts/$APP'."
 	fi
-	if [[ ! -z "$IMAGE_TAG" ]]; then
+	if [[ -n "$IMAGE_TAG" ]]; then
 		echo "🔄 Updating image information for '$APP'"
 		owner="${REPO%%/*}"
 		sed -i -E "s/^  registry: .*$/  registry: ghcr.io/g" "./charts/$APP/values.yaml"
 		sed -i -E "s/^  repository: .*$/  repository: wiremind\/$owner\/$APP/g" "./charts/$APP/values.yaml"
 		sed -i -E "s/^  tag: .*$/  tag: $IMAGE_TAG/g" "./charts/$APP/values.yaml"
 	fi
-	echo "Dont forget to check the image tag in values.yaml"
 done
 
 rm -rf "$TMP_DIR"
