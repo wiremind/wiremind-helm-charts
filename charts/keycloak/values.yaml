@@ -544,7 +544,7 @@ service:
   ## @param service.http.enabled Enable http port on service
   ##
   http:
-    enabled: false
+    enabled: true
   ## @param service.ports.http Keycloak service HTTP port
   ## @param service.ports.https Keycloak service HTTPS port
   ##
