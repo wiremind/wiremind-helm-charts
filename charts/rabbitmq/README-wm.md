@@ -4,9 +4,7 @@ Helm chart for rabbitmq pulled from the bitnami repo with some customizations.
 
 ## Update the chart
 
-If you updated the chart entirely using the script `update_charts.sh`, you need to:
-- Update the postgresql dependency to use the right repo and image.
-- Enabled http in the values.yaml
+You can update the entire chart using the script from root dir `./scripts/update_charts.sh -r bitnami/charts -a rabbitmq --path bitnami --wiremind-image <image_tag>
 
 ## Update app image
 
