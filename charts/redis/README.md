@@ -1,3 +1,18 @@
+# redis Helm chart
+
+Helm chart for redis sourced from bitnami/charts repository.
+
+## Update the chart
+
+To update this chart, run the following command from root dir:
+
+```bash
+./update_chart.sh -r bitnami/charts -b main -a redis --path bitnami --wiremind-image <image-tag>
+```
+
+Replace `<image-tag>` with the desired image version from Wiremind GitHub Container Registry.
+
+.
 <!--- app-name: Redis&reg; -->
 
 # Bitnami Secure Images Helm chart for Redis&reg;
