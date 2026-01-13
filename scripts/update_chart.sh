@@ -54,19 +54,23 @@ for APP in "${APP_ARRAY[@]}"; do
 		rm -rf "$TMP_DIR"
 		exit 1
 	fi
+	README_INFO="# $APP Helm chart\n\nHelm chart for $APP sourced from $REPO repository.\n\n## Update the chart\n\nTo update this chart, run the following command from root dir:\n\n\`\`\`bash\n./update_chart.sh -r $REPO -b $BRANCH -a $APP --path $CUSTOM_PATH --wiremind-image <image-tag>\n\`\`\`\n\nReplace \`<image-tag>\` with the desired image version from Wiremind GitHub Container Registry.\n\n."
+	echo -e "$README_INFO" > "$REPO_DIR/$CUSTOM_PATH/$APP/README_tmp.md"
+	cat "$REPO_DIR/$CUSTOM_PATH/$APP/README.md" >> "$REPO_DIR/$CUSTOM_PATH/$APP/README_tmp.md"
+	mv "$REPO_DIR/$CUSTOM_PATH/$APP/README_tmp.md" "$REPO_DIR/$CUSTOM_PATH/$APP/README.md"
 	if [[ -d "./charts/$APP" ]]; then
-		rsync -a --exclude='README-wm.md' "$REPO_DIR/$CUSTOM_PATH/$APP/" "./charts/$APP/"
+		rsync -a "$REPO_DIR/$CUSTOM_PATH/$APP/" "./charts/$APP/"
 		echo "✅ Chart for '$APP' successfully updated in './charts/$APP'."
 	else
 		cp -r "$REPO_DIR/$CUSTOM_PATH/$APP" "./charts/"
 		echo "✅ Chart for '$APP' successfully added in './charts/$APP'."
 	fi
 	if [[ -n "$IMAGE_TAG" ]]; then
-		echo "🔄 Updating image information for '$APP'"
 		owner="${REPO%%/*}"
 		sed -i -E "s/^  registry: .*$/  registry: ghcr.io/g" "./charts/$APP/values.yaml"
 		sed -i -E "s/^  repository: .*$/  repository: wiremind\/$owner\/$APP/g" "./charts/$APP/values.yaml"
 		sed -i -E "s/^  tag: .*$/  tag: $IMAGE_TAG/g" "./charts/$APP/values.yaml"
+		echo "✅ Image information updated for '$APP'"
 	fi
 done
 
