@@ -91,8 +91,8 @@ usePasswordFiles: true
 ## @param image.debug Enable Keycloak image debug mode
 ##
 image:
-  registry: ghcr.io
-  repository: wiremind/bitnami/keycloak
+  registry: ghcr.io/wiremind
+  repository: bitnami/keycloak
   tag: 26.5.0-debian-12-r3
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
