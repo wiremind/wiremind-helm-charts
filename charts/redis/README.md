@@ -1,6 +1,6 @@
 # redis Helm chart
 
-Helm chart for redis sourced from bitnami/charts repository. The version was updated to 23.0.6 to make use of the latest image from wiremind docker repository.
+Helm chart for redis sourced from bitnami/charts repository. The version was updated to 23.0.6 to make use of the latest image from Wiremind docker repository.
 
 ## Update the chart
 

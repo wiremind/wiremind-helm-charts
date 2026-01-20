@@ -1,6 +1,6 @@
 # rabbitmq Helm chart
 
-Helm chart for rabbitmq sourced from bitnami/charts repository. The version was updated to 16.0.17 to make use of the latest image from wiremind docker repository.
+Helm chart for rabbitmq sourced from bitnami/charts repository. The version was updated to 16.0.17 to make use of the latest image from Wiremind docker repository.
 
 ## Update the chart
 
