@@ -1,6 +1,6 @@
 # keycloak Helm chart
 
-Helm chart for keycloak sourced from bitnami/charts repository.
+Helm chart for keycloak sourced from bitnami/charts repository. The version was updated to 25.3.1 to make use of the latest image from Wiremind docker repository.
 
 ## Update the chart
 
