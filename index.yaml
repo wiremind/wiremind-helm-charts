@@ -129,6 +129,31 @@ entries:
     version: 0.23.7
   argo-cd-crds:
   - apiVersion: v2
+    appVersion: 9.4.1
+    created: "2026-02-09T14:04:38.09702481Z"
+    description: A Helm chart that deploys Argo CD CRD resources
+    digest: e26293c91a9b79d14ccb70e1de5dd1f4604122f034d4eef71dbd1fa7a6d5f278
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/argo-cd-crds
+    icon: https://argo-cd.readthedocs.io/en/stable/assets/logo.png
+    keywords:
+    - argoproj
+    - argocd
+    - gitops
+    - argo
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: argo-cd-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/argo-cd-crds
+    - https://github.com/argoproj/argo-helm/tree/main/charts/argo-cd
+    - https://github.com/argoproj/argo-cd
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/argo-cd-crds-9.4.1/argo-cd-crds-9.4.1.tgz
+    version: 9.4.1
+  - apiVersion: v2
     appVersion: 8.1.3
     created: "2025-07-17T09:49:13.635352114Z"
     description: A Helm chart that deploys Argo CD CRD resources
@@ -19664,4 +19689,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-01-26T13:00:14.929878019Z"
+generated: "2026-02-09T14:04:38.098829242Z"
