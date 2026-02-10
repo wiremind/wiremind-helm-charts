@@ -45,11 +45,11 @@ spec:
             - sh
             {{- end }}
           args:
+            {{- $passwordVar := printf "${%s}" $waitDbConfig.passwordRemoteRefKey }}
             {{- if eq $waitDbConfig.databaseType "postgresql" }}
             - -c
             - |
               echo "Waiting for {{ $waitDbName }} database to be ready..."
-              {{- $passwordVar := printf "${%s}" $waitDbConfig.passwordRemoteRefKey }}
               DB_URL="{{ $waitDbConfig.dialect }}://{{ $waitDbConfig.user }}:{{ $passwordVar }}@{{ $waitDbConfig.host }}:{{ $waitDbConfig.port }}/{{ $waitDbConfig.database }}"
               echo "Checking {{ $waitDbName }} database connectivity..."
               until psql "$DB_URL" -c "SELECT 1;" >/dev/null 2>&1; do
@@ -62,7 +62,6 @@ spec:
             - |
               set -euo pipefail
               echo "Waiting for {{ $waitDbName }} (clickhouse-client) to be ready..."
-              {{- $passwordVar := printf "${%s}" $waitDbConfig.passwordRemoteRefKey }}
               HOST="{{ $waitDbConfig.host }}"
               # Use native_port if defined, otherwise default to 9000
               PORT="{{ default 9000 $waitDbConfig.native_port }}"
