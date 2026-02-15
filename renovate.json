@@ -1,0 +1,49 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "labels": ["dependencies"],
+  "automerge": false,
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "schedule": [
+    "before 4am on Monday"
+  ],
+  "packageRules": [
+    {
+      "description": "Group Helm chart dependencies updates",
+      "matchDatasources": ["helm"],
+      "groupName": "helm dependencies",
+      "commitMessageTopic": "helm chart {{depName}}",
+      "commitMessagePrefix": "chore(deps):"
+    },
+    {
+      "description": "Group GitHub Actions updates",
+      "matchManagers": ["github-actions"],
+      "groupName": "github-actions",
+      "commitMessageTopic": "GitHub Actions",
+      "commitMessagePrefix": "chore(deps):"
+    },
+    {
+      "description": "Docker image updates",
+      "matchDatasources": ["docker"],
+      "commitMessageTopic": "{{depName}}",
+      "commitMessagePrefix": "chore(deps):",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "deps"
+    }
+  ],
+  "helm-values": {
+    "fileMatch": ["charts/.+/values\\.yaml$"]
+  },
+  "helmv3": {
+    "fileMatch": ["charts/.+/Chart\\.yaml$"]
+  },
+  "kubernetes": {
+    "fileMatch": ["charts/.+/templates/.+\\.yaml$"]
+  }
+}
