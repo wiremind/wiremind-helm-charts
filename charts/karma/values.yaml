@@ -59,6 +59,21 @@ ingress:
     #    hosts:
     #      - chart-example.local
 
+# Gateway API HTTPRoute
+httpRoute:
+  # Toggle to create an HTTPRoute resource alongside the existing ingress definition
+  enabled: false
+  apiVersion: "gateway.networking.k8s.io/v1"
+  kind: HTTPRoute
+  # specify the Gateway instance to bind the HTTPRoute to.
+  parentRefs: []
+  # - name: envoy-gateway-bundle
+  #   namespace: envoy-gateway-system
+  # Hostnames to use for the http route.
+  hostnames: []
+  # Extra HTTPRoute rules that will be appended before the default backend
+  extraRules: []
+
 deployment:
   annotations: {}
 

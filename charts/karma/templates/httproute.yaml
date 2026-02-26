@@ -1,0 +1,24 @@
+{{- if .Values.httpRoute.enabled }}
+apiVersion: {{ .Values.httpRoute.apiVersion }}
+kind: {{ .Values.httpRoute.kind }}
+metadata:
+  name: {{ include "karma.fullname" . }}
+  labels:
+    {{- include "karma.labels" . | nindent 4 }}
+spec:
+  {{- with .Values.httpRoute.parentRefs }}
+  parentRefs:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  hostnames:
+  {{- range .Values.httpRoute.hostnames }}
+    - {{ . | quote }}
+  {{- end }}
+  rules:
+{{- if .Values.httpRoute.extraRules }}
+{{- toYaml .Values.httpRoute.extraRules | nindent 2 }}
+{{- end }}
+  - backendRefs:
+    - name: {{ include "karma.fullname" . }}
+      port: {{ .Values.service.port }}
+{{- end }}
