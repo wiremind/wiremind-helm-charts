@@ -19393,6 +19393,26 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: v4.10.2
+    created: "2026-03-05T21:03:43.140116638Z"
+    description: Manage Vpa CRDs
+    digest: 314a4e653d958ca19c20d7a2c00eb5feef5db2ea43ac0faff3ff165faf7dfd7d
+    keywords:
+    - vpa
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: vpa-crds
+    sources:
+    - https://github.com/FairwindsOps/charts/blob/master/stable/vpa/
+    - https://github.com/FairwindsOps/charts/tree/master/stable/vpa/crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/vpa-crds-4.10.2/vpa-crds-4.10.2.tgz
+    version: 4.10.2
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: v4.7.2
     created: "2025-06-24T10:43:31.363393102Z"
     description: Manage Vpa CRDs
@@ -19689,4 +19709,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-02-09T14:04:38.098829242Z"
+generated: "2026-03-05T21:03:43.141434977Z"
