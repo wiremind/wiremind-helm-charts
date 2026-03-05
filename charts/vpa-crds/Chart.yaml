@@ -2,8 +2,8 @@ apiVersion: v2
 annotations:
   category: DeveloperTools
 name: vpa-crds
-version: 4.7.2
-appVersion: "v4.7.2"
+version: 4.10.2
+appVersion: "v4.10.2"
 description: Manage Vpa CRDs
 keywords:
   - vpa
