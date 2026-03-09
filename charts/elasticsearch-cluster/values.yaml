@@ -4,14 +4,14 @@ fullnameOverride: ""
 ## To define common settings, it may be useful to use YAML anchors to use the same
 ## base settings for all node types (data + master) + ingest
 es-defaults: &defaults
-  imageTag: 8.18.8
+  imageTag: 8.19.12
   ## Change me, and change urls using elasticsearch below
   clusterName: "my-elasticsearch-cluster"
   ## Enable if you want backup (see below)
   # keystore:
   #   - secretName: $RELEASE-NAME-elasticsearch-s3
   ## Installs by default repository-s3 and mappersize plugin
-  elasticsearchPlugins: "" # Example: "repository-s3 mapper-size"
+  elasticsearchPlugins: ""  # Example: "repository-s3 mapper-size"
   extraInitContainers: |
     {{- if .Values.elasticsearchPlugins }}
     - name: elasticsearch-install-plugins
@@ -216,7 +216,7 @@ keystore:
 
 kibana:
   enabled: false
-  imageTag: 8.18.8
+  imageTag: 8.19.12
   ## Change me
   elasticsearchHosts: http://my-elasticsearch-cluster-data-hot:9200
   elasticsearchCredentialSecret: my-elasticsearch-cluster-data-hot-credentials
