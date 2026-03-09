@@ -81,7 +81,7 @@ hostAliases: []
 #     - "bar.local"
 
 image: "docker.io/library/elasticsearch"
-imageTag: "8.15.3"
+imageTag: "8.19.12"
 imagePullPolicy: "IfNotPresent"
 
 podAnnotations: {}
