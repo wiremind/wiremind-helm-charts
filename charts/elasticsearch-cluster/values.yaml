@@ -11,7 +11,7 @@ es-defaults: &defaults
   # keystore:
   #   - secretName: $RELEASE-NAME-elasticsearch-s3
   ## Installs by default repository-s3 and mappersize plugin
-  elasticsearchPlugins: repository-s3 mapper-size
+  elasticsearchPlugins: "" # Example: "repository-s3 mapper-size"
   extraInitContainers: |
     {{- if .Values.elasticsearchPlugins }}
     - name: elasticsearch-install-plugins
@@ -30,6 +30,7 @@ es-defaults: &defaults
               echo "Plugin $PLUGIN_NAME already exists, skipping."
             else
               echo "$PLUGIN_NAME does not exist yet, installing..."
+              rm -rf /usr/share/elasticsearch/plugins/$PLUGIN_NAME
               bin/elasticsearch-plugin install --batch $PLUGIN_NAME
             fi
           done
