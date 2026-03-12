@@ -4,6 +4,7 @@ installCRDs: true
 
 # Synchonize your values from external-secrets Helm Chart with the ones below
 crds:
+  unsafeServeV1Beta1: false
   # -- If true, create CRDs for Cluster External Secret.
   createClusterExternalSecret: true
   # -- If true, create CRDs for Cluster Secret Store.
