@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/name: "cert-manager"
     app.kubernetes.io/instance: "cert-manager"
     app.kubernetes.io/component: "crds"
-    app.kubernetes.io/version: "v1.19.1"
+    app.kubernetes.io/version: "v1.20.0"
 spec:
   group: cert-manager.io
   names:
@@ -314,6 +314,10 @@ spec:
                   type: string
               type: object
           type: object
+      selectableFields:
+        - jsonPath: .spec.issuerRef.group
+        - jsonPath: .spec.issuerRef.kind
+        - jsonPath: .spec.issuerRef.name
       served: true
       storage: true
       subresources:
