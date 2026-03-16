@@ -1448,6 +1448,28 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: v1.20.0
+    created: "2026-03-16T08:57:52.873316944Z"
+    description: Manage cert-manager CRDs
+    digest: c65cfbf4671dbe88b51d7807e66442eb33ba9a30fa93001da33a73210af4f668
+    icon: https://raw.githubusercontent.com/jetstack/cert-manager/master/logo/logo.png
+    keywords:
+    - cert
+    - manager
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: cert-manager-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cert-manager-crds
+    - https://github.com/cert-manager/cert-manager
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/cert-manager-crds-1.20.0/cert-manager-crds-1.20.0.tgz
+    version: 1.20.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: v1.19.1
     created: "2025-10-28T11:42:03.984145406Z"
     description: Manage cert-manager CRDs
@@ -12338,6 +12360,18 @@ entries:
     version: 0.2.1
   external-secrets-crds:
   - apiVersion: v2
+    appVersion: 2.1.0
+    created: "2026-03-16T08:57:53.124737956Z"
+    description: A Helm chart to manage external-secrets CRDs
+    digest: 8cf4b042d57ff27054ff9c507a8306cb1ae157fdbbac300c7d532accd61474f6
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: external-secrets-crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/external-secrets-crds-2.1.0/external-secrets-crds-2.1.0.tgz
+    version: 2.1.0
+  - apiVersion: v2
     appVersion: 1.2.0
     created: "2025-12-23T09:51:39.878708742Z"
     description: A Helm chart to manage external-secrets CRDs
@@ -19181,6 +19215,27 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: 0.40.1
+    created: "2026-03-16T08:57:53.371511071Z"
+    description: Manage topolvm CRDs
+    digest: 27297f8257a7cdd0974f1c5bb981bbe0435f5ab235b5041527a5b11f179b1630
+    icon: https://i.imgur.com/iqSQEf7.png
+    keywords:
+    - topolvm
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: topolvm-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/topolvm-crds
+    - https://github.com/topolvm/topolvm/tree/main/charts/topolvm
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/topolvm-crds-16.0.0/topolvm-crds-16.0.0.tgz
+    version: 16.0.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: 0.39.0
     created: "2026-01-06T11:15:00.819126992Z"
     description: Manage topolvm CRDs
@@ -19835,4 +19890,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-03-16T08:57:21.714179907Z"
+generated: "2026-03-16T08:57:53.373585397Z"
