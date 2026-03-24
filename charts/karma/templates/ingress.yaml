@@ -6,10 +6,7 @@ metadata:
   name: {{ $fullName }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: {{ include "karma.name" . }}
-    helm.sh/chart: {{ include "karma.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "karma.labels" . | nindent 4 }}
 {{- with .Values.ingress.annotations }}
   annotations:
     {{- tpl (toYaml .) $ | nindent 4 }}

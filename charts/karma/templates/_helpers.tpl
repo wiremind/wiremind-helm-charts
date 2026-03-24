@@ -41,3 +41,23 @@ Create the name of the service account to use
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Common labels
+*/}}
+{{- define "karma.labels" -}}
+helm.sh/chart: {{ include "karma.chart" . }}
+{{ include "karma.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "karma.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "karma.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

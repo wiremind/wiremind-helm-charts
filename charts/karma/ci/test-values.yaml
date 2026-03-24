@@ -9,6 +9,14 @@ ingress:
   path: /
   pathType: ImplementationSpecific
 
+httpRoute:
+  enabled: true
+  hostnames:
+   - chart-example.local
+  parentRefs:
+    - name: gateway
+      namespace: default
+
 kthxbyeSidecar:
   enabled: true
   alertmanagerServiceName: prometheus-alertmanager

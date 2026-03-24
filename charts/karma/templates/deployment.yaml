@@ -4,10 +4,7 @@ metadata:
   name: {{ include "karma.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: {{ include "karma.name" . }}
-    helm.sh/chart: {{ include "karma.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "karma.labels" . | nindent 4 }}
 {{- with .Values.deployment.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
@@ -16,13 +13,11 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "karma.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- include "karma.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "karma.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- include "karma.selectorLabels" . | nindent 8 }}
         {{- if .Values.podLabels -}}
         {{ toYaml .Values.podLabels | nindent 8 }}
         {{- end }}
