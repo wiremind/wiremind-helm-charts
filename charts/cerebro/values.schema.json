@@ -5,6 +5,9 @@
         "affinity": {
             "type": "object"
         },
+        "createSecret": {
+            "type": "boolean"
+        },
         "config": {
             "type": "object",
             "properties": {
