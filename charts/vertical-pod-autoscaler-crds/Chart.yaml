@@ -1,0 +1,16 @@
+apiVersion: v2
+annotations:
+  category: DeveloperTools
+name: vertical-pod-autoscaler-crds
+version: 1.6.0
+appVersion: 1.6.0
+description: Manage Vertical Pod Autoscaler CRDs
+keywords:
+  - vpa
+  - crds
+sources:
+  - https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/
+  - https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/deploy/vpa-v1-crd-gen.yaml
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
