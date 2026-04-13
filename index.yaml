@@ -19719,6 +19719,27 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
+  vertical-pod-autoscaler-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 1.6.0
+    created: "2026-04-13T13:26:15.845828694Z"
+    description: Manage Vertical Pod Autoscaler CRDs
+    digest: 679a1d863ef18e7a9c23a4e65c0c0b5d440d956c0e0fc9219d76777a345f424c
+    keywords:
+    - vpa
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: vertical-pod-autoscaler-crds
+    sources:
+    - https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/
+    - https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/deploy/vpa-v1-crd-gen.yaml
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/vertical-pod-autoscaler-crds-1.6.0/vertical-pod-autoscaler-crds-1.6.0.tgz
+    version: 1.6.0
   vpa-crds:
   - annotations:
       category: DeveloperTools
@@ -20039,4 +20060,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-04-07T10:18:55.50626634Z"
+generated: "2026-04-13T13:26:15.846744358Z"
