@@ -5,10 +5,7 @@ metadata:
   name: {{ include "karma.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: {{ include "karma.name" . }}
-    helm.sh/chart: {{ include "karma.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "karma.labels" . | nindent 4 }}
 {{- if .Values.serviceMonitor.additionalLabels }}
 {{ toYaml .Values.serviceMonitor.additionalLabels | indent 4 }}
 {{- end }}
@@ -35,6 +32,5 @@ spec:
 {{- end }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "karma.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- include "karma.selectorLabels" . | nindent 6 }}
 {{- end }}
