@@ -1,0 +1,72 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/argoproj/argo-events/master/api/jsonschema/schema.json
+{{- if eq .Values.config.kind "review" }}
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: {{ .Values.config.name }}
+  namespace: {{ .Values.project.name }}-argo
+spec:
+  template:
+    serviceAccountName: sensor
+  eventBusName: eventbus
+  dependencies:
+    - name: upgrade
+      eventSourceName: gitlab
+      eventName: webhook
+      filters:
+        data:
+          - path: body.object_kind
+            type: string
+            comparator: "="
+            value: 
+              - "push"
+          - path: body.ref
+            type: string
+            comparator: "="
+            value:
+              {{- range $repo := .Values.project.repositories }}
+              - "refs/heads/{{ $repo.targetRevision }}"
+              {{- end }}
+          - path: body.project.id
+            type: number
+            comparator: "="
+            value:
+              {{- range $repo := .Values.project.repositories }}
+              - "{{ $repo.id }}"
+              {{- end }}
+  triggers:
+    - template:
+        name: review-upgrade
+        conditions: upgrade
+        argoWorkflow:
+          operation: submit
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: upgrade-review-
+                namespace: {{ .Values.project.name }}-argo
+              spec:
+                workflowTemplateRef:
+                  name: upgrade
+                arguments:
+                  parameters:
+                    - name: branch
+                      value: "{{ .Values.name }}"
+                    - name: commit-sha
+                    - name: components
+                    - name: envkind
+                      value: "review"
+                    - name: user-email
+                      value: {{ .Values.config.creator }}@wiremind.io
+          parameters:
+            - src:
+                dependencyName: upgrade
+                dataKey: body.checkout_sha
+              dest: spec.arguments.parameters.1.value
+            - src:
+                dependencyName: upgrade
+                dataTemplate: {{ include "environment.project.components" . | quote }}
+              dest: spec.arguments.parameters.2.value
+{{- end }}

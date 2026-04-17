@@ -1,0 +1,28 @@
+# Example values
+
+config:
+  name: example
+  kind: review
+  creator: "rsabbah"
+  labels:
+
+project:
+  name: "example-project"
+  repositories:
+    - id: 123
+      targetRevision: "back-branch-name"
+      # List for multi-image support
+      components:
+        # Component name is the key to replace in {project}-deploy
+        - name: backend
+        - name: test
+          # Suffix to add to image tag
+          imageSuffix: "test"
+    - id: 456
+      targetRevision: "front-branch-name"
+      components:
+        - name: frontend
+    - id: 789
+      targetRevision: "main"
+      components:
+        - name: another-front
