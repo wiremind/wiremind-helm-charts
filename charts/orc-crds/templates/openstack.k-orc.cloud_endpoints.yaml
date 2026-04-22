@@ -4,16 +4,16 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.20.1
-  name: volumetypes.openstack.k-orc.cloud
+  name: endpoints.openstack.k-orc.cloud
 spec:
   group: openstack.k-orc.cloud
   names:
     categories:
     - openstack
-    kind: VolumeType
-    listKind: VolumeTypeList
-    plural: volumetypes
-    singular: volumetype
+    kind: Endpoint
+    listKind: EndpointList
+    plural: endpoints
+    singular: endpoint
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -32,7 +32,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: VolumeType is the Schema for an ORC resource.
+        description: Endpoint is the Schema for an ORC resource.
         properties:
           apiVersion:
             description: |-
@@ -91,20 +91,22 @@ spec:
                       error state and will not continue to retry.
                     minProperties: 1
                     properties:
-                      description:
-                        description: description of the existing resource
-                        maxLength: 255
+                      interface:
+                        description: interface of the existing endpoint.
+                        enum:
+                        - admin
+                        - internal
+                        - public
+                        type: string
+                      serviceRef:
+                        description: serviceRef is a reference to the ORC Service
+                          which this resource is associated with.
+                        maxLength: 253
                         minLength: 1
                         type: string
-                      isPublic:
-                        description: isPublic indicates whether the VolumeType is
-                          public.
-                        type: boolean
-                      name:
-                        description: name of the existing resource
-                        maxLength: 255
-                        minLength: 1
-                        pattern: ^[^,]+$
+                      url:
+                        description: url is the URL of the existing endpoint.
+                        maxLength: 1024
                         type: string
                     type: object
                   id:
@@ -160,37 +162,37 @@ spec:
                     maxLength: 255
                     minLength: 1
                     type: string
-                  extraSpecs:
-                    description: extraSpecs is a map of key-value pairs that define
-                      extra specifications for the volume type.
-                    items:
-                      properties:
-                        name:
-                          description: name is the name of the extraspec
-                          maxLength: 255
-                          type: string
-                        value:
-                          description: value is the value of the extraspec
-                          maxLength: 255
-                          type: string
-                      required:
-                      - name
-                      - value
-                      type: object
-                    maxItems: 64
-                    type: array
-                    x-kubernetes-list-type: atomic
-                  isPublic:
-                    description: isPublic indicates whether the volume type is public.
+                    x-kubernetes-validations:
+                    - message: description is immutable
+                      rule: self == oldSelf
+                  enabled:
+                    description: enabled indicates whether the endpoint is enabled
+                      or not.
                     type: boolean
-                  name:
-                    description: |-
-                      name will be the name of the created resource. If not specified, the
-                      name of the ORC object will be used.
-                    maxLength: 255
-                    minLength: 1
-                    pattern: ^[^,]+$
+                  interface:
+                    description: interface indicates the visibility of the endpoint.
+                    enum:
+                    - admin
+                    - internal
+                    - public
                     type: string
+                  serviceRef:
+                    description: serviceRef is a reference to the ORC Service which
+                      this resource is associated with.
+                    maxLength: 253
+                    minLength: 1
+                    type: string
+                    x-kubernetes-validations:
+                    - message: serviceRef is immutable
+                      rule: self == oldSelf
+                  url:
+                    description: url is the endpoint URL.
+                    maxLength: 1024
+                    type: string
+                required:
+                - interface
+                - serviceRef
+                - url
                 type: object
             required:
             - cloudCredentialsRef
@@ -298,31 +300,24 @@ spec:
                   description:
                     description: description is a human-readable description for the
                       resource.
+                    maxLength: 255
+                    minLength: 1
+                    type: string
+                  enabled:
+                    description: enabled indicates whether the endpoint is enabled
+                      or not.
+                    type: boolean
+                  interface:
+                    description: interface indicates the visibility of the endpoint.
+                    maxLength: 128
+                    type: string
+                  serviceID:
+                    description: serviceID is the ID of the Service to which the resource
+                      is associated.
                     maxLength: 1024
                     type: string
-                  extraSpecs:
-                    description: extraSpecs is a map of key-value pairs that define
-                      extra specifications for the volume type.
-                    items:
-                      properties:
-                        name:
-                          description: name is the name of the extraspec
-                          maxLength: 255
-                          type: string
-                        value:
-                          description: value is the value of the extraspec
-                          maxLength: 255
-                          type: string
-                      type: object
-                    maxItems: 64
-                    type: array
-                    x-kubernetes-list-type: atomic
-                  isPublic:
-                    description: isPublic indicates whether the VolumeType is public.
-                    type: boolean
-                  name:
-                    description: name is a Human-readable name for the resource. Might
-                      not be unique.
+                  url:
+                    description: url is the endpoint URL.
                     maxLength: 1024
                     type: string
                 type: object

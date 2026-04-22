@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.1
+    controller-gen.kubebuilder.io/version: v0.20.1
   name: ports.openstack.k-orc.cloud
 spec:
   group: openstack.k-orc.cloud
@@ -95,10 +95,19 @@ spec:
                       error state and will not continue to retry.
                     minProperties: 1
                     properties:
+                      adminStateUp:
+                        description: |-
+                          adminStateUp is the administrative state of the port,
+                          which is up (true) or down (false).
+                        type: boolean
                       description:
                         description: description of the existing resource
                         maxLength: 255
                         minLength: 1
+                        type: string
+                      macAddress:
+                        description: macAddress is the MAC address of the port.
+                        maxLength: 32
                         type: string
                       name:
                         description: name of the existing resource
@@ -183,6 +192,7 @@ spec:
                       that when specifying an import by ID, the resource MUST already exist.
                       The ORC object will enter an error state if the resource does not exist.
                     format: uuid
+                    maxLength: 36
                     type: string
                 type: object
               managedOptions:
@@ -251,6 +261,12 @@ spec:
                     x-kubernetes-validations:
                     - message: addresses is immutable
                       rule: self == oldSelf
+                  adminStateUp:
+                    default: true
+                    description: |-
+                      adminStateUp is the administrative state of the port,
+                      which is up (true) or down (false). The default value is true.
+                    type: boolean
                   allowedAddressPairs:
                     description: allowedAddressPairs are allowed addresses associated
                       with this port.
@@ -282,6 +298,43 @@ spec:
                       resource.
                     maxLength: 255
                     minLength: 1
+                    type: string
+                  hostID:
+                    description: |-
+                      hostID specifies the host where the port will be bound.
+                      Note that when the port is attached to a server, OpenStack may
+                      rebind the port to the server's actual compute host, which may
+                      differ from the specified hostID if no matching scheduler hint
+                      is used. In this case the port's status will reflect the actual
+                      binding host, not the value specified here.
+                    maxProperties: 1
+                    minProperties: 1
+                    properties:
+                      id:
+                        description: |-
+                          id is the literal host ID string to use for binding:host_id.
+                          This is mutually exclusive with serverRef.
+                        maxLength: 36
+                        type: string
+                      serverRef:
+                        description: |-
+                          serverRef is a reference to an ORC Server resource from which to
+                          retrieve the hostID for port binding. The hostID will be read from
+                          the Server's status.resource.hostID field.
+                          This is mutually exclusive with id.
+                        maxLength: 253
+                        minLength: 1
+                        type: string
+                    type: object
+                    x-kubernetes-validations:
+                    - message: hostID is immutable
+                      rule: self == oldSelf
+                    - message: exactly one of id or serverRef must be set
+                      rule: (has(self.id) && size(self.id) > 0) != (has(self.serverRef)
+                        && size(self.serverRef) > 0)
+                  macAddress:
+                    description: macAddress is the MAC address of the port.
+                    maxLength: 32
                     type: string
                   name:
                     description: name is a human-readable name of the port. If not
@@ -470,6 +523,7 @@ spec:
                 x-kubernetes-list-type: map
               id:
                 description: id is the unique identifier of the OpenStack resource.
+                maxLength: 1024
                 type: string
               resource:
                 description: resource contains the observed state of the OpenStack
@@ -542,6 +596,10 @@ spec:
                     maxItems: 128
                     type: array
                     x-kubernetes-list-type: atomic
+                  hostID:
+                    description: hostID is the ID of host where the port resides.
+                    maxLength: 128
+                    type: string
                   macAddress:
                     description: macAddress is the MAC address of the port.
                     maxLength: 1024
@@ -605,6 +663,8 @@ spec:
                     type: string
                 type: object
             type: object
+        required:
+        - spec
         type: object
     served: true
     storage: true
