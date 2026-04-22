@@ -4,16 +4,16 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.20.1
-  name: volumetypes.openstack.k-orc.cloud
+  name: users.openstack.k-orc.cloud
 spec:
   group: openstack.k-orc.cloud
   names:
     categories:
     - openstack
-    kind: VolumeType
-    listKind: VolumeTypeList
-    plural: volumetypes
-    singular: volumetype
+    kind: User
+    listKind: UserList
+    plural: users
+    singular: user
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -32,7 +32,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: VolumeType is the Schema for an ORC resource.
+        description: User is the Schema for an ORC resource.
         properties:
           apiVersion:
             description: |-
@@ -91,15 +91,12 @@ spec:
                       error state and will not continue to retry.
                     minProperties: 1
                     properties:
-                      description:
-                        description: description of the existing resource
-                        maxLength: 255
+                      domainRef:
+                        description: domainRef is a reference to the ORC Domain which
+                          this resource is associated with.
+                        maxLength: 253
                         minLength: 1
                         type: string
-                      isPublic:
-                        description: isPublic indicates whether the VolumeType is
-                          public.
-                        type: boolean
                       name:
                         description: name of the existing resource
                         maxLength: 255
@@ -154,34 +151,32 @@ spec:
 
                   resource must be specified if the management policy is `managed`.
                 properties:
+                  defaultProjectRef:
+                    description: defaultProjectRef is a reference to the Default Project
+                      which this resource is associated with.
+                    maxLength: 253
+                    minLength: 1
+                    type: string
+                    x-kubernetes-validations:
+                    - message: defaultProjectRef is immutable
+                      rule: self == oldSelf
                   description:
                     description: description is a human-readable description for the
                       resource.
                     maxLength: 255
                     minLength: 1
                     type: string
-                  extraSpecs:
-                    description: extraSpecs is a map of key-value pairs that define
-                      extra specifications for the volume type.
-                    items:
-                      properties:
-                        name:
-                          description: name is the name of the extraspec
-                          maxLength: 255
-                          type: string
-                        value:
-                          description: value is the value of the extraspec
-                          maxLength: 255
-                          type: string
-                      required:
-                      - name
-                      - value
-                      type: object
-                    maxItems: 64
-                    type: array
-                    x-kubernetes-list-type: atomic
-                  isPublic:
-                    description: isPublic indicates whether the volume type is public.
+                  domainRef:
+                    description: domainRef is a reference to the ORC Domain which
+                      this resource is associated with.
+                    maxLength: 253
+                    minLength: 1
+                    type: string
+                    x-kubernetes-validations:
+                    - message: domainRef is immutable
+                      rule: self == oldSelf
+                  enabled:
+                    description: enabled defines whether a user is enabled or disabled
                     type: boolean
                   name:
                     description: |-
@@ -191,7 +186,18 @@ spec:
                     minLength: 1
                     pattern: ^[^,]+$
                     type: string
+                  passwordRef:
+                    description: |-
+                      passwordRef is a reference to a Secret containing the password
+                      for this user. The Secret must contain a key named "password".
+                      If not specified, the user is created without a password.
+                    maxLength: 253
+                    minLength: 1
+                    type: string
                 type: object
+                x-kubernetes-validations:
+                - message: passwordRef may not be removed once set
+                  rule: '!has(oldSelf.passwordRef) || has(self.passwordRef)'
             required:
             - cloudCredentialsRef
             type: object
@@ -295,34 +301,38 @@ spec:
                 description: resource contains the observed state of the OpenStack
                   resource.
                 properties:
+                  appliedPasswordRef:
+                    description: |-
+                      appliedPasswordRef is the name of the Secret containing the
+                      password that was last applied to the OpenStack resource.
+                    maxLength: 1024
+                    type: string
+                  defaultProjectID:
+                    description: defaultProjectID is the ID of the Default Project
+                      to which the user is associated with.
+                    maxLength: 1024
+                    type: string
                   description:
                     description: description is a human-readable description for the
                       resource.
                     maxLength: 1024
                     type: string
-                  extraSpecs:
-                    description: extraSpecs is a map of key-value pairs that define
-                      extra specifications for the volume type.
-                    items:
-                      properties:
-                        name:
-                          description: name is the name of the extraspec
-                          maxLength: 255
-                          type: string
-                        value:
-                          description: value is the value of the extraspec
-                          maxLength: 255
-                          type: string
-                      type: object
-                    maxItems: 64
-                    type: array
-                    x-kubernetes-list-type: atomic
-                  isPublic:
-                    description: isPublic indicates whether the VolumeType is public.
+                  domainID:
+                    description: domainID is the ID of the Domain to which the resource
+                      is associated.
+                    maxLength: 1024
+                    type: string
+                  enabled:
+                    description: enabled defines whether a user is enabled or disabled
                     type: boolean
                   name:
                     description: name is a Human-readable name for the resource. Might
                       not be unique.
+                    maxLength: 1024
+                    type: string
+                  passwordExpiresAt:
+                    description: passwordExpiresAt is the timestamp at which the user's
+                      password expires.
                     maxLength: 1024
                     type: string
                 type: object

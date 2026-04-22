@@ -4,16 +4,16 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.20.1
-  name: securitygroups.openstack.k-orc.cloud
+  name: trunks.openstack.k-orc.cloud
 spec:
   group: openstack.k-orc.cloud
   names:
     categories:
     - openstack
-    kind: SecurityGroup
-    listKind: SecurityGroupList
-    plural: securitygroups
-    singular: securitygroup
+    kind: Trunk
+    listKind: TrunkList
+    plural: trunks
+    singular: trunk
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -32,7 +32,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: SecurityGroup is the Schema for an ORC resource.
+        description: Trunk is the Schema for an ORC resource.
         properties:
           apiVersion:
             description: |-
@@ -91,6 +91,10 @@ spec:
                       error state and will not continue to retry.
                     minProperties: 1
                     properties:
+                      adminStateUp:
+                        description: adminStateUp is the administrative state of the
+                          trunk.
+                        type: boolean
                       description:
                         description: description of the existing resource
                         maxLength: 255
@@ -130,10 +134,15 @@ spec:
                         maxItems: 64
                         type: array
                         x-kubernetes-list-type: set
+                      portRef:
+                        description: portRef is a reference to the ORC Port which
+                          this resource is associated with.
+                        maxLength: 253
+                        minLength: 1
+                        type: string
                       projectRef:
-                        description: |-
-                          projectRef is a reference to the ORC Project this resource is associated with.
-                          Typically, only used by admin.
+                        description: projectRef is a reference to the ORC Project
+                          which this resource is associated with.
                         maxLength: 253
                         minLength: 1
                         type: string
@@ -214,6 +223,11 @@ spec:
 
                   resource must be specified if the management policy is `managed`.
                 properties:
+                  adminStateUp:
+                    description: |-
+                      adminStateUp is the administrative state of the trunk. If false (down),
+                      the trunk does not forward packets.
+                    type: boolean
                   description:
                     description: description is a human-readable description for the
                       resource.
@@ -228,142 +242,63 @@ spec:
                     minLength: 1
                     pattern: ^[^,]+$
                     type: string
+                  portRef:
+                    description: portRef is a reference to the ORC Port which this
+                      resource is associated with.
+                    maxLength: 253
+                    minLength: 1
+                    type: string
+                    x-kubernetes-validations:
+                    - message: portRef is immutable
+                      rule: self == oldSelf
                   projectRef:
-                    description: |-
-                      projectRef is a reference to the ORC Project this resource is associated with.
-                      Typically, only used by admin.
+                    description: projectRef is a reference to the ORC Project which
+                      this resource is associated with.
                     maxLength: 253
                     minLength: 1
                     type: string
                     x-kubernetes-validations:
                     - message: projectRef is immutable
                       rule: self == oldSelf
-                  rules:
-                    description: rules is a list of security group rules belonging
-                      to this SG.
+                  subports:
+                    description: subports is the list of ports to attach to the trunk.
                     items:
-                      description: SecurityGroupRule defines a Security Group rule
-                      minProperties: 1
+                      description: |-
+                        TrunkSubportSpec represents a subport to attach to a trunk.
+                        It maps to gophercloud's trunks.Subport.
                       properties:
-                        description:
-                          description: description is a human-readable description
-                            for the resource.
-                          maxLength: 255
+                        portRef:
+                          description: portRef is a reference to the ORC Port that
+                            will be attached as a subport.
+                          maxLength: 253
                           minLength: 1
                           type: string
-                        direction:
-                          description: |-
-                            direction represents the direction in which the security group rule
-                            is applied. Can be ingress or egress.
+                        segmentationID:
+                          description: segmentationID is the segmentation ID for the
+                            subport (e.g. VLAN ID).
+                          format: int32
+                          maximum: 4094
+                          minimum: 1
+                          type: integer
+                        segmentationType:
+                          description: segmentationType is the segmentation type for
+                            the subport (e.g. vlan).
                           enum:
-                          - ingress
-                          - egress
-                          type: string
-                        ethertype:
-                          description: |-
-                            ethertype must be IPv4 or IPv6, and addresses represented in CIDR
-                            must match the ingress or egress rules.
-                          enum:
-                          - IPv4
-                          - IPv6
-                          type: string
-                        portRange:
-                          description: |-
-                            portRange sets the minimum and maximum ports range that the security group rule
-                            matches. If the protocol is [tcp, udp, dccp sctp,udplite] PortRange.Min must be less than
-                            or equal to the PortRange.Max attribute value.
-                            If the protocol is ICMP, this PortRamge.Min must be an ICMP code and PortRange.Max
-                            should be an ICMP type
-                          properties:
-                            max:
-                              description: |-
-                                max is the maximum port number in the range that is matched by the security group rule.
-                                If the protocol is TCP, UDP, DCCP, SCTP or UDP-Lite this value must be greater than or equal
-                                to the port_range_min attribute value. If the protocol is ICMP, this value must be an ICMP code.
-                              format: int32
-                              maximum: 65535
-                              minimum: 0
-                              type: integer
-                            min:
-                              description: |-
-                                min is the minimum port number in the range that is matched by the security group rule.
-                                If the protocol is TCP, UDP, DCCP, SCTP or UDP-Lite this value must be less than or equal
-                                to the port_range_max attribute value. If the protocol is ICMP, this value must be an ICMP type
-                              format: int32
-                              maximum: 65535
-                              minimum: 0
-                              type: integer
-                          required:
-                          - max
-                          - min
-                          type: object
-                        protocol:
-                          description: protocol is the IP protocol is represented
-                            by a string
-                          enum:
-                          - ah
-                          - dccp
-                          - egp
-                          - esp
-                          - gre
-                          - icmp
-                          - icmpv6
-                          - igmp
-                          - ipip
-                          - ipv6-encap
-                          - ipv6-frag
-                          - ipv6-icmp
-                          - ipv6-nonxt
-                          - ipv6-opts
-                          - ipv6-route
-                          - ospf
-                          - pgm
-                          - rsvp
-                          - sctp
-                          - tcp
-                          - udp
-                          - udplite
-                          - vrrp
-                          type: string
-                        remoteIPPrefix:
-                          description: remoteIPPrefix is an IP address block. Should
-                            match the Ethertype (IPv4 or IPv6)
-                          format: cidr
-                          maxLength: 49
+                          - inherit
+                          - vlan
+                          maxLength: 32
                           minLength: 1
                           type: string
                       required:
-                      - ethertype
+                      - portRef
+                      - segmentationID
+                      - segmentationType
                       type: object
-                      x-kubernetes-validations:
-                      - message: portRangeMax should be equal or greater than portRange.min
-                        rule: (!has(self.portRange)|| !(self.protocol == 'tcp'|| self.protocol
-                          == 'udp' || self.protocol == 'dccp' || self.protocol ==
-                          'sctp' || self.protocol == 'udplite') || (self.portRange.min
-                          <= self.portRange.max))
-                      - message: When protocol is ICMP or ICMPv6 portRange.min should
-                          be between 0 and 255
-                        rule: '!(self.protocol == ''icmp'' || self.protocol == ''icmpv6'')
-                          || !has(self.portRange)|| (self.portRange.min >= 0 && self.portRange.min
-                          <= 255)'
-                      - message: When protocol is ICMP or ICMPv6 portRange.max should
-                          be between 0 and 255
-                        rule: '!(self.protocol == ''icmp'' || self.protocol == ''icmpv6'')
-                          || !has(self.portRange)|| (self.portRange.max >= 0 && self.portRange.max
-                          <= 255)'
-                    maxItems: 256
+                    maxItems: 1024
                     type: array
                     x-kubernetes-list-type: atomic
-                  stateful:
-                    description: stateful indicates if the security group is stateful
-                      or stateless.
-                    type: boolean
-                    x-kubernetes-validations:
-                    - message: stateful is immutable
-                      rule: self == oldSelf
                   tags:
-                    description: tags is a list of tags which will be applied to the
-                      security group.
+                    description: tags is a list of Neutron tags to apply to the trunk.
                     items:
                       description: |-
                         NeutronTag represents a tag on a Neutron resource.
@@ -374,6 +309,8 @@ spec:
                     maxItems: 64
                     type: array
                     x-kubernetes-list-type: set
+                required:
+                - portRef
                 type: object
             required:
             - cloudCredentialsRef
@@ -478,6 +415,9 @@ spec:
                 description: resource contains the observed state of the OpenStack
                   resource.
                 properties:
+                  adminStateUp:
+                    description: adminStateUp is the administrative state of the trunk.
+                    type: boolean
                   createdAt:
                     description: createdAt shows the date and time when the resource
                       was created. The date and time stamp format is ISO 8601
@@ -489,92 +429,54 @@ spec:
                     maxLength: 1024
                     type: string
                   name:
-                    description: name is a Human-readable name for the security group.
-                      Might not be unique.
+                    description: name is a Human-readable name for the resource. Might
+                      not be unique.
+                    maxLength: 1024
+                    type: string
+                  portID:
+                    description: portID is the ID of the Port to which the resource
+                      is associated.
                     maxLength: 1024
                     type: string
                   projectID:
-                    description: projectID is the project owner of the security group.
+                    description: projectID is the ID of the Project to which the resource
+                      is associated.
                     maxLength: 1024
                     type: string
                   revisionNumber:
                     description: revisionNumber optionally set via extensions/standard-attr-revisions
                     format: int64
                     type: integer
-                  rules:
-                    description: rules is a list of security group rules belonging
-                      to this SG.
+                  status:
+                    description: status indicates whether the trunk is currently operational.
+                    maxLength: 1024
+                    type: string
+                  subports:
+                    description: subports is a list of ports associated with the trunk.
                     items:
+                      description: |-
+                        TrunkSubportStatus represents an attached subport on a trunk.
+                        It maps to gophercloud's trunks.Subport.
                       properties:
-                        description:
-                          description: description is a human-readable description
-                            for the resource.
+                        portID:
+                          description: portID is the OpenStack ID of the Port attached
+                            as a subport.
                           maxLength: 1024
                           type: string
-                        direction:
-                          description: |-
-                            direction represents the direction in which the security group rule
-                            is applied. Can be ingress or egress.
-                          maxLength: 1024
-                          type: string
-                        ethertype:
-                          description: |-
-                            ethertype must be IPv4 or IPv6, and addresses represented in CIDR
-                            must match the ingress or egress rules.
-                          maxLength: 1024
-                          type: string
-                        id:
-                          description: id is the ID of the security group rule.
-                          maxLength: 1024
-                          type: string
-                        portRange:
-                          description: |-
-                            portRange sets the minimum and maximum ports range that the security group rule
-                            matches. If the protocol is [tcp, udp, dccp sctp,udplite] PortRange.Min must be less than
-                            or equal to the PortRange.Max attribute value.
-                            If the protocol is ICMP, this PortRamge.Min must be an ICMP code and PortRange.Max
-                            should be an ICMP type
-                          properties:
-                            max:
-                              description: |-
-                                max is the maximum port number in the range that is matched by the security group rule.
-                                If the protocol is TCP, UDP, DCCP, SCTP or UDP-Lite this value must be greater than or equal
-                                to the port_range_min attribute value. If the protocol is ICMP, this value must be an ICMP code.
-                              format: int32
-                              type: integer
-                            min:
-                              description: |-
-                                min is the minimum port number in the range that is matched by the security group rule.
-                                If the protocol is TCP, UDP, DCCP, SCTP or UDP-Lite this value must be less than or equal
-                                to the port_range_max attribute value. If the protocol is ICMP, this value must be an ICMP type
-                              format: int32
-                              type: integer
-                          type: object
-                        protocol:
-                          description: |-
-                            protocol is the IP protocol can be represented by a string, an
-                            integer, or null
-                          maxLength: 1024
-                          type: string
-                        remoteGroupID:
-                          description: |-
-                            remoteGroupID is the remote group UUID to associate with this security group rule
-                            RemoteGroupID
-                          maxLength: 1024
-                          type: string
-                        remoteIPPrefix:
-                          description: remoteIPPrefix is an IP address block. Should
-                            match the Ethertype (IPv4 or IPv6)
+                        segmentationID:
+                          description: segmentationID is the segmentation ID for the
+                            subport (e.g. VLAN ID).
+                          format: int32
+                          type: integer
+                        segmentationType:
+                          description: segmentationType is the segmentation type for
+                            the subport (e.g. vlan).
                           maxLength: 1024
                           type: string
                       type: object
-                    maxItems: 256
+                    maxItems: 1024
                     type: array
                     x-kubernetes-list-type: atomic
-                  stateful:
-                    description: stateful indicates if the security group is stateful
-                      or stateless.
-                    type: boolean
                   tags:
                     description: tags is the list of tags on the resource.
                     items:
@@ -583,6 +485,11 @@ spec:
                     maxItems: 64
                     type: array
                     x-kubernetes-list-type: atomic
+                  tenantID:
+                    description: tenantID is the project owner of the trunk (alias
+                      of projectID in some deployments).
+                    maxLength: 1024
+                    type: string
                   updatedAt:
                     description: updatedAt shows the date and time when the resource
                       was updated. The date and time stamp format is ISO 8601
