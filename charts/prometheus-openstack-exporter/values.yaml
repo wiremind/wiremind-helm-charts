@@ -1,0 +1,238 @@
+# -- Override the name of the chart
+nameOverride: ""
+# -- Override the full name of the chart
+fullnameOverride: ""
+
+# -- OpenStack endpoint type to use: public, internal, or admin (empty = exporter default: public)
+endpoint_type: ""
+# -- Cloud name to use when multicloud.enabled is false
+cloud: default
+
+# -- Number of replicas
+replicaCount: 1
+
+image:
+  # -- Image repository
+  repository: ghcr.io/openstack-exporter/openstack-exporter
+  # -- Image tag (defaults to appVersion)
+  tag: ""
+  # -- Image pull policy
+  pullPolicy: IfNotPresent
+
+# -- Image pull secrets for private registries
+imagePullSecrets: []
+# - name: "image-pull-secret"
+
+# -- ServiceAccount configuration
+serviceAccount:
+  # -- Specifies whether a service account should be created
+  create: true
+  # -- Annotations to add to the service account
+  annotations: {}
+  # -- The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+serviceMonitor:
+  # -- Enable ServiceMonitor creation
+  enabled: false
+  # -- Scrape interval
+  interval: 1m
+  # -- Scrape timeout
+  scrapeTimeout: 30s
+  # -- Additional labels for ServiceMonitor
+  additionalLabels: {}
+  # -- Additional annotations for ServiceMonitor
+  annotations: {}
+
+multicloud:
+  # -- Enable multicloud mode (i.e. /probe?... targets)
+  # Doc: https://github.com/openstack-exporter/openstack-exporter#description
+  enabled: false
+  # -- Monitor the exporter's internal metrics (i.e. /metrics)
+  selfmonitor: false
+  # -- List of clouds to scrape, and the services to scrape from them
+  clouds:
+    - name: cloud1
+      services:
+        - volume
+    - name: cloud2
+      services:
+        - volume
+        - image
+        - identity
+        - compute
+        - network
+        - placement
+
+# -- Add extra args to the exporter
+# Doc: https://github.com/openstack-exporter/openstack-exporter#command-line-options
+extraArgs: []
+#  - --disable-service.baremetal
+#  - --disable-service.container-infra
+#  - --disable-service.object-store
+
+# -- Add extra environment variables
+extraEnvs: {}
+#  "ENV_VAR": "value"
+
+# -- Add extra labels to all resources
+commonLabels: {}
+#  prometheus.io/monitor: "true"
+
+# -- Secret configuration for clouds.yaml
+secret:
+  # -- Use an existing secret instead of creating one
+  # The secret must contain a key 'clouds.yaml' with the OpenStack configuration
+  existingSecret: ""
+  # -- Key in the existing secret containing clouds.yaml
+  existingSecretKey: "clouds.yaml"
+
+# -- Generate a secret for clouds.yaml (used when secret.existingSecret is not set)
+# Doc: https://github.com/openstack-exporter/openstack-exporter#openstack-configuration
+clouds_yaml_config: |
+  clouds:
+    default:
+      region_name: your-region-here
+      auth:
+        username: your-user-here
+        password: your-password-here
+        project_name: your-project-here
+        project_domain_name: 'Default'
+        user_domain_name: 'Default'
+        auth_url: 'http://your-url-here:5000/v3'
+# In case of multicloud.enabled
+#    cloud1:
+#     ...
+#    cloud2:
+#     ...
+
+# -- PrometheusRule configuration
+prometheusRule:
+  # -- Enable PrometheusRule creation
+  enabled: false
+  # -- Additional labels for PrometheusRule
+  additionalLabels: {}
+
+# -- Service configuration
+service:
+  # -- Service type
+  type: ClusterIP
+  # -- Service port
+  port: 9180
+  # -- Additional annotations for Service
+  annotations: {}
+
+# -- Resource requests and limits
+resources: {}
+#  requests:
+#    cpu: 100m
+#    memory: 128Mi
+#  limits:
+#    cpu: 500m
+#    memory: 256Mi
+
+# -- Node selector
+nodeSelector: {}
+
+# -- Tolerations
+tolerations: []
+
+# -- Affinity rules
+affinity: {}
+
+# -- Host aliases
+hostAliases: []
+#  - ip: "127.0.0.1"
+#    hostnames:
+#      - "foo.local"
+
+# -- Topology spread constraints
+topologySpreadConstraints: []
+# - maxSkew: 1
+#   topologyKey: topology.kubernetes.io/zone
+#   whenUnsatisfiable: ScheduleAnyway
+#   labelSelector:
+#     matchLabels:
+#       app.kubernetes.io/name: prometheus-openstack-exporter
+
+# -- Priority class name
+priorityClassName: ""
+
+# -- Pod disruption budget configuration
+podDisruptionBudget:
+  # -- Enable PodDisruptionBudget
+  enabled: false
+  # -- Minimum available pods
+  # minAvailable: 1
+  # -- Maximum unavailable pods (mutually exclusive with minAvailable)
+  # maxUnavailable: 1
+
+# -- Pod security context
+podSecurityContext:
+  fsGroup: 65534
+  seccompProfile:
+    type: RuntimeDefault
+
+# -- Container security context
+containerSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 65534
+  runAsGroup: 65534
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+# -- Extra pod labels
+podLabels: {}
+
+# -- Extra pod annotations
+podAnnotations: {}
+
+# -- Liveness probe configuration
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: metrics
+  initialDelaySeconds: 10
+  periodSeconds: 30
+  timeoutSeconds: 10
+  successThreshold: 1
+  failureThreshold: 3
+
+# -- Readiness probe configuration
+readinessProbe:
+  httpGet:
+    path: /healthz
+    port: metrics
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 3
+
+# -- Horizontal Pod Autoscaler configuration
+autoscaling:
+  # -- Enable HPA
+  enabled: false
+  # -- Minimum replicas
+  minReplicas: 1
+  # -- Maximum replicas
+  maxReplicas: 3
+  # -- Target CPU utilization percentage
+  targetCPUUtilizationPercentage: 80
+  # -- Target memory utilization percentage
+  # targetMemoryUtilizationPercentage: 80
+
+# -- Network policy configuration
+networkPolicy:
+  # -- Enable NetworkPolicy
+  enabled: false
+  # -- Allow connections from all namespaces
+  allowExternal: true
+  # -- Additional ingress rules
+  ingressRules: []
+  # -- Additional egress rules (if empty, all egress is allowed)
+  egressRules: []
