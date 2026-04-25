@@ -17456,6 +17456,31 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/priorityclass-0.1.0/priorityclass-0.1.0.tgz
     version: 0.1.0
+  prometheus-openstack-exporter:
+  - apiVersion: v2
+    appVersion: 1.7.0
+    created: "2026-04-25T09:13:19.811456852Z"
+    description: A Helm chart for prometheus-openstack-exporter - exports OpenStack
+      metrics for Prometheus
+    digest: 02347af9b88d63b1f5c3ae2d6f420c2bf8f3f5f2e7007d3bfe8bea39e3d22e01
+    home: https://github.com/openstack-exporter/openstack-exporter
+    keywords:
+    - prometheus
+    - openstack
+    - exporter
+    - metrics
+    - monitoring
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind
+    name: prometheus-openstack-exporter
+    sources:
+    - https://github.com/openstack-exporter/openstack-exporter
+    - https://github.com/openstack-exporter/helm-charts
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/prometheus-openstack-exporter-0.5.0/prometheus-openstack-exporter-0.5.0.tgz
+    version: 0.5.0
   prometheus-safety-exporter:
   - apiVersion: v2
     appVersion: 0.7.0
@@ -20130,4 +20155,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-04-22T14:40:15.27740377Z"
+generated: "2026-04-25T09:13:19.813516153Z"
