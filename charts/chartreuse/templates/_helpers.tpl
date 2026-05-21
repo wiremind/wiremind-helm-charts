@@ -56,6 +56,20 @@ Create the name of the service account to use
 {{- end -}}
 
 {{- define "chartreuse.upgradeJobAnnotations" -}}
+{{- if eq (.Values.deploymentMethod | default "helm") "argocd" -}}
+{{- if .Values.upgradeBeforeDeployment -}}
+# ArgoCD has no IsInstall concept (every reconcile is a sync); run PreSync
+# so the migration fires before resources on both create and update.
+"argocd.argoproj.io/hook": PreSync
+"argocd.argoproj.io/sync-wave": {{ .Values.upgradeJobWeight | quote }}
+"argocd.argoproj.io/hook-delete-policy": BeforeHookCreation
+{{- else }}
+# Should be run as a PostSync hook in ArgoCD (equivalent of post-install,post-upgrade).
+"argocd.argoproj.io/hook": PostSync
+"argocd.argoproj.io/sync-wave": {{ .Values.upgradeJobWeight | quote }}
+"argocd.argoproj.io/hook-delete-policy": BeforeHookCreation
+{{- end }}
+{{- else -}}
 {{- if .Values.upgradeBeforeDeployment -}}
 {{- if .Release.IsInstall }}
 # No hook: we deploy this job during the initial install, as part of the Helm Release
@@ -72,9 +86,19 @@ Create the name of the service account to use
 "helm.sh/hook-weight": {{ .Values.upgradeJobWeight | quote }}
 "helm.sh/hook-delete-policy": "before-hook-creation"
 {{- end }}
+{{- end }}
 {{- end -}}
 
 {{- define "chartreuse.annotations.ephemeral" -}}
+{{- if eq (.Values.deploymentMethod | default "helm") "argocd" -}}
+{{- if .Values.upgradeBeforeDeployment -}}
+"argocd.argoproj.io/hook": PreSync
+{{- else }}
+"argocd.argoproj.io/hook": PostSync
+{{- end }}
+"argocd.argoproj.io/sync-wave": "-1"
+"argocd.argoproj.io/hook-delete-policy": BeforeHookCreation,HookSucceeded,HookFailed
+{{- else -}}
 {{- if .Values.upgradeBeforeDeployment -}}
 "helm.sh/hook": pre-upgrade
 {{- else }}
@@ -82,15 +106,28 @@ Create the name of the service account to use
 {{- end }}
 "helm.sh/hook-weight": "-1"
 "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded,hook-failed"
+{{- end }}
 {{- end -}}
 
-# Adds suffix -ephemeral if it is a helm hook
+# Adds suffix -ephemeral if the resource is rendered as a hook (helm or argocd).
+# Under ArgoCD every sync is hook-like, so the suffix follows the same rule as
+# under Helm: always suffixed in the post-deployment path, only suffixed on
+# upgrade in the pre-deployment path.
 {{- define "chartreuse.hook.suffix" -}}
+{{- if eq (.Values.deploymentMethod | default "helm") "argocd" -}}
+{{- if .Values.upgradeBeforeDeployment -}}
+{{- /* PreSync hook on every sync; suffix to avoid colliding with non-hook resources. */ -}}
+-ephemeral
+{{- else -}}
+-ephemeral
+{{- end -}}
+{{- else -}}
 {{- if .Values.upgradeBeforeDeployment -}}
 {{- if .Release.IsUpgrade -}}
 -ephemeral
 {{- end -}}
 {{- else -}}
 -ephemeral
+{{- end -}}
 {{- end -}}
 {{- end -}}

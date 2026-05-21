@@ -2,6 +2,13 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+## Selects which deployment surface the chart renders for.
+## When `argocd`, hook annotations are emitted in ArgoCD's
+## `argocd.argoproj.io/*` namespace instead of `helm.sh/*` so the migration
+## Job runs as a PreSync/PostSync hook under ArgoCD.
+## Default `helm` keeps current behaviour for direct-Helm installs.
+deploymentMethod: helm
+
 image:
   ## Change me to a real image from a tag containing chartreuse python package and your migration code
   repository: overrideme
