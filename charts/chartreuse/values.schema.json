@@ -8,6 +8,19 @@
         "affinity": {
             "type": "object"
         },
+        "argocd": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "syncWave": {
+                    "type": "integer",
+                    "default": -50
+                }
+            }
+        },
         "alembic": {
             "type": "object",
             "properties": {
