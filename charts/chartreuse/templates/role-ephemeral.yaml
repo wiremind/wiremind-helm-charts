@@ -1,3 +1,4 @@
+{{- if ne .Values.deploymentMethod "argocd" -}}
 {{- if .Values.rbac.create -}}
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
@@ -54,4 +55,5 @@ subjects:
     name: {{ template "chartreuse.fullname" . }}-ephemeral
     namespace: {{ .Release.Namespace }}
 
+{{- end -}}
 {{- end -}}

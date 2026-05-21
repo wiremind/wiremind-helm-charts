@@ -8,6 +8,20 @@
         "affinity": {
             "type": "object"
         },
+        "argocd": {
+            "type": "object",
+            "properties": {
+                "syncWave": {
+                    "type": "integer",
+                    "default": -50
+                }
+            }
+        },
+        "deploymentMethod": {
+            "type": "string",
+            "enum": ["helm", "argocd"],
+            "default": "helm"
+        },
         "alembic": {
             "type": "object",
             "properties": {

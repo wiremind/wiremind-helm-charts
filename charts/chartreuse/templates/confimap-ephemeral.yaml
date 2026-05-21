@@ -1,3 +1,4 @@
+{{- if ne .Values.deploymentMethod "argocd" -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -47,3 +48,4 @@ data:
   {{- range $key, $value := .Values.additionalEnvironmentVariables }}
   {{ $key }}: {{ $value | quote }}
   {{- end }}
+{{- end -}}
