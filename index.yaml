@@ -17235,6 +17235,31 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/plugin-barman-cloud-crds-0.9.0/plugin-barman-cloud-crds-0.9.0.tgz
     version: 0.9.0
+  postgres-operator:
+  - apiVersion: v2
+    appVersion: 1.14.0
+    created: "2026-05-21T10:34:15.385518844Z"
+    description: Zalando PostgreSQL operator (wiremind fork, adds deploymentAnnotations)
+    digest: 757fafa926c609d1eb08e37cd142f8ad2fd793ac746ced8af551c031d92a7ca7
+    home: https://github.com/zalando/postgres-operator
+    icon: https://www.wiremind.io/assets/logo.png
+    keywords:
+    - postgres
+    - operator
+    - cloud-native
+    - patroni
+    - spilo
+    maintainers:
+    - email: opensource@zalando.de
+      name: Zalando
+    - email: platform@wiremind.io
+      name: platform
+    name: postgres-operator
+    sources:
+    - https://github.com/zalando/postgres-operator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/postgres-operator-1.14.0-wiremind0/postgres-operator-1.14.0-wiremind0.tgz
+    version: 1.14.0-wiremind0
   postgres-operator-crds:
   - annotations:
       category: DeveloperTools
@@ -20155,4 +20180,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-04-25T09:13:19.813516153Z"
+generated: "2026-05-21T10:34:15.386477764Z"
