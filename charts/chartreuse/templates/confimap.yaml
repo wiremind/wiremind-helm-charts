@@ -40,7 +40,7 @@ data:
 
   CHARTREUSE_UPGRADE_PRIORITYCLASS_NAME: {{ .Values.priorityClassName | quote }}
 
-  HELM_CHART_VERSION: {{ .Chart.Version | quote }}
+  HELM_CHART_VERSION: {{ .Chart.AppVersion | quote }}
 
   {{- range $key, $value := .Values.additionalEnvironmentVariables }}
   {{ $key }}: {{ $value | quote }}
