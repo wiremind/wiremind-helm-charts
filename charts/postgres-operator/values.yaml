@@ -10,6 +10,10 @@ image:
 # imagePullSecrets:
 # - name: myRegistryKeySecretName
 
+## Annotations to add to the postgres-operator Deployment's metadata.annotations.
+## Wiremind extension: not present in upstream zalando chart at v1.14.0.
+deploymentAnnotations: {}
+
 podAnnotations: {}
 podLabels: {}
 
