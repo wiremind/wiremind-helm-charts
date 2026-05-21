@@ -91,13 +91,17 @@ affinity: {}
 
 podAnnotations: {}
 
-## ArgoCD-native mode. When enabled, the chart renders the migration Job as an
-## ArgoCD Sync hook with delete-and-recreate semantics (fixing the immutable
-## Job.spec.template error on image bumps) and skips the `-ephemeral` upgrade-hook
-## resource set entirely (the Helm-only mechanism for pre-upgrade migrations).
-## Default false to preserve existing Helm-install/upgrade behavior unchanged.
+## Deployment surface. `helm` (default) keeps existing Helm install/upgrade
+## hook semantics. `argocd` renders the migration Job as an ArgoCD Sync hook
+## with delete-and-recreate (fixing the immutable Job.spec.template error on
+## image bumps) and skips the `-ephemeral` upgrade-hook resource set entirely
+## (the Helm-only mechanism for pre-upgrade migrations). Matches the umbrella
+## wiremind chart and overwhelm's `--cd-version` derivation so the same toggle
+## propagates end-to-end.
+deploymentMethod: helm
+
 argocd:
-  enabled: false
+  ## Used only when `deploymentMethod: argocd`.
   ## Sync-wave for the chartreuse Job. Consumers should place their app Deployments
   ## at a higher wave (default 0) and their database resources at a lower wave so
   ## ordering is DB -> chartreuse -> app.

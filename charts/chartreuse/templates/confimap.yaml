@@ -12,7 +12,7 @@ data:
   CHARTREUSE_ALEMBIC_ALLOW_MIGRATION_FOR_EMPTY_DATABASE: ""
 {{- end }}
 
-{{- if not .Values.argocd.enabled }}
+{{- if ne .Values.deploymentMethod "argocd" }}
 {{- if .Release.IsInstall }}
   HELM_IS_INSTALL: "1"
 {{- else }}

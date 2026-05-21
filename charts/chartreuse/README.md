@@ -12,16 +12,21 @@ The chart ships an opt-in ArgoCD-native mode that replaces the Helm hook
 machinery with ArgoCD Sync hooks. Enable it by setting:
 
 ```yaml
+deploymentMethod: argocd
+
 argocd:
-  enabled: true
   # Sync-wave applied to the migration Job.
   # Default: -50 (runs before consumer Deployments at the default wave 0).
   syncWave: -50
 ```
 
+The `deploymentMethod` value matches the umbrella `wiremind` chart and
+`overwhelm`'s `--cd-version` derivation, so the same toggle propagates
+end-to-end across overwhelm → wiremind → chartreuse.
+
 ### What it does
 
-When `argocd.enabled: true`:
+When `deploymentMethod: argocd`:
 
 - The chartreuse migration `Job` is rendered with the following annotations:
   - `argocd.argoproj.io/hook: Sync`
@@ -64,6 +69,6 @@ Override `argocd.syncWave` if your deployment uses a different wave scheme.
 
 ### Backward compatibility
 
-This mode is **opt-in**. With `argocd.enabled: false` (the default), the
+This mode is **opt-in**. With `deploymentMethod: helm` (the default), the
 chart renders exactly the same resources with the same annotations and
 naming as previous versions; pure-Helm consumers are not affected.

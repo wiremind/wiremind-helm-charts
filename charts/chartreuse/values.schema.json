@@ -11,15 +11,16 @@
         "argocd": {
             "type": "object",
             "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "default": false
-                },
                 "syncWave": {
                     "type": "integer",
                     "default": -50
                 }
             }
+        },
+        "deploymentMethod": {
+            "type": "string",
+            "enum": ["helm", "argocd"],
+            "default": "helm"
         },
         "alembic": {
             "type": "object",

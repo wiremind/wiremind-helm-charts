@@ -1,4 +1,4 @@
-{{- if not .Values.argocd.enabled -}}
+{{- if ne .Values.deploymentMethod "argocd" -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:

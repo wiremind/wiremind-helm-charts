@@ -56,7 +56,7 @@ Create the name of the service account to use
 {{- end -}}
 
 {{- define "chartreuse.upgradeJobAnnotations" -}}
-{{- if .Values.argocd.enabled -}}
+{{- if eq .Values.deploymentMethod "argocd" -}}
 "argocd.argoproj.io/hook": Sync
 "argocd.argoproj.io/hook-delete-policy": BeforeHookCreation
 "argocd.argoproj.io/sync-wave": {{ .Values.argocd.syncWave | quote }}
@@ -92,7 +92,7 @@ Create the name of the service account to use
 
 # Adds suffix -ephemeral if it is a helm hook
 {{- define "chartreuse.hook.suffix" -}}
-{{- if .Values.argocd.enabled -}}
+{{- if eq .Values.deploymentMethod "argocd" -}}
 {{/* No suffix in ArgoCD mode - single unsuffixed resource set, with the Job as a Sync hook. */}}
 {{- else -}}
 {{- if .Values.upgradeBeforeDeployment -}}
