@@ -56,6 +56,11 @@ Create the name of the service account to use
 {{- end -}}
 
 {{- define "chartreuse.upgradeJobAnnotations" -}}
+{{- if .Values.argocd.enabled -}}
+"argocd.argoproj.io/hook": Sync
+"argocd.argoproj.io/hook-delete-policy": BeforeHookCreation
+"argocd.argoproj.io/sync-wave": {{ .Values.argocd.syncWave | quote }}
+{{- else -}}
 {{- if .Values.upgradeBeforeDeployment -}}
 {{- if .Release.IsInstall }}
 # No hook: we deploy this job during the initial install, as part of the Helm Release
@@ -73,6 +78,7 @@ Create the name of the service account to use
 "helm.sh/hook-delete-policy": "before-hook-creation"
 {{- end }}
 {{- end -}}
+{{- end -}}
 
 {{- define "chartreuse.annotations.ephemeral" -}}
 {{- if .Values.upgradeBeforeDeployment -}}
@@ -86,11 +92,15 @@ Create the name of the service account to use
 
 # Adds suffix -ephemeral if it is a helm hook
 {{- define "chartreuse.hook.suffix" -}}
+{{- if .Values.argocd.enabled -}}
+{{/* No suffix in ArgoCD mode - single unsuffixed resource set, with the Job as a Sync hook. */}}
+{{- else -}}
 {{- if .Values.upgradeBeforeDeployment -}}
 {{- if .Release.IsUpgrade -}}
 -ephemeral
 {{- end -}}
 {{- else -}}
 -ephemeral
+{{- end -}}
 {{- end -}}
 {{- end -}}
