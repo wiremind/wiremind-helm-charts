@@ -12,8 +12,12 @@ data:
   CHARTREUSE_ALEMBIC_ALLOW_MIGRATION_FOR_EMPTY_DATABASE: ""
 {{- end }}
 
+{{- if not .Values.argocd.enabled }}
 {{- if .Release.IsInstall }}
   HELM_IS_INSTALL: "1"
+{{- else }}
+  HELM_IS_INSTALL: ""
+{{- end }}
 {{- else }}
   HELM_IS_INSTALL: ""
 {{- end }}
