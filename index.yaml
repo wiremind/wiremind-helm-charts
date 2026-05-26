@@ -17259,6 +17259,31 @@ entries:
   postgres-operator:
   - apiVersion: v2
     appVersion: 1.14.0
+    created: "2026-05-26T13:37:03.788996576Z"
+    description: Zalando PostgreSQL operator (wiremind fork, adds deploymentAnnotations
+      and operatorConfigurationAnnotations)
+    digest: a4648c1a3f2bfb54765a04adf37a05524c7642453e8d7d7bc2ec53084be21ed3
+    home: https://github.com/zalando/postgres-operator
+    icon: https://www.wiremind.io/assets/logo.png
+    keywords:
+    - postgres
+    - operator
+    - cloud-native
+    - patroni
+    - spilo
+    maintainers:
+    - email: opensource@zalando.de
+      name: Zalando
+    - email: platform@wiremind.io
+      name: platform
+    name: postgres-operator
+    sources:
+    - https://github.com/zalando/postgres-operator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/postgres-operator-1.14.0-wiremind1/postgres-operator-1.14.0-wiremind1.tgz
+    version: 1.14.0-wiremind1
+  - apiVersion: v2
+    appVersion: 1.14.0
     created: "2026-05-21T10:34:15.385518844Z"
     description: Zalando PostgreSQL operator (wiremind fork, adds deploymentAnnotations)
     digest: 757fafa926c609d1eb08e37cd142f8ad2fd793ac746ced8af551c031d92a7ca7
@@ -20201,4 +20226,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-05-21T11:50:25.732805527Z"
+generated: "2026-05-26T13:37:03.789858599Z"
