@@ -14,6 +14,11 @@ image:
 ## Wiremind extension: not present in upstream zalando chart at v1.14.0.
 deploymentAnnotations: {}
 
+## Annotations to add to the OperatorConfiguration CR's metadata.annotations.
+## Only honored when configTarget == "OperatorConfigurationCRD".
+## Wiremind extension: not present in upstream zalando chart at v1.14.0.
+operatorConfigurationAnnotations: {}
+
 podAnnotations: {}
 podLabels: {}
 
