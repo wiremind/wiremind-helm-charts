@@ -9,6 +9,10 @@ metadata:
     helm.sh/chart: {{ template "postgres-operator.chart" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
+  {{- with .Values.operatorConfigurationAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 configuration:
 {{ tpl (toYaml .Values.configGeneral) . | indent 2 }}
   users:
