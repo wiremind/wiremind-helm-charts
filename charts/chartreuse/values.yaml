@@ -105,4 +105,13 @@ argocd:
   ## Sync-wave for the chartreuse Job. Consumers should place their app Deployments
   ## at a higher wave (default 0) and their database resources at a lower wave so
   ## ordering is DB -> chartreuse -> app.
+  ## The Job's own dependencies (ServiceAccount, ConfigMap, RBAC, ExternalSecret)
+  ## are automatically placed one wave earlier (`syncWave - 1`) so they exist before
+  ## the Job hook runs.
   syncWave: -50
+  ## Sync-wave for the chartreuse-config ExternalSecret specifically. Defaults to the
+  ## dependency wave (`syncWave - 1`). Override this to an umbrella's early "secrets"
+  ## wave (well before the Job) when a shared force-sync refresh Job is responsible for
+  ## re-pulling it at deploy time — that path also requires `refreshPolicy: OnChange`,
+  ## which this chart sets automatically in ArgoCD mode. null = use `syncWave - 1`.
+  externalSecretSyncWave: null

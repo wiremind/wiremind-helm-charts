@@ -4,6 +4,10 @@ metadata:
   name: {{ template "chartreuse.fullname" . }}
   labels:
     {{- include "chartreuse.labels" . | nindent 4 }}
+  {{- with (include "chartreuse.dependencyAnnotations" .) }}
+  annotations:
+    {{- . | nindent 4 }}
+  {{- end }}
 data:
   # Note: Chartreuse expects false values to be empty string (falsy value) and true values to be non-empty string.
 {{- if .Values.alembic.allowMigrationFromEmptyDatabase }}
