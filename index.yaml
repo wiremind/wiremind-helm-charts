@@ -20013,6 +20013,19 @@ entries:
   wiremind-baremetal:
   - apiVersion: v2
     appVersion: 3.18.0
+    created: "2026-05-29T09:39:45.056851375Z"
+    description: Helm chart to use BareMetal Encrypted at Rest disks
+    digest: 40fc3f9e140fec8c145996243e802e3ac554768810acf704f190449909edc2ac
+    icon: https://www.wiremind.io/assets/logo.png
+    maintainers:
+    - email: platform@wiremind.io
+      name: platform
+    name: wiremind-baremetal
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-baremetal-2.0.1/wiremind-baremetal-2.0.1.tgz
+    version: 2.0.1
+  - apiVersion: v2
+    appVersion: 3.18.0
     created: "2025-06-17T14:42:43.594685511Z"
     description: Helm chart to use BareMetal Encrypted at Rest disks
     digest: aec7e5577b66dcd75a35854732c75a6359f7eb587c0d3b9a58dcc906a6905c69
@@ -20289,4 +20302,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-05-27T13:13:24.292317739Z"
+generated: "2026-05-29T09:39:45.05861531Z"
