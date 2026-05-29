@@ -10,6 +10,11 @@ secret:
 
 extraEnv: []
 
+# Space-separated md device candidates checked in order.
+# We /dev/md127 because we did a mistake on creating /dev/md/md0_0 instead of /dev/md/md0 
+# with symbolic link: /dev/md/md0_0 -> ../md127)
+raidDevice: "/dev/md/md0 /dev/md127"
+
 tolerations: []
 
 affinity: {}
