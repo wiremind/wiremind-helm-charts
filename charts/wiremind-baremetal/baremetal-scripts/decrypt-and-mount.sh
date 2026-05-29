@@ -3,20 +3,26 @@ set -x
 set -e
 
 RAID_DEVICE="/dev/md/md0"
+FALLBACK_RAID_DEVICE="/dev/md/md0_0"
 DECRYPTED_LUKS_DEVICE_NAME="md0crypt"
 DECRYPTED_LUKS_DEVICE="/dev/mapper/md0crypt"
 LVM_PARTITION_DEVICES="/dev/md0cryptlvm/persistentvolume*"
 
-# Check if raid device exists
-set +e
+resolve_raid_device() {
+  for CANDIDATE_RAID_DEVICE in "$RAID_DEVICE" "$FALLBACK_RAID_DEVICE"; do
+    if mdadm -D "$CANDIDATE_RAID_DEVICE" >/dev/null 2>&1; then
+      RAID_DEVICE="$CANDIDATE_RAID_DEVICE"
+      return 0
+    fi
+  done
 
-device_details=$(mdadm -D "$RAID_DEVICE")
-if [[ "$?" != "0" ]]; then
-    echo "Raid device <${RAID_DEVICE}> not found, skipping"
-    exit 0
+  return 1
+}
+
+if ! resolve_raid_device; then
+  echo "Raid devices <${RAID_DEVICE}> and <${FALLBACK_RAID_DEVICE}> not found, skipping"
+  exit 0
 fi
-
-set -e
 
 wmb_decrypt_device() {
   if ! cryptsetup status $DECRYPTED_LUKS_DEVICE_NAME; then
