@@ -32,7 +32,7 @@ spec:
           - name: RAID_DEVICE_CANDIDATES
             value: {{ .Values.raidDevice | quote }}
         {{- with .Values.extraEnv }}
-        {{- toYaml . | nindent 8 }}
+        {{- toYaml . | nindent 10 }}
         {{- end }}
         volumeMounts:
         - name: {{ .Release.Name }}-install-script
