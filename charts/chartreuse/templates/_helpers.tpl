@@ -93,6 +93,24 @@ ConfigMap / Secret). Empty under Helm, where they ship as part of the Release.
 {{- end -}}
 {{- end -}}
 
+{{/*
+Annotations for the chartreuse-config ExternalSecret.
+- helm mode: a render-time timestamp (moved here from a label) bumps the object on
+  every `helm upgrade`, forcing external-secrets to re-pull while `refreshInterval`
+  is intentionally long.
+- argocd mode: only the dependency sync-wave; NO timestamp. Manifests are committed
+  to git, so a per-render `now` would churn the diff and break idempotency. A config
+  change already mutates the ExternalSecret spec (bumping .metadata.generation), which
+  triggers an immediate re-sync; tune `refreshInterval` to catch store-side rotation.
+The two branches are mutually exclusive, so they never need joining.
+*/}}
+{{- define "chartreuse.externalSecretAnnotations" -}}
+{{- include "chartreuse.dependencyAnnotations" . -}}
+{{- if ne .Values.deploymentMethod "argocd" -}}
+helm.sh/release-time: {{ now | unixEpoch | quote }}
+{{- end -}}
+{{- end -}}
+
 {{- define "chartreuse.annotations.ephemeral" -}}
 {{- if .Values.upgradeBeforeDeployment -}}
 "helm.sh/hook": pre-upgrade
