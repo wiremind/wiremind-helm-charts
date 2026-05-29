@@ -28,8 +28,10 @@ spec:
               {{- else }}
               name: {{ .Release.Name }}-installer
               {{- end }}
-        {{- with .Values.extraEnv }}
         env:
+          - name: RAID_DEVICE_CANDIDATES
+            value: {{ .Values.raidDevice | quote }}
+        {{- with .Values.extraEnv }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
         volumeMounts:
