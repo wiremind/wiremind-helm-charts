@@ -105,4 +105,7 @@ argocd:
   ## Sync-wave for the chartreuse Job. Consumers should place their app Deployments
   ## at a higher wave (default 0) and their database resources at a lower wave so
   ## ordering is DB -> chartreuse -> app.
+  ## The Job's own dependencies (ServiceAccount, ConfigMap, RBAC, ExternalSecret)
+  ## are automatically placed one wave earlier (`syncWave - 1`) so they exist before
+  ## the Job hook runs.
   syncWave: -50

@@ -80,6 +80,19 @@ Create the name of the service account to use
 {{- end -}}
 {{- end -}}
 
+{{/*
+ArgoCD sync-wave for the Job's dependency resources (ServiceAccount, ConfigMap,
+RBAC, ExternalSecret). In ArgoCD mode the Job is a Sync hook at `argocd.syncWave`;
+ArgoCD applies (and health-gates) lower waves first, so these dependencies must sit
+one wave earlier than the Job or the hook deadlocks creating its pod (missing SA /
+ConfigMap / Secret). Empty under Helm, where they ship as part of the Release.
+*/}}
+{{- define "chartreuse.dependencyAnnotations" -}}
+{{- if eq .Values.deploymentMethod "argocd" -}}
+"argocd.argoproj.io/sync-wave": {{ sub (int .Values.argocd.syncWave) 1 | quote }}
+{{- end -}}
+{{- end -}}
+
 {{- define "chartreuse.annotations.ephemeral" -}}
 {{- if .Values.upgradeBeforeDeployment -}}
 "helm.sh/hook": pre-upgrade

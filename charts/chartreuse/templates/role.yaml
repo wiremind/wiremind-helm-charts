@@ -5,6 +5,10 @@ metadata:
   name: {{ template "chartreuse.fullname" . }}
   labels:
     {{- include "chartreuse.labels" . | nindent 4 }}
+  {{- with (include "chartreuse.dependencyAnnotations" .) }}
+  annotations:
+    {{- . | nindent 4 }}
+  {{- end }}
 rules:
   - apiGroups: [""]
     resources: ["replicationcontrollers/scale"]
@@ -42,6 +46,10 @@ metadata:
   name: {{ template "chartreuse.fullname" . }}
   labels:
     {{- include "chartreuse.labels" . | nindent 4 }}
+  {{- with (include "chartreuse.dependencyAnnotations" .) }}
+  annotations:
+    {{- . | nindent 4 }}
+  {{- end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
