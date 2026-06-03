@@ -55,14 +55,6 @@
           "type": "boolean",
           "title": "Enable RabbitMQ clustering"
         },
-        "addressType": {
-          "type": "string",
-          "title": "RabbitMQ clustering address type",
-          "enum": [
-            "ip",
-            "hostname"
-          ]
-        },
         "peerDiscovery": {
           "type": "object",
           "title": "Peer discovery configuration",

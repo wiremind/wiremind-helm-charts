@@ -287,9 +287,6 @@ clustering:
   ## If not set, a name is generated using the common.names.fullname template
   ##
   name: ""
-  ## @param clustering.addressType Switch clustering mode. Either `ip` or `hostname`
-  ##
-  addressType: hostname
   ## @param clustering.rebalance Rebalance master for queues in cluster when new replica is created
   ## ref: https://www.rabbitmq.com/rabbitmq-queues.8.html#rebalance
   ##
@@ -461,11 +458,7 @@ configuration: |-
   {{- else if $peerDiscovery.classicConfig.autoGenerateNodes }}
   {{- $svcName := include "rabbitmq.headlessServiceName" . }}
   {{- range $index := until (.Values.replicaCount | int) }}
-  {{- if eq $.Values.clustering.addressType "hostname" }}
   cluster_formation.classic_config.nodes.{{ add $index 1 }} = rabbit@{{ include "common.names.fullname" $ }}-{{ $index }}.{{ $svcName }}.{{ include "common.names.namespace" $ }}.svc.{{ $.Values.clusterDomain }}
-  {{- else }}
-  cluster_formation.classic_config.nodes.{{ add $index 1 }} = rabbit@{{ include "common.names.fullname" $ }}-{{ $index }}
-  {{- end }}
   {{- end }}
   {{- end }}
   cluster_formation.discovery_retry_limit = {{ $peerDiscovery.discoveryRetryLimit }}

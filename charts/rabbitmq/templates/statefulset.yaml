@@ -215,13 +215,8 @@ spec:
             {{- end }}
             - name: RABBITMQ_FORCE_BOOT
               value: {{ ternary "yes" "no" .Values.clustering.forceBoot | quote }}
-            {{- if (eq "hostname" .Values.clustering.addressType) }}
             - name: RABBITMQ_NODE_NAME
               value: "rabbit@$(MY_POD_NAME).{{ $svcName }}.$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
-            {{- else }}
-            - name: RABBITMQ_NODE_NAME
-              value: "rabbit@$(MY_POD_NAME)"
-            {{- end }}
             - name: RABBITMQ_UPDATE_PASSWORD
               value: {{ ternary "yes" "no" .Values.auth.updatePassword | quote }}
             - name: RABBITMQ_MNESIA_DIR
