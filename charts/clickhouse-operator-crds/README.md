@@ -10,5 +10,5 @@ CRDs are retrieved from [here](https://github.com/Altinity/clickhouse-operator/t
 
 To download them, you can use the following script at root :
 ```
-./scripts/update_crds.sh -r Altinity/clickhouse-operator -b 0.25.6 --folder deploy/helm/clickhouse-operator/crds -o charts/clickhouse-operator-crds/templates/
+./scripts/update_crds.sh -r Altinity/clickhouse-operator -b 0.27.0 --folder deploy/helm/clickhouse-operator/crds -o charts/clickhouse-operator-crds/templates/
 ```
