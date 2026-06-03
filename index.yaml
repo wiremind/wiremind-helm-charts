@@ -3563,6 +3563,26 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: 0.25.6
+    created: "2026-06-03T07:34:17.629161916Z"
+    description: Manage clickhouse-operator CRDs
+    digest: 0bbcfb9f0a9e886cea657a03d9d5a2fceff85502ee0934669c1bf9cd55022cad
+    keywords:
+    - clickhouse-operator
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: clickhouse-operator-crds
+    sources:
+    - https://github.com/Altinity/clickhouse-operator/tree/master/deploy/helm
+    - https://github.com/Altinity/clickhouse-operator/tree/master/deploy/helm/clickhouse-operator/crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/clickhouse-operator-crds-0.25.6/clickhouse-operator-crds-0.25.6.tgz
+    version: 0.25.6
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: 0.25.5
     created: "2025-11-25T10:55:34.161734783Z"
     description: Manage clickhouse-operator CRDs
@@ -20336,4 +20356,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-05-29T19:02:22.31726052Z"
+generated: "2026-06-03T07:34:17.630283967Z"
