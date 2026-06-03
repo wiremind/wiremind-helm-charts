@@ -7,7 +7,7 @@ kind: CustomResourceDefinition
 metadata:
   name: clickhouseoperatorconfigurations.clickhouse.altinity.com
   labels:
-    clickhouse.altinity.com/chop: 0.25.6
+    clickhouse.altinity.com/chop: 0.27.0
 spec:
   group: clickhouse.altinity.com
   scope: Namespaced
@@ -56,6 +56,20 @@ spec:
                       type: object
                       description: "List of namespaces where clickhouse-operator watches for events."
                       x-kubernetes-preserve-unknown-fields: true
+                    configuration:
+                      type: object
+                      description: "Behavior when ClickHouseOperatorConfiguration resources change"
+                      properties:
+                        onChange:
+                          type: string
+                          enum:
+                            - none
+                            - None
+                            - ignore
+                            - Ignore
+                            - restart
+                            - Restart
+                          description: "none/ignore — do nothing; restart — exit process so the operator pod restarts"
                 clickhouse:
                   type: object
                   description: "Clickhouse related parameters used by clickhouse-operator"
@@ -240,6 +254,19 @@ spec:
                                 Timeout used to limit metrics collection request. In seconds.
                                 Upon reaching this timeout metrics collection is aborted and no more metrics are collected in this cycle.
                                 All collected metrics are returned.
+                        tablesRegexp:
+                          type: string
+                          description: |
+                            Regexp to match tables in system database to fetch metrics from.
+                            Multiple tables can be matched using regexp. Matched tables are merged using merge() table function.
+                            Default is "^(metrics|custom_metrics)$".
+                        excludeRegexp:
+                          type: array
+                          items:
+                            type: string
+                          description: |
+                            List of regexps to match ClickHouse metrics to exclude from export.
+                            Regexps match internal metric names before Prometheus normalization and prefixing.
                 template:
                   type: object
                   description: "Parameters which are used if you want to generate ClickHouseInstallationTemplate custom resources from files which are stored inside clickhouse-operator deployment"
@@ -318,6 +345,24 @@ spec:
                                 1. abort - do nothing, just break the process and wait for admin.
                                 2. rollback (default) - delete Pod and rollback StatefulSet to previous Generation. Pod would be recreated by StatefulSet based on rollback-ed configuration.
                                 3. ignore - ignore error, pretend nothing happened and move on to the next StatefulSet.
+                        recreate:
+                          type: object
+                          description: "Behavior during recreate StatefulSet"
+                          properties:
+                            onDataLoss:
+                              type: string
+                              description: |
+                                What to do in case operator needs to recreate StatefulSet due to PVC data loss or missing volumes.
+                                Possible options:
+                                1. abort - abort the process, do nothing with the problematic StatefulSet.
+                                2. recreate (default) - proceed and recreate StatefulSet.
+                            onUpdateFailure:
+                              type: string
+                              description: |
+                                What to do in case operator needs to recreate StatefulSet due to update failure or StatefulSet not ready.
+                                Possible options:
+                                1. abort - abort the process, do nothing with the problematic StatefulSet.
+                                2. recreate (default) - proceed and recreate StatefulSet.
                     host:
                       type: object
                       description: |
@@ -413,6 +458,109 @@ spec:
                                   !!merge <<: *TypeStringBool
                                   description: |
                                     Whether the operator during reconcile procedure should drop active replicas when replica is deleted or recreated
+                        hooks:
+                          type: object
+                          description: "default host-level hooks to execute before and after host reconcile"
+                          properties:
+                            pre:
+                              type: array
+                              description: "actions to execute before host reconcile"
+                              nullable: true
+                              items: &TypeHookActionChop
+                                type: object
+                                properties:
+                                  sql:
+                                    type: object
+                                    properties:
+                                      queries:
+                                        type: array
+                                        nullable: true
+                                        items:
+                                          type: string
+                                  shell:
+                                    type: object
+                                    properties:
+                                      command:
+                                        type: array
+                                        nullable: true
+                                        items:
+                                          type: string
+                                      container:
+                                        type: string
+                                  http:
+                                    type: object
+                                    properties:
+                                      url:
+                                        type: string
+                                      method:
+                                        type: string
+                                  target:
+                                    type: string
+                                    description: "where to execute hook: FirstHost (default), AllHosts, AllShards"
+                                    enum:
+                                      - ""
+                                      - "FirstHost"
+                                      - "firsthost"
+                                      - "AllHosts"
+                                      - "allhosts"
+                                      - "AllShards"
+                                      - "allshards"
+                            post:
+                              type: array
+                              description: "actions to execute after host reconcile"
+                              nullable: true
+                              items:
+                                !!merge <<: *TypeHookActionChop
+                    coordination:
+                      type: object
+                      description: "Coordination with external systems during reconcile"
+                      properties:
+                        keeper:
+                          type: object
+                          description: "Keeper-related coordination settings"
+                          properties:
+                            readyTimeout:
+                              type: integer
+                              minimum: 1
+                              description: |
+                                How long the operator waits for a referenced ClickHouseKeeper to become ready
+                                before aborting CHI reconcile. In seconds. Default is 120.
+                            onKeeperResourceUpdate:
+                              type: string
+                              description: |
+                                Reaction when a referenced CHK resource changes.
+                                  none (default) — do nothing
+                                  reconcile — trigger CHI reconcile
+                              enum:
+                                - ""
+                                - "None"
+                                - "none"
+                                - "Reconcile"
+                                - "reconcile"
+                    recovery:
+                      type: object
+                      description: "Auto-recovery from reconcile failures, scoped by CHI state"
+                      properties:
+                        from:
+                          type: object
+                          description: "Recovery scopes keyed by CHI state being recovered from"
+                          properties:
+                            aborted:
+                              type: object
+                              description: "Recovery from Status=Aborted"
+                              properties:
+                                onPodReady:
+                                  type: string
+                                  description: |
+                                    Reaction when a pod belonging to an Aborted CHI transitions to Ready.
+                                      retry (default) — re-enqueue the CHI for reconcile
+                                      none — do nothing, CHI stays Aborted
+                                  enum:
+                                    - ""
+                                    - "None"
+                                    - "none"
+                                    - "Retry"
+                                    - "retry"
                 annotation:
                   type: object
                   description: "defines which metadata.annotations items will include or exclude during render StatefulSet, Pod, PVC resources"
