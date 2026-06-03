@@ -10,7 +10,7 @@ To update this chart, run the following command from root dir:
 ./update_chart.sh -r bitnami/charts -b main -a rabbitmq --path bitnami --wiremind-image <image-tag>
 ```
 
-Replace `<image-tag>` with the desired image version from Wiremind GitHub Container Registry.
+Replace `<image-tag>` with the desired RabbitMQ `4.3.x` image version from Wiremind GitHub Container Registry.
 
 .
 <!--- app-name: RabbitMQ -->
@@ -336,13 +336,21 @@ RabbitMQ nodes assume their peers come back online within five minutes (by defau
 The following combination of deployment settings avoids the problem:
 
 - Use `podManagementPolicy: "Parallel"` to boot multiple cluster nodes in parallel
-- Use `rabbitmq-diagnostics ping` for readiness probe
+- Use a TCP readiness probe on the AMQP listener
 
 To learn more, please consult RabbitMQ documentation guides:
 
 - [RabbitMQ Clustering guide: Node Restarts](https://www.rabbitmq.com/docs/clustering#restarting)
 - [RabbitMQ Clustering guide: Restarts and Readiness Probes](https://www.rabbitmq.com/docs/clustering#restarting-readiness-probes)
 - [Recommendations](https://www.rabbitmq.com/docs/cluster-formation#peer-discovery-k8s) for Operator-less (DIY) deployments to Kubernetes
+
+### RabbitMQ 4.3.x Only
+
+RabbitMQ `4.3.1` is the default target version for this chart, and the chart supports RabbitMQ `4.3.x` only. RabbitMQ only supports upgrades to `4.3.x` from the latest `4.2.x` patch line and with all required feature flags enabled. Feature flag preparation is operational rollout work and is not automated by this chart.
+
+For Kubernetes StatefulSet clusters, `podManagementPolicy: Parallel` with TCP readiness is the recommended recovery-friendly profile. `RABBITMQ_FORCE_BOOT` is still disabled by default and should remain disabled except for explicit emergency recovery.
+
+The RabbitMQ 4.3.x Kubernetes peer discovery plugin derives the seed node from StatefulSet pod names and does not query the Kubernetes API. The chart therefore does not render Kubernetes API lookup options for the `k8s` backend.
 
 #### Do Not Force Boot Nodes on a Regular Basis
 
@@ -492,7 +500,11 @@ Because they expose different sets of data, a valid use case is to scrape metric
 | `clustering.addressType`                     | Switch clustering mode. Either `ip` or `hostname`                                                                                                                       | `hostname`                                        |
 | `clustering.rebalance`                       | Rebalance master for queues in cluster when new replica is created                                                                                                      | `false`                                           |
 | `clustering.forceBoot`                       | Force boot of an unexpectedly shut down cluster (in an unexpected order).                                                                                               | `false`                                           |
-| `clustering.partitionHandling`               | Switch Partition Handling Strategy. Either `autoheal` or `pause_minority` or `pause_if_all_down` or `ignore`                                                            | `autoheal`                                        |
+| `clustering.peerDiscovery.backend`           | Peer discovery backend. Either `k8s` or `classic_config`                                                                                                                | `k8s`                                             |
+| `clustering.peerDiscovery.discoveryRetryLimit` | Classic config peer discovery retry limit. Use `unlimited` to wait indefinitely                                                                                      | `30`                                              |
+| `clustering.peerDiscovery.discoveryRetryInterval` | Classic config peer discovery retry interval in milliseconds                                                                                                      | `1000`                                            |
+| `clustering.peerDiscovery.classicConfig.autoGenerateNodes` | Generate classic config node names from StatefulSet ordinals when `nodes` is empty                                                                          | `true`                                            |
+| `clustering.peerDiscovery.classicConfig.nodes` | Classic config node names. When set, values are rendered verbatim as `cluster_formation.classic_config.nodes.N`                                                       | `[]`                                              |
 | `loadDefinition.enabled`                     | Enable loading a RabbitMQ definitions file to configure RabbitMQ                                                                                                        | `false`                                           |
 | `loadDefinition.file`                        | Name of the definitions file                                                                                                                                            | `/app/load_definition.json`                       |
 | `loadDefinition.existingSecret`              | Existing secret with the load definitions file                                                                                                                          | `""`                                              |

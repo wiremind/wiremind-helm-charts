@@ -36,7 +36,7 @@ global:
       ##
       adaptSecurityContext: auto
 ## @section RabbitMQ Image parameters
-## Bitnami RabbitMQ image version
+## Bitnami RabbitMQ image version. This chart targets RabbitMQ 4.3.x only.
 ## ref: https://hub.docker.com/r/bitnami/rabbitmq/tags/
 ## @param image.registry [default: REGISTRY_NAME] RabbitMQ image registry
 ## @param image.repository [default: REPOSITORY_NAME/rabbitmq] RabbitMQ image repository
@@ -49,7 +49,7 @@ global:
 image:
   registry: ghcr.io/wiremind
   repository: bitnami/rabbitmq
-  tag: 4.2.2-debian-12-r1
+  tag: 4.3.1-debian-12-r2
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -299,10 +299,27 @@ clustering:
   ## ref: https://www.rabbitmq.com/rabbitmqctl.8.html#force_boot
   ##
   forceBoot: false
-  ## @param clustering.partitionHandling Switch Partition Handling Strategy. Either `autoheal` or `pause_minority` or `pause_if_all_down` or `ignore`
-  ## ref: https://www.rabbitmq.com/partitions.html#automatic-handling
+  ## RabbitMQ peer discovery settings.
   ##
-  partitionHandling: autoheal
+  peerDiscovery:
+    ## @param clustering.peerDiscovery.backend Peer discovery backend. Either `k8s` or `classic_config`
+    ##
+    backend: k8s
+    ## @param clustering.peerDiscovery.discoveryRetryLimit Classic config peer discovery retry limit. Use `unlimited` to wait indefinitely
+    ##
+    discoveryRetryLimit: 30
+    ## @param clustering.peerDiscovery.discoveryRetryInterval Classic config peer discovery retry interval in milliseconds
+    ##
+    discoveryRetryInterval: 1000
+    ## Classic config peer discovery settings.
+    ##
+    classicConfig:
+      ## @param clustering.peerDiscovery.classicConfig.autoGenerateNodes Generate classic config node names from StatefulSet ordinals when `nodes` is empty
+      ##
+      autoGenerateNodes: true
+      ## @param clustering.peerDiscovery.classicConfig.nodes Classic config node names. When set, values are rendered verbatim as `cluster_formation.classic_config.nodes.N`
+      ##
+      nodes: []
 ## Loading a RabbitMQ definitions file to configure RabbitMQ
 ##
 loadDefinition:
@@ -434,19 +451,31 @@ configuration: |-
   ## Clustering
   ##
   cluster_name = {{ default (include "common.names.fullname" .) .Values.clustering.name }}
-  cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
-  cluster_formation.k8s.host = kubernetes.default
-  cluster_formation.k8s.address_type = {{ .Values.clustering.addressType }}
-  {{- $svcName := printf "%s-%s" (include "common.names.fullname" .) (default "headless" .Values.servicenameOverride) }}
-  cluster_formation.k8s.service_name = {{ $svcName }}
-  cluster_formation.k8s.hostname_suffix = .{{ $svcName }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
+  {{- $peerDiscovery := .Values.clustering.peerDiscovery }}
+  {{- if eq $peerDiscovery.backend "classic_config" }}
+  cluster_formation.peer_discovery_backend = classic_config
+  {{- if $peerDiscovery.classicConfig.nodes }}
+  {{- range $index, $node := $peerDiscovery.classicConfig.nodes }}
+  cluster_formation.classic_config.nodes.{{ add $index 1 }} = {{ $node }}
+  {{- end }}
+  {{- else if $peerDiscovery.classicConfig.autoGenerateNodes }}
+  {{- $svcName := include "rabbitmq.headlessServiceName" . }}
+  {{- range $index := until (.Values.replicaCount | int) }}
+  {{- if eq $.Values.clustering.addressType "hostname" }}
+  cluster_formation.classic_config.nodes.{{ add $index 1 }} = rabbit@{{ include "common.names.fullname" $ }}-{{ $index }}.{{ $svcName }}.{{ include "common.names.namespace" $ }}.svc.{{ $.Values.clusterDomain }}
+  {{- else }}
+  cluster_formation.classic_config.nodes.{{ add $index 1 }} = rabbit@{{ include "common.names.fullname" $ }}-{{ $index }}
+  {{- end }}
+  {{- end }}
+  {{- end }}
+  cluster_formation.discovery_retry_limit = {{ $peerDiscovery.discoveryRetryLimit }}
+  cluster_formation.discovery_retry_interval = {{ $peerDiscovery.discoveryRetryInterval }}
+  {{- else }}
+  cluster_formation.peer_discovery_backend = rabbit_peer_discovery_k8s
+  {{- end }}
   cluster_formation.node_cleanup.interval = 10
   cluster_formation.node_cleanup.only_log_warning = true
-  cluster_partition_handling = {{ .Values.clustering.partitionHandling }}
   {{- end }}
-  {{ if and .Values.clustering.enabled .Values.loadDefinition.enabled }}
-  cluster_formation.target_cluster_size_hint = {{ .Values.replicaCount }}
-  {{ end }}
   {{- if .Values.loadDefinition.enabled }}
   load_definitions = {{ .Values.loadDefinition.file }}
   {{- end }}

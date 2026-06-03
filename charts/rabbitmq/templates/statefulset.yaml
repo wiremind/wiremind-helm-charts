@@ -208,7 +208,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            {{- $svcName := printf "%s-%s" (include "common.names.fullname" .) (default "headless" .Values.servicenameOverride) }}
+            {{- $svcName := include "rabbitmq.headlessServiceName" . }}
             {{- if .Values.featureFlags }}
             - name: RABBITMQ_FEATURE_FLAGS
               value: {{ .Values.featureFlags }}
@@ -349,15 +349,8 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
-            exec:
-              command:
-                - /bin/bash
-                - -ec
-                {{- if or (.Values.loadDefinition.enabled) (not (contains "rabbitmq_management" .Values.plugins )) }}
-                - rabbitmq-diagnostics -q check_running && rabbitmq-diagnostics -q check_local_alarms
-                {{- else }}
-                - curl -f --user {{ .Values.auth.username }}:{{ ternary "$(< $RABBITMQ_PASSWORD_FILE)" "$RABBITMQ_PASSWORD"  .Values.usePasswordFiles }} 127.0.0.1:{{ .Values.containerPorts.manager }}/api/health/checks/local-alarms
-                {{- end }}
+            tcpSocket:
+              port: {{ ternary "amqp-tls" "amqp" .Values.auth.tls.enabled }}
           {{- end }}
           {{- if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
