@@ -19460,6 +19460,26 @@ entries:
     version: 0.0.1
   silence-operator-crds:
   - apiVersion: v2
+    appVersion: v0.20.1
+    created: "2026-06-04T13:19:56.103926229Z"
+    description: Silence operator manages Alertmanager silences via custom resources.
+    digest: eea143e08aed0e7204c38cfddf9b79f3e9b7225a40e4d2b7b4abd33d59fbae9b
+    icon: https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.png
+    keywords:
+    - silence
+    - operator
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: silence-operator-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/silence-operator-crds
+    - https://github.com/giantswarm/silence-operator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/silence-operator-crds-0.20.1/silence-operator-crds-0.20.1.tgz
+    version: 0.20.1
+  - apiVersion: v2
     appVersion: v0.13.0
     created: "2025-03-28T12:57:28.750832079Z"
     description: Silence operator manages Alertmanager silences via custom resources.
@@ -20376,4 +20396,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-06-03T08:54:40.482148101Z"
+generated: "2026-06-04T13:19:56.104948908Z"
