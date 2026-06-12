@@ -268,6 +268,9 @@ queue_leader_locator: balanced
 ## @param queue_master_locator DEPRECATED.  Use queue_leader_locator instead
 ##
 queue_master_locator: ""
+## @param consumerTimeout Time in milliseconds before RabbitMQ closes a consumer channel waiting for an acknowledgement
+##
+consumerTimeout: 1800000
 
 ## @param communityPlugins List of Community plugins (URLs) to be downloaded during container initialization
 ## Combine it with extraPlugins to also enable them.
@@ -444,6 +447,13 @@ configuration: |-
   {{- if and (not .Values.auth.securePassword) .Values.auth.password }}
   default_pass = {{ .Values.auth.password }}
   {{- end }}
+  ## Consumer timeout, starting with 4.3 defaults to 30 minutes.
+  ## If a message delivered to a consumer has not been acknowledged before this timer
+  ## triggers the channel will be force closed by the broker. This ensures that
+  ## faulty consumers that never ack will not hold on to messages indefinitely.
+  ##
+  # Can be set at queue initialization too.
+  consumer_timeout = {{ int (default 1800000 .Values.consumerTimeout) }}
   {{- if .Values.clustering.enabled }}
   ## Clustering
   ##

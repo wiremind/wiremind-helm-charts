@@ -41,6 +41,12 @@
       "render": "textArea",
       "description": "Extra configuration to be appended to RabbitMQ Configuration"
     },
+    "consumerTimeout": {
+      "type": "integer",
+      "title": "Consumer timeout",
+      "form": true,
+      "description": "Time in milliseconds before RabbitMQ closes a consumer channel waiting for an acknowledgement"
+    },
     "replicaCount": {
       "type": "integer",
       "form": true,

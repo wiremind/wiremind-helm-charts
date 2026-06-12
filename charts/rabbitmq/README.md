@@ -1,6 +1,6 @@
 # rabbitmq Helm chart
 
-Helm chart for rabbitmq sourced from bitnami/charts repository. The version was updated to 16.0.17 to make use of the latest image from Wiremind docker repository.
+Helm chart for rabbitmq sourced from the bitnami/charts repository and adapted to use Wiremind RabbitMQ `4.3.x` images.
 
 ## Update the chart
 
@@ -352,6 +352,10 @@ For Kubernetes StatefulSet clusters, `podManagementPolicy: Parallel` with TCP re
 
 The RabbitMQ 4.3.x Kubernetes peer discovery plugin derives the seed node from StatefulSet pod names and does not query the Kubernetes API. The chart therefore does not render Kubernetes API lookup options for the `k8s` backend.
 
+#### Consumer Timeout
+
+RabbitMQ `4.3.x` defaults `consumer_timeout` to 30 minutes. This chart exposes that broker-level setting as the top-level `consumerTimeout` value, expressed in milliseconds and defaulting to `1800000`. When a consumer does not acknowledge a delivered message before the timeout expires, RabbitMQ closes the channel. RabbitMQ can still override this per queue during queue initialization.
+
 #### Do Not Force Boot Nodes on a Regular Basis
 
 Note that forcing nodes to boot is **not a solution** and doing so **can be dangerous**. Forced booting is a last resort mechanism in RabbitMQ that helps make remaining cluster nodes recover and rejoin each other after a permanent loss of some of their former peers. In other words, forced booting a node is an emergency event recovery procedure.
@@ -493,6 +497,7 @@ Because they expose different sets of data, a valid use case is to scrape metric
 | `plugins`                                    | List of default plugins to enable (should only be altered to remove defaults; for additional plugins use `extraPlugins`)                                                | `rabbitmq_management rabbitmq_peer_discovery_k8s` |
 | `queue_leader_locator`                       | Changes the queue_leader_locator setting in the rabbitmq config file                                                                                                    | `balanced`                                        |
 | `queue_master_locator`                       | DEPRECATED.  Use queue_leader_locator instead                                                                                                                           | `""`                                              |
+| `consumerTimeout`                           | Time in milliseconds before RabbitMQ closes a consumer channel waiting for an acknowledgement                                                                            | `1800000`                                         |
 | `communityPlugins`                           | List of Community plugins (URLs) to be downloaded during container initialization                                                                                       | `""`                                              |
 | `extraPlugins`                               | Extra plugins to enable (single string containing a space-separated list)                                                                                               | `rabbitmq_auth_backend_ldap`                      |
 | `clustering.enabled`                         | Enable RabbitMQ clustering                                                                                                                                              | `true`                                            |
