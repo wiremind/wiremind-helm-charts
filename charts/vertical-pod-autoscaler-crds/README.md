@@ -9,5 +9,5 @@ CRDs are retrieved from [here](https://github.com/kubernetes/autoscaler/blob/mas
 To download them, you can use the following script at root :
 
 ```
-./scripts/update_crds.sh -r kubernetes/autoscaler -b master --folder vertical-pod-autoscaler/deploy -o charts/vertical-pod-autoscaler-crds/templates/
+./scripts/update_crds.sh -r kubernetes/autoscaler -b vpa-release-1.7 --folder vertical-pod-autoscaler/deploy -o charts/vertical-pod-autoscaler-crds/templates/
 ```
