@@ -20055,6 +20055,26 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: 1.7.0
+    created: "2026-06-16T10:20:28.873483721Z"
+    description: Manage Vertical Pod Autoscaler CRDs
+    digest: 237a4abf0e772434fefe710e575424e1f20ad97c2990a1be298655a71e29bf3a
+    keywords:
+    - vpa
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: vertical-pod-autoscaler-crds
+    sources:
+    - https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/
+    - https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/deploy/vpa-v1-crd-gen.yaml
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/vertical-pod-autoscaler-crds-1.7.0/vertical-pod-autoscaler-crds-1.7.0.tgz
+    version: 1.7.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: 1.6.0
     created: "2026-04-13T13:26:15.845828694Z"
     description: Manage Vertical Pod Autoscaler CRDs
@@ -20418,4 +20438,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-06-11T15:27:05.376094859Z"
+generated: "2026-06-16T10:20:28.874408055Z"
