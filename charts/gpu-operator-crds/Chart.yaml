@@ -2,8 +2,8 @@ apiVersion: v2
 annotations:
   category: DeveloperTools
 name: gpu-operator-crds
-version: 25.3.0
-appVersion: "v25.3.0"
+version: 26.3.0
+appVersion: "v26.3.0"
 description: Manage gpu-operator CRDs
 keywords:
   - gpu-operator
