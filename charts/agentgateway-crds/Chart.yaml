@@ -1,0 +1,18 @@
+apiVersion: v2
+annotations:
+  category: DeveloperTools
+name: agentgateway-crds
+version: 1.3.1
+appVersion: "v1.3.1"
+description: Manage agentgateway CRDs
+keywords:
+  - agentgateway
+  - gateway-api
+  - crds
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/agentgateway-crds
+  - https://github.com/agentgateway/agentgateway/tree/v1.3.1/controller/install/helm/agentgateway-crds
+icon: https://raw.githubusercontent.com/agentgateway/website/refs/heads/main/static/favicon.svg
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
