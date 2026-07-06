@@ -12488,6 +12488,18 @@ entries:
     version: 3.0.0
   external-dns-crds:
   - apiVersion: v2
+    appVersion: 0.21.0
+    created: "2026-07-06T15:21:24.337928706Z"
+    description: A Helm chart to manage external-dns CRDs
+    digest: 67aa6fb3f3b89cc1575f71145efac706cee78edd4803780fe482752c5d115a3c
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: external-dns-crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/external-dns-crds-1.21.1/external-dns-crds-1.21.1.tgz
+    version: 1.21.1
+  - apiVersion: v2
     appVersion: 0.17.0
     created: "2025-08-12T13:00:11.118708938Z"
     description: A Helm chart to manage external-dns CRDs
@@ -20494,4 +20506,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-06-29T09:54:29.123130619Z"
+generated: "2026-07-06T15:21:24.339203362Z"
