@@ -11,6 +11,9 @@ jobs:
     permissions:
       contents: write
       packages: write
+      pages: write
+    outputs:
+      changed_charts: ${{ steps.cr.outputs.changed_charts }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -24,6 +27,21 @@ jobs:
         run: |
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Configure GitHub Pages to deploy via GitHub Actions
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              await github.rest.repos.updateInformationAboutPagesSite({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                build_type: 'workflow'
+              });
+              core.info('Configured GitHub Pages to use GitHub Actions deployment');
+            } catch (error) {
+              core.warning(`Could not update GitHub Pages configuration: ${error.message}`);
+            }
 
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.7.0
@@ -50,3 +68,41 @@ jobs:
 
             helm push "${pkg}" oci://ghcr.io/${{ github.repository }}
           done
+
+  deploy-pages:
+    needs: release
+    if: ${{ needs.release.outputs.changed_charts != '' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
