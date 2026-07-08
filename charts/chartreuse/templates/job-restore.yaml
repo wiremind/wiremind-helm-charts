@@ -1,0 +1,74 @@
+{{- /*
+Post-deployment restore of the Deployments that the migration Job stopped.
+
+Only needed on the upgrade-before-deployment path: there the migration Job intentionally
+skips start_pods() and relies on the deployment that follows to restore replicas. That works
+for Deployments whose chart sets spec.replicas, but HPA-managed ones omit it and an HPA whose
+target is at 0 replicas with minReplicas >= 1 is ScalingDisabled: without this Job they stay
+stranded at 0 after every migration.
+
+ArgoCD mode only: as a PostSync hook it runs once the new pod template is applied, so it only
+ever starts new-version pods. In Helm mode the pre-upgrade `-ephemeral` resource set (SA,
+RBAC, ConfigMap) is deleted as soon as the migration hook succeeds, so this Job has nothing
+to run with there; Helm-mode users of upgradeBeforeDeployment keep the pre-existing behavior.
+*/ -}}
+{{- if and .Values.alembic.enabled .Values.stopPods .Values.upgradeBeforeDeployment .Values.restorePods (eq .Values.deploymentMethod "argocd") -}}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "chartreuse.fullname" . }}-restore
+  labels:
+    {{- include "chartreuse.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "chartreuse-restore"
+  annotations:
+    "argocd.argoproj.io/hook": PostSync
+    "argocd.argoproj.io/hook-delete-policy": BeforeHookCreation
+spec:
+  # The restore is idempotent and annotation-gated: retrying on transient API errors is safe.
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 1800
+  template:
+    metadata:
+      labels:
+        {{- include "chartreuse.labels" . | nindent 8 }}
+        app.kubernetes.io/component: chartreuse-restore
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- if .Values.priorityClassName }}
+      priorityClassName: "{{ .Values.priorityClassName }}"
+      {{- end }}
+      restartPolicy: "Never"
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecret }}
+      containers:
+        - name: chartreuse-restore
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - {{ .Values.restoreEntrypoint | quote }}
+          envFrom:
+          - configMapRef:
+              name: {{ template "chartreuse.fullname" . }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      serviceAccountName: {{ template "chartreuse.serviceAccountName" . }}
+      terminationGracePeriodSeconds: 0
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
