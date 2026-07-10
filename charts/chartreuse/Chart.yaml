@@ -3,7 +3,7 @@ name: chartreuse
 # appVersion must track the chartreuse package release that ships the `chartreuse-restore`
 # entrypoint (ensure_safe_run aborts on a major.minor mismatch with the image's package).
 appVersion: 7.0.0
-version: 6.4.0
+version: 6.4.1
 description: Automate Alembic SQL schema migrations.
 maintainers:
   - name: Wiremind
