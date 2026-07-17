@@ -1,4 +1,4 @@
-{{- if or .Values.freshclamConfig .Values.clamdConfigDict -}}
+{{- if or .Values.freshclamConfig .Values.freshclamConfigDict -}}
 kind: ConfigMap
 apiVersion: v1
 metadata:
