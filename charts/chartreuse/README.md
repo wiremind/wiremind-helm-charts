@@ -6,6 +6,28 @@ Chartreuse is an Automated Alembic migrations within kubernetes.
 
 Please refer to https://github.com/wiremind/chartreuse.
 
+## Post-deployment restore Job (`restorePods`)
+
+On the `upgradeBeforeDeployment` path the migration Job stops the tracked
+Deployments (scale to 0 + HPA pause via `spec.behavior.scaleUp.selectPolicy:
+Disabled`) and intentionally skips `start_pods()`, relying on the deployment
+that follows to restore replicas. That deployment restores `spec.replicas`
+only where the chart sets it — HPA-managed Deployments omit it — and never
+touches the paused HPAs (`spec.behavior` is not chart-owned): without a
+restore step they stay stranded at 0 / unable to scale up forever.
+
+With `restorePods: true` (default) and `upgradeBeforeDeployment` + `stopPods`
+enabled, the chart renders a `chartreuse-restore` Job that runs
+`restore_stopped_pods()` after the deployment:
+
+- `deploymentMethod: argocd` → ArgoCD `PostSync` hook.
+- `deploymentMethod: helm` → `helm.sh/hook: post-upgrade`.
+
+The Job is idempotent and annotation-gated (`wiremind.io/stopped-by`,
+`wiremind.io/pre-pause-scale-behavior`), so it also heals leftovers from a
+previous run that crashed or predates the restore Job. It requires chartreuse
+package >= 7.0 in the image (the `chartreuse-restore` entrypoint).
+
 ## Using this chart under ArgoCD
 
 The chart ships an opt-in ArgoCD-native mode that replaces the Helm hook
@@ -70,5 +92,7 @@ Override `argocd.syncWave` if your deployment uses a different wave scheme.
 ### Backward compatibility
 
 This mode is **opt-in**. With `deploymentMethod: helm` (the default), the
-chart renders exactly the same resources with the same annotations and
-naming as previous versions; pure-Helm consumers are not affected.
+chart renders the same resources with the same annotations and naming as
+previous versions; the only Helm-mode addition since 6.5.0 is the
+`chartreuse-restore` post-upgrade hook Job described above (disable with
+`restorePods: false` to get the pre-6.5.0 rendering).

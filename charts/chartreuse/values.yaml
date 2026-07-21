@@ -18,12 +18,14 @@ upgradeBeforeDeployment: false
 ## Whether or not to scale down deployments with ExpectedDeploymentScale before migrating (if migration is needed)
 stopPods: true
 
-## Whether to run a post-deployment (ArgoCD PostSync) Job restoring the Deployments that the
-## migration stopped and that the deployment itself could not scale back up. Without it,
-## HPA-managed Deployments (which omit spec.replicas in their chart) stay stranded at 0
-## replicas after every upgrade-before-deployment migration: an HPA whose target is at 0
-## replicas with minReplicas >= 1 is ScalingDisabled and never recovers on its own.
-## Only effective with upgradeBeforeDeployment + stopPods + deploymentMethod argocd.
+## Whether to run a post-deployment Job (ArgoCD PostSync hook / Helm post-upgrade hook)
+## restoring the Deployments that the migration stopped and that the deployment itself could
+## not scale back up. Without it, HPA-managed Deployments (which omit spec.replicas in their
+## chart) stay stranded at 0 replicas after every upgrade-before-deployment migration: the
+## HPAs are paused during the migration (spec.behavior.scaleUp.selectPolicy: Disabled, a
+## field charts don't own so no apply reverts it) and an HPA whose target is at 0 replicas
+## with minReplicas >= 1 is ScalingDisabled — neither recovers on its own.
+## Only effective with upgradeBeforeDeployment + stopPods.
 restorePods: true
 
 ## Additional environment variables injected within chartreuse Pods
