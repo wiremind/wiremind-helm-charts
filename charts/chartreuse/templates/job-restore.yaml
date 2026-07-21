@@ -7,12 +7,19 @@ for Deployments whose chart sets spec.replicas, but HPA-managed ones omit it and
 target is at 0 replicas with minReplicas >= 1 is ScalingDisabled: without this Job they stay
 stranded at 0 after every migration.
 
-ArgoCD mode only: as a PostSync hook it runs once the new pod template is applied, so it only
-ever starts new-version pods. In Helm mode the pre-upgrade `-ephemeral` resource set (SA,
-RBAC, ConfigMap) is deleted as soon as the migration hook succeeds, so this Job has nothing
-to run with there; Helm-mode users of upgradeBeforeDeployment keep the pre-existing behavior.
+Worse since chartreuse 7.0.1: the migration pauses the HPAs themselves
+(spec.behavior.scaleUp.selectPolicy: Disabled), and that field is not chart-owned, so no
+later apply ever resumes them — every paused HPA (minReplicas 0 included) stays unable to
+scale up until restore_stopped_pods() runs.
+
+ArgoCD mode: PostSync hook — runs once the new pod template is applied, so it only ever
+starts new-version pods. Helm mode: post-upgrade hook, the same placement (post-install is
+not needed: at install the migration Job runs in-release with HELM_IS_INSTALL=1 and calls
+start_pods() itself). In both modes the Job uses the persistent unsuffixed
+SA/RBAC/ConfigMap — regular release resources in Helm mode too — not the pre-upgrade
+`-ephemeral` set that Helm deletes as soon as the migration hook succeeds.
 */ -}}
-{{- if and .Values.alembic.enabled .Values.stopPods .Values.upgradeBeforeDeployment .Values.restorePods (eq .Values.deploymentMethod "argocd") -}}
+{{- if and .Values.alembic.enabled .Values.stopPods .Values.upgradeBeforeDeployment .Values.restorePods -}}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -22,8 +29,14 @@ metadata:
     {{- include "chartreuse.labels" . | nindent 4 }}
     app.kubernetes.io/component: "chartreuse-restore"
   annotations:
+    {{- if eq .Values.deploymentMethod "argocd" }}
     "argocd.argoproj.io/hook": PostSync
     "argocd.argoproj.io/hook-delete-policy": BeforeHookCreation
+    {{- else }}
+    "helm.sh/hook": post-upgrade
+    "helm.sh/hook-weight": {{ .Values.upgradeJobWeight | quote }}
+    "helm.sh/hook-delete-policy": "before-hook-creation"
+    {{- end }}
 spec:
   # The restore is idempotent and annotation-gated: retrying on transient API errors is safe.
   backoffLimit: 3
