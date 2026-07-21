@@ -1957,6 +1957,27 @@ entries:
   chartreuse:
   - apiVersion: v2
     appVersion: 7.0.0
+    created: "2026-07-21T09:12:03.487861342Z"
+    description: Automate Alembic SQL schema migrations.
+    digest: 30d1abaed98d3a0f551e380f1fb7df1aaf15e2ef111dd4f85c0ee1b56a3097d0
+    keywords:
+    - alembic
+    - database
+    - migration
+    - postgresql
+    - clickhouse
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: chartreuse
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/chartreuse
+    - https://github.com/wiremind/chartreuse
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/chartreuse-6.5.0/chartreuse-6.5.0.tgz
+    version: 6.5.0
+  - apiVersion: v2
+    appVersion: 7.0.0
     created: "2026-07-10T09:54:39.946686879Z"
     description: Automate Alembic SQL schema migrations.
     digest: fab010a9866cd30c2bbbea0494a77f7bfea35d16c46ae5ae5504147305aadf4b
@@ -20588,4 +20609,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-07-17T11:55:05.114203925Z"
+generated: "2026-07-21T09:12:03.489523506Z"
