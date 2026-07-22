@@ -4,6 +4,7 @@
 
 # Number of replicas
 replicaCount: 1
+revisionHistoryLimit: 3
 
 image:
   ## The image to run

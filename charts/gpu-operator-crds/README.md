@@ -11,5 +11,5 @@ CRDs are retrieved from [here](https://github.com/NVIDIA/gpu-operator/tree/main/
 
 To download them, you can use the following script at root : 
 ```
-./scripts/update_crds.sh -r NVIDIA/gpu-operator -b v25.3.0 --folder deployments/gpu-operator/crds -o charts/gpu-operator-crds/templates/
+./scripts/update_crds.sh -r NVIDIA/gpu-operator -b v26.3.0 --folder deployments/gpu-operator/crds -o charts/gpu-operator-crds/templates/
 ```

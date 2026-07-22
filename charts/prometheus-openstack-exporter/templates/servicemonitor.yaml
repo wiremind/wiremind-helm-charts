@@ -1,0 +1,109 @@
+{{- if .Values.serviceMonitor.enabled }}
+{{- $fullname := include "openstack-exporter.fullname" . }}
+{{- $labels := include "openstack-exporter.labels" . }}
+{{- $selectorLabels := include "openstack-exporter.selectorLabels" . }}
+{{- if .Values.multicloud.enabled }}
+{{- range .Values.multicloud.clouds }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ $fullname }}-{{ .name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- $labels | nindent 4 }}
+    {{- with $.Values.serviceMonitor.additionalLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with $.Values.serviceMonitor.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  endpoints:
+    - interval: {{ $.Values.serviceMonitor.interval }}
+      scrapeTimeout: {{ $.Values.serviceMonitor.scrapeTimeout }}
+      port: metrics
+      path: /probe
+      params:
+        cloud:
+          - {{ .name }}
+        include_services:
+          - {{ join "," .services }}
+      relabelings:
+        - action: replace
+          regex: (.*)
+          replacement: {{ .name }}
+          targetLabel: instance
+  jobLabel: jobLabel
+  namespaceSelector:
+    matchNames:
+      - {{ $.Release.Namespace }}
+  selector:
+    matchLabels:
+      {{- $selectorLabels | nindent 6 }}
+{{- end }}
+{{- if .Values.multicloud.selfmonitor }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "openstack-exporter.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "openstack-exporter.labels" . | nindent 4 }}
+    {{- with .Values.serviceMonitor.additionalLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.serviceMonitor.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  endpoints:
+    - interval: {{ .Values.serviceMonitor.interval }}
+      scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
+      port: metrics
+  jobLabel: jobLabel
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      {{- include "openstack-exporter.selectorLabels" . | nindent 6 }}
+{{- end }}
+{{- else }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "openstack-exporter.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "openstack-exporter.labels" . | nindent 4 }}
+    {{- with .Values.serviceMonitor.additionalLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.serviceMonitor.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  endpoints:
+    - interval: {{ .Values.serviceMonitor.interval }}
+      scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
+      port: metrics
+      relabelings:
+        - action: replace
+          regex: (.*)
+          replacement: {{ .Values.cloud }}
+          targetLabel: instance
+  jobLabel: jobLabel
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      {{- include "openstack-exporter.selectorLabels" . | nindent 6 }}
+{{- end }}
+{{- end }}

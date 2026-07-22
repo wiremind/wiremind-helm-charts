@@ -3,7 +3,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   labels:
-{{ include "orc.labels" . | indent 4 }}
+    {{- include "orc.labels" . | nindent 4 }}
   name: {{ include "orc.name" . }}-leader-election-role
 rules:
 - apiGroups:
@@ -42,7 +42,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   labels:
-{{ include "orc.labels" . | indent 4 }}
+    {{- include "orc.labels" . | nindent 4 }}
   name: {{ include "orc.name" . }}-leader-election-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io

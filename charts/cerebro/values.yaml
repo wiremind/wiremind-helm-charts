@@ -1,6 +1,9 @@
 replicaCount: 1
 revisionHistoryLimit: 3
 
+# Set to false to skip creation of the secret-vars Secret (e.g. when using ExternalSecrets)
+createSecret: true
+
 image:
   repository: lmenezes/cerebro
   # Note: when updating the version, ensure `config` and the ConfigMap are kept

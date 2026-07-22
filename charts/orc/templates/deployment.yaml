@@ -49,11 +49,11 @@ spec:
             protocol: TCP
           {{- end }}
         {{- if .Values.probes.enable }}
-        {{- with .Values.livenessProbe }}
+        {{- with .Values.probes.livenessProbe }}
         livenessProbe:
           {{- toYaml . | nindent 10 }}
         {{- end }}
-        {{- with .Values.readinessProbe }}
+        {{- with .Values.probes.readinessProbe }}
         readinessProbe:
           {{- toYaml . | nindent 10 }}
         {{- end }}
@@ -78,6 +78,10 @@ spec:
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "orc.serviceAccountName" . }}

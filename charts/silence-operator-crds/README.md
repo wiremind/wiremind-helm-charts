@@ -6,4 +6,8 @@ Helm chart for deploying silence operator CRDs.
 
 The Chart has the same version as the `silence-operator`, try to keep them equal.
 
-CRDs are retrieved from [here](https://github.com/giantswarm/silence-operator/tree/master/config/crd).
+To download CRDs, you can use the following script at root :
+
+```
+./scripts/update_crds.sh -r giantswarm/silence-operator/ -b v0.20.1 --folder helm/silence-operator/templates/crds.yml -o charts/silence-operator-crds/templates/
+```

@@ -56,6 +56,11 @@ Create the name of the service account to use
 {{- end -}}
 
 {{- define "chartreuse.upgradeJobAnnotations" -}}
+{{- if eq .Values.deploymentMethod "argocd" -}}
+"argocd.argoproj.io/hook": Sync
+"argocd.argoproj.io/hook-delete-policy": BeforeHookCreation
+"argocd.argoproj.io/sync-wave": {{ .Values.argocd.syncWave | quote }}
+{{- else -}}
 {{- if .Values.upgradeBeforeDeployment -}}
 {{- if .Release.IsInstall }}
 # No hook: we deploy this job during the initial install, as part of the Helm Release
@@ -73,6 +78,39 @@ Create the name of the service account to use
 "helm.sh/hook-delete-policy": "before-hook-creation"
 {{- end }}
 {{- end -}}
+{{- end -}}
+
+{{/*
+ArgoCD sync-wave for the Job's dependency resources (ServiceAccount, ConfigMap,
+RBAC, ExternalSecret). In ArgoCD mode the Job is a Sync hook at `argocd.syncWave`;
+ArgoCD applies (and health-gates) lower waves first, so these dependencies must sit
+one wave earlier than the Job or the hook deadlocks creating its pod (missing SA /
+ConfigMap / Secret). Empty under Helm, where they ship as part of the Release.
+*/}}
+{{- define "chartreuse.dependencyAnnotations" -}}
+{{- if eq .Values.deploymentMethod "argocd" -}}
+"argocd.argoproj.io/sync-wave": {{ sub (int .Values.argocd.syncWave) 1 | quote }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Annotations for the chartreuse-config ExternalSecret.
+- argocd mode: a sync-wave only (NO render-time timestamp — manifests are committed to
+  git, so `now` would break idempotency). Defaults to the dependency wave
+  (`syncWave - 1`) but is overridable via `argocd.externalSecretSyncWave` so an umbrella
+  can place it in its early "secrets" band, where a shared force-sync refresh Job
+  re-pulls it at deploy time. That refresh path relies on `refreshPolicy: OnChange`
+  (set in the ExternalSecret spec below), so a force-sync annotation triggers a pull.
+- helm mode: a render-time timestamp (moved here from a label) bumps the object on
+  every `helm upgrade`, forcing a re-pull while `refreshInterval` is intentionally long.
+*/}}
+{{- define "chartreuse.externalSecretAnnotations" -}}
+{{- if eq .Values.deploymentMethod "argocd" -}}
+"argocd.argoproj.io/sync-wave": {{ .Values.argocd.externalSecretSyncWave | default (sub (int .Values.argocd.syncWave) 1) | quote }}
+{{- else -}}
+helm.sh/release-time: {{ now | unixEpoch | quote }}
+{{- end -}}
+{{- end -}}
 
 {{- define "chartreuse.annotations.ephemeral" -}}
 {{- if .Values.upgradeBeforeDeployment -}}
@@ -86,11 +124,15 @@ Create the name of the service account to use
 
 # Adds suffix -ephemeral if it is a helm hook
 {{- define "chartreuse.hook.suffix" -}}
+{{- if eq .Values.deploymentMethod "argocd" -}}
+{{/* No suffix in ArgoCD mode - single unsuffixed resource set, with the Job as a Sync hook. */}}
+{{- else -}}
 {{- if .Values.upgradeBeforeDeployment -}}
 {{- if .Release.IsUpgrade -}}
 -ephemeral
 {{- end -}}
 {{- else -}}
 -ephemeral
+{{- end -}}
 {{- end -}}
 {{- end -}}

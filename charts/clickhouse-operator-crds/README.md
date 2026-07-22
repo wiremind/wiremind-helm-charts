@@ -8,7 +8,7 @@ The Chart has the same version as the `clickhouse-operator`, try to keep them eq
 
 CRDs are retrieved from [here](https://github.com/Altinity/clickhouse-operator/tree/master/deploy/helm/clickhouse-operator/crds).
 
-To download them, you can use the following script at root : 
+To download them, you can use the following script at root :
 ```
-./scripts/update_crds.sh -r Altinity/clickhouse-operator -b 0.25.5 --folder deploy/helm/clickhouse-operator/crds -o charts/clickhouse-operator-crds/templates/
+./scripts/update_crds.sh -r Altinity/clickhouse-operator -b 0.27.0 --folder deploy/helm/clickhouse-operator/crds -o charts/clickhouse-operator-crds/templates/
 ```

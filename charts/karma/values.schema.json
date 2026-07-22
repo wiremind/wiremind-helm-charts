@@ -102,6 +102,11 @@
         "replicaCount": {
             "type": "integer"
         },
+        "revisionHistoryLimit": {
+            "type": "number",
+            "description": "The number of old history to retain to allow rollback",
+            "default": 3
+        },
         "resources": {
             "type": "object"
         },

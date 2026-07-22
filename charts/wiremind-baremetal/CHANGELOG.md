@@ -1,5 +1,13 @@
 # Changelog
 
+# v2.0.2 (2026-05-29)
+## Fix
+- Keep `extraEnv` entries under the container `env` list so the chart still renders when custom environment variables are set
+
+# v2.0.1 (2026-05-29)
+## Fix
+- Allow configuring the RAID device path with the `raidDevice` value and try `/dev/md/md0` then `/dev/md127` by default
+
 # v1.4.0 (2022-06-13)
 ## Feat
 - Support resources, containerSecurityContext, readinessProbe, livenessProbe, image, hostPID

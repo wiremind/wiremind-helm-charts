@@ -18,6 +18,16 @@ upgradeBeforeDeployment: false
 ## Whether or not to scale down deployments with ExpectedDeploymentScale before migrating (if migration is needed)
 stopPods: true
 
+## Whether to run a post-deployment Job (ArgoCD PostSync hook / Helm post-upgrade hook)
+## restoring the Deployments that the migration stopped and that the deployment itself could
+## not scale back up. Without it, HPA-managed Deployments (which omit spec.replicas in their
+## chart) stay stranded at 0 replicas after every upgrade-before-deployment migration: the
+## HPAs are paused during the migration (spec.behavior.scaleUp.selectPolicy: Disabled, a
+## field charts don't own so no apply reverts it) and an HPA whose target is at 0 replicas
+## with minReplicas >= 1 is ScalingDisabled — neither recovers on its own.
+## Only effective with upgradeBeforeDeployment + stopPods.
+restorePods: true
+
 ## Additional environment variables injected within chartreuse Pods
 additionalEnvironmentVariables: {}
 
@@ -72,6 +82,9 @@ alembic:
 ## you have no reason to edit it.
 entrypoint: "chartreuse-upgrade"
 
+## Entry point of the post-deployment restore Job (see restorePods).
+restoreEntrypoint: "chartreuse-restore"
+
 rbac:
   create: true
 
@@ -90,3 +103,28 @@ tolerations: []
 affinity: {}
 
 podAnnotations: {}
+
+## Deployment surface. `helm` (default) keeps existing Helm install/upgrade
+## hook semantics. `argocd` renders the migration Job as an ArgoCD Sync hook
+## with delete-and-recreate (fixing the immutable Job.spec.template error on
+## image bumps) and skips the `-ephemeral` upgrade-hook resource set entirely
+## (the Helm-only mechanism for pre-upgrade migrations). Matches the umbrella
+## wiremind chart and overwhelm's `--cd-version` derivation so the same toggle
+## propagates end-to-end.
+deploymentMethod: helm
+
+argocd:
+  ## Used only when `deploymentMethod: argocd`.
+  ## Sync-wave for the chartreuse Job. Consumers should place their app Deployments
+  ## at a higher wave (default 0) and their database resources at a lower wave so
+  ## ordering is DB -> chartreuse -> app.
+  ## The Job's own dependencies (ServiceAccount, ConfigMap, RBAC, ExternalSecret)
+  ## are automatically placed one wave earlier (`syncWave - 1`) so they exist before
+  ## the Job hook runs.
+  syncWave: -50
+  ## Sync-wave for the chartreuse-config ExternalSecret specifically. Defaults to the
+  ## dependency wave (`syncWave - 1`). Override this to an umbrella's early "secrets"
+  ## wave (well before the Job) when a shared force-sync refresh Job is responsible for
+  ## re-pulling it at deploy time — that path also requires `refreshPolicy: OnChange`,
+  ## which this chart sets automatically in ArgoCD mode. null = use `syncWave - 1`.
+  externalSecretSyncWave: null

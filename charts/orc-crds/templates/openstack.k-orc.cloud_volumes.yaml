@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.1
+    controller-gen.kubebuilder.io/version: v0.20.1
   name: volumes.openstack.k-orc.cloud
 spec:
   group: openstack.k-orc.cloud
@@ -119,6 +119,7 @@ spec:
                       that when specifying an import by ID, the resource MUST already exist.
                       The ORC object will enter an error state if the resource does not exist.
                     format: uuid
+                    maxLength: 36
                     type: string
                 type: object
               managedOptions:
@@ -173,6 +174,17 @@ spec:
                     maxLength: 255
                     minLength: 1
                     type: string
+                  imageRef:
+                    description: |-
+                      imageRef is a reference to an ORC Image. If specified, creates a
+                      bootable volume from this image. The volume size must be >= the
+                      image's min_disk requirement.
+                    maxLength: 253
+                    minLength: 1
+                    type: string
+                    x-kubernetes-validations:
+                    - message: imageRef is immutable
+                      rule: self == oldSelf
                   metadata:
                     description: |-
                       metadata key and value pairs to be associated with the volume.
@@ -323,6 +335,7 @@ spec:
                 x-kubernetes-list-type: map
               id:
                 description: id is the unique identifier of the OpenStack resource.
+                maxLength: 1024
                 type: string
               resource:
                 description: resource contains the observed state of the OpenStack
@@ -387,6 +400,11 @@ spec:
                     type: boolean
                   host:
                     description: host is the identifier of the host holding the volume.
+                    maxLength: 1024
+                    type: string
+                  imageID:
+                    description: imageID is the ID of the image this volume was created
+                      from, if any.
                     maxLength: 1024
                     type: string
                   metadata:
@@ -456,6 +474,8 @@ spec:
                     type: string
                 type: object
             type: object
+        required:
+        - spec
         type: object
     served: true
     storage: true

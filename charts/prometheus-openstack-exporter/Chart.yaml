@@ -1,0 +1,19 @@
+apiVersion: v2
+name: prometheus-openstack-exporter
+description: A Helm chart for prometheus-openstack-exporter - exports OpenStack metrics for Prometheus
+type: application
+version: 0.5.0
+appVersion: "1.7.0"
+home: https://github.com/openstack-exporter/openstack-exporter
+sources:
+  - https://github.com/openstack-exporter/openstack-exporter
+  - https://github.com/openstack-exporter/helm-charts
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind
+keywords:
+  - prometheus
+  - openstack
+  - exporter
+  - metrics
+  - monitoring
