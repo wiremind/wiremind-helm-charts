@@ -12,7 +12,7 @@ ingress:
 httpRoute:
   enabled: true
   hostnames:
-   - chart-example.local
+    - chart-example.local
   parentRefs:
     - name: gateway
       namespace: default
