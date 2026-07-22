@@ -102,6 +102,10 @@ jobs:
             helm repo add wiremind https://wiremind.github.io/wiremind-helm-charts --force-update
             helm install snapshot-controller-crds wiremind/snapshot-controller-crds --version 6.2.1
           fi
+          # karma + httproute
+          if [[ "$CHART_NAME" == *"karma" ]]; then
+            kubectl apply --server-side=true -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
+          fi
 
       - name: Run chart-testing (install)
         run: ct install --config ct.yaml --helm-extra-args "--timeout 300s"
