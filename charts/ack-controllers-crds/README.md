@@ -2,24 +2,29 @@
 
 Helm chart for deploying common AWS Controllers for Kubernetes (ACK) CRDs.
 
-This chart is used to centralize CRDs that are shared across multiple ACK controllers, for now ack-s3-controller-crds and ack-iam-controller-crds 
+This chart centralizes the CRDs of the ACK controllers we deploy, currently the s3
+and iam ones. Installing them from a single chart avoids the Helm ownership
+conflicts you get when several ACK controller charts each ship the same shared
+`services.k8s.aws` CRDs.
 
 ###  How to update the common chart
 
-When updating or adding new ACK CRDs, you can use the helper script to automatically move CRDs into the ack-controllers-crds chart without having to deal witl commons CRDS:
+Vendor the CRDs from the `helm/crds` folder of the upstream controller release you
+are moving to, then follow the CRD-chart rules in the repo `CLAUDE.md`:
 
 ```
-./scripts/move_common_crds.sh charts/ack-s3-controller-crds/templates charts/ack-iam-controller-crds/templates charts/ack-controllers-crds/templates
+./scripts/update_crds.sh -r aws-controllers-k8s/s3-controller -b v1.8.2 \
+  --folder helm/crds -o charts/ack-controllers-crds/templates
 ```
-This script will:
 
-✅ move all CRDs
-✅ if a CRD already exists in DEST (by metadata.name), skip moving it again
+1. Strip `creationTimestamp: null` from the result (mandatory, CI fails otherwise):
+   `find ./charts/ack-controllers-crds -type f -exec sed -i -e '/creationTimestamp: null/d' {} \;`
+2. Bump `Chart.yaml` (patch for fixes, minor for new fields or new CRDs).
+3. Update the CRD sources table below, and keep the controller chart versions
+   deployed from `wiremind-services-configuration` in sync with it.
 
-
-This makes it easier to avoid Helm conflicts when installing multiple ACK controllers.
-
-You can add additional controller charts as sources to the script if needed.
+Shared `services.k8s.aws` CRDs are shipped identically by the upstream controller
+charts, so vendoring them from either release gives the same bytes.
 
 ### CRD sources
 
