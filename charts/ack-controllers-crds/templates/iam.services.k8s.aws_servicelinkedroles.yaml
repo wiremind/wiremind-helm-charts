@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.2
+    controller-gen.kubebuilder.io/version: v0.19.0
   name: servicelinkedroles.iam.services.k8s.aws
 spec:
   group: iam.services.k8s.aws
@@ -106,6 +106,10 @@ spec:
                     description: |-
                       OwnerAccountID is the AWS Account ID of the account that owns the
                       backend AWS service API resource.
+                    type: string
+                  partition:
+                    description: Partition is the AWS partition in which the resource
+                      exists or will exist
                     type: string
                   region:
                     description: Region is the AWS region in which the resource exists
