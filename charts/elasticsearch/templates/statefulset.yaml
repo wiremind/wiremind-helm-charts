@@ -33,10 +33,10 @@ spec:
       name: {{ template "elasticsearch.uname" . }}
       {{- if .Values.persistence.labels.enabled }}
       labels:
-        release: {{ .Release.Name | quote }}
+        release: {{ .Values.persistence.labels.release | default .Release.Name | quote }}
         chart: "{{ .Chart.Name }}"
         app: "{{ template "elasticsearch.uname" . }}"
-        {{- range $key, $value := .Values.labels }}
+        {{- range $key, $value := omit .Values.labels "release" }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
       {{- end }}
