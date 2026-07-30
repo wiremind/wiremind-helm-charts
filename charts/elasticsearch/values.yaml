@@ -149,6 +149,8 @@ persistence:
   labels:
     # Add default labels for the volumeClaimTemplate of the StatefulSet
     enabled: false
+    # Override the immutable `release` label. Defaults to .Release.Name.
+    release: ""
   annotations: {}
 
 extraVolumes: []
