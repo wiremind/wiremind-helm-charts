@@ -293,7 +293,7 @@ prometheus-elasticsearch-exporter:
           severity: critical
         annotations:
           summary: "Cluster health status is RED"
-          description: 'Cluster {{ "{{ $labels.cluster }}" }} health status is RED'
+          description: 'Cluster {{ "{{ $externalLabels.cluster }}" }} health status is RED'
       - alert: ESClusteStatusYELLOW
         expr: |
           elasticsearch_cluster_health_status{color="yellow", service="{{ template "elasticsearch-exporter.fullname" . }}"} == 1
@@ -302,7 +302,7 @@ prometheus-elasticsearch-exporter:
           severity: high
         annotations:
           summary: "Cluster health status is YELLOW"
-          description: 'Cluster {{ "{{ $labels.cluster }}" }} health status is YELLOW'
+          description: 'Cluster {{ "{{ $externalLabels.cluster }}" }} health status is YELLOW'
 
       ## Report any rejected request.
       - alert: ESBulkRequestsRejection
@@ -314,7 +314,7 @@ prometheus-elasticsearch-exporter:
         annotations:
           summary: "Elasticsearch Bulk Query Rejection"
           description: |
-            'Bulk Rejection at {{ "{{ $labels.name }}" }} node in {{ "{{ $labels.cluster }}" }} cluster'
+            'Bulk Rejection at {{ "{{ $labels.name }}" }} node in {{ "{{ $externalLabels.cluster }}" }} cluster'
 
       - alert: ESJVMHeapHigh
         expr: |
@@ -330,7 +330,7 @@ prometheus-elasticsearch-exporter:
         annotations:
           summary: "JVM Heap usage on the node is high"
           description: |
-            'JVM Heap usage on the node {{ "{{ $labels.node }}" }} in {{ "{{ $labels.cluster }}" }} cluster is {{ "{{ $value }}" }}%. There might be long running GCs now.'
+            'JVM Heap usage on the node {{ "{{ $labels.node }}" }} in {{ "{{ $externalLabels.cluster }}" }} cluster is {{ "{{ $value }}" }}%. There might be long running GCs now.'
 
 cerebro:
   enabled: false
