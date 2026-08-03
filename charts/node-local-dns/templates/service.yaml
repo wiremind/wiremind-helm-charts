@@ -1,0 +1,31 @@
+{{- if hasKey .Values.config "cilium" }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.image.args.upstreamSvc }}
+  labels:
+    {{- include "node-local-dns.labels" . | nindent 4 }}
+    k8s-app: kube-dns
+    kubernetes.io/name: "KubeDNSUpstream"
+  {{- with .Values.serviceAccount.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ports:
+  {{- if .Values.config.cilium.udp.enabled }}
+  - name: {{ .Values.config.cilium.udp.portName | default "dns" }}
+    port: 53
+    protocol: UDP
+    targetPort: 53
+  {{- end }}
+  {{- if .Values.config.cilium.tcp.enabled }}
+  - name: {{ .Values.config.cilium.tcp.portName | default "dns-tcp" }}
+    port: 53
+    protocol: TCP
+    targetPort: 53
+  {{- end }}
+  selector:
+    k8s-app: kube-dns
+{{- end }}

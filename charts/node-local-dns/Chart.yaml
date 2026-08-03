@@ -1,0 +1,25 @@
+annotations:
+  artifacthub.io/changes: |
+    - Fork of lablabs/node-local-dns 2.4.0
+    - Fix cache.serve_stale being read as cache.server_stale, and support its duration and refresh mode
+    - Fix forward.health_check being rendered as expire, which silently disabled upstream health checking
+apiVersion: v2
+appVersion: 1.23.1
+description: NodeLocal DNS Cache helm chart
+home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/node-local-dns
+icon: https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.svg
+keywords:
+  - node
+  - dns
+  - cache
+  - kubernetes
+maintainers:
+  - name: Wiremind
+    url: https://github.com/wiremind/wiremind-helm-charts
+name: node-local-dns
+sources:
+  - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/node-local-dns
+  - https://github.com/lablabs/k8s-nodelocaldns-helm
+  - https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/dns/nodelocaldns
+type: application
+version: 2.4.1

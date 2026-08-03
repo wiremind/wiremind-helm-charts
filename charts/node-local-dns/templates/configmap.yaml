@@ -1,0 +1,130 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "node-local-dns.fullname" . }}
+  labels:
+    {{- include "node-local-dns.labels" . | nindent 4 }}
+data:
+  Corefile: |-
+    {{- $localDnsIp := .Values.config.localDnsIp -}}
+    {{- $metricsPort := .Values.metrics.port -}}
+    {{- $ciliumConfig := ternary true false (hasKey .Values.config "cilium") -}}
+
+    {{- range $k, $v := .Values.config.zones }}
+    {{ $k }} {
+    {{- range $v }}
+      {{- if $v.plugins.errors }}
+      errors
+      {{- end }}
+      cache {{ $v.plugins.cache.parameters }} {
+        {{- if $v.plugins.cache.denial }}
+        denial {{ $v.plugins.cache.denial.size }} {{ if $v.plugins.cache.denial.ttl }} {{ $v.plugins.cache.denial.ttl }} {{ end }}
+        {{- end }}
+        {{- if $v.plugins.cache.success }}
+        success {{ $v.plugins.cache.success.size }} {{ if $v.plugins.cache.success.ttl }} {{ $v.plugins.cache.success.ttl }} {{ end }}
+        {{- end }}
+        {{- if $v.plugins.cache.prefetch }}
+        prefetch {{ $v.plugins.cache.prefetch.amount }} {{ if $v.plugins.cache.prefetch.duration }} {{ $v.plugins.cache.prefetch.duration }} {{ end }} {{ if $v.plugins.cache.prefetch.percentage }} {{ $v.plugins.cache.prefetch.percentage }} {{ end }}
+        {{- end }}
+        {{- if $v.plugins.cache.serve_stale }}
+        serve_stale {{ $v.plugins.cache.serve_stale.duration | default "1h" }} {{ $v.plugins.cache.serve_stale.refresh_mode | default "immediate" }}
+        {{- end }}
+      }
+      {{- if $v.plugins.template }}
+      template {{ $v.plugins.template.parameters }} {
+        {{- if $v.plugins.template.match }}
+        match {{ $v.plugins.template.match }}
+        {{- end }}
+        {{- if $v.plugins.template.answer }}
+        answer {{ $v.plugins.template.answer }}
+        {{- end }}
+        {{- if $v.plugins.template.additional }}
+        additional {{ $v.plugins.template.additional }}
+        {{- end }}
+        {{- if $v.plugins.template.authority }}
+        authority {{ $v.plugins.template.authority }}
+        {{- end }}
+        {{- if $v.plugins.template.rcode }}
+        rcode {{ $v.plugins.template.rcode }}
+        {{- end }}
+        {{- if $v.plugins.template.ederror }}
+        ederror {{ $v.plugins.template.ederror }}
+        {{- end }}
+        {{- if $v.plugins.template.fallthrough }}
+        fallthrough {{ $v.plugins.template.fallthrough }}
+        {{- end }}
+      }
+      {{- end }}
+      {{- if $v.plugins.reload }}
+      reload
+      {{- end }}
+      {{- if $v.plugins.hosts }}
+      hosts {
+      {{- range $kk, $vv := $v.plugins.hosts.entries }}
+        {{ $vv.ip }} {{ $vv.name }}
+      {{- end }}
+      {{- if $v.plugins.hosts.ttl }}
+        ttl {{ $v.plugins.hosts.ttl }}
+      {{- end }}
+      {{- if $v.plugins.hosts.no_reverse }}
+        no_reverse
+      {{- end }}
+      {{- if $v.plugins.hosts.reload }}
+        reload {{ $v.plugins.hosts.reload | quote }}
+      {{- end }}
+      {{- if $v.plugins.hosts.fallthrough }}
+        fallthrough
+      {{- end }}
+      }
+      {{- end }}
+      {{- if $v.plugins.log }}
+      log . {{ default "combined" $v.plugins.log.format }} {
+        class {{ $v.plugins.log.classes }}
+      }
+      {{- end }}
+      {{- if $v.plugins.debug }}
+      debug
+      {{- end }}
+      loop
+      {{- if not $ciliumConfig }}
+      bind {{ $localDnsIp }}
+      {{- else }}
+      bind 0.0.0.0
+      {{- end }}
+      forward . {{ $v.plugins.forward.parameters }} {
+      {{- if $v.plugins.forward.policy }}
+        policy {{ $v.plugins.forward.policy }}
+      {{- end }}
+      {{- if $v.plugins.forward.force_tcp }}
+        force_tcp
+      {{- end }}
+      {{- if $v.plugins.forward.prefer_udp }}
+        prefer_udp
+      {{- end }}
+      {{- if $v.plugins.forward.max_fails }}
+        max_fails {{ $v.plugins.forward.max_fails }}
+      {{- end }}
+      {{- if $v.plugins.forward.expire }}
+        expire {{ $v.plugins.forward.expire }}
+      {{- end }}
+      {{- if $v.plugins.forward.health_check }}
+        health_check {{ $v.plugins.forward.health_check }}
+      {{- end }}
+      {{- if $v.plugins.forward.except }}
+        except {{ $v.plugins.forward.except }}
+      {{- end }}
+      }
+      {{- if $v.plugins.prometheus }}
+      prometheus :{{ $metricsPort }}
+      {{- end }}
+      {{- if $v.plugins.health }}
+      {{- if not $ciliumConfig }}
+      health {{ $localDnsIp }}:{{ $v.plugins.health.port }}
+      {{- else }}
+      health
+      {{- end }}
+      {{- end }}
+    {{- end }}
+    }
+    {{- end }}

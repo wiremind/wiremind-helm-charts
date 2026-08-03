@@ -1,0 +1,138 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "node-local-dns.fullname" . }}
+  labels:
+    {{- include "node-local-dns.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "node-local-dns.selectorLabels" . | nindent 6 }}
+  updateStrategy:
+    {{- toYaml .Values.updateStrategy | nindent 4 }}
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: {{ .Values.metrics.prometheusScrape | quote }}
+        prometheus.io/port: {{ .Values.metrics.port | quote }}
+        checksum/configmaps: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- if .Values.podAnnotations }}
+        {{- toYaml .Values.podAnnotations | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "node-local-dns.selectorLabels" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- toYaml .Values.podLabels | nindent 8 }}
+        {{- end }}
+    spec:
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      serviceAccountName: {{ include "node-local-dns.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- if not (hasKey .Values.config "cilium") }}
+      hostNetwork: {{ .Values.useHostNetwork }}
+      {{- end }}
+      dnsPolicy: Default
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - -localip
+            - "{{ .Values.config.localDnsIp }}"
+            {{- if .Values.image.args.skipTeardown }}
+            - -skipteardown=true
+            {{- else }}
+            - -skipteardown=false
+            {{- end }}
+            {{- if .Values.image.args.setupEptables }}
+            - -setupeptables
+            {{- end }}
+            {{- if .Values.image.args.setupInterface }}
+            - -setupinterface=true
+            {{- else }}
+            - -setupinterface=false
+            {{- end }}
+            {{- if .Values.image.args.setupIptables }}
+            - -setupiptables=true
+            {{- else }}
+            - -setupiptables=false
+            {{- end }}
+            {{- if .Values.image.args.quiet }}
+            - -quiet
+            {{- end }}
+            {{- if .Values.image.args.healthPort }}
+            - -health-port
+            - {{ .Values.image.args.healthPort | quote }}
+            {{- end }}
+            {{- if .Values.image.args.upstreamSvc }}
+            - -upstreamsvc
+            - {{ .Values.image.args.upstreamSvc | quote }}
+            {{- end }}
+            - -conf
+            - /etc/Corefile
+            - -syncinterval
+            - {{ .Values.image.args.syncInterval }}
+            {{- if .Values.image.args.setupInterface }}
+            - -interfacename
+            - {{ .Values.image.args.interfaceName }}
+            {{- end }}
+            - -metrics-listen-address
+            - "0.0.0.0:{{ add .Values.metrics.port 100 }}"
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.metrics.port }}
+              protocol: TCP
+          {{- if (hasKey .Values.config "cilium") }}
+          {{- if .Values.config.cilium.udp.enabled }}
+            - name: {{ .Values.config.cilium.udp.portName | default "dns" }}
+              containerPort: 53
+              protocol: UDP
+          {{- end }}
+          {{- if .Values.config.cilium.tcp.enabled }}
+            - name: {{ .Values.config.cilium.tcp.portName | default "dns-tcp" }}
+              containerPort: 53
+              protocol: TCP
+          {{- end }}
+          {{- end }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              {{- if not (hasKey .Values.config "cilium") }}
+              host: {{ .Values.config.localDnsIp }}
+              {{- end }}
+              path: /health
+              port: {{ default "8080" .Values.image.args.healthPort }}
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /run/xtables.lock
+              name: xtables-lock
+              readOnly: false
+            - name: config
+              mountPath: /etc/coredns
+      nodeSelector:
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
+      affinity:
+        {{- toYaml .Values.affinity | nindent 8 }}
+      tolerations:
+        {{- toYaml .Values.tolerations | nindent 8 }}
+      volumes:
+        - name: xtables-lock
+          hostPath:
+            path: /run/xtables.lock
+            type: FileOrCreate
+        - name: config
+          configMap:
+            name: {{ include "node-local-dns.fullname" . }}
+            items:
+              - key: Corefile
+                path: Corefile.base

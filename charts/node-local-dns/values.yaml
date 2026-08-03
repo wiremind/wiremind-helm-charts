@@ -1,0 +1,164 @@
+---
+commonLabels: {}
+
+image:
+  repository: registry.k8s.io/dns/k8s-dns-node-cache
+  pullPolicy: IfNotPresent
+  tag: 1.23.0
+  args:
+    interfaceName: nodelocaldns
+    healthPort: 8080
+    setupInterface: true
+    skipTeardown: true
+    setupIptables: false
+    syncInterval: 1ns
+    quiet: false
+    upstreamSvc: kube-dns
+
+imagePullSecrets: []
+
+config:
+  localDnsIp: 169.254.20.11
+#  cilium:
+#    clusterDNSService: kube-dns
+#    clusterDNSNamespace: kube-system
+#    redirectType: address
+#    udp:
+#      enabled: true
+#      portName: dns
+#    tcp:
+#      enabled: true
+#      portName: dns-tcp
+  zones:
+    .:53:
+      plugins:
+        errors: true
+        reload: true
+        debug: false
+        log:
+          format: combined
+          classes: all
+        template: {}                    # https://coredns.io/plugins/template/
+          # parameters: "ANY AAAA"
+          # match: ""
+          # additional: ""
+          # authority: ""
+          # rcode: "NOERROR"
+          # ederror: ""
+          # fallthrough: ""
+        cache:
+          parameters: 30
+          denial: {}
+            # size: 0
+            # ttl: 1
+          success: {}
+            # size: 8192
+            # ttl: 30
+          prefetch: {}
+            # amount: 1
+            # duration: 10m
+            # percentage: 20%
+          # Serve an expired answer when the upstream cannot be reached, instead
+          # of failing the query. Set to a map to enable:
+          #   serve_stale:
+          #     duration: 10m         # defaults to CoreDNS' 1h
+          #     refresh_mode: immediate   # immediate|verify, defaults to immediate
+          serve_stale: {}
+        forward:
+          parameters: __PILLAR__UPSTREAM__SERVERS__   # defaults to /etc/resolv.conf
+          force_tcp: false
+          prefer_udp: false
+          policy: ""    # random|round_robin|sequential
+          max_fails: ""   # 10
+          expire: ""    # 10s
+          health_check: ""    # 10s
+          except: ""    # space-separated list of domains to exclude from forwarding
+        prometheus: true
+        health:
+          port: 8080
+#        hosts:
+#          entries:     # dns.hosts INLINE
+#            - ip: 10.5.0.4
+#              name: blabla.lala
+#          ttl: 3600       # in seconds, 3600 (default)
+#          no_reverse: true    # set no_reverse
+#          reload: "0s"    # 0s disable (default), use duration notation, ie, "1.5h"
+#          fallthrough: true
+    ip6.arpa:53:
+      plugins:
+        errors: true
+        reload: true
+        debug: false
+        log:
+          format: combined
+          classes: all
+        cache:
+          parameters: 30
+        forward:
+          parameters: __PILLAR__UPSTREAM__SERVERS__   # defaults to /etc/resolv.conf
+          force_tcp: false
+        prometheus: true
+        health:
+          port: 8080
+    in-addr.arpa:53:
+      plugins:
+        errors: true
+        reload: true
+        debug: false
+        log:
+          format: combined
+          classes: all
+        cache:
+          parameters: 30
+        forward:
+          parameters: __PILLAR__UPSTREAM__SERVERS__   # defaults to /etc/resolv.conf
+          force_tcp: false
+        prometheus: true
+        health:
+          port: 8080
+
+# useHostNetwork is always false when using cilium
+useHostNetwork: true
+
+updateStrategy:
+  rollingUpdate:
+    maxUnavailable: 10%
+
+priorityClassName: system-node-critical
+podAnnotations: {}
+podLabels: {}
+podSecurityContext: {}
+
+securityContext:
+  privileged: true
+
+readinessProbe:
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+nodeSelector: {}
+affinity: {}
+
+tolerations:
+  - key: CriticalAddonsOnly
+    operator: Exists
+  - effect: NoExecute
+    operator: Exists
+  - effect: NoSchedule
+    operator: Exists
+
+resources:
+  requests:
+    cpu: 30m
+    memory: 50Mi
+
+metrics:
+  prometheusScrape: "true"
+  port: 9253
+
+podmonitor:
+  enabled: false
+  metricRelabelings: []

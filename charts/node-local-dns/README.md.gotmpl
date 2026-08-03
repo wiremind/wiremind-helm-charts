@@ -1,0 +1,59 @@
+{{ template "chart.header" . }}
+{{ template "chart.description" . }}
+
+{{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
+
+[<img src="https://lablabs.io/static/ll-logo.png" width=350px>](https://lablabs.io/)
+
+## Installing the Chart
+
+This chart deploys NodeLocal DNSCache Daemon set according to <https://kubernetes.io/docs/tasks/administer-cluster/nodelocaldns/>.
+
+It is designed to work both with iptables and IPVS setup.
+
+Latest available `node-local-dns` image can be found at [node-local-dns google container repository](https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/k8s-dns-node-cache)
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}
+
+## Additional Information
+
+### Cilium
+
+For clusters running [cilium](https://cilium.io/), there is a CRD,
+[local-redirect-policy](https://docs.cilium.io/en/stable/network/kubernetes/local-redirect-policy/),
+which needs be extra enabled via `--set localRedirectPolicy=true`.
+It enables pod traffic destined to an IP address and port/protocol tuple or Kubernetes service to be redirected
+locally to backend pod(s) within a node, using eBPF.
+The namespace of backend pod(s) need to match with that of the policy.
+
+For using this feature, values should provides the following extra configuration,
+
+For getting the `CLUSTER_DNS_IP`,
+
+```console
+kubectl get svc kube-dns -n kube-system -o jsonpath={.spec.clusterIP}
+```
+
+```yaml
+config:
+  localDnsIp: CLUSTER_DNS_IP
+  cilium:
+    clusterDNSService: kube-dns
+    clusterDNSNamespace: kube-system
+    udp:
+      enabled: true
+      portName: dns
+    tcp:
+      enabled: true
+      portName: dns-tcp
+```
+
+#### RKE2
+
+As this feature heavily depends on the Cluster DNS implementation, for a [Rancher Kubernetes Engine 2](https://docs.rke2.io/) cluster,
+`clusterDNSService` should be `rke2-coredns-rke2-coredns`, and port names,
+`udp-53` and `tcp-53` respectively.
+
+{{ template "helm-docs.versionFooter" . }}

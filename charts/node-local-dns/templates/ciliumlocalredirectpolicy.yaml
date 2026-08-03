@@ -1,0 +1,49 @@
+{{- if hasKey .Values.config "cilium" }}
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumLocalRedirectPolicy
+metadata:
+  name: "node-local-dns"
+  labels:
+    {{- include "node-local-dns.labels" . | nindent 4 }}
+  {{- with .Values.serviceAccount.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  redirectFrontend:
+    {{- if eq .Values.config.cilium.redirectType "address" }}
+    addressMatcher:
+      ip: {{ .Values.config.localDnsIp }}
+      toPorts:
+      {{- if .Values.config.cilium.udp.enabled }}
+      - port: "53"
+        name: {{ .Values.config.cilium.udp.portName | default "dns" }}
+        protocol: UDP
+     {{- end }}
+     {{- if .Values.config.cilium.tcp.enabled }}
+      - port: "53"
+        name: {{ .Values.config.cilium.tcp.portName | default "dns-tcp" }}
+        protocol: TCP
+     {{- end }}
+    {{- else }}
+    serviceMatcher:
+      serviceName: {{ .Values.config.cilium.clusterDNSService | default "kube-dns" }}
+      namespace: {{ .Values.config.cilium.clusterDNSNamespace | default "kube-system" }}
+    {{- end }}
+  redirectBackend:
+    localEndpointSelector:
+      matchLabels:
+        {{- include "node-local-dns.selectorLabels" . | nindent 8 }}
+    toPorts:
+      {{- if .Values.config.cilium.udp.enabled }}
+      - port: "53"
+        name: {{ .Values.config.cilium.udp.portName | default "dns" }}
+        protocol: UDP
+     {{- end }}
+     {{- if .Values.config.cilium.tcp.enabled }}
+      - port: "53"
+        name: {{ .Values.config.cilium.tcp.portName | default "dns-tcp" }}
+        protocol: TCP
+     {{- end }}
+{{- end }}
