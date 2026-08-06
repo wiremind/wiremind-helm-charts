@@ -4,9 +4,7 @@ kind: ClusterRole
 metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
-    app.kubernetes.io/name: {{ template "postgres-operator.name" . }}
-    helm.sh/chart: {{ template "postgres-operator.chart" . }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "postgres-operator.labels" . | nindent 4 }}
     app.kubernetes.io/instance: {{ .Release.Name }}
   name: {{ template "postgres-operator.fullname" . }}:users:admin
 rules:
@@ -31,9 +29,7 @@ kind: ClusterRole
 metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
-    app.kubernetes.io/name: {{ template "postgres-operator.name" . }}
-    helm.sh/chart: {{ template "postgres-operator.chart" . }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "postgres-operator.labels" . | nindent 4 }}
     app.kubernetes.io/instance: {{ .Release.Name }}
   name: {{ template "postgres-operator.fullname" . }}:users:edit
 rules:
@@ -53,9 +49,7 @@ kind: ClusterRole
 metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-view: "true"
-    app.kubernetes.io/name: {{ template "postgres-operator.name" . }}
-    helm.sh/chart: {{ template "postgres-operator.chart" . }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "postgres-operator.labels" . | nindent 4 }}
     app.kubernetes.io/instance: {{ .Release.Name }}
   name: {{ template "postgres-operator.fullname" . }}:users:view
 rules:

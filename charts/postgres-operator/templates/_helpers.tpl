@@ -77,3 +77,16 @@ Flatten nested config options when ConfigMap is used as ConfigTarget
     {{- end }}
 {{- end }}
 {{- end }}
+
+{{/*
+Labels stamped on every resource. The three base labels were repeated verbatim in each template
+before; commonLabels is appended so a parent chart can group everything this chart renders.
+*/}}
+{{- define "postgres-operator.labels" -}}
+app.kubernetes.io/name: {{ template "postgres-operator.name" . }}
+helm.sh/chart: {{ template "postgres-operator.chart" . }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- with .Values.commonLabels }}
+{{ toYaml . }}
+{{- end }}
+{{- end -}}
