@@ -28,6 +28,9 @@ serviceAccount:
   name: ""
 
 podAnnotations: {}
+# Labels added to every resource this chart renders.
+commonLabels: {}
+
 podLabels: {}
 deploymentAnnotations: {}
 deploymentLabels: {}
