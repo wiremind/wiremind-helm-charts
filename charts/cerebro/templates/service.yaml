@@ -3,10 +3,7 @@ kind: Service
 metadata:
   name: {{ template "cerebro.fullname" . }}
   labels:
-    app: {{ template "cerebro.name" . }}
-    chart: {{ template "cerebro.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    {{- include "cerebro.labels" . | nindent 4 }}
 {{- if .Values.service.labels }}
 {{ toYaml .Values.service.labels | indent 4 }}
 {{- end }}

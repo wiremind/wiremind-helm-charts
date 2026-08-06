@@ -32,6 +32,20 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Labels stamped on every resource. The four base labels were repeated verbatim in each template
+before; commonLabels is appended so a parent chart can group everything this chart renders.
+*/}}
+{{- define "cerebro.labels" -}}
+app: {{ template "cerebro.name" . }}
+chart: {{ template "cerebro.chart" . }}
+release: {{ .Release.Name }}
+heritage: {{ .Release.Service }}
+{{- with .Values.commonLabels }}
+{{ toYaml . }}
+{{- end }}
+{{- end -}}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "cerebro.serviceAccountName" -}}

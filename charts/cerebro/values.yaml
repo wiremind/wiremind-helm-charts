@@ -1,3 +1,6 @@
+# Labels added to every resource this chart renders.
+commonLabels: {}
+
 replicaCount: 1
 revisionHistoryLimit: 3
 
