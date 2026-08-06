@@ -88,6 +88,11 @@ podAnnotations: {}
 # iam.amazonaws.com/role: es-cluster
 
 # additionals labels
+# Labels added to every resource this chart renders. Unlike `labels`, these do NOT reach the
+# StatefulSet's volumeClaimTemplates, whose labels are immutable — so setting them cannot
+# turn an upgrade into a StatefulSet recreate.
+commonLabels: {}
+
 labels: {}
 
 # additionals annotations

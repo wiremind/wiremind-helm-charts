@@ -11,6 +11,9 @@ metadata:
     {{- range $key, $value := .Values.labels }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
   annotations:
     esMajorVersion: "{{ include "elasticsearch.esMajorVersion" . }}"
     {{- range $key, $value := .Values.annotations }}

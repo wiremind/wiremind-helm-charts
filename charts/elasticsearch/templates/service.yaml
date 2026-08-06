@@ -13,6 +13,9 @@ metadata:
     release: {{ .Release.Name | quote }}
     chart: "{{ .Chart.Name }}"
     app: "{{ template "elasticsearch.uname" . }}"
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 {{- if .Values.service.labels }}
 {{ toYaml .Values.service.labels | indent 4}}
 {{- end }}
@@ -60,6 +63,9 @@ metadata:
     release: {{ .Release.Name | quote }}
     chart: "{{ .Chart.Name }}"
     app: "{{ template "elasticsearch.uname" . }}"
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 {{- if .Values.service.labelsHeadless }}
 {{ toYaml .Values.service.labelsHeadless | indent 4 }}
 {{- end }}

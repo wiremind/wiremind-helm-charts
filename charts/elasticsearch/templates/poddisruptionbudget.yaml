@@ -7,6 +7,14 @@ apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   name: "{{ template "elasticsearch.uname" . }}-pdb"
+  labels:
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: "{{ .Chart.Name }}"
+    app: "{{ template "elasticsearch.uname" . }}"
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   maxUnavailable: {{ .Values.maxUnavailable }}
   selector:
