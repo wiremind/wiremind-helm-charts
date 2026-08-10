@@ -1,3 +1,8 @@
+# Labels added to every resource this chart renders. Its children (the elasticsearch node
+# groups, kibana, cerebro) take their own commonLabels — set per alias, not propagated from
+# here, so nothing reaches a volumeClaimTemplate by accident.
+commonLabels: {}
+
 nameOverride: ""
 fullnameOverride: ""
 

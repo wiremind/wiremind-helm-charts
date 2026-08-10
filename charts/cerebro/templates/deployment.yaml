@@ -3,10 +3,7 @@ kind: Deployment
 metadata:
   name: {{ template "cerebro.fullname" . }}
   labels:
-    app: {{ template "cerebro.name" . }}
-    chart: {{ template "cerebro.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    {{- include "cerebro.labels" . | nindent 4 }}
     {{- range $key, $value := .Values.deployment.labels }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}

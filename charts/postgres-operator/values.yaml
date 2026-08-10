@@ -20,6 +20,9 @@ deploymentAnnotations: {}
 operatorConfigurationAnnotations: {}
 
 podAnnotations: {}
+# Labels added to every resource this chart renders.
+commonLabels: {}
+
 podLabels: {}
 
 configTarget: "OperatorConfigurationCRD"

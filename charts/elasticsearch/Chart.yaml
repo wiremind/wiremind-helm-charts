@@ -5,7 +5,7 @@ maintainers:
   - name: Wiremind
     url: https://github.com/wiremind/wiremind-helm-charts
 name: elasticsearch
-version: 8.17.2
+version: 8.18.0
 appVersion: 8.19.12
 sources:
   - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch

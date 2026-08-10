@@ -4,9 +4,7 @@ kind: ClusterRole
 metadata:
   name: {{ include "postgres-operator.serviceAccountName" . }}
   labels:
-    app.kubernetes.io/name: {{ template "postgres-operator.name" . }}
-    helm.sh/chart: {{ template "postgres-operator.chart" . }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "postgres-operator.labels" . | nindent 4 }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 rules:
 # all verbs allowed for custom operator resources
