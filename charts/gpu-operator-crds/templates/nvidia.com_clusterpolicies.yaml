@@ -82,6 +82,10 @@ spec:
                       - name
                       type: object
                     type: array
+                  hostNetwork:
+                    description: HostNetwork indicates whether the CC Manager pod
+                      uses the host's network namespace.
+                    type: boolean
                   image:
                     description: CC Manager image name
                     pattern: '[a-zA-Z0-9\-]+'
@@ -489,6 +493,10 @@ spec:
                       - name
                       type: object
                     type: array
+                  hostNetwork:
+                    description: HostNetwork indicates whether the DCGM pod uses the
+                      host's network namespace.
+                    type: boolean
                   hostPort:
                     description: 'Deprecated: HostPort represents host port that needs
                       to be bound for DCGM engine (Default: 5555)'
@@ -545,6 +553,14 @@ spec:
               dcgmExporter:
                 description: DCGMExporter spec
                 properties:
+                  annotations:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      Optional: Annotations is an unstructured key value map stored with a resource that may be
+                      set by external tools to store and retrieve arbitrary metadata. They are not
+                      queryable and should be preserved when modifying objects.
+                    type: object
                   args:
                     description: 'Optional: List of arguments'
                     items:
@@ -559,6 +575,16 @@ spec:
                           metrics to be collected by NVIDIA DCGM Exporter
                         type: string
                     type: object
+                  enablePodLabels:
+                    description: |-
+                      Enable Kubernetes pod labels as Prometheus label dimensions in DCGM exporter metrics.
+                      (Requires cluster-level read access to pods.)
+                    type: boolean
+                  enablePodUID:
+                    description: |-
+                      Enable Kubernetes pod UID as a Prometheus label dimension in DCGM exporter metrics.
+                      (Requires cluster-level read access to pods.)
+                    type: boolean
                   enabled:
                     description: Enabled indicates if deployment of NVIDIA DCGM Exporter
                       through operator is enabled
@@ -609,6 +635,13 @@ spec:
                     type: string
                   imagePullSecrets:
                     description: Image pull secrets
+                    items:
+                      type: string
+                    type: array
+                  podLabelAllowlistRegex:
+                    description: |-
+                      Regex list for filtering which Kubernetes pod labels are included in DCGM exporter metrics.
+                      Empty means all pod labels are included.
                     items:
                       type: string
                     type: array
@@ -815,6 +848,10 @@ spec:
                       - name
                       type: object
                     type: array
+                  hostNetwork:
+                    description: HostNetwork indicates whether the Device Plugin pod
+                      uses the host's network namespace.
+                    type: boolean
                   image:
                     description: NVIDIA Device Plugin image name
                     pattern: '[a-zA-Z0-9\-]+'
@@ -907,6 +944,10 @@ spec:
                       - name
                       type: object
                     type: array
+                  hostNetwork:
+                    description: HostNetwork indicates whether the Driver pod uses
+                      the host's network namespace.
+                    type: boolean
                   image:
                     description: NVIDIA Driver image name
                     pattern: '[a-zA-Z0-9\-]+'
@@ -1419,6 +1460,10 @@ spec:
                       - name
                       type: object
                     type: array
+                  hostNetwork:
+                    description: HostNetwork indicates whether the GPU Feature Discovery
+                      pod uses the host's network namespace.
+                    type: boolean
                   image:
                     description: GFD image name
                     pattern: '[a-zA-Z0-9\-]+'
@@ -1562,6 +1607,10 @@ spec:
                       - name
                       type: object
                     type: array
+                  hostNetwork:
+                    description: HostNetwork indicates whether the Kata Manager pod
+                      uses the host's network namespace.
+                    type: boolean
                   image:
                     description: Kata Manager image name
                     pattern: '[a-zA-Z0-9\-]+'
@@ -1638,6 +1687,10 @@ spec:
                       - name
                       type: object
                     type: array
+                  hostNetwork:
+                    description: HostNetwork indicates whether the Kata Sandbox Device
+                      Plugin pod uses the host's network namespace.
+                    type: boolean
                   image:
                     description: NVIDIA component image name
                     pattern: '[a-zA-Z0-9\-]+'
@@ -1751,6 +1804,10 @@ spec:
                         description: ConfigMap name
                         type: string
                     type: object
+                  hostNetwork:
+                    description: HostNetwork indicates whether the MIG Manager pod
+                      uses the host's network namespace.
+                    type: boolean
                   image:
                     description: NVIDIA MIG Manager image name
                     pattern: '[a-zA-Z0-9\-]+'
@@ -1827,6 +1884,10 @@ spec:
                       - name
                       type: object
                     type: array
+                  hostNetwork:
+                    description: HostNetwork indicates whether the Node Status Exporter
+                      pod uses the host's network namespace.
+                    type: boolean
                   image:
                     description: Node Status Exporter image name
                     pattern: '[a-zA-Z0-9\-]+'
@@ -1976,6 +2037,10 @@ spec:
                       - name
                       type: object
                     type: array
+                  hostNetwork:
+                    description: HostNetwork indicates whether the Sandbox Device
+                      Plugin pod uses the host's network namespace.
+                    type: boolean
                   image:
                     description: NVIDIA Sandbox Device Plugin image name
                     pattern: '[a-zA-Z0-9\-]+'
@@ -2081,6 +2146,10 @@ spec:
                       - name
                       type: object
                     type: array
+                  hostNetwork:
+                    description: HostNetwork indicates whether the Container Toolkit
+                      pod uses the host's network namespace.
+                    type: boolean
                   image:
                     description: NVIDIA Container Toolkit image name
                     pattern: '[a-zA-Z0-9\-]+'
@@ -2197,6 +2266,10 @@ spec:
                       - name
                       type: object
                     type: array
+                  hostNetwork:
+                    description: HostNetwork indicates whether the Validator pod uses
+                      the host's network namespace.
+                    type: boolean
                   image:
                     description: Validator image name
                     pattern: '[a-zA-Z0-9\-]+'
@@ -2415,6 +2488,10 @@ spec:
                       - name
                       type: object
                     type: array
+                  hostNetwork:
+                    description: HostNetwork indicates whether the VFIO Manager pod
+                      uses the host's network namespace.
+                    type: boolean
                   image:
                     description: VFIO Manager image name
                     pattern: '[a-zA-Z0-9\-]+'
@@ -2503,6 +2580,10 @@ spec:
                       - name
                       type: object
                     type: array
+                  hostNetwork:
+                    description: HostNetwork indicates whether the vGPU Device Manager
+                      pod uses the host's network namespace.
+                    type: boolean
                   image:
                     description: NVIDIA vGPU Device Manager image name
                     pattern: '[a-zA-Z0-9\-]+'
@@ -2621,6 +2702,10 @@ spec:
                       - name
                       type: object
                     type: array
+                  hostNetwork:
+                    description: HostNetwork indicates whether the vGPU Manager pod
+                      uses the host's network namespace.
+                    type: boolean
                   image:
                     description: NVIDIA vGPU Manager  image name
                     pattern: '[a-zA-Z0-9\-]+'
