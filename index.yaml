@@ -13343,6 +13343,26 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: v26.3.3
+    created: "2026-08-10T16:08:18.316653098Z"
+    description: Manage gpu-operator CRDs
+    digest: 6e6b9b130e004a5e8cefea69bb1a2dba4777f1b95d3eba8ca53991f6ff72093b
+    keywords:
+    - gpu-operator
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: gpu-operator-crds
+    sources:
+    - https://github.com/NVIDIA/gpu-operator/tree/main/deployments/gpu-operator
+    - https://github.com/NVIDIA/gpu-operator/tree/main/deployments/gpu-operator/crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/gpu-operator-crds-26.3.3/gpu-operator-crds-26.3.3.tgz
+    version: 26.3.3
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: v26.3.0
     created: "2026-06-18T15:09:19.01155425Z"
     description: Manage gpu-operator CRDs
@@ -20978,4 +20998,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-08-10T15:28:42.491390517Z"
+generated: "2026-08-10T16:08:18.318298871Z"
