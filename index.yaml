@@ -1091,6 +1091,27 @@ entries:
   cerebro:
   - apiVersion: v2
     appVersion: 0.9.4
+    created: "2026-08-10T13:56:57.511117955Z"
+    description: A Helm chart for Cerebro - a web admin tool to manage ElasticSearch
+    digest: 4ba86cfd0a1254316e8a5ed3cf079d3a78f5534d977dcae6a490dfa612ba5332
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cerebro
+    icon: https://raw.githubusercontent.com/lmenezes/cerebro/main/public/img/logo.png
+    keywords:
+    - cerebro
+    - elasticsearch
+    - admin
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: cerebro
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cerebro
+    - https://github.com/lmenezes/cerebro-docker
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/cerebro-2.4.0/cerebro-2.4.0.tgz
+    version: 2.4.0
+  - apiVersion: v2
+    appVersion: 0.9.4
     created: "2026-04-03T15:30:30.758040259Z"
     description: A Helm chart for Cerebro - a web admin tool to manage ElasticSearch
     digest: 72123817b4213de3e7c98da9e62b48c4c0c9bfb493c0277a6bc51bcc886bf4aa
@@ -7637,6 +7658,23 @@ entries:
   elasticsearch:
   - apiVersion: v1
     appVersion: 8.19.12
+    created: "2026-08-10T13:56:57.654484888Z"
+    description: A helm chart for Elasticsearch
+    digest: 42c332ed376b09b813ac4f7380392cc94227126f9b0b6a1fb95e81b2805955f8
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch
+    icon: https://helm.elastic.co/icons/elasticsearch.png
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: elasticsearch
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch
+    - https://github.com/elastic/elasticsearch
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/elasticsearch-8.18.0/elasticsearch-8.18.0.tgz
+    version: 8.18.0
+  - apiVersion: v1
+    appVersion: 8.19.12
     created: "2026-07-30T08:36:06.987100629Z"
     description: A helm chart for Elasticsearch
     digest: 4e9487e1c581795026cded939a566abdc691b575da137fc2cc8b4cd6dad43653
@@ -7823,6 +7861,62 @@ entries:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/elasticsearch-8.15.0/elasticsearch-8.15.0.tgz
     version: 8.15.0
   elasticsearch-cluster:
+  - apiVersion: v2
+    appVersion: 8.19.12
+    created: "2026-08-10T13:56:57.769695792Z"
+    dependencies:
+    - alias: es-data-hot
+      condition: es-data-hot.enabled
+      name: elasticsearch
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    - alias: es-data-warm
+      condition: es-data-warm.enabled
+      name: elasticsearch
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    - alias: es-data-cold
+      condition: es-data-cold.enabled
+      name: elasticsearch
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    - alias: es-master
+      condition: es-master.enabled
+      name: elasticsearch
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    - alias: es-ingest
+      condition: es-ingest.enabled
+      name: elasticsearch
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    - condition: kibana.enabled
+      name: kibana
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    - condition: prometheus-elasticsearch-exporter.enabled
+      name: prometheus-elasticsearch-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: '*'
+    - condition: cerebro.enabled
+      name: cerebro
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    description: Elasticsearch cluster - a hat chart for several elasticsearch charts
+    digest: 46000e1208841b3e4a47edf0445bc6f09f53f7191b949b4532b879c9558ddaef
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch-cluster
+    icon: https://static-www.elastic.co/v3/assets/bltefdd0b53724fa2ce/blt5ebe80fb665aef6b/5ea8c8f26b62d4563b6ecec2/brand-elasticsearch-220x130.svg
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: elasticsearch-cluster
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch-cluster
+    - https://github.com/elastic/helm-charts/tree/master/elasticsearch
+    - https://github.com/elastic/elasticsearch
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/elasticsearch-cluster-4.5.0/elasticsearch-cluster-4.5.0.tgz
+    version: 4.5.0
   - apiVersion: v2
     appVersion: 8.19.12
     created: "2026-07-30T08:42:31.973165951Z"
@@ -17713,6 +17807,31 @@ entries:
   postgres-operator:
   - apiVersion: v2
     appVersion: 1.14.0
+    created: "2026-08-10T13:56:57.903259376Z"
+    description: Zalando PostgreSQL operator (wiremind fork, adds deploymentAnnotations
+      and operatorConfigurationAnnotations)
+    digest: 5b7be3e95b9262e6a6d7f8a11b606a64da28a30a4c4538d103dec45ee3379a91
+    home: https://github.com/zalando/postgres-operator
+    icon: https://www.wiremind.io/assets/logo.png
+    keywords:
+    - postgres
+    - operator
+    - cloud-native
+    - patroni
+    - spilo
+    maintainers:
+    - email: opensource@zalando.de
+      name: Zalando
+    - email: platform@wiremind.io
+      name: platform
+    name: postgres-operator
+    sources:
+    - https://github.com/zalando/postgres-operator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/postgres-operator-1.14.0-wiremind2/postgres-operator-1.14.0-wiremind2.tgz
+    version: 1.14.0-wiremind2
+  - apiVersion: v2
+    appVersion: 1.14.0
     created: "2026-05-26T13:37:03.788996576Z"
     description: Zalando PostgreSQL operator (wiremind fork, adds deploymentAnnotations
       and operatorConfigurationAnnotations)
@@ -18007,6 +18126,28 @@ entries:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/prometheus-openstack-exporter-0.5.0/prometheus-openstack-exporter-0.5.0.tgz
     version: 0.5.0
   prometheus-safety-exporter:
+  - apiVersion: v2
+    appVersion: 0.7.0
+    created: "2026-08-10T13:56:58.019956668Z"
+    description: A Helm chart for Kubernetes
+    digest: 2c781f28c46550b48cbe940be71bbeab5e7aba0367a8eb76b9fde05397f42735
+    keywords:
+    - safety
+    - python
+    - security
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: prometheus-safety-exporter
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/prometheus-safety-exporter
+    - https://github.com/pyupio/safety
+    - https://safetycli.com/product/safety-cli
+    - https://github.com/prometheus-community/json_exporter
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/prometheus-safety-exporter-0.6.0/prometheus-safety-exporter-0.6.0.tgz
+    version: 0.6.0
   - apiVersion: v2
     appVersion: 0.7.0
     created: "2026-06-11T15:27:05.375397222Z"
@@ -20781,4 +20922,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-08-07T10:44:40.332902131Z"
+generated: "2026-08-10T13:56:58.021109529Z"
