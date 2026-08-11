@@ -1,7 +1,7 @@
 apiVersion: v1
 name: ack-controllers-crds
 description: Manage some CRDs of the ACK controllers
-version: 1.1.0
+version: 1.1.1
 appVersion: v1.0.0
 home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/ack-controllers-crds
 icon: https://raw.githubusercontent.com/aws/eks-charts/master/docs/logo/aws.png
