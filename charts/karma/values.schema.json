@@ -90,6 +90,30 @@
         "nameOverride": {
             "type": "string"
         },
+        "networkPolicy": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "enabled": {
+                "type": "boolean"
+              },
+              "ingress": {
+                "type": "array"
+              },
+              "egress": {
+                "type": "array"
+              },
+              "policyTypes": {
+                "type": "array",
+                "items": {
+                  "enum": ["Ingress", "Egress"]
+                }
+              }
+            },
+            "required": [
+              "enabled"
+            ]
+        },
         "nodeSelector": {
             "type": "object"
         },

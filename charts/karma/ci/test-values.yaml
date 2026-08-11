@@ -21,3 +21,6 @@ kthxbyeSidecar:
   enabled: true
   alertmanagerServiceName: prometheus-alertmanager
   alertmanagerServicePort: 80
+
+networkPolicy:
+  enabled: true
