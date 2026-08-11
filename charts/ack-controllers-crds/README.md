@@ -10,15 +10,23 @@ conflicts you get when several ACK controller charts each ship the same shared
 ###  How to update the common chart
 
 Vendor the CRDs from the `helm/crds` folder of the upstream controller release you
-are moving to, then follow the CRD-chart rules in the repo `CLAUDE.md`:
+are moving to, then follow the CRD-chart rules in the repo `AGENTS.md`. Run the
+script once per controller vendored here, so the s3 and iam CRDs do not drift
+apart:
 
 ```
 ./scripts/update_crds.sh -r aws-controllers-k8s/s3-controller -b v1.8.2 \
   --folder helm/crds -o charts/ack-controllers-crds/templates
+./scripts/update_crds.sh -r aws-controllers-k8s/iam-controller -b v1.7.3 \
+  --folder helm/crds -o charts/ack-controllers-crds/templates
 ```
 
+The script only downloads and overwrites, so running it per controller never
+prunes the CRDs vendored by the other one, nor `adoptedresources` which upstream
+no longer ships.
+
 1. Strip `creationTimestamp: null` from the result (mandatory, CI fails otherwise):
-   `find ./charts/ack-controllers-crds -type f -exec sed -i -e '/creationTimestamp: null/d' {} \;`
+   `find ./charts/ack-controllers-crds/templates -name '*.yaml' -exec sed -i -e '/creationTimestamp: null/d' {} \;`
 2. Bump `Chart.yaml` (patch for fixes, minor for new fields or new CRDs).
 3. Update the CRD sources table below, and keep the controller chart versions
    deployed from `wiremind-services-configuration` in sync with it.
