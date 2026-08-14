@@ -17150,6 +17150,28 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/marge-bot-1.2.0/marge-bot-1.2.0.tgz
     version: 1.2.0
+  metabase:
+  - apiVersion: v1
+    appVersion: v0.61.1.x
+    created: "2026-08-14T08:12:01.953822474Z"
+    description: The easy, open source way for everyone in your company to ask questions
+      and learn from data. Wiremind fork, adds commonLabels and standard app.kubernetes.io
+      labels.
+    digest: 73771607b8694ed019c7e44ddfbfe885f6d4c279d6b98d4488ae5190e8e48f10
+    home: http://www.metabase.com/
+    icon: https://www.wiremind.io/assets/logo.png
+    maintainers:
+    - email: phamminhthanh69@gmail.com
+      name: pmint93
+    - email: platform@wiremind.io
+      name: platform
+    name: metabase
+    sources:
+    - https://github.com/metabase/metabase
+    - https://github.com/pmint93/helm-charts/tree/metabase-2.27.5/charts/metabase
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/metabase-2.27.5-wiremind0/metabase-2.27.5-wiremind0.tgz
+    version: 2.27.5-wiremind0
   nginx:
   - apiVersion: v2
     created: "2020-11-24T16:08:07.975878328Z"
@@ -21090,4 +21112,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-08-14T08:09:47.119803286Z"
+generated: "2026-08-14T08:12:01.955194472Z"
