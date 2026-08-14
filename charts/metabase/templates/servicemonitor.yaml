@@ -9,6 +9,7 @@ metadata:
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Values.monitoring.serviceMonitor.releaseLabel | default .Release.Name }}
     heritage: {{ .Release.Service }}
+    {{- include "metabase.wiremindLabels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:

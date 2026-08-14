@@ -85,6 +85,23 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Wiremind fork: the labels this fork adds to every object's metadata.
+
+Upstream stamps only the legacy {app, chart, release, heritage} set on object
+metadata, which no Wiremind tooling can group on. This adds the standard
+app.kubernetes.io/* labels and the caller-supplied commonLabels.
+
+This is metadata only. Every selector in this chart matches on {app, release},
+so the immutable Deployment, Service and ServiceMonitor selectors are untouched.
+*/}}
+{{- define "metabase.wiremindLabels" -}}
+{{ include "metabase.labels" . }}
+{{- with .Values.commonLabels }}
+{{ toYaml . }}
+{{- end }}
+{{- end -}}
+
+{{/*
 Create the namespace name
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}

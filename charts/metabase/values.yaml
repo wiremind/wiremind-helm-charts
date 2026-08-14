@@ -23,6 +23,11 @@ pdb:
   minAvailable: 1
   maxUnavailable: ""
 
+# Wiremind fork: labels added to the metadata of every object this chart creates.
+# Selectors are not affected, so you can change these on a live release.
+# Do not put app.kubernetes.io/* keys here. The chart already stamps that set,
+# and a repeated key renders a duplicate YAML key that breaks kustomize.
+commonLabels: {}
 deploymentAnnotations: {}
 deploymentLabels: {}
 podAnnotations: {}

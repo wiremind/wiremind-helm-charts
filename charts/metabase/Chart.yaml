@@ -1,12 +1,15 @@
 apiVersion: v1
 appVersion: v0.61.1.x
-description: The easy, open source way for everyone in your company to ask questions and learn from data.
+description: The easy, open source way for everyone in your company to ask questions and learn from data. Wiremind fork, adds commonLabels and standard app.kubernetes.io labels.
 home: http://www.metabase.com/
-icon: http://www.metabase.com/images/logo.svg
+icon: https://www.wiremind.io/assets/logo.png
 maintainers:
 - email: phamminhthanh69@gmail.com
   name: pmint93
+- email: platform@wiremind.io
+  name: platform
 name: metabase
 sources:
 - https://github.com/metabase/metabase
-version: 2.27.5
+- https://github.com/pmint93/helm-charts/tree/metabase-2.27.5/charts/metabase
+version: 2.27.5-wiremind0
