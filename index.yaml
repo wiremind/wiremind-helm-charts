@@ -7677,6 +7677,23 @@ entries:
   elasticsearch:
   - apiVersion: v1
     appVersion: 8.19.12
+    created: "2026-08-14T08:02:53.176196542Z"
+    description: A helm chart for Elasticsearch
+    digest: c1b90f921cf1cee7f356e67af66085f790848c2342ac4a2bdc412f7e6c9726fd
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch
+    icon: https://helm.elastic.co/icons/elasticsearch.png
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: elasticsearch
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch
+    - https://github.com/elastic/elasticsearch
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/elasticsearch-8.19.0/elasticsearch-8.19.0.tgz
+    version: 8.19.0
+  - apiVersion: v1
+    appVersion: 8.19.12
     created: "2026-08-10T13:56:57.654484888Z"
     description: A helm chart for Elasticsearch
     digest: 42c332ed376b09b813ac4f7380392cc94227126f9b0b6a1fb95e81b2805955f8
@@ -21017,4 +21034,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-08-11T16:01:16.230672692Z"
+generated: "2026-08-14T08:02:53.177017631Z"
