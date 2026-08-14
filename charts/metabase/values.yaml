@@ -1,0 +1,457 @@
+replicaCount: 1
+
+hpa:
+  enabled: false
+  # If external: false, the HPA will be managed by the chart
+  # If external: true, the HPA will not be created by the chart
+  # Useful for external HPA controllers such as KEDA.
+  external: false
+  minReplicas: 1
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Adding host aliases to the metabase deployment
+hostAliases: []
+# - ip: "127.0.0.1"
+#   hostnames:
+#   - "foo.local"
+#   - "bar.local"
+
+pdb:
+  create: false
+  minAvailable: 1
+  maxUnavailable: ""
+
+deploymentAnnotations: {}
+deploymentLabels: {}
+podAnnotations: {}
+podLabels: {}
+podSecurityContext: {}
+image:
+  repository: metabase/metabase
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  command: []
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+## Strings to fully override metabase.fullname and metabase.namespace templates
+##
+# fullnameOverride:
+# fullnamespaceOverride:
+
+# Config Jetty web server
+listen:
+  host: "0.0.0.0"
+  port: 3000
+
+monitoring:
+  enabled: false
+  serviceMonitor:
+    enabled: false
+    # Override the release label, e.g. "kube-prometheus-stack"
+    releaseLabel: ""
+  port: 9191
+
+ssl:
+  # If you have an ssl certificate and would prefer to have Metabase run over HTTPS
+  enabled: false
+  # port: 8443
+  # keyStore: |-
+  #   << JKS KEY STORE >>
+  # keyStorePassword: storepass
+jetty:
+#  maxThreads: 254
+#  minThreads: 8
+#  maxQueued: -1
+#  maxIdleTime: 60000
+
+# Backend database
+database:
+  # Database type (h2 / mysql / postgres), default: h2
+  type: h2
+  # if h2 is used, the persistentVolume and pvc are used to store the database. Only for non-production environments.
+  persistence:
+    type: pvc
+    enabled: false
+    # storageClassName: default
+    ## (Optional) Use this to bind the claim to an existing PersistentVolume (PV) by name.
+    volumeName: ""
+    accessModes:
+      - ReadWriteOnce
+    size: 10Gi
+    # annotations: {}
+    finalizers:
+      - kubernetes.io/pvc-protection
+    # selectorLabels: {}
+    ## Sub-directory of the PV to mount. Can be templated.
+    # subPath: ""
+    ## Name of an existing PVC. Can be templated.
+    # existingClaim:
+    ## Extra labels to apply to a PVC.
+    extraPvcLabels: {}
+    disableWarning: false
+
+    ## If 'lookupVolumeName' is set to true, Helm will attempt to retrieve
+    ## the current value of 'spec.volumeName' and incorporate it into the template.
+    lookupVolumeName: true
+  ## Specify file to store H2 database.  You will also have to back this with a volume (cf. extraVolume and extraVolumeMounts)!
+  # file:
+  # encryptionKey: << YOUR ENCRYPTION KEY OR LEAVE BLANK AND USE EXISTING SECRET >>
+  ## Only need when you use mysql / postgres
+  # host:
+  # port:
+  # dbname:
+  # username:
+  # password:
+  ## Alternatively, use a connection URI for full configurability. Example for SSL enabled Postgres.
+  # connectionURI: postgres://<host>:<port>/<database>?user=<username>&password=<password>&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory
+  ## If a secret with the database credentials already exists, use the following values:
+  # existingSecret:
+  # existingSecretUsernameKey:
+  # existingSecretPasswordKey:
+  # existingSecretConnectionURIKey:
+  # existingSecretEncryptionKeyKey:
+  # existingSecretPortKey:
+  # existingSecretHostKey:
+  # existingSecretDatabaseNameKey:
+  ## One or more Google Cloud SQL database instances can be made available to Metabase via the *Cloud SQL Auth proxy*.
+  ## These can be used for Metabase's internal database (by specifying `host: localhost` and the port above), or as
+  ## additional databases (configured at Admin → Databases). Workload Identity should be used for authentication, so
+  ## that when `serviceAccount.create=true`, `serviceAccount.annotations` should contain:
+  ##   iam.gke.io/gcp-service-account: your-gsa@email
+  ## Ref: https://cloud.google.com/sql/docs/postgres/connect-kubernetes-engine
+  googleCloudSQL:
+    ## Found in Cloud Console "Cloud SQL Instance details" or using `gcloud sql instances describe INSTANCE_ID`
+    ## example format: $project:$region:$instance=tcp:$port
+    ## Each connection must have a unique TCP port.
+    instanceConnectionNames: []
+    ## IP address types for Cloud SQL (e.g. PRIVATE,PUBLIC)
+    ipAddressTypes: ""
+    #
+    ## Option to use a specific version and image of the *Cloud SQL Auth proxy* sidecar image.
+    ## ref: https://console.cloud.google.com/gcr/images/cloudsql-docker/GLOBAL/gce-proxy
+    # sidecarImage: gcr.io/cloudsql-docker/gce-proxy
+    # sidecarImageTag: latest
+    ## ref: https://cloud.google.com/sql/docs/postgres/connect-kubernetes-engine#running_the_as_a_sidecar
+    resources: {}
+    securityContext:
+      runAsNonRoot: true
+  postgresBackupHook:
+    ## Only when you use postgres
+    ## enables a pre-upgrade hook that backups the metabase database with pg_dump prior to upgrading the Helm release
+    enabled: false
+    ## image that contains 'pg_dump'
+    ## version/tag should align with your actual version of postgres (e.g. 'postgres:17.7') for best compability of the dump
+    image: "postgres:latest"
+    ## secret with the database credentials must exist
+    # existingSecret:
+    ## either use connection string
+    # existingSecretConnectionURIKey:
+    ## or specify user,password,host,port and database seperately
+    # existingSecretUsernameKey:
+    # existingSecretPasswordKey:
+    # existingSecretPortKey:
+    # existingSecretHostKey:
+    # existingSecretDatabaseNameKey:
+    ## name of the PersistenceVolumeClaim to store the backup
+    # pvcName:
+    ## optional: specify pg_dump '--schema' option (e.g. if you have multiple schemas and only want to backup specific ones)
+    # schema:
+
+password:
+  # Changing Metabase password complexity:
+  # weak: no character constraints
+  # normal: at least 1 digit (default)
+  # strong: minimum 8 characters w/ 2 lowercase, 2 uppercase, 1 digit, and 1 special character
+  complexity: normal
+  length: 6
+
+timeZone: UTC
+emojiLogging: true
+colorLogging: true
+# javaOpts:
+# pluginsDirectory: /plugins
+# siteUrl:
+
+session:
+  {}
+  # maxSessionAge:
+  # sessionCookies:
+  # cookieSameSite:
+
+# specify init containers, e.g. for module download
+extraInitContainers: []
+#  - name: download-modules
+#    image: "curlimages/curl:7.70.0"
+#    imagePullPolicy: "IfNotPresent"
+#    volumeMounts:
+#      - name: plugins
+#        mountPath: /plugins
+#    workingDir: /plugins
+#    command:
+#      - "/bin/sh"
+#      - "-ec"
+#      - |
+#        curl -Lso /plugins/athena.metabase-driver.jar \
+#                  https://github.com/dacort/metabase-athena-driver/releases/download/v1.1.0/athena.metabase-driver.jar
+
+extraVolumeMounts: []
+#  - name: plugins
+#    mountPath: /plugins
+#    readOnly: false
+
+extraVolumes: []
+#  - name: plugins
+#    emptyDir: {}
+
+startupProbe:
+  path: /api/health
+  timeoutSeconds: 3
+  failureThreshold: 60
+  periodSeconds: 5
+
+livenessProbe:
+  path: /api/health
+  initialDelaySeconds: 5
+  timeoutSeconds: 30
+  failureThreshold: 6
+
+readinessProbe:
+  path: /api/health
+  initialDelaySeconds: 5
+  timeoutSeconds: 3
+  periodSeconds: 5
+
+service:
+  name: metabase
+  type: ClusterIP
+  externalPort: 80
+  internalPort: 3000
+  # Used to fix NodePort when service.type: NodePort.
+  nodePort:
+  annotations:
+    {}
+    # Used to add custom annotations to the Service.
+    # service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
+  labels:
+    {}
+    # Used to add custom labels to the Service.
+  loadBalancerSourceRanges:
+    {}
+  # ipFamilyPolicy: PreferDualStack
+  # ipFamilies:
+  #   - IPv6
+  #   - IPv4
+  # Used to configure a static IP address
+  loadBalancerIP:
+
+ingress:
+  enabled: false
+  # The ingress class name, if you use multiple ingress controllers:
+  # className: ...
+  # Used to create Ingress record (should used with service.type: ClusterIP).
+  hosts:
+    - "*"
+    # - metabase.domain.com
+  # The ingress path. Useful to host metabase on a subpath, such as `/metabase`.
+  path: /
+  pathType: Prefix
+  labels:
+    # Used to add custom labels to the Ingress
+    # Useful if for example you have multiple Ingress controllers and want your Ingress controllers to bind to specific Ingresses
+    # traffic: internal
+  annotations:
+    {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  tls:
+    # Secrets must be manually created in the namespace.
+    # - secretName: metabase-tls
+    #   hosts:
+    #     - metabase.domain.com
+
+# Note: This is the Openshift route
+route:
+  enabled: false
+  labels:
+    # Used to add custom labels to the Route
+    # Useful if for example you have multiple Ingress controllers (Routers) and want your Routers to bind to specific Routes
+    # traffic: internal
+  annotations:
+    {}
+    # haproxy.router.openshift.io/timeout: "60s"
+  # host: ""
+  path: ""
+  wildcardPolicy: "None"
+  tls:
+    {}
+    # termination: "Edge"
+    # insecureEdgeTerminationPolicy: "Redirect"
+    # key: ""
+    # certificate: ""
+    # caCertificate: ""
+    # destinationCACertificate: ""
+
+# A custom log4j2.xml file can be provided using a multiline YAML string.
+# See https://github.com/metabase/metabase/blob/master/resources/log4j2.xml
+#
+# log4j2XML:
+
+# DEPRECATED; A custom log4j.properties file can be provided using a multiline YAML string.
+# See https://github.com/metabase/metabase/blob/master/resources/log4j.properties
+#
+# log4jProperties:
+
+# The deployment strategy to use
+# https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/deployment-v1/#DeploymentSpec
+# strategy:
+#   type: "Recreate"
+
+# -- Kubernetes Gateway API HTTPRoute
+# Use it with a Gateway API implementation (e.g. Envoy Gateway, Istio, Cilium, etc.)
+# Ref: https://gateway-api.sigs.k8s.io/
+httpRoute:
+  enabled: false
+
+  ## Labels to add to the HTTPRoute resource
+  labels: {}
+
+  ## Annotations to add to the HTTPRoute resource
+  annotations: {}
+
+  ## Parent Gateway reference(s) that this HTTPRoute attaches to.
+  ## The Gateway must already exist and have a matching listener.
+  ## TLS termination is configured on the Gateway, not here.
+  parentRefs:
+    - name: ""
+      # namespace: gateway-namespace
+      # sectionName: https
+
+  ## Hostnames to match. Must align with the Gateway listener's hostname/certificate.
+  ## Example:
+  ##   hostnames:
+  ##     - metabase.example.com
+  hostnames: []
+
+  ## Simple path-based routing (used when 'rules' is not set)
+  path: "/"
+
+  ## Override the backend service port (defaults to .Values.service.port)
+  # servicePort: 80
+
+  ## Advanced: define custom routing rules.
+  ## When set, 'path' above is ignored. Each rule gets the service backend automatically.
+  ## Example:
+  ##   rules:
+  ##     - matches:
+  ##         - path:
+  ##             type: PathPrefix
+  ##             value: /
+  ##       name: root
+  ##       filters:
+  ##         - type: RequestHeaderModifier
+  ##           requestHeaderModifier:
+  ##             set:
+  ##               - name: X-Forwarded-Proto
+  ##                 value: https
+  # rules: []
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+  # autoMount is deprecated in favor of automountServiceAccountToken
+  # If you want to disable auto mount of Service Account Token then you can set the value to false;
+  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#opt-out-of-api-credential-automounting
+  automountServiceAccountToken: false
+
+resources:
+  {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+# You can also opt out of automounting API credentials for a particular Pod;
+# https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#opt-out-of-api-credential-automounting
+automountServiceAccountToken: true
+
+## Node labels for pod assignment
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+#
+nodeSelector: {}
+
+## Tolerations for pod assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Affinity for pod assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
+## Spread Constraints for pod assignment
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+topologySpreadConstraints: []
+
+## PriorityClass for pod assignment
+## ref:
+## https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#pod-priority
+## priorityClass: ""
+
+## AWS Security Group Policy (EKS)
+## ref: https://docs.aws.amazon.com/eks/latest/userguide/security-groups-for-pods.html
+##
+awsEKS:
+  sgp:
+    enabled: false
+    # AWS Security Group IDs to attach to the pod
+    # sgIds:
+    #   - sg-abc123
+    #   - sg-xyz456
+
+extraEnv: []
+#  - name: MB_CHECK_FOR_UPDATES
+#    value: false
+#  - name: MB_ADMIN_EMAIL
+#    valueFrom:
+#      configMapKeyRef:
+#        name: metabase
+#        key: email
+
+envFrom: []
+  # - type: secret
+  #   name: metabase-secret
+  # - type: configMap
+  #   name: metabase-cm
+
+securityContext: {}
+
+sidecars: []
+  # - name: busybox
+  #   image: busybox
+  #   ports:
+  #     - containerPort: 80
+  #       name: http
+  #   resources:
+  #     requests:
+  #       memory: 100Mi
+  #       cpu: 10m
+  #     limits:
+  #       memory: 100Mi
+  #       cpu: 10m
+  #   command: ["/bin/sh"]
+  #   args: ["-c", "while true; do echo hello; sleep 10;done"]

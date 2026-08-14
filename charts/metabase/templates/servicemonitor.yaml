@@ -1,0 +1,20 @@
+{{- if .Values.monitoring.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "metabase.fullname" . }}
+  namespace:  {{ template "metabase.namespace" . }}
+  labels:
+    app: {{ template "metabase.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Values.monitoring.serviceMonitor.releaseLabel | default .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "metabase.name" . }}
+      release: {{ .Release.Name }}
+  endpoints:
+    - path: /metrics
+      port: metrics
+{{- end }}
