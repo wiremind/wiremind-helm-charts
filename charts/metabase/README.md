@@ -1,5 +1,8 @@
 # Metabase
 
+> This chart is a Wiremind fork of [pmint93/metabase](https://github.com/pmint93/helm-charts/tree/metabase-2.27.5/charts/metabase).
+> See [FORK.md](FORK.md) for the changes and for how to re-apply them on an upstream bump.
+
 [Metabase](http://metabase.com) is the easy, open source way for everyone in your company to ask questions and learn from data.
 
 ## Introduction
@@ -55,6 +58,7 @@ The following table lists the configurable parameters of the Metabase chart and 
 | pdb.create                                      | Enable/disable a Pod Disruption Budget creation                            | false             |
 | pdb.minAvailable                                | Minimum number/percentage of pods that should remain scheduled             | 1                 |
 | pdb.maxUnavailable                              | Maximum number/percentage of pods that may be made unavailable             |                   |
+| commonLabels                                    | extra labels on every object (wiremind fork, see FORK.md)                  | {}                |
 | deploymentAnnotations                           | extra deployment annotations                                               | {}                |
 | deploymentLabels                                | extra deployment labels                                                    | {}                |
 | podAnnotations                                  | controller pods annotations                                                | {}                |

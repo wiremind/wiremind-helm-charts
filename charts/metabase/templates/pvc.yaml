@@ -4,7 +4,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ template "metabase.fullname" . }}-database
   labels:
-    {{- include "metabase.labels" . | nindent 4 }}
+    {{- include "metabase.wiremindLabels" . | nindent 4 }}
     {{- with .Values.database.persistence.extraPvcLabels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
