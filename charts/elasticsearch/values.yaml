@@ -91,6 +91,8 @@ podAnnotations: {}
 # Labels added to every resource this chart renders. Unlike `labels`, these do NOT reach the
 # StatefulSet's volumeClaimTemplates, whose labels are immutable — so setting them cannot
 # turn an upgrade into a StatefulSet recreate.
+# You can set the same key in `commonLabels` and in `labels`. The StatefulSet and the Secret
+# render the two maps merged, so the key appears one time. `commonLabels` wins.
 commonLabels: {}
 
 labels: {}

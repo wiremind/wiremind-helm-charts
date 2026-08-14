@@ -8,11 +8,8 @@ metadata:
     release: {{ .Release.Name | quote }}
     chart: "{{ .Chart.Name }}"
     app: "{{ template "elasticsearch.uname" . }}"
-    {{- range $key, $value := .Values.labels }}
+    {{- range $key, $value := merge (dict) (.Values.commonLabels | default dict) (.Values.labels | default dict) }}
     {{ $key }}: {{ $value | quote }}
-    {{- end }}
-    {{- with .Values.commonLabels }}
-    {{- toYaml . | nindent 4 }}
     {{- end }}
   annotations:
     esMajorVersion: "{{ include "elasticsearch.esMajorVersion" . }}"
