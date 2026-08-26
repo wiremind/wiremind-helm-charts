@@ -1,0 +1,30 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "enabled": true,
+  "baseBranchPatterns": [
+    "main"
+  ],
+  "commitMessageSuffix": "({{updateType}})",
+  "extends": [
+    "config:best-practices",
+    "default:semanticCommits",
+    ":disableRateLimiting"
+  ],
+  "enabledManagers": [
+    "custom.regex"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)Chart\\.yaml$/"
+      ],
+      "matchStringsStrategy": "any",
+      "matchStrings": [
+        "(?:appVersion|version): (?<currentValue>.*?)\\s+# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\n"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    }
+  ],
+  "timezone": "Europe/Paris"
+}
