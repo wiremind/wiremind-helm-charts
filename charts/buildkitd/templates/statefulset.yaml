@@ -126,7 +126,8 @@ spec:
                 - debug
                 - workers
             failureThreshold: {{ .Values.startupProbe.retries }}
-            periodSeconds: 1
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
           securityContext:
             capabilities:
               add:

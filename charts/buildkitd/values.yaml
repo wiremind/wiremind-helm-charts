@@ -155,6 +155,8 @@ readinessProbe:
 
 startupProbe:
   retries: 60
+  periodSeconds: 1
+  timeoutSeconds: 1
 
 extraSecurityContext: {}
 
