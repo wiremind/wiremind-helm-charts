@@ -11,7 +11,7 @@ CRDs are located [here](https://github.com/cloudnative-pg/charts/blob/main/chart
 **Do not forget to change APP_VERSION**
 
 ``` bash
-export CHART_VERSION=v0.5.0
+export CHART_VERSION=v0.7.1
 cd charts/plugin-barman-cloud-crds
 curl https://raw.githubusercontent.com/cloudnative-pg/charts/refs/tags/plugin-barman-cloud-$CHART_VERSION/charts/plugin-barman-cloud/templates/crds/crds.yaml -L -o crds.yaml
 sed -i '/{{- if .Values.crds.create }}/d; /{{- end }}/d' crds.yaml
