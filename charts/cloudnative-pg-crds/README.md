@@ -11,7 +11,7 @@ CRDs are located [here](https://github.com/cloudnative-pg/charts/blob/main/chart
 **Do not forget to change APP_VERSION**
 
 ``` bash
-export CHART_VERSION=v0.27.0
+export CHART_VERSION=v0.29.0
 cd charts/cloudnative-pg-crds
 curl https://raw.githubusercontent.com/cloudnative-pg/charts/refs/tags/cloudnative-pg-$CHART_VERSION/charts/cloudnative-pg/templates/crds/crds.yaml -L -o crds.yaml
 sed -i '/{{- if .Values.crds.create }}/d; /{{- end }}/d' crds.yaml
