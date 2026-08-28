@@ -3859,6 +3859,26 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: v1.30.0
+    created: "2026-08-28T09:29:00.376225962Z"
+    description: Manage cloudnative-pg CRDs
+    digest: 40a79e4e9ad20b76d607cdf47ff8fedf800685746e36b542362b02d8eada95d2
+    keywords:
+    - cloudnative-pg
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: cloudnative-pg-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/cloudnative-pg-crds
+    - https://github.com/cloudnative-pg/charts/
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/cloudnative-pg-crds-1.30.0/cloudnative-pg-crds-1.30.0.tgz
+    version: 1.30.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: v1.28.0
     created: "2025-12-19T10:23:33.631133672Z"
     description: Manage cloudnative-pg CRDs
@@ -17983,6 +18003,27 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: v0.14.0
+    created: "2026-08-28T09:29:00.507896053Z"
+    description: Manage plugin-barman-cloud CRDs
+    digest: 807f83aa510f1dc8902bea96a6c44b9fb5b4631ad28ebf4f452b4f249125247f
+    keywords:
+    - cloudnative-pg
+    - barman-cloud
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: plugin-barman-cloud-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/plugin-barman-cloud-crds
+    - https://github.com/cloudnative-pg/charts/
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/plugin-barman-cloud-crds-0.14.0/plugin-barman-cloud-crds-0.14.0.tgz
+    version: 0.14.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: v0.11.0
     created: "2026-03-06T14:39:52.563988456Z"
     description: Manage plugin-barman-cloud CRDs
@@ -21140,4 +21181,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-08-27T15:29:52.338536762Z"
+generated: "2026-08-28T09:29:00.509007876Z"
