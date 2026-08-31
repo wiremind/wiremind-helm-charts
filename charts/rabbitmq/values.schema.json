@@ -18,6 +18,22 @@
         }
       }
     },
+    "image": {
+      "type": "object",
+      "title": "RabbitMQ image",
+      "properties": {
+        "tag": {
+          "type": "string",
+          "title": "RabbitMQ image tag",
+          "description": "This chart targets RabbitMQ 4.3.x only",
+          "pattern": "^(|4\\.3\\.)"
+        },
+        "digest": {
+          "type": "string",
+          "title": "RabbitMQ image digest"
+        }
+      }
+    },
     "extraConfiguration": {
       "type": "string",
       "title": "Extra RabbitMQ Configuration",
@@ -25,11 +41,74 @@
       "render": "textArea",
       "description": "Extra configuration to be appended to RabbitMQ Configuration"
     },
+    "consumerTimeout": {
+      "type": "integer",
+      "title": "Consumer timeout",
+      "form": true,
+      "description": "Time in milliseconds before RabbitMQ closes a consumer channel waiting for an acknowledgement"
+    },
     "replicaCount": {
       "type": "integer",
       "form": true,
       "title": "Number of replicas",
       "description": "Number of replicas to deploy"
+    },
+    "clustering": {
+      "type": "object",
+      "title": "Clustering configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable RabbitMQ clustering"
+        },
+        "peerDiscovery": {
+          "type": "object",
+          "title": "Peer discovery configuration",
+          "properties": {
+            "backend": {
+              "type": "string",
+              "title": "Peer discovery backend",
+              "enum": [
+                "k8s",
+                "classic_config"
+              ]
+            },
+            "discoveryRetryLimit": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string",
+                  "pattern": "^(unlimited|[0-9]+)$"
+                }
+              ],
+              "title": "Classic config peer discovery retry limit",
+              "description": "Use unlimited to wait indefinitely"
+            },
+            "discoveryRetryInterval": {
+              "type": "integer",
+              "title": "Classic config peer discovery retry interval"
+            },
+            "classicConfig": {
+              "type": "object",
+              "properties": {
+                "autoGenerateNodes": {
+                  "type": "boolean",
+                  "title": "Auto-generate classic config nodes"
+                },
+                "nodes": {
+                  "type": "array",
+                  "title": "Classic config nodes",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "persistence": {
       "type": "object",

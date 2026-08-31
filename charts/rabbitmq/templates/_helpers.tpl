@@ -27,6 +27,13 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Return the RabbitMQ headless service name.
+*/}}
+{{- define "rabbitmq.headlessServiceName" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) (default "headless" .Values.servicenameOverride) -}}
+{{- end -}}
+
+{{/*
  Create the name of the service account to use
  */}}
 {{- define "rabbitmq.serviceAccountName" -}}
@@ -166,11 +173,36 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "rabbitmq.validateValues.memoryHighWatermark" .) -}}
 {{- $messages := append $messages (include "rabbitmq.validateValues.ingress.tls" .) -}}
 {{- $messages := append $messages (include "rabbitmq.validateValues.auth.tls" .) -}}
+{{- $messages := append $messages (include "rabbitmq.validateValues.image" .) -}}
+{{- $messages := append $messages (include "rabbitmq.validateValues.peerDiscovery" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of rabbitmq - Image
+*/}}
+{{- define "rabbitmq.validateValues.image" -}}
+{{- if and (empty .Values.image.digest) (not (regexMatch "^4\\.3\\." (toString .Values.image.tag))) }}
+rabbitmq: image.tag
+    This chart targets RabbitMQ 4.3.x only. Use an image tag that starts with "4.3.".
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of rabbitmq - Peer discovery
+*/}}
+{{- define "rabbitmq.validateValues.peerDiscovery" -}}
+{{- if and .Values.clustering.enabled (not (has .Values.clustering.peerDiscovery.backend (list "k8s" "classic_config"))) }}
+rabbitmq: clustering.peerDiscovery.backend
+    Invalid peer discovery backend. Valid values are "k8s" and "classic_config".
+{{- else if and .Values.clustering.enabled (not (regexMatch "^(unlimited|[0-9]+)$" (toString .Values.clustering.peerDiscovery.discoveryRetryLimit))) }}
+rabbitmq: clustering.peerDiscovery.discoveryRetryLimit
+    Invalid peer discovery retry limit. Use an integer value or "unlimited".
 {{- end -}}
 {{- end -}}
 
