@@ -1,3 +1,5 @@
+---
+
 # Default values for ClamAV.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
@@ -45,6 +47,8 @@ serviceAccount:
 
 service:
   type: ClusterIP
+  ## uncomment for headless service
+  # ClusterIP: None
   port: 3310
   # nodePort: 30100
   annotations: {}
@@ -66,7 +70,7 @@ extraEnvVarsSecret: ""
 
 ingress:
   enabled: false
-# ingressClassName: ""
+  # ingressClassName: ""
   annotations: {}
   # kubernetes.io/ingress.class: nginx
   # kubernetes.io/tls-acme: "true"
@@ -375,7 +379,7 @@ persistentVolume:
   ## Must match those of existing PV or dynamic provisioner
   ## Ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
 
   ## Persistent Volume Size
   ##
