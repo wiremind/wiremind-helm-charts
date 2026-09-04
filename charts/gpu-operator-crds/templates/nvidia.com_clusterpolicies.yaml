@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.20.1
+    controller-gen.kubebuilder.io/version: v0.21.0
   name: clusterpolicies.nvidia.com
 spec:
   group: nvidia.com
@@ -698,11 +698,9 @@ spec:
                         additionalProperties:
                           type: string
                         description: AdditionalLabels to add to ServiceMonitor instance
-                          for NVIDIA DCGM Exporter
                         type: object
                       enabled:
                         description: Enabled indicates if ServiceMonitor is deployed
-                          for NVIDIA DCGM Exporter
                         type: boolean
                       honorLabels:
                         description: HonorLabels chooses the metric’s labels on collisions
@@ -710,13 +708,13 @@ spec:
                         type: boolean
                       interval:
                         description: |-
-                          Interval which metrics should be scraped from NVIDIA DCGM Exporter. If not specified Prometheus’ global scrape interval is used.
+                          Interval at which metrics should be scraped. If not specified, Prometheus’ global scrape interval is used.
                           Supported units: y, w, d, h, m, s, ms
                         pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
                         type: string
                       relabelings:
                         description: Relabelings allows to rewrite labels on metric
-                          sets for NVIDIA DCGM Exporter
+                          sets
                         items:
                           description: |-
                             RelabelConfig allows dynamic rewriting of the label set for targets, alerts,
@@ -763,6 +761,7 @@ spec:
 
                                 Only applicable when the action is `HashMod`.
                               format: int64
+                              minimum: 0
                               type: integer
                             regex:
                               description: regex defines the regular expression against
@@ -802,6 +801,13 @@ spec:
                               type: string
                           type: object
                         type: array
+                      scrapeTimeout:
+                        description: |-
+                          ScrapeTimeout to use when scraping metrics. Must not be greater than Interval.
+                          If not specified, Prometheus' global scrape timeout is used.
+                          Supported units: y, w, d, h, m, s, ms
+                        pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
+                        type: string
                     type: object
                   version:
                     description: NVIDIA DCGM Exporter image tag
@@ -1521,6 +1527,12 @@ spec:
                       DriverInstallDir represents the root at which driver files including libraries,
                       config files, and executables can be found.
                     type: string
+                  kubeletRootDir:
+                    default: /var/lib/kubelet
+                    description: |-
+                      KubeletRootDir represents the location of the kubelet root directory.
+                      If empty, it will default to "/var/lib/kubelet".
+                    type: string
                   rootFS:
                     description: |-
                       RootFS represents the path to the root filesystem of the host.
@@ -1531,7 +1543,9 @@ spec:
                     type: string
                 type: object
               kataManager:
-                description: KataManager component spec
+                description: |-
+                  Deprecated: This field is no longer honored by the GPU Operator. All values under this field are ignored.
+                  KataManager component spec
                 properties:
                   args:
                     description: 'Optional: List of arguments'
@@ -1981,6 +1995,130 @@ spec:
                       Optional: Map of string keys and values that can be used to organize and categorize
                       (scope and select) objects. May match selectors of replication controllers
                       and services.
+                    type: object
+                  metrics:
+                    description: Metrics configuration for NVIDIA GPU Operator
+                    properties:
+                      serviceMonitor:
+                        description: 'Optional: ServiceMonitor configuration for NVIDIA
+                          GPU Operator'
+                        properties:
+                          additionalLabels:
+                            additionalProperties:
+                              type: string
+                            description: AdditionalLabels to add to ServiceMonitor
+                              instance
+                            type: object
+                          enabled:
+                            description: Enabled indicates if ServiceMonitor is deployed
+                            type: boolean
+                          honorLabels:
+                            description: HonorLabels chooses the metric’s labels on
+                              collisions with target labels.
+                            type: boolean
+                          interval:
+                            description: |-
+                              Interval at which metrics should be scraped. If not specified, Prometheus’ global scrape interval is used.
+                              Supported units: y, w, d, h, m, s, ms
+                            pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
+                            type: string
+                          relabelings:
+                            description: Relabelings allows to rewrite labels on metric
+                              sets
+                            items:
+                              description: |-
+                                RelabelConfig allows dynamic rewriting of the label set for targets, alerts,
+                                scraped samples and remote write samples.
+
+                                More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+                              properties:
+                                action:
+                                  default: replace
+                                  description: |-
+                                    action to perform based on the regex matching.
+
+                                    `Uppercase` and `Lowercase` actions require Prometheus >= v2.36.0.
+                                    `DropEqual` and `KeepEqual` actions require Prometheus >= v2.41.0.
+
+                                    Default: "Replace"
+                                  enum:
+                                  - replace
+                                  - Replace
+                                  - keep
+                                  - Keep
+                                  - drop
+                                  - Drop
+                                  - hashmod
+                                  - HashMod
+                                  - labelmap
+                                  - LabelMap
+                                  - labeldrop
+                                  - LabelDrop
+                                  - labelkeep
+                                  - LabelKeep
+                                  - lowercase
+                                  - Lowercase
+                                  - uppercase
+                                  - Uppercase
+                                  - keepequal
+                                  - KeepEqual
+                                  - dropequal
+                                  - DropEqual
+                                  type: string
+                                modulus:
+                                  description: |-
+                                    modulus to take of the hash of the source label values.
+
+                                    Only applicable when the action is `HashMod`.
+                                  format: int64
+                                  minimum: 0
+                                  type: integer
+                                regex:
+                                  description: regex defines the regular expression
+                                    against which the extracted value is matched.
+                                  type: string
+                                replacement:
+                                  description: |-
+                                    replacement value against which a Replace action is performed if the
+                                    regular expression matches.
+
+                                    Regex capture groups are available.
+                                  type: string
+                                separator:
+                                  description: separator defines the string between
+                                    concatenated SourceLabels.
+                                  type: string
+                                sourceLabels:
+                                  description: |-
+                                    sourceLabels defines the source labels select values from existing labels. Their content is
+                                    concatenated using the configured Separator and matched against the
+                                    configured regular expression.
+                                  items:
+                                    description: |-
+                                      LabelName is a valid Prometheus label name.
+                                      For Prometheus 3.x, a label name is valid if it contains UTF-8 characters.
+                                      For Prometheus 2.x, a label name is only valid if it contains ASCII characters, letters, numbers, as well as underscores.
+                                    type: string
+                                  type: array
+                                targetLabel:
+                                  description: |-
+                                    targetLabel defines the label to which the resulting string is written in a replacement.
+
+                                    It is mandatory for `Replace`, `HashMod`, `Lowercase`, `Uppercase`,
+                                    `KeepEqual` and `DropEqual` actions.
+
+                                    Regex capture groups are available.
+                                  type: string
+                              type: object
+                            type: array
+                          scrapeTimeout:
+                            description: |-
+                              ScrapeTimeout to use when scraping metrics. Must not be greater than Interval.
+                              If not specified, Prometheus' global scrape timeout is used.
+                              Supported units: y, w, d, h, m, s, ms
+                            pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
+                            type: string
+                        type: object
                     type: object
                   runtimeClass:
                     default: nvidia
