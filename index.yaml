@@ -17330,6 +17330,26 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: v0.19.0
+    created: "2026-09-04T15:45:42.107726324Z"
+    description: Manage node-feature-discovery CRDs
+    digest: 7e6630e9340a0e2ff2faf960f45a423cfe95a127dda19073057af2496fc152c5
+    keywords:
+    - node-feature-discovery
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: node-feature-discovery-crds
+    sources:
+    - https://github.com/kubernetes-sigs/node-feature-discovery
+    - https://github.com/kubernetes-sigs/node-feature-discovery/tree/master/deployment/helm/node-feature-discovery/crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/node-feature-discovery-crds-0.19.0/node-feature-discovery-crds-0.19.0.tgz
+    version: 0.19.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: v0.17.3
     created: "2025-04-09T11:45:51.074683158Z"
     description: Manage node-feature-discovery CRDs
@@ -21242,4 +21262,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-09-04T15:14:15.977505277Z"
+generated: "2026-09-04T15:45:42.108630457Z"
