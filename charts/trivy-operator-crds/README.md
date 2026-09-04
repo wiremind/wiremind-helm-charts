@@ -11,5 +11,5 @@ CRDs are retrieved from [here](https://github.com/aquasecurity/trivy-operator/tr
 
 To download them, you can use the following script at root : 
 ```
-./scripts/update_crds.sh -r aquasecurity/trivy-operator -b v0.25.0 --folder deploy/helm/crds -o charts/trivy-operator-crds/templates/
+./scripts/update_crds.sh -r aquasecurity/trivy-operator -b v0.34.0 --folder deploy/helm/crds -o charts/trivy-operator-crds/templates/
 ```
