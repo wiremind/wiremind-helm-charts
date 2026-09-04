@@ -2,8 +2,8 @@ apiVersion: v2
 annotations:
   category: DeveloperTools
 name: node-feature-discovery-crds
-version: 0.17.3
-appVersion: "v0.17.3"
+version: 0.19.0
+appVersion: "v0.19.0"
 description: Manage node-feature-discovery CRDs
 keywords:
   - node-feature-discovery
