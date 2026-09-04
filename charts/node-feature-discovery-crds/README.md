@@ -11,5 +11,5 @@ CRDs are retrieved from [here](https://github.com/kubernetes-sigs/node-feature-d
 
 To download them, you can use the following script at root : 
 ```
-./scripts/update_crds.sh -r kubernetes-sigs/node-feature-discovery -b v0.17.2 --folder deployment/helm/node-feature-discovery/crds -o charts/node-feature-discovery-crds/templates/
+./scripts/update_crds.sh -r kubernetes-sigs/node-feature-discovery -b v0.19.0 --folder deployment/helm/node-feature-discovery/crds -o charts/node-feature-discovery-crds/templates/
 ```

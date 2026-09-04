@@ -77,10 +77,18 @@ spec:
                                             - Exists
                                             - DoesNotExist
                                             - Gt
+                                            - Ge
                                             - Lt
+                                            - Le
                                             - GtLt
+                                            - GeLe
                                             - IsTrue
                                             - IsFalse
+                                          type: string
+                                        type:
+                                          description: |-
+                                            Type defines the value type for specific operators.
+                                            The currently supported type is 'version' for Gt,Ge,Lt,Le,GtLt,GeLe operators.
                                           type: string
                                         value:
                                           description: |-
@@ -113,10 +121,18 @@ spec:
                                           - Exists
                                           - DoesNotExist
                                           - Gt
+                                          - Ge
                                           - Lt
+                                          - Le
                                           - GtLt
+                                          - GeLe
                                           - IsTrue
                                           - IsFalse
+                                        type: string
+                                      type:
+                                        description: |-
+                                          Type defines the value type for specific operators.
+                                          The currently supported type is 'version' for Gt,Ge,Lt,Le,GtLt,GeLe operators.
                                         type: string
                                       value:
                                         description: |-
@@ -166,10 +182,18 @@ spec:
                                       - Exists
                                       - DoesNotExist
                                       - Gt
+                                      - Ge
                                       - Lt
+                                      - Le
                                       - GtLt
+                                      - GeLe
                                       - IsTrue
                                       - IsFalse
+                                    type: string
+                                  type:
+                                    description: |-
+                                      Type defines the value type for specific operators.
+                                      The currently supported type is 'version' for Gt,Ge,Lt,Le,GtLt,GeLe operators.
                                     type: string
                                   value:
                                     description: |-
@@ -202,10 +226,18 @@ spec:
                                     - Exists
                                     - DoesNotExist
                                     - Gt
+                                    - Ge
                                     - Lt
+                                    - Le
                                     - GtLt
+                                    - GeLe
                                     - IsTrue
                                     - IsFalse
+                                  type: string
+                                type:
+                                  description: |-
+                                    Type defines the value type for specific operators.
+                                    The currently supported type is 'version' for Gt,Ge,Lt,Le,GtLt,GeLe operators.
                                   type: string
                                 value:
                                   description: |-
@@ -226,6 +258,19 @@ spec:
                         type: array
                       name:
                         description: Name of the rule.
+                        type: string
+                      vars:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          Vars is the variables to store if the rule matches. Variables can be
+                          referenced from other rules enabling more complex rule hierarchies.
+                        type: object
+                      varsTemplate:
+                        description: |-
+                          VarsTemplate specifies a template to expand for dynamically generating
+                          multiple variables. Data (after template expansion) must be keys with an
+                          optional value (<key>[=<value>]) separated by newlines.
                         type: string
                     required:
                       - name
