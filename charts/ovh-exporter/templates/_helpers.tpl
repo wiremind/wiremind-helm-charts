@@ -60,3 +60,22 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Stop rendering when a key is set in both extraEnv and extraSecretEnv.
+
+extraEnv lands in the ConfigMap and extraSecretEnv in the Secret, and the
+Deployment lists the ConfigMap first in envFrom, then the Secret. Kubernetes
+resolves a duplicate key in favour of the last source, so the Secret silently
+wins. Neither Helm nor `helm diff` reports it: both objects render fine, and
+the conflict only exists once they are merged into the container. Failing here
+turns that into a rendering error instead.
+*/}}
+{{- define "ovh-exporter.validateNoDuplicateEnvKey" -}}
+{{- $extraSecretEnv := .Values.extraSecretEnv | default dict }}
+{{- range $key, $_ := .Values.extraEnv | default dict }}
+{{- if hasKey $extraSecretEnv $key }}
+{{- fail (printf "%s is set in both extraEnv and extraSecretEnv. envFrom loads the Secret after the ConfigMap, so the Secret value would silently win. Keep the key in one of them only." $key) }}
+{{- end }}
+{{- end }}
+{{- end }}
