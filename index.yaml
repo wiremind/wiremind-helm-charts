@@ -20792,6 +20792,26 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: v0.34.0
+    created: "2026-09-10T08:38:59.512189905Z"
+    description: Manage trivy-operator CRDs
+    digest: 661e4a0219b85c0d0a10a28a0dfbbbef275b8c94e6f86173324edb51c6755d3b
+    keywords:
+    - trivy-operator
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: trivy-operator-crds
+    sources:
+    - https://github.com/aquasecurity/trivy-operator/tree/main/deploy/helm
+    - https://github.com/aquasecurity/trivy-operator/tree/main/deploy/helm/crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/trivy-operator-crds-0.34.0/trivy-operator-crds-0.34.0.tgz
+    version: 0.34.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: v0.25.0
     created: "2025-03-20T12:36:59.295562747Z"
     description: Manage trivy-operator CRDs
@@ -21326,4 +21346,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-09-10T08:27:43.601847382Z"
+generated: "2026-09-10T08:38:59.512963067Z"
