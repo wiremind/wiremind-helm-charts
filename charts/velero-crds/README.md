@@ -11,7 +11,7 @@ If the version of the CRDs changes, aka breaking changes (this doesn't happen ev
 ```
 cd charts/velero-crds
 repo="vmware-tanzu/helm-charts"
-branch="velero-12.0.3"
+branch="velero-12.1.0"
 folder="charts/velero/crds"
 files=$(curl -s "https://api.github.com/repos/$repo/contents/$folder?ref=$branch" | jq -r '.[].download_url')
 for file in $files

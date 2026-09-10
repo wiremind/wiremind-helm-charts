@@ -4,7 +4,7 @@ description: A Helm chart to manage velero CRDs
 # Set it velero's Chart version.
 appVersion: 1.18.1
 kubeVersion: ">=1.16.0-0"
-version: 12.0.3
+version: 12.1.0
 maintainers:
   - name: Wiremind
     url: https://github.com/wiremind/wiremind-helm-charts

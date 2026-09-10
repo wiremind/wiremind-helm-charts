@@ -11,7 +11,7 @@ CRDs are retrieved from [here](https://github.com/kubernetes-csi/external-snapsh
 You can download them with these commands
 
 ```
-export APP_VERSION="v8.2.0"
+export APP_VERSION="v8.6.0"
 curl -fsSL https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/$APP_VERSION/client/config/crd/snapshot.storage.k8s.io_volumesnapshotclasses.yaml -o templates/snapshot.storage.k8s.io_volumesnapshotclasses.yaml
 curl -fsSL https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/$APP_VERSION/client/config/crd/snapshot.storage.k8s.io_volumesnapshots.yaml -o templates/snapshot.storage.k8s.io_volumesnapshots.yaml
 curl -fsSL https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/$APP_VERSION/client/config/crd/snapshot.storage.k8s.io_volumesnapshotcontents.yaml -o templates/snapshot.storage.k8s.io_volumesnapshotcontents.yaml

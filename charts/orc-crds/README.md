@@ -13,7 +13,7 @@ CRDs are located [here](https://github.com/k-orc/openstack-resource-controller/t
 ```
 cd charts/orc-crds
 repo="k-orc/openstack-resource-controller"
-branch="v2.0.3"
+branch="v2.6.0"
 folder="config/crd/bases"
 files=$(curl -s "https://api.github.com/repos/$repo/contents/$folder?ref=$branch" | jq -r '.[].download_url')
 for file in $files
