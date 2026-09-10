@@ -3861,6 +3861,26 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: 0.27.3
+    created: "2026-09-10T09:03:20.54479151Z"
+    description: Manage clickhouse-operator CRDs
+    digest: 09348597fff9014a6c6d74681494777f7ac7f2e8c0e3b25fbdbb1fee70003ab6
+    keywords:
+    - clickhouse-operator
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: clickhouse-operator-crds
+    sources:
+    - https://github.com/Altinity/clickhouse-operator/tree/master/deploy/helm
+    - https://github.com/Altinity/clickhouse-operator/tree/master/deploy/helm/clickhouse-operator/crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/clickhouse-operator-crds-0.27.3/clickhouse-operator-crds-0.27.3.tgz
+    version: 0.27.3
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: 0.27.0
     created: "2026-06-03T08:54:40.481309025Z"
     description: Manage clickhouse-operator CRDs
@@ -13187,6 +13207,18 @@ entries:
     version: 0.2.1
   external-secrets-crds:
   - apiVersion: v2
+    appVersion: 2.10.0
+    created: "2026-09-10T09:03:20.780945796Z"
+    description: A Helm chart to manage external-secrets CRDs
+    digest: 3cf681ed3e257cd0922514291b9cae32e5cc3f709c04d34ae132ca533a5f8eaf
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: external-secrets-crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/external-secrets-crds-2.10.0/external-secrets-crds-2.10.0.tgz
+    version: 2.10.0
+  - apiVersion: v2
     appVersion: 2.2.0
     created: "2026-03-25T09:07:03.085423018Z"
     description: A Helm chart to manage external-secrets CRDs
@@ -13442,6 +13474,26 @@ entries:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/external-secrets-kit-0.0.1/external-secrets-kit-0.0.1.tgz
     version: 0.0.1
   gateway-api-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 1.6.2
+    created: "2026-09-10T09:03:20.997885713Z"
+    description: Manage gateway-api (experimental) CRDs
+    digest: 0c5a8bc003386cbe1287c40a0a44a98c0eaf84edf7caa4639568f5c7399216e8
+    keywords:
+    - gateway-api
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: gateway-api-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/gateway-api-crds
+    - https://github.com/kubernetes-sigs/gateway-api
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/gateway-api-crds-1.6.2/gateway-api-crds-1.6.2.tgz
+    version: 1.6.2
   - annotations:
       category: DeveloperTools
     apiVersion: v2
@@ -17086,6 +17138,18 @@ entries:
   kubemod-crds:
   - apiVersion: v2
     appVersion: 0.19.1
+    created: "2026-09-10T09:03:21.19242612Z"
+    description: A Helm chart to manage Kubemod CRDs
+    digest: 754d1f5d2dc9bbed6bf00b4c92cf2d519a73e99fd2371236379f2da61d1b51dc
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: kubemod-crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/kubemod-crds-0.5.2/kubemod-crds-0.5.2.tgz
+    version: 0.5.2
+  - apiVersion: v2
+    appVersion: 0.19.1
     created: "2023-11-23T13:31:05.809032148Z"
     description: A Helm chart to manage Kubemod CRDs
     digest: ebc14f8cb97d44b5e05a1c5fb5719d0665962b591e28c297b6a1fbd1ad882be8
@@ -17579,6 +17643,26 @@ entries:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/orc-0.1.0/orc-0.1.0.tgz
     version: 0.1.0
   orc-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: v2.6.0
+    created: "2026-09-10T09:03:21.427030401Z"
+    description: Manage Openstack Resource Controller CRDs
+    digest: b19ec5f4d87906546fc443b79b1b6de1a60291a577f78ae2de56b388e1b0037a
+    keywords:
+    - orc
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: orc-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/orc-crds
+    - https://github.com/k-orc/openstack-resource-controller/
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/orc-crds-2.6.0/orc-crds-2.6.0.tgz
+    version: 2.6.0
   - annotations:
       category: DeveloperTools
     apiVersion: v2
@@ -18145,6 +18229,27 @@ entries:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/platform-namespace-core-0.1.0/platform-namespace-core-0.1.0.tgz
     version: 0.1.0
   plugin-barman-cloud-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: v0.15.0
+    created: "2026-09-10T09:03:21.604155514Z"
+    description: Manage plugin-barman-cloud CRDs
+    digest: 102b39f2c1c0f454972786fff48eb062a39b205013ca08b1d84f0b0e2566d76f
+    keywords:
+    - cloudnative-pg
+    - barman-cloud
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: plugin-barman-cloud-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/plugin-barman-cloud-crds
+    - https://github.com/cloudnative-pg/charts/
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/plugin-barman-cloud-crds-0.15.0/plugin-barman-cloud-crds-0.15.0.tgz
+    version: 0.15.0
   - annotations:
       category: DeveloperTools
     apiVersion: v2
@@ -20357,6 +20462,26 @@ entries:
     version: 0.0.1
   silence-operator-crds:
   - apiVersion: v2
+    appVersion: v0.21.0
+    created: "2026-09-10T09:03:21.775059419Z"
+    description: Silence operator manages Alertmanager silences via custom resources.
+    digest: eb1547ce2e647112df8d612cf9815ecae7d595050569a6705a3ed65ed2e227f9
+    icon: https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.png
+    keywords:
+    - silence
+    - operator
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: silence-operator-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/silence-operator-crds
+    - https://github.com/giantswarm/silence-operator
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/silence-operator-crds-0.21.0/silence-operator-crds-0.21.0.tgz
+    version: 0.21.0
+  - apiVersion: v2
     appVersion: v0.20.1
     created: "2026-06-04T13:19:56.103926229Z"
     description: Silence operator manages Alertmanager silences via custom resources.
@@ -20443,6 +20568,27 @@ entries:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/silence-operator-crds-0.0.1/silence-operator-crds-0.0.1.tgz
     version: 0.0.1
   snapshot-controller-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: v8.6.0
+    created: "2026-09-10T09:03:21.909261633Z"
+    description: Manage snapshot-controller CRDs
+    digest: a13d7bd62f69526ac9f1a5e8f2a4c64432413dfc4046ab8b782a122fc7bea2eb
+    keywords:
+    - storage
+    - snapshot
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: snapshot-controller-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/snapshot-controller-crds
+    - https://github.com/kubernetes-csi/external-snapshotter
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/snapshot-controller-crds-8.6.0/snapshot-controller-crds-8.6.0.tgz
+    version: 8.6.0
   - annotations:
       category: DeveloperTools
     apiVersion: v2
@@ -20568,6 +20714,27 @@ entries:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/syslog-ng-0.1.0/syslog-ng-0.1.0.tgz
     version: 0.1.0
   topolvm-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 0.41.1
+    created: "2026-09-10T09:03:22.101913317Z"
+    description: Manage topolvm CRDs
+    digest: 56dcdfe06609be08b376b3f2f87d0bc9240e35c12d25f3aae3606688404e3063
+    icon: https://i.imgur.com/iqSQEf7.png
+    keywords:
+    - topolvm
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: topolvm-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/topolvm-crds
+    - https://github.com/topolvm/topolvm/tree/main/charts/topolvm
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/topolvm-crds-17.2.0/topolvm-crds-17.2.0.tgz
+    version: 17.2.0
   - annotations:
       category: DeveloperTools
     apiVersion: v2
@@ -20832,6 +20999,19 @@ entries:
   velero-crds:
   - apiVersion: v2
     appVersion: 1.18.1
+    created: "2026-09-10T09:03:22.228635703Z"
+    description: A Helm chart to manage velero CRDs
+    digest: 5de7e7b890b2e9832dc881fa6187b56f326ab2099a088dcb8ce1668fba2cacd9
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: velero-crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-12.1.0/velero-crds-12.1.0.tgz
+    version: 12.1.0
+  - apiVersion: v2
+    appVersion: 1.18.1
     created: "2026-06-19T09:26:26.760670692Z"
     description: A Helm chart to manage velero CRDs
     digest: 8eb6fab9073f6fec17f0c6d569684075794962ce7f9beabe7066086dc4341711
@@ -20960,6 +21140,26 @@ entries:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
   vertical-pod-autoscaler-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 1.7.1
+    created: "2026-09-10T09:03:22.441769138Z"
+    description: Manage Vertical Pod Autoscaler CRDs
+    digest: 381b16a53f01541c8c45e754f82f8345fecf820c740c8076c7589ff5b86aa38d
+    keywords:
+    - vpa
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: vertical-pod-autoscaler-crds
+    sources:
+    - https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/
+    - https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/deploy/vpa-v1-crd-gen.yaml
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/vertical-pod-autoscaler-crds-1.7.1/vertical-pod-autoscaler-crds-1.7.1.tgz
+    version: 1.7.1
   - annotations:
       category: DeveloperTools
     apiVersion: v2
@@ -21346,4 +21546,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-09-10T08:38:59.512963067Z"
+generated: "2026-09-10T09:03:22.442976665Z"
