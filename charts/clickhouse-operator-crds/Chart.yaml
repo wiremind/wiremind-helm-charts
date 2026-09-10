@@ -2,8 +2,8 @@ apiVersion: v2
 annotations:
   category: DeveloperTools
 name: clickhouse-operator-crds
-version: 0.27.0
-appVersion: "0.27.0"
+version: 0.27.3
+appVersion: "0.27.3"
 description: Manage clickhouse-operator CRDs
 keywords:
   - clickhouse-operator
