@@ -11,7 +11,8 @@
     ":disableRateLimiting"
   ],
   "enabledManagers": [
-    "custom.regex"
+    "custom.regex",
+    "helm-values"
   ],
   "customManagers": [
     {
@@ -26,5 +27,22 @@
       "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     }
   ],
-  "timezone": "Europe/Paris"
+  "timezone": "Europe/Paris",
+  "packageRules": [
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "pinDigests": false
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "moby/buildkit"
+      ],
+      "extractVersion": "^v(?<version>\\d+\\.\\d+\\.\\d+)$"
+    }
+  ]
 }
