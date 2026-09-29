@@ -7869,6 +7869,23 @@ entries:
     version: 0.1.0
   elasticsearch:
   - apiVersion: v1
+    appVersion: 8.19.22
+    created: "2026-09-29T07:00:53.755104108Z"
+    description: A helm chart for Elasticsearch
+    digest: 6fa2ae318196a211b12824c17a0c456fd71ff1249786520922de1a25e94e8e67
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch
+    icon: https://helm.elastic.co/icons/elasticsearch.png
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: elasticsearch
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch
+    - https://github.com/elastic/elasticsearch
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/elasticsearch-8.19.1/elasticsearch-8.19.1.tgz
+    version: 8.19.1
+  - apiVersion: v1
     appVersion: 8.19.12
     created: "2026-08-14T08:02:53.176196542Z"
     description: A helm chart for Elasticsearch
@@ -8090,6 +8107,62 @@ entries:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/elasticsearch-8.15.0/elasticsearch-8.15.0.tgz
     version: 8.15.0
   elasticsearch-cluster:
+  - apiVersion: v2
+    appVersion: 8.19.22
+    created: "2026-09-29T07:00:53.906197975Z"
+    dependencies:
+    - alias: es-data-hot
+      condition: es-data-hot.enabled
+      name: elasticsearch
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    - alias: es-data-warm
+      condition: es-data-warm.enabled
+      name: elasticsearch
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    - alias: es-data-cold
+      condition: es-data-cold.enabled
+      name: elasticsearch
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    - alias: es-master
+      condition: es-master.enabled
+      name: elasticsearch
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    - alias: es-ingest
+      condition: es-ingest.enabled
+      name: elasticsearch
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    - condition: kibana.enabled
+      name: kibana
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    - condition: prometheus-elasticsearch-exporter.enabled
+      name: prometheus-elasticsearch-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: '*'
+    - condition: cerebro.enabled
+      name: cerebro
+      repository: https://wiremind.github.io/wiremind-helm-charts
+      version: '*'
+    description: Elasticsearch cluster - a hat chart for several elasticsearch charts
+    digest: eec5d0a30e504da0347a4b71000134a346ca48ed97f84d884592ae2c551b5750
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch-cluster
+    icon: https://static-www.elastic.co/v3/assets/bltefdd0b53724fa2ce/blt5ebe80fb665aef6b/5ea8c8f26b62d4563b6ecec2/brand-elasticsearch-220x130.svg
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: elasticsearch-cluster
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/elasticsearch-cluster
+    - https://github.com/elastic/helm-charts/tree/master/elasticsearch
+    - https://github.com/elastic/elasticsearch
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/elasticsearch-cluster-4.5.3/elasticsearch-cluster-4.5.3.tgz
+    version: 4.5.3
   - apiVersion: v2
     appVersion: 8.19.12
     created: "2026-08-14T08:09:47.118791247Z"
@@ -16204,6 +16277,23 @@ entries:
     version: 0.0.10
   kibana:
   - apiVersion: v1
+    appVersion: 8.19.22
+    created: "2026-09-29T07:00:54.081044872Z"
+    description: A Helm chart for Kibana
+    digest: 4ef71bd6705be50adaf2f7d84582099c3bebbcdc9060ce02fd0c9ebb77c89327
+    home: https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/kibana
+    icon: https://helm.elastic.co/icons/kibana.png
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: kibana
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/kibana
+    - https://github.com/elastic/kibana
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/kibana-8.5.24/kibana-8.5.24.tgz
+    version: 8.5.24
+  - apiVersion: v1
     appVersion: 8.18.0
     created: "2025-11-26T09:31:28.390014754Z"
     description: A Helm chart for Kibana
@@ -21588,4 +21678,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-09-23T16:08:20.804268274Z"
+generated: "2026-09-29T07:00:54.082324494Z"
