@@ -83,18 +83,6 @@ Validate the platform-namespace-core chart.
 {{- end -}}
 {{- end -}}
 
-{{/*
-ClusterSecretStore name definition.
-*/}}
-{{- define "platform-namespace-core.cluster-secret-store.name" -}}
-{{- $providerName := index (keys .Values.clusterSecretStore.provider) 0 -}}
-{{- if eq .Values.namespace.labels.project "platform" -}}
-{{- printf "%s-platform-%s" $providerName .Release.Name -}}
-{{- else -}}
-{{- printf "%s-%s" $providerName .Release.Name -}}
-{{- end -}}
-{{- end -}}
-
 # templates/_helpers.tpl
 {{- define "platform-namespace-core.cluster-secret-store.validate" -}}
   {{- $prov := .Values.clusterSecretStore.provider -}}
