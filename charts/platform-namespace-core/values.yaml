@@ -10,6 +10,9 @@ certManager:
 
 clusterSecretStore:
   enabled: false
+  # Required when enabled. It goes through tpl, so one values file can serve
+  # every release, for example "infisical-platform-{{ .Release.Name }}".
+  name: ""
   # Full documentation for all providers: https://external-secrets.io/latest/provider
   provider: {}
 
