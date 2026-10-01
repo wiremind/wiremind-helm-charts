@@ -8,9 +8,11 @@
   "extends": [
     "config:best-practices",
     "default:semanticCommits",
-    ":disableRateLimiting"
+    ":disableRateLimiting",
+    "helpers:pinGitHubActionDigests"
   ],
   "enabledManagers": [
+    "github-actions",
     "custom.regex",
     "helm-values"
   ],
