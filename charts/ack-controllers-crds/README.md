@@ -15,9 +15,9 @@ script once per controller vendored here, so the s3 and iam CRDs do not drift
 apart:
 
 ```
-./scripts/update_crds.sh -r aws-controllers-k8s/s3-controller -b v1.11.0 \
+./scripts/update_crds.sh -r aws-controllers-k8s/s3-controller -b v1.13.1 \
   --folder helm/crds -o charts/ack-controllers-crds/templates
-./scripts/update_crds.sh -r aws-controllers-k8s/iam-controller -b v1.7.3 \
+./scripts/update_crds.sh -r aws-controllers-k8s/iam-controller -b v1.10.1 \
   --folder helm/crds -o charts/ack-controllers-crds/templates
 ```
 
@@ -38,9 +38,9 @@ charts, so vendoring them from either release gives the same bytes.
 
 | CRD | Upstream | Version |
 | --- | --- | --- |
-| `buckets.s3.services.k8s.aws` | [aws-controllers-k8s/s3-controller](https://github.com/aws-controllers-k8s/s3-controller/tree/v1.11.0/helm/crds) | v1.11.0 |
-| `*.iam.services.k8s.aws` | [aws-controllers-k8s/iam-controller](https://github.com/aws-controllers-k8s/iam-controller/tree/v1.7.3/helm/crds) | v1.7.3 |
-| `fieldexports.services.k8s.aws`, `iamroleselectors.services.k8s.aws` | ACK runtime commons, shipped identically by both controller charts above | v1.7.3 (iam) |
+| `buckets.s3.services.k8s.aws` | [aws-controllers-k8s/s3-controller](https://github.com/aws-controllers-k8s/s3-controller/tree/v1.13.1/helm/crds) | v1.13.1 |
+| `*.iam.services.k8s.aws` | [aws-controllers-k8s/iam-controller](https://github.com/aws-controllers-k8s/iam-controller/tree/v1.10.1/helm/crds) | v1.10.1 |
+| `fieldexports.services.k8s.aws`, `iamroleselectors.services.k8s.aws` | ACK runtime commons, shipped identically by both controller charts above | v1.10.1 (iam) |
 | `adoptedresources.services.k8s.aws` | ACK runtime commons, no longer shipped upstream | v1.4.2 (iam) |
 
 CRDs are vendored from the upstream `helm/crds` folder of the matching controller
