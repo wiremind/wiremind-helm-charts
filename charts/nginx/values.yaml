@@ -8,7 +8,7 @@ restartPolicy: Never
 
 image:
   repository: nginx
-  tag: 1.17-alpine
+  tag: 1.31-alpine
   pullPolicy: IfNotPresent
   # pullSecrets: "my-docker-registry-secret"
 
