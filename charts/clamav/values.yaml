@@ -258,7 +258,7 @@ metrics:
   ## ClamAV exporter image configuration
   image:
     repository: sergeymakinen/clamav_exporter
-    tag: "v2.1.2"
+    tag: "v2.1.9"
     pullPolicy: IfNotPresent
 
   ## Port for metrics endpoint
