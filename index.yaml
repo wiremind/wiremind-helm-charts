@@ -21286,6 +21286,26 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: v0.35.0
+    created: "2026-10-16T07:54:16.220100259Z"
+    description: Manage trivy-operator CRDs
+    digest: 72268129e26d41733b448f586d80ec4a707599550a77f0587c8a6f2c4aad8711
+    keywords:
+    - trivy-operator
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: trivy-operator-crds
+    sources:
+    - https://github.com/aquasecurity/trivy-operator/tree/main/deploy/helm
+    - https://github.com/aquasecurity/trivy-operator/tree/main/deploy/helm/crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/trivy-operator-crds-0.35.0/trivy-operator-crds-0.35.0.tgz
+    version: 0.35.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: v0.34.0
     created: "2026-09-10T08:38:59.512189905Z"
     description: Manage trivy-operator CRDs
@@ -21467,6 +21487,26 @@ entries:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/velero-crds-2.28.0/velero-crds-2.28.0.tgz
     version: 2.28.0
   vertical-pod-autoscaler-crds:
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 1.8.0
+    created: "2026-10-16T07:54:16.501805577Z"
+    description: Manage Vertical Pod Autoscaler CRDs
+    digest: eda38974ccb1e5c4c8a2e35e10a63b419cb17fec32aab28f8bb938a8ca07f4b5
+    keywords:
+    - vpa
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: vertical-pod-autoscaler-crds
+    sources:
+    - https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/
+    - https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/deploy/vpa-v1-crd-gen.yaml
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/vertical-pod-autoscaler-crds-1.8.0/vertical-pod-autoscaler-crds-1.8.0.tgz
+    version: 1.8.0
   - annotations:
       category: DeveloperTools
     apiVersion: v2
@@ -21873,4 +21913,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-10-16T07:48:52.986801313Z"
+generated: "2026-10-16T07:54:16.503152711Z"
