@@ -4,7 +4,7 @@ description: A Helm chart for https://github.com/moby/buildkit (rootless)
 type: application
 appVersion: 0.34.1  # renovate: datasource=docker depName=moby/buildkit
 kubeVersion: ">=1.19.0-0"
-version: 0.33.1
+version: 0.34.0
 maintainers:
   - name: Wiremind
     url: https://github.com/wiremind/wiremind-helm-charts
