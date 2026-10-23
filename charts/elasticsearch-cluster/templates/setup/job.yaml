@@ -157,10 +157,19 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.setup.terminationGracePeriodSeconds }}
       volumes:
         - name: setup
+          {{- if .Values.setup.existingSecret }}
+          projected:
+            sources:
+              - configMap:
+                  name: {{ include "elasticsearch-cluster.fullname" . }}-setup
+              - secret:
+                  name: {{ .Values.setup.existingSecret }}
+          {{- else }}
           configMap:
             # Provide the name of the ConfigMap containing the files you want
             # to add to the container
             name: {{ include "elasticsearch-cluster.fullname" . }}-setup
+          {{- end }}
         {{- if .Values.setup.elasticsearchCertificateSecret }}
         - name: elasticsearch-certs
           secret:

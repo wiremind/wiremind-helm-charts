@@ -375,6 +375,7 @@ setup:
   ttlSecondsAfterFinished: 1800
   elasticsearchCertificateSecret: ""
   elasticsearchCertificateAuthoritiesFile: ca.crt
+  existingSecret: ""
   # priorityClassName: my-priority-class
   annotations:
     "helm.sh/hook": post-install, post-upgrade
