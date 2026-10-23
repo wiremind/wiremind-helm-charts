@@ -358,6 +358,13 @@ extraObjects: []
 ## List of queries that will be executed when elasticsearch is up and running
 setup:
   enabled: false
+  image:
+    registry: docker.io
+    repository: curlimages/curl
+    tag: 8.22.0
+    # sha256 digest, appended to the reference as repository:tag@digest when set
+    digest: ""
+    pullPolicy: IfNotPresent
   containerSecurityContext:
     capabilities:
       drop:
