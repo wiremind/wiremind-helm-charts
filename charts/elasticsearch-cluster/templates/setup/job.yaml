@@ -27,8 +27,10 @@ spec:
       {{- end }}
       containers:
         - name: setup
-          image: curlimages/curl:8.11.0
-          imagePullPolicy: IfNotPresent
+          {{- with .Values.setup.image }}
+          image: "{{ with .registry }}{{ . }}/{{ end }}{{ .repository }}:{{ .tag }}{{ with .digest }}@{{ . }}{{ end }}"
+          {{- end }}
+          imagePullPolicy: {{ .Values.setup.image.pullPolicy }}
           {{- with .Values.setup.containerSecurityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
