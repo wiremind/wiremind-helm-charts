@@ -314,6 +314,9 @@
         "enabled": {
           "type": "boolean"
         },
+        "cleanTmpDirs": {
+          "type": "boolean"
+        },
         "annotations": {
           "type": "object"
         },
