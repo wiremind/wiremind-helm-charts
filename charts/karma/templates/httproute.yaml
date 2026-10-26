@@ -5,6 +5,10 @@ metadata:
   name: {{ include "karma.fullname" . }}
   labels:
     {{- include "karma.labels" . | nindent 4 }}
+  {{- with .Values.httpRoute.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   {{- with .Values.httpRoute.parentRefs }}
   parentRefs:
