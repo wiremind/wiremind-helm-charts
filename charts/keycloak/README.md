@@ -610,6 +610,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | `metrics.service.ports.metrics`            | Metrics service Metrics port                                                                           | `9000`  |
 | `metrics.service.annotations`              | Annotations for enabling prometheus to access the metrics endpoints                                    | `{}`    |
 | `metrics.service.extraPorts`               | Add additional ports to the keycloak metrics service                                                   | `[]`    |
+| `metrics.service.headless`                 | Create a headless metrics service named `<fullname>-metrics-headless`                                  | `false` |
 | `metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false` |
 | `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                               | `""`    |
 | `metrics.serviceMonitor.annotations`       | Additional custom annotations for the ServiceMonitor                                                   | `{}`    |
