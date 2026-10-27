@@ -1,0 +1,38 @@
+name: Bug report
+description: A chart renders or behaves incorrectly
+labels:
+  - bug
+body:
+  - type: input
+    id: chart
+    attributes:
+      label: Chart and version
+      placeholder: buildkitd 0.35.0
+    validations:
+      required: true
+  - type: textarea
+    id: values
+    attributes:
+      label: Values
+      description: The minimal values that reproduce the problem.
+      render: yaml
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened
+      description: Rendered manifest, error message or logs.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Helm and Kubernetes versions
+      placeholder: helm v3.19.0, Kubernetes v1.33

@@ -1,0 +1,29 @@
+name: Feature request
+description: A new value or capability for a chart
+labels:
+  - enhancement
+body:
+  - type: input
+    id: chart
+    attributes:
+      label: Chart
+    validations:
+      required: true
+  - type: textarea
+    id: need
+    attributes:
+      label: Use case
+      description: What you are trying to do and why the chart does not allow it today.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed values
+      render: yaml
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I am willing to open a pull request for this.
