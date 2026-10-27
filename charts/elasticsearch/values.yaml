@@ -220,6 +220,8 @@ service:
   annotations: {}
   httpPortName: http
   transportPortName: transport
+  # Discovery uses the headless Service: false keeps transport out of the ClusterIP Service.
+  transportPortEnabled: true
   loadBalancerIP: ""
   loadBalancerSourceRanges: []
   externalTrafficPolicy: ""
