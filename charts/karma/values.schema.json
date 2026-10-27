@@ -8,6 +8,9 @@
         "certSecretNames": {
             "type": "array"
         },
+        "certConfigMapNames": {
+            "type": "array"
+        },
         "configMap": {
             "type": "object",
             "properties": {
@@ -31,6 +34,9 @@
             }
         },
         "extraManifests": {
+            "type": "array"
+        },
+        "imagePullSecrets": {
             "type": "array"
         },
         "fullnameOverride": {
