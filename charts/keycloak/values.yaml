@@ -908,6 +908,11 @@ metrics:
     ## @param metrics.service.extraPorts [array] Add additional ports to the keycloak metrics service
     ##
     extraPorts: []
+    ## @param metrics.service.headless Create a headless metrics service named `<fullname>-metrics-headless`
+    ## Prometheus scrapes the endpoints, so the metrics service needs no cluster IP and no kube-proxy rule.
+    ## The name differs because the cluster IP of a service cannot change.
+    ##
+    headless: false
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
