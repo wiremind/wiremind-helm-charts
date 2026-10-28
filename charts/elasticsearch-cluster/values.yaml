@@ -361,7 +361,7 @@ setup:
   image:
     registry: docker.io
     repository: curlimages/curl
-    tag: 8.22.0
+    tag: 8.23.0
     # sha256 digest, appended to the reference as repository:tag@digest when set
     digest: ""
     pullPolicy: IfNotPresent
