@@ -367,6 +367,10 @@ persistentVolume:
   ##
   enabled: false
 
+  ## Remove the tmp.* directories freshclam leaves in /data when it is killed mid-update
+  ## (OOM kill, grace period exceeded); runs as an init container before ClamAV starts
+  cleanTmpDirs: true
+
   ## Persistent Volume Claim annotations
   ##
   annotations: {}

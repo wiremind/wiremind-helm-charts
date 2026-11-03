@@ -54,6 +54,33 @@ spec:
       automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if and .Values.persistentVolume.enabled .Values.persistentVolume.cleanTmpDirs }}
+      initContainers:
+        - name: clean-tmp-dirs
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag | default (printf "%s_base" .Chart.AppVersion) }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - find
+            - /data
+            - -mindepth
+            - "1"
+            - -maxdepth
+            - "1"
+            - -type
+            - d
+            - -name
+            - tmp.*
+            - -exec
+            - rm
+            - -rf
+            - "{}"
+            - +
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          volumeMounts:
+            - name: clamav-data
+              mountPath: /data
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: {{ .Values.image.repository }}:{{ .Values.image.tag | default (printf "%s_base" .Chart.AppVersion) }}
