@@ -73,6 +73,27 @@ podDisruptionBudget:
   # minAvailable: 1
   # maxUnavailable: 1
 
+## Extra volumes and mounts, e.g. a CA bundle referenced by config.registries[].ca
+extraVolumes: []
+# - name: registry-ca
+#   configMap:
+#     name: registry-ca
+extraVolumeMounts: []
+# - name: registry-ca
+#   mountPath: /etc/buildkit/certs
+#   readOnly: true
+
+## NetworkPolicy restricting ingress to the BuildKit API (port "tcp") and the debug/metrics port
+networkPolicy:
+  enabled: false
+  ## Peers allowed to reach the BuildKit API; an empty list allows every source
+  from:
+    - podSelector:
+        matchLabels:
+          buildkitd-client: "true"
+  ## Peers allowed to reach the debug/metrics port (e.g. Prometheus); an empty list closes the port
+  metricsFrom: []
+
 config:
   debug: false
   trace: false
@@ -134,7 +155,7 @@ config:
   #       - "core.harbor.domain/proxy.docker.io"
   #     http: false
   #     insecure: false
-  #     ca: []
+  #     ca: ["/etc/buildkit/certs/ca.crt"]
   #     keypairs: []
   #       # - key: "/etc/config/key.pem"
   #       #   cert: "/etc/config/cert.pem"

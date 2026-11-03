@@ -48,6 +48,9 @@ spec:
           emptyDir:
             medium: Memory
             sizeLimit: 1Gi
+        {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       containers:
         - name: buildkitd
           image: {{ .Values.image.repository }}:{{ .Values.image.tag | default (printf "v%s-rootless" .Chart.AppVersion) }}
@@ -67,6 +70,9 @@ spec:
               mountPath: /home/{{ .Values.user.name }}/.config/buildkit
             - name: runtime-dir
               mountPath: /run/{{ .Values.user.name }}/{{ .Values.user.uid }}
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           args:
             {{- with .Values.extraArgs }}
             {{- toYaml . | nindent 12 }}
