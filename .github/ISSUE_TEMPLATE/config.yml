@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/wiremind/wiremind-helm-charts/security/advisories/new
+    about: Report security problems privately, not as an issue.
+  - name: Question
+    url: https://github.com/wiremind/wiremind-helm-charts/discussions
+    about: Ask usage questions in Discussions.

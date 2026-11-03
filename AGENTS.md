@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to coding agents working in this repository. Human contributors: see CONTRIBUTING.md.
 
 ## Repository Overview
 
@@ -8,8 +8,8 @@ This repository contains Wiremind's collection of Helm charts, published to [Art
 
 The repository contains two types of charts:
 
-- **CRD Charts** (32 charts with `-crds` suffix): Pure CustomResourceDefinition charts that require special handling
-- **Application Charts** (42 charts): Standard Helm charts for deploying services and workloads
+- **CRD Charts** (`-crds` suffix): Pure CustomResourceDefinition charts that require special handling
+- **Application Charts**: Standard Helm charts for deploying services and workloads
 
 ## Common Development Commands
 
@@ -105,7 +105,7 @@ charts/CHART_NAME/
 
 - **`ct.yaml`**: Chart-testing configuration with validation settings
 - **`.kubeconform`**: Schema locations for CRD validation
-- **`charts/*/ci/`**: Directory containing CI test value files (22+ test configurations)
+- **`charts/*/ci/`**: Directory containing CI test value files
 - **Pre-installed CRDs**: CI pre-installs prometheus-operator-crds, istio-operator-crds, and snapshot-controller-crds before testing charts
 
 ## Helper Scripts
