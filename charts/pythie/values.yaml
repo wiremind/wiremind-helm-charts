@@ -1,7 +1,7 @@
 pythieServing:
   image:
     repository: "ghcr.io/wiremind/pythie-serving"
-    tag: "v3.4.2"
+    tag: "v3.4.3"
     pullPolicy: IfNotPresent
   ## Add custom ports to expose
   customPorts: []
