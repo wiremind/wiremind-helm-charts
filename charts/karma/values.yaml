@@ -127,6 +127,24 @@ livenessProbe:
   period: 5
   path: /health
 
+# -- Define network policy targeting managed pod
+networkPolicy:
+  enabled: false
+  # -- Ingress definition
+  ingress:
+  - ports:
+    - protocol: TCP
+      port: http
+  # -- Egress definition
+  egress: []
+  # - ports:
+  #   - port: 9093
+  #     protocol: TCP
+  #   - port: 9090
+  #     protocol: TCP
+  # -- Explicit Kubernetes policy types; inferred from ingress/egress when empty.
+  policyTypes: []
+
 # store the whole Karma configuration in a Secret if you have sensitive
 # information like basic-auth credentials for Alertmanager endpoints et. al.
 # The structure of the Secret must be the same as in `configMap.rawConfig`.
