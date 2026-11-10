@@ -6,12 +6,15 @@ The Chart has the same version as the `velero` Chart's, try to keep them equal e
 
 The CRDs are retrieved/adjustec from [here](https://github.com/vmware-tanzu/helm-charts/tree/main/charts/velero/crds), Checkout the right tag and see if there are any changes. Comment out `creationTimestamp` due to kubeconform + <https://github.com/kubernetes/kubernetes/issues/109427>.
 
+`restores.yaml` comes from [velero v1.18.4](https://github.com/vmware-tanzu/velero/blob/v1.18.4/config/crd/v1/bases/velero.io_restores.yaml), with the `component: velero` label added.
+The velero chart 12.2.2 ships the v1.18.2 CRD, which does not have `spec.resourcePolicy`.
+
 If the version of the CRDs changes, aka breaking changes (this doesn't happen every day) more actions will be required!
 
 ```
 cd charts/velero-crds
 repo="vmware-tanzu/helm-charts"
-branch="velero-12.1.0"
+branch="velero-12.2.2"
 folder="charts/velero/crds"
 files=$(curl -s "https://api.github.com/repos/$repo/contents/$folder?ref=$branch" | jq -r '.[].download_url')
 for file in $files
