@@ -20,6 +20,7 @@ spec:
           description: |-
             NodeFeature resource holds the features discovered for one node in the
             cluster.
+            NodeFeature is namespaced.
           properties:
             apiVersion:
               description: |-

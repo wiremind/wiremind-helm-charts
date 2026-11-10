@@ -21,6 +21,7 @@ spec:
           description: |-
             NodeFeatureRule resource specifies a configuration for feature-based
             customization of node objects, such as node labeling.
+            NodeFeatureRule is cluster-scoped (short name `nfr`).
           properties:
             apiVersion:
               description: |-
