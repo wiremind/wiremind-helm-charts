@@ -2,8 +2,8 @@ annotations:
   category: DeveloperTools
 apiVersion: v2
 name: chaos-mesh-crds
-version: 2.7.2
-appVersion: "v2.7.2"
+version: 2.8.7
+appVersion: "v2.8.7"
 description: Manage chaos-mesh CRDs
 keywords:
   - chaos
