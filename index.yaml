@@ -18871,6 +18871,27 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: v0.16.0
+    created: "2026-11-10T14:10:43.67019019Z"
+    description: Manage plugin-barman-cloud CRDs
+    digest: 07f00548a920697c9931e1d9ac7a79483232ee0ad68b7d3afd6dda7118ec1f5f
+    keywords:
+    - cloudnative-pg
+    - barman-cloud
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: plugin-barman-cloud-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/plugin-barman-cloud-crds
+    - https://github.com/cloudnative-pg/charts/
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/plugin-barman-cloud-crds-0.16.0/plugin-barman-cloud-crds-0.16.0.tgz
+    version: 0.16.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: v0.15.0
     created: "2026-09-10T09:03:21.604155514Z"
     description: Manage plugin-barman-cloud CRDs
@@ -22238,4 +22259,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-11-10T14:09:52.011576832Z"
+generated: "2026-11-10T14:10:43.671072938Z"
