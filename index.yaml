@@ -2198,6 +2198,28 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: v2.8.7
+    created: "2026-11-10T14:18:30.517253024Z"
+    description: Manage chaos-mesh CRDs
+    digest: a56d31e95d1b47457566f321da8c3c468aa741b7c0a12548d01614ee1f79d139
+    icon: https://raw.githubusercontent.com/chaos-mesh/chaos-mesh/master/static/logo.svg
+    keywords:
+    - chaos
+    - mesh
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: chaos-mesh-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/chaos-mesh-crds
+    - https://github.com/chaos-mesh/chaos-mesh/
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/chaos-mesh-crds-2.8.7/chaos-mesh-crds-2.8.7.tgz
+    version: 2.8.7
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: v2.7.2
     created: "2025-07-01T12:19:22.600704638Z"
     description: Manage chaos-mesh CRDs
@@ -22259,4 +22281,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-11-10T14:10:43.671072938Z"
+generated: "2026-11-10T14:18:30.51872279Z"
