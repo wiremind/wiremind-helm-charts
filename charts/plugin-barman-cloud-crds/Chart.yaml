@@ -2,8 +2,8 @@ apiVersion: v2
 annotations:
   category: DeveloperTools
 name: plugin-barman-cloud-crds
-version: 0.15.0
-appVersion: "v0.15.0"
+version: 0.16.0
+appVersion: "v0.16.0"
 description: Manage plugin-barman-cloud CRDs
 keywords:
   - cloudnative-pg
