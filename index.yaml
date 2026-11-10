@@ -186,6 +186,28 @@ entries:
   - annotations:
       category: DeveloperTools
     apiVersion: v2
+    appVersion: v1.7.0
+    created: "2026-11-10T12:27:18.265959372Z"
+    description: Manage agentgateway CRDs
+    digest: a4f199f610ad8bab0d5cd258016f6274d628014f688433895d31e65d373f28d9
+    icon: https://raw.githubusercontent.com/agentgateway/website/refs/heads/main/static/favicon.svg
+    keywords:
+    - agentgateway
+    - gateway-api
+    - crds
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: agentgateway-crds
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/agentgateway-crds
+    - https://github.com/agentgateway/agentgateway/tree/v1.7.0/controller/install/helm/agentgateway-crds
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/agentgateway-crds-1.7.0/agentgateway-crds-1.7.0.tgz
+    version: 1.7.0
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
     appVersion: v1.6.0
     created: "2026-10-12T08:36:01.722557251Z"
     description: Manage agentgateway CRDs
@@ -22163,4 +22185,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-10-27T16:09:13.601695973Z"
+generated: "2026-11-10T12:27:18.266914212Z"
