@@ -9,6 +9,8 @@ Helm chart at tag `v1.14.0`. The functional changes are:
   which annotates the pod template).
 - `operatorConfigurationAnnotations` values key that renders annotations onto
   the `OperatorConfiguration` CR's `metadata.annotations`.
+- `revisionHistoryLimit` values key (default `2`) on the operator `Deployment`.
+  Upstream keeps the Kubernetes default of 10 old ReplicaSets.
 
 These let GitOps tooling pin per-resource ordering metadata (e.g. sync waves)
 on the controller resources, which upstream does not expose.

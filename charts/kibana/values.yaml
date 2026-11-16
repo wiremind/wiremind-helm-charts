@@ -6,6 +6,8 @@ elasticsearchCredentialSecret: elasticsearch-master-credentials
 
 replicas: 1
 
+revisionHistoryLimit: 2
+
 # Extra environment variables to append to this nodeGroup
 # This will be appended to the current 'env:' key. You can use any of the kubernetes env
 # syntax here

@@ -4,6 +4,8 @@
 
 replicaCount: 1
 
+revisionHistoryLimit: 2
+
 image:
   repository: setme
   tag: setme
