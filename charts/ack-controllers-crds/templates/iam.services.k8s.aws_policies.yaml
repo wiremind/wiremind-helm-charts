@@ -14,7 +14,14 @@ spec:
     singular: policy
   scope: Namespaced
   versions:
-  - name: v1alpha1
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=="ACK.ResourceSynced")].status
+      name: Synced
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
     schema:
       openAPIV3Schema:
         description: Policy is the Schema for the Policies API
@@ -69,6 +76,9 @@ spec:
 
                   Regex Pattern: `^[\w+=,.@-]+$`
                 type: string
+                x-kubernetes-validations:
+                - message: Value is immutable once set
+                  rule: self == oldSelf
               path:
                 description: |-
                   The path for the policy.
@@ -212,6 +222,13 @@ spec:
                       description: A human readable message indicating details about
                         the transition.
                       type: string
+                    observedGeneration:
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration
+                        is 9, the condition is out of date with respect to the current state of the instance.
+                      format: int64
+                      type: integer
                     reason:
                       description: The reason for the condition's last transition.
                       type: string
