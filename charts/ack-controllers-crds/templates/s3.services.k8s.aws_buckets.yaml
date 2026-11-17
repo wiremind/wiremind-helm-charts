@@ -750,6 +750,12 @@ spec:
                   A container for specifying the notification configuration of the bucket.
                   If this element is empty, notifications are turned off for the bucket.
                 properties:
+                  eventBridgeConfiguration:
+                    additionalProperties:
+                      type: string
+                    description: A container for specifying the configuration for
+                      Amazon EventBridge.
+                    type: object
                   lambdaFunctionConfigurations:
                     items:
                       description: A container for specifying the configuration for
@@ -1377,6 +1383,13 @@ spec:
                       description: A human readable message indicating details about
                         the transition.
                       type: string
+                    observedGeneration:
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration
+                        is 9, the condition is out of date with respect to the current state of the instance.
+                      format: int64
+                      type: integer
                     reason:
                       description: The reason for the condition's last transition.
                       type: string
