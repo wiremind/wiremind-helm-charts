@@ -15208,6 +15208,24 @@ entries:
   karma:
   - apiVersion: v2
     appVersion: v0.131
+    created: "2026-11-17T14:11:44.088630873Z"
+    description: A Helm chart for Karma - an UI for Prometheus Alertmanager
+    digest: bb8240a69a86e5363827a72c9540e100a8cbdbe68e1e5dce10c3d9ecef006ba7
+    home: https://github.com/prymitive/karma
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - name: Wiremind
+      url: https://github.com/wiremind/wiremind-helm-charts
+    name: karma
+    sources:
+    - https://github.com/wiremind/wiremind-helm-charts/tree/main/charts/karma
+    - https://github.com/prymitive/karma
+    type: application
+    urls:
+    - https://github.com/wiremind/wiremind-helm-charts/releases/download/karma-2.13.2/karma-2.13.2.tgz
+    version: 2.13.2
+  - apiVersion: v2
+    appVersion: v0.131
     created: "2026-07-22T09:55:41.391297665Z"
     description: A Helm chart for Karma - an UI for Prometheus Alertmanager
     digest: 1167206bf7a3338e97c7850afd96c974909212b15cbd63d51da4928a86c00287
@@ -22300,4 +22318,4 @@ entries:
     urls:
     - https://github.com/wiremind/wiremind-helm-charts/releases/download/wiremind-kubies-0.7.0/wiremind-kubies-0.7.0.tgz
     version: 0.7.0
-generated: "2026-11-17T13:59:06.748359306Z"
+generated: "2026-11-17T14:11:44.089726128Z"
