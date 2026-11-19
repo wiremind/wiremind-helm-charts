@@ -105,7 +105,7 @@ pythieServing:
 tensorflowServing:
   image:
     repository: "tensorflow/serving"
-    tag: "2.12.1"
+    tag: "2.21.0"
     pullPolicy: IfNotPresent
   istio:
     enabled: false
