@@ -1,7 +1,7 @@
 image:
   repository: busybox
   pullPolicy: IfNotPresent
-  tag: "1.36"
+  tag: "1.38"
 
 nameOverride: ""
 fullnameOverride: ""
