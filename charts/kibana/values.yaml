@@ -89,7 +89,7 @@ token:
 
   image:
     repository: dwdraju/alpine-curl-jq
-    tag: latest@sha256:83bd9be2b14bcbb960bd6bc81cb2159808f97efec05ecdf51903234ede08f29d
+    tag: latest@sha256:ad2af593082661e7814281d8b720a5ec1e411d3817815bb49b7793b0725fd6e0
     pullPolicy: IfNotPresent
 
   serviceAccount:
