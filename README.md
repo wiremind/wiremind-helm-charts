@@ -2,15 +2,31 @@
 
 # wiremind Helm Charts
 
-This is a set of Helm Charts used and maintained by Wiremind. Do not hesitate to create Pull Requests.
+Helm charts used and maintained by Wiremind, browsable on [Artifact Hub](https://artifacthub.io/packages/search?repo=wiremind&sort=relevance&page=1).
 
-All charts are visible from the Artifact Hub: https://artifacthub.io/packages/search?repo=wiremind&sort=relevance&page=1
+## Usage
+
+```bash
+helm repo add wiremind https://wiremind.github.io/wiremind-helm-charts
+helm install my-release wiremind/<chart>
+```
+
+Charts are also published as OCI artifacts:
+
+```bash
+helm install my-release oci://ghcr.io/wiremind/wiremind-helm-charts/<chart> --version <version>
+```
+
+## Contributing
+
+Pull requests are welcome, see [CONTRIBUTING.md](CONTRIBUTING.md). Report security problems privately as described in [SECURITY.md](SECURITY.md).
 
 ## CRDs charts
 
-To update CRDs of a specific chart, please refer to its README.md, if there is none, just copy paste the upstream CRDs into ours.
+To update CRDs of a specific chart, refer to its README.md; if there is none, copy the upstream CRDs into ours.
 
 Then run this command:
+
 ```bash
 MY_CHART="mycrdschartname"
 find ./charts/$MY_CHART -type f -exec sed -i -e '/creationTimestamp: null/d' {} \;
@@ -21,5 +37,9 @@ Running this command is mandatory because of this:
 
 ## Add new charts from public repos
 
-To add and update charts from public repos use the script at root `./scripts/update_charts.sh -r <repo> -a <app_name> --path <custom_path>`.
-If the chart already exists please refer to it's README-wm.md file before updating it.
+To add and update charts from public repos use the script at root `./scripts/update_chart.sh -r <repo> -a <app_name> --path <custom_path>`.
+If the chart already exists, read its README.md before updating it.
+
+## License
+
+[Apache 2.0](LICENSE)
