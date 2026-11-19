@@ -232,7 +232,7 @@ kthxbyeSidecar:
   enabled: false
   image:
     repository: ghcr.io/prymitive/kthxbye
-    tag: v0.14
+    tag: v0.16
     pullPolicy: IfNotPresent
   alertmanagerServiceName: prometheus-alertmanager
   alertmanagerServicePort: 80
