@@ -46,7 +46,7 @@ data:
 
       {{- if .Values.config.gc.enabled }}
       gc = true
-      gckeepstorage = {{ floor (mulf (mulf (trimSuffix "Gi" .Values.persistence.size) 1024) .Values.config.gc.keepstoragePercentage) }}
+      gckeepstorage = {{ include "buildkitd.gcKeepStorage" . }}
 
       {{- range $v := .Values.config.gc.policies }}
       {{- with $ }}
@@ -55,7 +55,7 @@ data:
         {{- if $v.all }}
         all = {{ $v.all }}
         {{- end }}
-        keepBytes = {{ $v.keepBytes | default (floor (mulf (mulf (trimSuffix "Gi" .Values.persistence.size) 1024) .Values.config.gc.keepstoragePercentage)) }}
+        keepBytes = {{ $v.keepBytes | default (include "buildkitd.gcKeepStorage" .) }}
         {{- if $v.keepDuration }}
         keepDuration = {{ $v.keepDuration }}
         {{- end }}

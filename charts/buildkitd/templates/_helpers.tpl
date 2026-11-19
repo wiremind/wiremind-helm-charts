@@ -49,3 +49,7 @@ Selector labels
 app.kubernetes.io/name: {{ include "buildkitd.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+{{- define "buildkitd.gcKeepStorage" -}}
+{{- printf "\"%.0fMiB\"" (floor (mulf (mulf (trimSuffix "Gi" .Values.persistence.size) 1024) .Values.config.gc.keepstoragePercentage)) }}
+{{- end }}
