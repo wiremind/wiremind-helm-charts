@@ -41,7 +41,7 @@ metrics:
   enable: false
   image:
     repository: quay.io/prometheuscommunity/json-exporter
-    tag: v0.6.0
+    tag: v0.8.0
     pullPolicy: IfNotPresent
   containerPorts:
     http: 7979
