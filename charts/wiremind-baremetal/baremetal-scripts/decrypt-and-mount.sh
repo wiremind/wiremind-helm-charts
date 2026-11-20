@@ -1,5 +1,4 @@
 #!/bin/sh
-set -x
 set -e
 
 : "${RAID_DEVICE_CANDIDATES:?RAID_DEVICE_CANDIDATES must be set}"
@@ -31,21 +30,22 @@ fi
 set -e
 
 wmb_decrypt_device() {
-	if ! cryptsetup status $DECRYPTED_LUKS_DEVICE_NAME; then
+	if ! cryptsetup status $DECRYPTED_LUKS_DEVICE_NAME >/dev/null; then
 		echo "Decrypting the device $DECRYPTED_LUKS_DEVICE_NAME."
-		set +x # Do not log password, please.
 		# XXX: this will actually hang (even if successfully opening) when run like this.
 		# When run locally, even from a script, it works.
 		# It will anyway get killed by the livenessprobe.
 		echo -n "$password" | cryptsetup luksOpen --verbose $RAID_DEVICE $DECRYPTED_LUKS_DEVICE_NAME --verbose --debug --allow-discards --key-file -
 		echo "Done decrypting the device $DECRYPTED_LUKS_DEVICE_NAME."
-		set -x
 	fi
 
 	# Check, will exit non-0 if failed
-	cryptsetup status $DECRYPTED_LUKS_DEVICE
-	pvscan
-	vgscan
+	if ! cryptsetup status $DECRYPTED_LUKS_DEVICE >/dev/null; then
+		echo "$DECRYPTED_LUKS_DEVICE is not active"
+		exit 1
+	fi
+	pvscan >/dev/null
+	vgscan >/dev/null
 }
 
 wmb_mount_partition_devices() {
@@ -56,7 +56,7 @@ wmb_mount_partition_devices() {
 			echo "No lvm partition found"
 			continue
 		fi
-		if ! findmnt "$PARTITION_DEVICE"; then
+		if ! findmnt "$PARTITION_DEVICE" >/dev/null; then
 			mount -t ext4 "$PARTITION_DEVICE" /mnt/$(basename "$PARTITION_DEVICE")
 		fi
 	done
@@ -69,8 +69,10 @@ wmb_check_partition_devices_mounts() {
 			echo "No lvm partition found"
 			continue
 		fi
-		echo "Checking $PARTITION_DEVICE mount point..."
-		findmnt "$PARTITION_DEVICE"
+		if ! findmnt "$PARTITION_DEVICE" >/dev/null; then
+			echo "$PARTITION_DEVICE is not mounted"
+			exit 1
+		fi
 	done
 }
 
