@@ -1,5 +1,9 @@
 # Changelog
 
+# v2.0.3 (2026-11-20)
+## Fix
+- Stop tracing every command and printing the `cryptsetup`, `pvscan`, `vgscan` and `findmnt` output on each 30 s check: the scripts now log only decryption, mounts and failures
+
 # v2.0.2 (2026-05-29)
 ## Fix
 - Keep `extraEnv` entries under the container `env` list so the chart still renders when custom environment variables are set

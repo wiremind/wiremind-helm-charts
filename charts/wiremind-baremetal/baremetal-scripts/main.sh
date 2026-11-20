@@ -1,5 +1,4 @@
 #!/bin/sh
-set -x
 set -e
 
 # Copy scripts to host
