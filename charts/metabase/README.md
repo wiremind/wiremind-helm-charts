@@ -55,6 +55,7 @@ The following table lists the configurable parameters of the Metabase chart and 
 | Parameter                                       | Description                                                                | Default           |
 |-------------------------------------------------|----------------------------------------------------------------------------|-------------------|
 | replicaCount                                    | desired number of controller pods                                          | 1                 |
+| revisionHistoryLimit                            | old ReplicaSets to keep for rollback                                       | 3                 |
 | pdb.create                                      | Enable/disable a Pod Disruption Budget creation                            | false             |
 | pdb.minAvailable                                | Minimum number/percentage of pods that should remain scheduled             | 1                 |
 | pdb.maxUnavailable                              | Maximum number/percentage of pods that may be made unavailable             |                   |

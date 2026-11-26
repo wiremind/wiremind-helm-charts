@@ -5,6 +5,8 @@ elasticsearchCertificateAuthoritiesFile: ca.crt
 elasticsearchCredentialSecret: elasticsearch-master-credentials
 
 replicas: 1
+# Old ReplicaSets to keep for rollback
+revisionHistoryLimit: 3
 
 # Extra environment variables to append to this nodeGroup
 # This will be appended to the current 'env:' key. You can use any of the kubernetes env
@@ -68,6 +70,8 @@ token:
   priorityClassName: ""
 
   replicas: 1
+  # Old ReplicaSets to keep for rollback
+  revisionHistoryLimit: 3
 
   labels: {}
   annotations: {}

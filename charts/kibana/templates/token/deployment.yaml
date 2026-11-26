@@ -11,6 +11,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.token.replicas }}
+  revisionHistoryLimit: {{ .Values.token.revisionHistoryLimit }}
   selector:
     matchLabels:
       app: {{ template "kibana.fullname" . }}-token
