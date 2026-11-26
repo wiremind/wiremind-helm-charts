@@ -3,6 +3,8 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
+# Old ReplicaSets to keep for rollback
+revisionHistoryLimit: 3
 
 image:
   repository: setme
